@@ -229,16 +229,41 @@ def scale_schematic(path, factor=3.0):
         text
     )
 
-    # --- Paper size: A0 (1189x841) -> User scaled ---
-    new_w = round(1189 * S)
-    new_h = round(841 * S)
-    text = re.sub(
-        r'\(paper "A0"\)',
-        f'(paper "User" {new_w} {new_h})',
-        text
-    )
+    # --- Paper size: detect standard size -> User scaled ---
+    paper_sizes = {
+        'A0': (1189, 841), 'A1': (841, 594), 'A2': (594, 420),
+        'A3': (420, 297), 'A4': (297, 210),
+    }
+    for pname, (pw, ph) in paper_sizes.items():
+        pat = rf'\(paper "{pname}"\)'
+        if re.search(pat, text):
+            new_w = round(pw * S)
+            new_h = round(ph * S)
+            text = re.sub(pat, f'(paper "User" {new_w} {new_h})', text)
+            break
+    else:
+        # Already User or unknown - try to scale User dimensions
+        m = re.search(r'\(paper "User" (\d+) (\d+)\)', text)
+        if m:
+            new_w = round(int(m.group(1)) * S)
+            new_h = round(int(m.group(2)) * S)
+            text = re.sub(
+                r'\(paper "User" \d+ \d+\)',
+                f'(paper "User" {new_w} {new_h})',
+                text
+            )
 
-    # --- Do NOT scale: stroke width, rotation angles, UUIDs, version ---
+    # --- Stroke width: scale so lines remain proportional ---
+    # width 0 means "default" in KiCad; give it a visible bold minimum at scale
+    def _scale_stroke_width(m):
+        w = float(m.group(1))
+        if w == 0:
+            # Default width: bold minimum for scaled drawing
+            return f'(width {round(0.35 * S, 4)})'
+        return f'(width {round(w * S * 1.5, 4)})'  # 1.5x extra for bold
+    text = re.sub(r'\(width\s+([-\d.]+)\)', _scale_stroke_width, text)
+
+    # --- Do NOT scale: rotation angles, UUIDs, version ---
 
     with open(path, 'w', encoding='utf-8') as f:
         f.write(text)
@@ -4537,12 +4562,11 @@ quit
 def build_oscillator(**kwargs):
     """Build State Variable Oscillator KiCad schematic.
 
-    Layout on A3 sheet with 3x scaling for readability:
-        Row 1 (top):    Summing Amp | Integrator 1 (HP->BP) | Integrator 2 (BP->LP)
-        Row 2 (bottom): Power Supply | AD636 RMS Detector | ADuCM362 MCU
+    Layout on A3 sheet with 3x scaling for readability (3-col x 2-row grid):
+        Row 1 (top):    Summing Amp       | Integrator 1 (HP->BP) | AD636 RMS Detector
+        Row 2 (bottom): Integrator 2 (BP->LP) | Startup Kick + Power  | ADuCM362 MCU
 
-    Components are spread across the full sheet with generous spacing
-    so they are readable at normal zoom without squinting.
+    Tighter grid spacing so components fill the sheet properly.
     """
     print("Building State Variable Oscillator schematic...")
 
@@ -4550,73 +4574,81 @@ def build_oscillator(**kwargs):
     sch.set_paper_size("A3")
     sch.set_title_block(
         title="State Variable Oscillator - ADuCM362 + DAC7800 + AD636",
-        company="CircuitForge",
-        rev="1.0",
+        company="CircuitForge - Bob Smith",
+        rev="3.0",
         comments={1: "MDAC frequency control: 25Hz-30kHz",
-                  2: "Zener AGC: 1V RMS output, AD636 amplitude monitoring"}
+                  2: "Zener AGC: 1V RMS output, AD636 amplitude monitoring",
+                  3: "3-col x 2-row grid layout, 3x scaled"}
     )
 
     G = 2.54
     pwr_idx = 1
 
-    # Layout grid: 3 columns across A3 sheet
-    # Col 1: x=10-55G   Col 2: x=60-110G   Col 3: x=115-155G
-    # Row 1 (top): y=8-50G    Row 2 (bottom): y=55-90G
+    # ── Parameterized spacing (correction loop compatible) ──
+    fb_vert = kwargs.get('feedback_vert', 6)          # feedback Rf/Cint above inv input (G)
+    damp_vert = kwargs.get('damp_vert', 10)           # R_damp above inv input (G)
+    zener_vert = kwargs.get('zener_vert', 14)         # zeners above inv input (G)
+    col_spacing = kwargs.get('col_spacing', 45)       # column spacing (G) - tighter
+    row_spacing = kwargs.get('row_spacing', 42)       # row spacing (G) - tighter
+
+    # ── 3-column x 2-row grid origins ──
+    # Tighter spacing to fill A3 sheet properly
+    c1x = 15 * G     # Column 1 left edge (margin for titles)
+    c2x = (15 + col_spacing) * G      # Column 2 left edge
+    c3x = (15 + 2 * col_spacing) * G  # Column 3 left edge
+    r1y = 8 * G      # Row 1 top
+    r2y = (8 + row_spacing) * G       # Row 2 top
 
     # ═══════════════════════════════════════════════════════════════
-    # REGION 1: SUMMING AMPLIFIER (U1a LM4562)  [Top-Left]
+    # REGION 1: SUMMING AMPLIFIER (U1 LM4562)  [Row 1, Col 1]
     # HP output = -(R_lp/Rf_sum)*LP - (R_bp/Rf_sum)*BP
     # ═══════════════════════════════════════════════════════════════
-    sch.add_text("SUMMING AMPLIFIER", position=(12 * G, 8 * G), size=4.0, bold=True)
+    sch.add_text("SUMMING AMPLIFIER", position=(c1x, r1y), size=5.0, bold=True)
 
-    u1_x, u1_y = 38 * G, 28 * G
+    u1_x, u1_y = c1x + 40 * G, r1y + 30 * G
     sch.components.add(lib_id="LM741:LM741", reference="U1",
         value="LM4562", position=(u1_x, u1_y))
 
     # U1 pin positions (mirrored: inv(-) on top, ni(+) on bottom)
-    u1_inv = (u1_x - 7.62, u1_y - 2.54)   # (-) top-left
-    u1_ni  = (u1_x - 7.62, u1_y + 2.54)   # (+) bottom-left
-    u1_out = (u1_x + 7.62, u1_y)           # output right
-    u1_vp  = (u1_x - 2.54, u1_y + 7.62)   # V+ bottom
-    u1_vm  = (u1_x - 2.54, u1_y - 7.62)   # V- top
+    u1_inv = (u1_x - 7.62, u1_y - 2.54)
+    u1_ni  = (u1_x - 7.62, u1_y + 2.54)
+    u1_out = (u1_x + 7.62, u1_y)
+    u1_vp  = (u1_x - 2.54, u1_y + 7.62)
+    u1_vm  = (u1_x - 2.54, u1_y - 7.62)
 
     # Junction point at inverting input (summing node)
-    sum_x = u1_inv[0] - 4 * G
+    sum_x = u1_inv[0] - 6 * G
     sum_y = u1_inv[1]
 
     # R_lp (10k) - LP input to summing node
-    rlp_x = sum_x - 10 * G
-    rlp_y = sum_y - 8 * G
+    rlp_x = sum_x - 14 * G
+    rlp_y = sum_y - 10 * G
     sch.components.add(lib_id="R:R", reference="R1", value="10k",
         position=(rlp_x, rlp_y), rotation=90)
     rlp_left = (rlp_x - 3.81, rlp_y)
     rlp_right = (rlp_x + 3.81, rlp_y)
-    # Wire from R_lp right to summing junction
     wire_manhattan(sch, rlp_right[0], rlp_right[1], sum_x, sum_y)
-    # LP label on left
-    sch.add_label("LP", position=(rlp_left[0] - 4 * G, rlp_y))
-    sch.add_wire(start=(rlp_left[0] - 4 * G, rlp_y), end=rlp_left)
+    sch.add_label("LP", position=(rlp_left[0] - 6 * G, rlp_y))
+    sch.add_wire(start=(rlp_left[0] - 6 * G, rlp_y), end=rlp_left)
 
     # R_bp (22k) - BP input to summing node
-    rbp_x = sum_x - 10 * G
+    rbp_x = sum_x - 14 * G
     rbp_y = sum_y
     sch.components.add(lib_id="R:R", reference="R2", value="22k",
         position=(rbp_x, rbp_y), rotation=90)
     rbp_left = (rbp_x - 3.81, rbp_y)
     rbp_right = (rbp_x + 3.81, rbp_y)
     sch.add_wire(start=rbp_right, end=(sum_x, sum_y))
-    sch.add_label("BP", position=(rbp_left[0] - 4 * G, rbp_y))
-    sch.add_wire(start=(rbp_left[0] - 4 * G, rbp_y), end=rbp_left)
+    sch.add_label("BP", position=(rbp_left[0] - 6 * G, rbp_y))
+    sch.add_wire(start=(rbp_left[0] - 6 * G, rbp_y), end=rbp_left)
 
-    # Rf_sum (10k) - feedback HP to summing node
-    rf_y = sum_y - 12 * G
+    # Rf_sum (10k) - feedback summing node to output
+    rf_y = sum_y - fb_vert * G
     rf_cx = (sum_x + u1_out[0]) / 2
     sch.components.add(lib_id="R:R", reference="R3", value="10k",
         position=(rf_cx, rf_y), rotation=90)
     rf_left = (rf_cx - 3.81, rf_y)
     rf_right = (rf_cx + 3.81, rf_y)
-
-    # Feedback wiring: sum_node up to Rf, Rf across, down to output
     sch.add_wire(start=(sum_x, sum_y), end=(sum_x, rf_y))
     sch.add_wire(start=(sum_x, rf_y), end=rf_left)
     sch.add_wire(start=rf_right, end=(u1_out[0], rf_y))
@@ -4627,41 +4659,37 @@ def build_oscillator(**kwargs):
     sch.add_wire(start=(sum_x, sum_y), end=u1_inv)
 
     # Non-inverting input to GND
-    gnd1_y = u1_ni[1] + 4 * G
+    gnd1_y = u1_ni[1] + 6 * G
     sch.add_wire(start=u1_ni, end=(u1_ni[0], gnd1_y))
     sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
         value="GND", position=(u1_ni[0], gnd1_y))
     pwr_idx += 1
 
-    # Power pins
-    vcc_y1 = u1_vp[1] + 4 * G
+    # Power pins (+15V as net label, not VCC symbol, to avoid net mixing)
+    vcc_y1 = u1_vp[1] + 6 * G
     sch.add_wire(start=u1_vp, end=(u1_vp[0], vcc_y1))
-    sch.components.add(lib_id="VCC:VCC", reference=f"#PWR0{pwr_idx:02d}",
-        value="+15V", position=(u1_vp[0], vcc_y1))
-    pwr_idx += 1
-
-    vee_y1 = u1_vm[1] - 4 * G
+    sch.add_label("+15V", position=(u1_vp[0], vcc_y1))
+    vee_y1 = u1_vm[1] - 6 * G
     sch.add_wire(start=(u1_vm[0], vee_y1), end=u1_vm)
     sch.components.add(lib_id="VEE:VEE", reference=f"#PWR0{pwr_idx:02d}",
         value="-15V", position=(u1_vm[0], vee_y1))
     pwr_idx += 1
 
     # HP output label
-    hp_lbl_x = u1_out[0] + 6 * G
+    hp_lbl_x = u1_out[0] + 8 * G
     sch.add_label("HP", position=(hp_lbl_x, u1_out[1]))
     sch.add_wire(start=u1_out, end=(hp_lbl_x, u1_out[1]))
     sch.junctions.add(position=u1_out)
 
     # ═══════════════════════════════════════════════════════════════
-    # REGION 2: INTEGRATOR 1 - HP -> BP (via MDAC1)
-    # U1b LM4562, DAC7800 (XDAC1), Cint1 470p, R_damp1 100M
+    # REGION 2: INTEGRATOR 1 - HP -> BP (via MDAC1) [Row 1, Col 2]
+    # U2 LM4562, DAC7800 (XDAC1), Cint1 470p, R_damp1 100M
     # Zener AGC: Dz1/Dz2 back-to-back on integrator cap
     # ═══════════════════════════════════════════════════════════════
-    region2_title = (65 * G, 5 * G)
-    sch.add_text("INTEGRATOR 1 (HP->BP) + MDAC", position=region2_title,
-                 size=3.0, bold=True)
+    sch.add_text("INTEGRATOR 1 (HP->BP) + MDAC", position=(c2x, r1y),
+                 size=5.0, bold=True)
 
-    u2_x, u2_y = 100 * G, 22 * G
+    u2_x, u2_y = c2x + 45 * G, r1y + 35 * G
     sch.components.add(lib_id="LM741:LM741", reference="U2",
         value="LM4562", position=(u2_x, u2_y))
 
@@ -4672,32 +4700,29 @@ def build_oscillator(**kwargs):
     u2_vm  = (u2_x - 2.54, u2_y - 7.62)
 
     # DAC7800 block (drawn as labeled box with CTRL input)
-    dac1_x = u2_inv[0] - 22 * G
+    dac1_x = u2_inv[0] - 28 * G
     dac1_y = u2_inv[1]
-    sch.add_label("HP", position=(dac1_x - 8 * G, dac1_y))
-    sch.add_wire(start=(dac1_x - 8 * G, dac1_y), end=(dac1_x - 4 * G, dac1_y))
-    # DAC7800 label
-    sch.add_text("XDAC1\nDAC7800", position=(dac1_x - 2 * G, dac1_y - 3 * G), size=1.8)
+    sch.add_label("HP", position=(dac1_x - 10 * G, dac1_y))
+    sch.add_wire(start=(dac1_x - 10 * G, dac1_y), end=(dac1_x - 4 * G, dac1_y))
+    sch.add_text("XDAC1\nDAC7800", position=(dac1_x - 2 * G, dac1_y - 4 * G), size=2.5)
 
     # Rint1 (10k) between MDAC output and inv input
-    rint1_x = u2_inv[0] - 10 * G
+    rint1_x = u2_inv[0] - 14 * G
     rint1_y = u2_inv[1]
     sch.components.add(lib_id="R:R", reference="R4", value="10k",
         position=(rint1_x, rint1_y), rotation=90)
     rint1_left = (rint1_x - 3.81, rint1_y)
     rint1_right = (rint1_x + 3.81, rint1_y)
-
-    # Wire from DAC to Rint1
     sch.add_wire(start=(dac1_x - 4 * G, dac1_y), end=rint1_left)
     # CTRL label for DAC
-    ctrl_y1 = dac1_y + 6 * G
+    ctrl_y1 = dac1_y + 8 * G
     sch.add_label("VCTRL", position=(dac1_x - 2 * G, ctrl_y1))
 
     # Wire Rint1 to inv input
     sch.add_wire(start=rint1_right, end=u2_inv)
 
-    # Cint1 (470p) - integrator cap in feedback (inv_input to output)
-    cint1_y = u2_inv[1] - 10 * G
+    # Cint1 (470p) - integrator cap in feedback
+    cint1_y = u2_inv[1] - fb_vert * G
     cint1_cx = (u2_inv[0] + u2_out[0]) / 2
     sch.components.add(lib_id="C:C", reference="C1", value="470p",
         position=(cint1_cx, cint1_y), rotation=90)
@@ -4705,7 +4730,8 @@ def build_oscillator(**kwargs):
     c1_right = (cint1_cx + 3.81, cint1_y)
 
     # Feedback: inv_node up to cap, cap across, down to output
-    inv1_junc = (u2_inv[0] + 2 * G, u2_inv[1])
+    # Use cint1_cx - 3.81 as feedback column x to avoid overlapping V- pin column
+    inv1_junc = (cint1_cx - 3.81, u2_inv[1])
     sch.add_wire(start=rint1_right, end=inv1_junc)
     sch.add_wire(start=inv1_junc, end=(inv1_junc[0], cint1_y))
     sch.add_wire(start=(inv1_junc[0], cint1_y), end=c1_left)
@@ -4714,7 +4740,7 @@ def build_oscillator(**kwargs):
     sch.junctions.add(position=inv1_junc)
 
     # R_damp1 (100M) - parallel to Cint1
-    rdamp1_y = u2_inv[1] - 16 * G
+    rdamp1_y = u2_inv[1] - damp_vert * G
     sch.components.add(lib_id="R:R", reference="R5", value="100M",
         position=(cint1_cx, rdamp1_y), rotation=90)
     rd1_left = (cint1_cx - 3.81, rdamp1_y)
@@ -4726,67 +4752,124 @@ def build_oscillator(**kwargs):
     sch.junctions.add(position=(inv1_junc[0], cint1_y))
     sch.junctions.add(position=(u2_out[0], cint1_y))
 
-    # Zener AGC: Dz1, Dz2 back-to-back across integrator cap
-    # Dz1: cathode to inv_input side, anode to mid
-    # Dz2: cathode to mid, anode to output side
-    zener1_x = cint1_cx
-    zener1_y = u2_inv[1] - 22 * G
+    # Zener AGC: Dz1, Dz2 back-to-back (anode-to-anode center)
+    zener1_y = u2_inv[1] - zener_vert * G
     sch.components.add(lib_id="D:D", reference="D1", value="DZ09 BV=1.1",
-        position=(zener1_x - 4 * G, zener1_y), rotation=90)
+        position=(cint1_cx - 5 * G, zener1_y), rotation=0)
     sch.components.add(lib_id="D:D", reference="D2", value="DZ09 BV=1.1",
-        position=(zener1_x + 4 * G, zener1_y), rotation=270)
-    # Wire zeners
-    dz1_left = (zener1_x - 4 * G - 3.81, zener1_y)
-    dz1_right = (zener1_x - 4 * G + 3.81, zener1_y)
-    dz2_left = (zener1_x + 4 * G - 3.81, zener1_y)
-    dz2_right = (zener1_x + 4 * G + 3.81, zener1_y)
-    # Common cathode at center
+        position=(cint1_cx + 5 * G, zener1_y), rotation=180)
+    dz1_left = (cint1_cx - 5 * G - 3.81, zener1_y)
+    dz1_right = (cint1_cx - 5 * G + 3.81, zener1_y)
+    dz2_left = (cint1_cx + 5 * G - 3.81, zener1_y)
+    dz2_right = (cint1_cx + 5 * G + 3.81, zener1_y)
     sch.add_wire(start=dz1_right, end=dz2_left)
-    # Anode wires to feedback nodes
     sch.add_wire(start=dz1_left, end=(inv1_junc[0], zener1_y))
     sch.add_wire(start=(inv1_junc[0], zener1_y), end=(inv1_junc[0], rdamp1_y))
     sch.add_wire(start=dz2_right, end=(u2_out[0], zener1_y))
     sch.add_wire(start=(u2_out[0], zener1_y), end=(u2_out[0], rdamp1_y))
     sch.junctions.add(position=(inv1_junc[0], rdamp1_y))
     sch.junctions.add(position=(u2_out[0], rdamp1_y))
-
-    sch.add_text("Zener AGC\nBV=1.1V", position=(zener1_x, zener1_y + 4 * G), size=1.5)
+    sch.add_text("Zener AGC\nBV=1.1V", position=(cint1_cx - 2 * G, zener1_y + 5 * G), size=2.0)
 
     # U2 non-inverting input to GND
-    gnd2_y = u2_ni[1] + 4 * G
+    gnd2_y = u2_ni[1] + 6 * G
     sch.add_wire(start=u2_ni, end=(u2_ni[0], gnd2_y))
     sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
         value="GND", position=(u2_ni[0], gnd2_y))
     pwr_idx += 1
 
-    # U2 power
-    vcc_y2 = u2_vp[1] + 4 * G
+    # U2 power (+15V net label)
+    vcc_y2 = u2_vp[1] + 6 * G
     sch.add_wire(start=u2_vp, end=(u2_vp[0], vcc_y2))
-    sch.components.add(lib_id="VCC:VCC", reference=f"#PWR0{pwr_idx:02d}",
-        value="+15V", position=(u2_vp[0], vcc_y2))
-    pwr_idx += 1
-    vee_y2 = u2_vm[1] - 4 * G
+    sch.add_label("+15V", position=(u2_vp[0], vcc_y2))
+    vee_y2 = u2_vm[1] - 3 * G   # shortened to stay below feedback
     sch.add_wire(start=(u2_vm[0], vee_y2), end=u2_vm)
     sch.components.add(lib_id="VEE:VEE", reference=f"#PWR0{pwr_idx:02d}",
         value="-15V", position=(u2_vm[0], vee_y2))
     pwr_idx += 1
 
     # BP output label
-    bp_lbl_x = u2_out[0] + 6 * G
+    bp_lbl_x = u2_out[0] + 8 * G
     sch.add_label("BP", position=(bp_lbl_x, u2_out[1]))
     sch.add_wire(start=u2_out, end=(bp_lbl_x, u2_out[1]))
     sch.junctions.add(position=u2_out)
 
+    # Frequency annotation
+    sch.add_text("f = D / (4096 * 2pi * 10k * 470p)\n[25Hz - 30kHz]",
+                 position=(c2x + 2 * G, r1y + 58 * G), size=2.0)
+
     # ═══════════════════════════════════════════════════════════════
-    # REGION 3: INTEGRATOR 2 - BP -> LP (via MDAC2)
+    # REGION 3: AD636 RMS DETECTOR [Row 1, Col 3]
+    # 1/5 attenuator (40k + 10k), AD636 + CAV 10uF
+    # Input from BP, output to MCU ADC (AIN0)
+    # ═══════════════════════════════════════════════════════════════
+    sch.add_text("AD636 RMS DETECTOR", position=(c3x, r1y), size=5.0, bold=True)
+
+    # Attenuator: R_att1 (40k) + R_att2 (10k) voltage divider
+    att_x = c3x + 18 * G
+    att_y = r1y + 30 * G
+
+    sch.components.add(lib_id="R:R", reference="R10", value="40k",
+        position=(att_x, att_y), rotation=90)
+    ratt1_left = (att_x - 3.81, att_y)
+    ratt1_right = (att_x + 3.81, att_y)
+    sch.add_label("BP", position=(ratt1_left[0] - 6 * G, att_y))
+    sch.add_wire(start=(ratt1_left[0] - 6 * G, att_y), end=ratt1_left)
+
+    # R_att2 (10k) - shunt to GND, vertical
+    att2_x = ratt1_right[0] + 6 * G
+    att2_y = att_y + 8 * G
+    sch.components.add(lib_id="R:R", reference="R11", value="10k",
+        position=(att2_x, att2_y))
+    ratt2_top = (att2_x, att2_y - 3.81)
+    ratt2_bot = (att2_x, att2_y + 3.81)
+    sch.add_wire(start=ratt1_right, end=(att2_x, att_y))
+    sch.add_wire(start=(att2_x, att_y), end=ratt2_top)
+    sch.junctions.add(position=(att2_x, att_y))
+    gnd_att_y = ratt2_bot[1] + 5 * G
+    sch.add_wire(start=ratt2_bot, end=(att2_x, gnd_att_y))
+    sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
+        value="GND", position=(att2_x, gnd_att_y))
+    pwr_idx += 1
+    sch.add_text("1/5 attenuator\nVin/5 to AD636", position=(att2_x + 5 * G, att_y), size=2.0)
+
+    # AD636 block (drawn as text label + CAV cap)
+    ad636_x = att2_x + 24 * G
+    ad636_y = att_y
+    sch.add_wire(start=(att2_x, att_y), end=(ad636_x - 8 * G, att_y))
+    sch.add_text("U4\nAD636\nRMS-to-DC", position=(ad636_x - 6 * G, att_y - 7 * G), size=2.5)
+
+    # CAV capacitor (10uF) - averaging cap
+    cav_x = ad636_x
+    cav_y = att_y + 8 * G
+    sch.components.add(lib_id="C:C", reference="C3", value="10u",
+        position=(cav_x, cav_y))
+    cav_top = (cav_x, cav_y - 3.81)
+    cav_bot = (cav_x, cav_y + 3.81)
+    sch.add_wire(start=(ad636_x - 2 * G, att_y), end=(cav_x, att_y))
+    sch.add_wire(start=(cav_x, att_y), end=cav_top)
+    sch.add_text("CAV", position=(cav_x + 4 * G, cav_y), size=2.0)
+    gnd_cav_y = cav_bot[1] + 5 * G
+    sch.add_wire(start=cav_bot, end=(cav_x, gnd_cav_y))
+    sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
+        value="GND", position=(cav_x, gnd_cav_y))
+    pwr_idx += 1
+
+    # AD636 output to AIN0 label
+    ain0_x = ad636_x + 12 * G
+    sch.add_label("AIN0", position=(ain0_x, att_y))
+    sch.add_wire(start=(cav_x, att_y), end=(ain0_x, att_y))
+    sch.junctions.add(position=(cav_x, att_y))
+
+    # ═══════════════════════════════════════════════════════════════
+    # REGION 4: INTEGRATOR 2 - BP -> LP (via MDAC2) [Row 2, Col 1]
     # U3 LM4562, DAC7800 (XDAC2), Cint2 470p, R_damp2 100M
     # Zener AGC: Dz3/Dz4 back-to-back
     # ═══════════════════════════════════════════════════════════════
-    region3_title = (15 * G, 45 * G)
-    sch.add_text("INTEGRATOR 2 (BP->LP) + MDAC", position=region3_title,
-                 size=3.0, bold=True)
+    sch.add_text("INTEGRATOR 2 (BP->LP) + MDAC", position=(c1x, r2y),
+                 size=5.0, bold=True)
 
-    u3_x, u3_y = 50 * G, 62 * G
+    u3_x, u3_y = c1x + 45 * G, r2y + 35 * G
     sch.components.add(lib_id="LM741:LM741", reference="U3",
         value="LM4562", position=(u3_x, u3_y))
 
@@ -4797,35 +4880,35 @@ def build_oscillator(**kwargs):
     u3_vm  = (u3_x - 2.54, u3_y - 7.62)
 
     # DAC7800 #2 input
-    dac2_x = u3_inv[0] - 22 * G
+    dac2_x = u3_inv[0] - 28 * G
     dac2_y = u3_inv[1]
-    sch.add_label("BP", position=(dac2_x - 8 * G, dac2_y))
-    sch.add_wire(start=(dac2_x - 8 * G, dac2_y), end=(dac2_x - 4 * G, dac2_y))
-    sch.add_text("XDAC2\nDAC7800", position=(dac2_x - 2 * G, dac2_y - 3 * G), size=1.8)
+    sch.add_label("BP", position=(dac2_x - 10 * G, dac2_y))
+    sch.add_wire(start=(dac2_x - 10 * G, dac2_y), end=(dac2_x - 4 * G, dac2_y))
+    sch.add_text("XDAC2\nDAC7800", position=(dac2_x - 2 * G, dac2_y - 4 * G), size=2.5)
 
     # Rint2 (10k)
-    rint2_x = u3_inv[0] - 10 * G
+    rint2_x = u3_inv[0] - 14 * G
     rint2_y = u3_inv[1]
     sch.components.add(lib_id="R:R", reference="R6", value="10k",
         position=(rint2_x, rint2_y), rotation=90)
     rint2_left = (rint2_x - 3.81, rint2_y)
     rint2_right = (rint2_x + 3.81, rint2_y)
     sch.add_wire(start=(dac2_x - 4 * G, dac2_y), end=rint2_left)
-    # CTRL label
-    ctrl_y2 = dac2_y + 6 * G
+    ctrl_y2 = dac2_y + 8 * G
     sch.add_label("VCTRL", position=(dac2_x - 2 * G, ctrl_y2))
 
     sch.add_wire(start=rint2_right, end=u3_inv)
 
     # Cint2 (470p)
-    cint2_y = u3_inv[1] - 10 * G
+    cint2_y = u3_inv[1] - fb_vert * G
     cint2_cx = (u3_inv[0] + u3_out[0]) / 2
     sch.components.add(lib_id="C:C", reference="C2", value="470p",
         position=(cint2_cx, cint2_y), rotation=90)
     c2_left = (cint2_cx - 3.81, cint2_y)
     c2_right = (cint2_cx + 3.81, cint2_y)
 
-    inv2_junc = (u3_inv[0] + 2 * G, u3_inv[1])
+    # Use cint2_cx - 3.81 as feedback column x to avoid overlapping V- pin column
+    inv2_junc = (cint2_cx - 3.81, u3_inv[1])
     sch.add_wire(start=rint2_right, end=inv2_junc)
     sch.add_wire(start=inv2_junc, end=(inv2_junc[0], cint2_y))
     sch.add_wire(start=(inv2_junc[0], cint2_y), end=c2_left)
@@ -4834,7 +4917,7 @@ def build_oscillator(**kwargs):
     sch.junctions.add(position=inv2_junc)
 
     # R_damp2 (100M)
-    rdamp2_y = u3_inv[1] - 16 * G
+    rdamp2_y = u3_inv[1] - damp_vert * G
     sch.components.add(lib_id="R:R", reference="R7", value="100M",
         position=(cint2_cx, rdamp2_y), rotation=90)
     rd2_left = (cint2_cx - 3.81, rdamp2_y)
@@ -4846,17 +4929,16 @@ def build_oscillator(**kwargs):
     sch.junctions.add(position=(inv2_junc[0], cint2_y))
     sch.junctions.add(position=(u3_out[0], cint2_y))
 
-    # Zener AGC Dz3/Dz4
-    zener2_x = cint2_cx
-    zener2_y = u3_inv[1] - 22 * G
+    # Zener AGC Dz3/Dz4 back-to-back (anode-to-anode center)
+    zener2_y = u3_inv[1] - zener_vert * G
     sch.components.add(lib_id="D:D", reference="D3", value="DZ09 BV=1.1",
-        position=(zener2_x - 4 * G, zener2_y), rotation=90)
+        position=(cint2_cx - 5 * G, zener2_y), rotation=0)
     sch.components.add(lib_id="D:D", reference="D4", value="DZ09 BV=1.1",
-        position=(zener2_x + 4 * G, zener2_y), rotation=270)
-    dz3_left = (zener2_x - 4 * G - 3.81, zener2_y)
-    dz3_right = (zener2_x - 4 * G + 3.81, zener2_y)
-    dz4_left = (zener2_x + 4 * G - 3.81, zener2_y)
-    dz4_right = (zener2_x + 4 * G + 3.81, zener2_y)
+        position=(cint2_cx + 5 * G, zener2_y), rotation=180)
+    dz3_left = (cint2_cx - 5 * G - 3.81, zener2_y)
+    dz3_right = (cint2_cx - 5 * G + 3.81, zener2_y)
+    dz4_left = (cint2_cx + 5 * G - 3.81, zener2_y)
+    dz4_right = (cint2_cx + 5 * G + 3.81, zener2_y)
     sch.add_wire(start=dz3_right, end=dz4_left)
     sch.add_wire(start=dz3_left, end=(inv2_junc[0], zener2_y))
     sch.add_wire(start=(inv2_junc[0], zener2_y), end=(inv2_junc[0], rdamp2_y))
@@ -4864,299 +4946,223 @@ def build_oscillator(**kwargs):
     sch.add_wire(start=(u3_out[0], zener2_y), end=(u3_out[0], rdamp2_y))
     sch.junctions.add(position=(inv2_junc[0], rdamp2_y))
     sch.junctions.add(position=(u3_out[0], rdamp2_y))
-
-    sch.add_text("Zener AGC\nBV=1.1V", position=(zener2_x, zener2_y + 4 * G), size=1.5)
+    sch.add_text("Zener AGC\nBV=1.1V", position=(cint2_cx - 2 * G, zener2_y + 5 * G), size=2.0)
 
     # U3 GND + power
-    gnd3_y = u3_ni[1] + 4 * G
+    gnd3_y = u3_ni[1] + 6 * G
     sch.add_wire(start=u3_ni, end=(u3_ni[0], gnd3_y))
     sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
         value="GND", position=(u3_ni[0], gnd3_y))
     pwr_idx += 1
-    vcc_y3 = u3_vp[1] + 4 * G
+    vcc_y3 = u3_vp[1] + 6 * G
     sch.add_wire(start=u3_vp, end=(u3_vp[0], vcc_y3))
-    sch.components.add(lib_id="VCC:VCC", reference=f"#PWR0{pwr_idx:02d}",
-        value="+15V", position=(u3_vp[0], vcc_y3))
-    pwr_idx += 1
-    vee_y3 = u3_vm[1] - 4 * G
+    sch.add_label("+15V", position=(u3_vp[0], vcc_y3))
+    vee_y3 = u3_vm[1] - 3 * G   # shortened to stay below feedback
     sch.add_wire(start=(u3_vm[0], vee_y3), end=u3_vm)
     sch.components.add(lib_id="VEE:VEE", reference=f"#PWR0{pwr_idx:02d}",
         value="-15V", position=(u3_vm[0], vee_y3))
     pwr_idx += 1
 
     # LP output label
-    lp_lbl_x = u3_out[0] + 6 * G
+    lp_lbl_x = u3_out[0] + 8 * G
     sch.add_label("LP", position=(lp_lbl_x, u3_out[1]))
     sch.add_wire(start=u3_out, end=(lp_lbl_x, u3_out[1]))
     sch.junctions.add(position=u3_out)
 
-    # Output load (100k to GND)
-    rl_x = u3_out[0] + 12 * G
-    rl_y = u3_out[1] + 8 * G
+    # Output load (100k to GND) - connects BP back
+    rl_x = u3_out[0] + 16 * G
+    rl_y = u3_out[1] + 10 * G
     sch.components.add(lib_id="R:R", reference="R8", value="100k",
         position=(rl_x, rl_y))
     rl_top = (rl_x, rl_y - 3.81)
     rl_bot = (rl_x, rl_y + 3.81)
-    sch.add_label("BP", position=(rl_x + 4 * G, rl_top[1]))
-    sch.add_wire(start=rl_top, end=(rl_x + 4 * G, rl_top[1]))
-    gnd_rl_y = rl_bot[1] + 4 * G
+    sch.add_label("BP", position=(rl_x + 6 * G, rl_top[1]))
+    sch.add_wire(start=rl_top, end=(rl_x + 6 * G, rl_top[1]))
+    gnd_rl_y = rl_bot[1] + 5 * G
     sch.add_wire(start=rl_bot, end=(rl_x, gnd_rl_y))
     sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
         value="GND", position=(rl_x, gnd_rl_y))
     pwr_idx += 1
 
     # ═══════════════════════════════════════════════════════════════
-    # REGION 4: STARTUP KICK
-    # Vkick pulse + Rkick (100k) to HP node
+    # REGION 5: STARTUP KICK + POWER SUPPLY [Row 2, Col 2]
     # ═══════════════════════════════════════════════════════════════
-    kick_x = 15 * G
-    kick_y = 35 * G
+    sch.add_text("STARTUP KICK + POWER SUPPLY", position=(c2x, r2y),
+                 size=5.0, bold=True)
+
+    # Startup kick
+    kick_x = c2x + 10 * G
+    kick_y = r2y + 20 * G
     sch.components.add(lib_id="R:R", reference="R9", value="100k",
         position=(kick_x, kick_y), rotation=90)
     rk_left = (kick_x - 3.81, kick_y)
     rk_right = (kick_x + 3.81, kick_y)
-    sch.add_label("HP", position=(rk_right[0] + 4 * G, kick_y))
-    sch.add_wire(start=rk_right, end=(rk_right[0] + 4 * G, kick_y))
-    sch.add_text("Startup\nKick", position=(kick_x - 8 * G, kick_y - 3 * G), size=1.5)
-    # GND below kick source
-    gnd_kick_y = kick_y + 6 * G
+    sch.add_label("HP", position=(rk_right[0] + 6 * G, kick_y))
+    sch.add_wire(start=rk_right, end=(rk_right[0] + 6 * G, kick_y))
+    sch.add_text("Startup Kick\nPULSE 0.1V 10us", position=(kick_x - 10 * G, kick_y - 5 * G), size=2.0)
+    gnd_kick_y = kick_y + 8 * G
     sch.add_wire(start=rk_left, end=(rk_left[0], gnd_kick_y))
     sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
         value="GND", position=(rk_left[0], gnd_kick_y))
     pwr_idx += 1
-    sch.add_text("PULSE 0.1V 10us", position=(kick_x - 10 * G, kick_y + 2 * G), size=1.2)
 
-    # ═══════════════════════════════════════════════════════════════
-    # REGION 5: AD636 RMS DETECTOR
-    # 1/5 attenuator (40k + 10k), AD636 + CAV 10uF
-    # Input from BP, output to MCU ADC (AIN0)
-    # ═══════════════════════════════════════════════════════════════
-    region5_title = (85 * G, 45 * G)
-    sch.add_text("AD636 RMS DETECTOR", position=region5_title, size=3.0, bold=True)
+    # Power supply section (below startup kick, same column)
+    pwr_x = c2x + 10 * G
+    pwr_y = r2y + 42 * G
 
-    # Attenuator: R_att1 (40k) + R_att2 (10k) voltage divider
-    att_x = 90 * G
-    att_y = 58 * G
-
-    # R_att1 (40k) - series, horizontal
-    sch.components.add(lib_id="R:R", reference="R10", value="40k",
-        position=(att_x, att_y), rotation=90)
-    ratt1_left = (att_x - 3.81, att_y)
-    ratt1_right = (att_x + 3.81, att_y)
-    sch.add_label("BP", position=(ratt1_left[0] - 4 * G, att_y))
-    sch.add_wire(start=(ratt1_left[0] - 4 * G, att_y), end=ratt1_left)
-
-    # R_att2 (10k) - shunt to GND, vertical
-    att2_x = ratt1_right[0] + 4 * G
-    att2_y = att_y + 6 * G
-    sch.components.add(lib_id="R:R", reference="R11", value="10k",
-        position=(att2_x, att2_y))
-    ratt2_top = (att2_x, att2_y - 3.81)
-    ratt2_bot = (att2_x, att2_y + 3.81)
-    sch.add_wire(start=ratt1_right, end=(att2_x, att_y))
-    sch.add_wire(start=(att2_x, att_y), end=ratt2_top)
-    sch.junctions.add(position=(att2_x, att_y))
-    gnd_att_y = ratt2_bot[1] + 3 * G
-    sch.add_wire(start=ratt2_bot, end=(att2_x, gnd_att_y))
+    # +15V supply with bulk decoupling (net label, not VCC symbol)
+    sch.add_label("+15V", position=(pwr_x, pwr_y - 8 * G))
+    sch.components.add(lib_id="C:C", reference="C6", value="10u",
+        position=(pwr_x, pwr_y))
+    c6_top = (pwr_x, pwr_y - 3.81)
+    c6_bot = (pwr_x, pwr_y + 3.81)
+    sch.add_wire(start=(pwr_x, pwr_y - 8 * G), end=c6_top)
+    gnd_c6_y = c6_bot[1] + 5 * G
     sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
-        value="GND", position=(att2_x, gnd_att_y))
+        value="GND", position=(pwr_x, gnd_c6_y))
+    sch.add_wire(start=c6_bot, end=(pwr_x, gnd_c6_y))
     pwr_idx += 1
+    sch.add_text("+15V\nbulk", position=(pwr_x + 5 * G, pwr_y - 4 * G), size=2.0)
 
-    sch.add_text("1/5 atten\nVin/5 to AD636", position=(att2_x + 4 * G, att_y), size=1.3)
-
-    # AD636 block (drawn as text label + CAV cap)
-    ad636_x = att2_x + 18 * G
-    ad636_y = att_y
-    sch.add_wire(start=(att2_x, att_y), end=(ad636_x - 6 * G, att_y))
-    sch.add_text("U4\nAD636\nRMS-to-DC", position=(ad636_x - 4 * G, att_y - 5 * G), size=2.0)
-
-    # CAV capacitor (10uF) - averaging cap
-    cav_x = ad636_x
-    cav_y = att_y + 6 * G
-    sch.components.add(lib_id="C:C", reference="C3", value="10u",
-        position=(cav_x, cav_y))
-    cav_top = (cav_x, cav_y - 3.81)
-    cav_bot = (cav_x, cav_y + 3.81)
-    sch.add_wire(start=(ad636_x - 2 * G, att_y), end=(cav_x, att_y))
-    sch.add_wire(start=(cav_x, att_y), end=cav_top)
-    sch.add_text("CAV", position=(cav_x + 3 * G, cav_y), size=1.3)
-    gnd_cav_y = cav_bot[1] + 3 * G
-    sch.add_wire(start=cav_bot, end=(cav_x, gnd_cav_y))
+    # -15V supply with bulk decoupling
+    neg_x = pwr_x + 22 * G
+    sch.components.add(lib_id="VEE:VEE", reference=f"#PWR0{pwr_idx:02d}",
+        value="-15V", position=(neg_x, pwr_y - 8 * G))
+    pwr_idx += 1
+    sch.components.add(lib_id="C:C", reference="C7", value="10u",
+        position=(neg_x, pwr_y))
+    c7_top = (neg_x, pwr_y - 3.81)
+    c7_bot = (neg_x, pwr_y + 3.81)
+    sch.add_wire(start=(neg_x, pwr_y - 8 * G), end=c7_top)
+    gnd_c7_y = c7_bot[1] + 5 * G
     sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
-        value="GND", position=(cav_x, gnd_cav_y))
+        value="GND", position=(neg_x, gnd_c7_y))
+    sch.add_wire(start=c7_bot, end=(neg_x, gnd_c7_y))
     pwr_idx += 1
+    sch.add_text("-15V\nbulk", position=(neg_x + 5 * G, pwr_y - 4 * G), size=2.0)
 
-    # AD636 output to AIN0 label
-    ain0_x = ad636_x + 8 * G
-    sch.add_label("AIN0", position=(ain0_x, att_y))
-    sch.add_wire(start=(cav_x, att_y), end=(ain0_x, att_y))
-    sch.junctions.add(position=(cav_x, att_y))
+    # 3.3V regulator (LDO) - net label, not VCC symbol
+    reg_x = pwr_x + 44 * G
+    sch.add_label("3.3V", position=(reg_x, pwr_y - 8 * G))
+    sch.components.add(lib_id="C:C", reference="C8", value="100n",
+        position=(reg_x, pwr_y))
+    c8_top = (reg_x, pwr_y - 3.81)
+    c8_bot = (reg_x, pwr_y + 3.81)
+    sch.add_wire(start=(reg_x, pwr_y - 8 * G), end=c8_top)
+    gnd_c8_y = c8_bot[1] + 5 * G
+    sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
+        value="GND", position=(reg_x, gnd_c8_y))
+    sch.add_wire(start=c8_bot, end=(reg_x, gnd_c8_y))
+    pwr_idx += 1
+    sch.add_text("3.3V MCU\n(LDO from +15V)", position=(reg_x + 5 * G, pwr_y - 4 * G), size=2.0)
 
     # ═══════════════════════════════════════════════════════════════
-    # REGION 6: ADuCM362 MCU BLOCK
+    # REGION 6: ADuCM362 MCU BLOCK [Row 2, Col 3]
     # SPI0 -> DAC7800 (VCTRL), ADC AIN0 <- AD636, Timer1/P0.5 <- ZC
     # UART TX/RX for host communication
     # ═══════════════════════════════════════════════════════════════
-    region6_title = (85 * G, 75 * G)
-    sch.add_text("ADuCM362 MCU", position=region6_title, size=3.0, bold=True)
+    sch.add_text("ADuCM362 MCU", position=(c3x, r2y), size=5.0, bold=True)
 
-    mcu_x = 105 * G
-    mcu_y = 88 * G
+    mcu_x = c3x + 35 * G
+    mcu_y = r2y + 28 * G
 
     # MCU drawn as labeled block with pin labels
-    sch.add_text("U5\nADuCM362\nARM Cortex-M3", position=(mcu_x - 6 * G, mcu_y - 6 * G),
-                 size=2.0, bold=True)
+    sch.add_text("U5\nADuCM362\nARM Cortex-M3", position=(mcu_x - 8 * G, mcu_y - 8 * G),
+                 size=2.5, bold=True)
 
-    # Left side pins (inputs)
-    pin_spacing = 4 * G
-    left_x = mcu_x - 12 * G
+    # Left side pins (inputs) - wider spacing for readability
+    pin_spacing = 6 * G
+    left_x = mcu_x - 16 * G
     labels_left = ["AIN0", "P0.5_ZC", "UART_RX"]
     for i, name in enumerate(labels_left):
         pin_y = mcu_y + i * pin_spacing
-        sch.add_wire(start=(left_x, pin_y), end=(mcu_x - 4 * G, pin_y))
-        sch.add_text(name, position=(left_x - 2 * G, pin_y), size=1.3)
+        sch.add_wire(start=(left_x, pin_y), end=(mcu_x - 6 * G, pin_y))
+        sch.add_text(name, position=(left_x - 3 * G, pin_y), size=1.8)
 
     # AIN0 net label (connects to AD636 output)
-    sch.add_label("AIN0", position=(left_x - 4 * G, mcu_y))
-    sch.add_wire(start=(left_x - 4 * G, mcu_y), end=(left_x, mcu_y))
+    sch.add_label("AIN0", position=(left_x - 6 * G, mcu_y))
+    sch.add_wire(start=(left_x - 6 * G, mcu_y), end=(left_x, mcu_y))
 
     # ZC input (connects to BP zero-crossing)
-    sch.add_label("BP_ZC", position=(left_x - 4 * G, mcu_y + pin_spacing))
-    sch.add_wire(start=(left_x - 4 * G, mcu_y + pin_spacing),
+    sch.add_label("BP_ZC", position=(left_x - 6 * G, mcu_y + pin_spacing))
+    sch.add_wire(start=(left_x - 6 * G, mcu_y + pin_spacing),
                  end=(left_x, mcu_y + pin_spacing))
 
-    # Right side pins (outputs)
-    right_x = mcu_x + 12 * G
+    # UART_RX net label (connects to host UART)
+    sch.add_label("UART_RX", position=(left_x - 6 * G, mcu_y + 2 * pin_spacing))
+    sch.add_wire(start=(left_x - 6 * G, mcu_y + 2 * pin_spacing),
+                 end=(left_x, mcu_y + 2 * pin_spacing))
+
+    # Right side pins (outputs) with net labels to avoid floating wires
+    right_x = mcu_x + 16 * G
     labels_right = ["SPI0_CLK", "SPI0_MOSI", "DAC_CS", "UART_TX"]
     for i, name in enumerate(labels_right):
         pin_y = mcu_y + i * pin_spacing
-        sch.add_wire(start=(mcu_x + 4 * G, pin_y), end=(right_x, pin_y))
-        sch.add_text(name, position=(right_x + G, pin_y), size=1.3)
+        sch.add_wire(start=(mcu_x + 6 * G, pin_y), end=(right_x, pin_y))
+        sch.add_label(name, position=(right_x, pin_y))
 
-    # SPI to VCTRL label (connects to DAC7800s)
-    sch.add_label("VCTRL", position=(right_x + 6 * G, mcu_y))
-    sch.add_wire(start=(right_x, mcu_y), end=(right_x + 6 * G, mcu_y))
-    sch.add_text("SPI0 -> DAC7800\ncontrols frequency",
-                 position=(right_x + G, mcu_y + 3 * pin_spacing + 3 * G), size=1.2)
+    # Annotation: SPI controls DAC7800 which outputs VCTRL (not a net label)
+    sch.add_text("SPI0 -> DAC7800\ncontrols VCTRL",
+                 position=(right_x + 2 * G, mcu_y + 3 * pin_spacing + 4 * G), size=1.8)
 
-    # MCU power
-    mcu_vcc_y = mcu_y - 8 * G
-    sch.components.add(lib_id="VCC:VCC", reference=f"#PWR0{pwr_idx:02d}",
-        value="3.3V", position=(mcu_x, mcu_vcc_y))
-    pwr_idx += 1
-    sch.add_wire(start=(mcu_x, mcu_vcc_y), end=(mcu_x, mcu_y - 4 * G))
-    sch.add_text("3.3V", position=(mcu_x + 2 * G, mcu_vcc_y), size=1.5)
+    # MCU power (3.3V net label)
+    mcu_vcc_y = mcu_y - 12 * G
+    sch.add_label("3.3V", position=(mcu_x, mcu_vcc_y))
+    sch.add_wire(start=(mcu_x, mcu_vcc_y), end=(mcu_x, mcu_y - 6 * G))
 
-    mcu_gnd_y = mcu_y + 4 * pin_spacing + 2 * G
+    mcu_gnd_y = mcu_y + 4 * pin_spacing + 4 * G
     sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
         value="GND", position=(mcu_x, mcu_gnd_y))
     pwr_idx += 1
-    sch.add_wire(start=(mcu_x, mcu_y + 3 * pin_spacing + G), end=(mcu_x, mcu_gnd_y))
+    sch.add_wire(start=(mcu_x, mcu_y + 3 * pin_spacing + 2 * G), end=(mcu_x, mcu_gnd_y))
 
-    # Decoupling caps
-    dcap_x = mcu_x + 6 * G
-    dcap_y = mcu_y - 4 * G
+    # Decoupling caps (GND leads shortened to avoid crossing VCTRL bus wire)
+    dcap_x = mcu_x + 10 * G
+    dcap_y = mcu_y - 6 * G
     sch.components.add(lib_id="C:C", reference="C4", value="100n",
         position=(dcap_x, dcap_y))
     c4_top = (dcap_x, dcap_y - 3.81)
     c4_bot = (dcap_x, dcap_y + 3.81)
-    sch.add_wire(start=(mcu_x, mcu_y - 4 * G), end=c4_top)
-    gnd_dc_y = c4_bot[1] + 3 * G
+    sch.add_wire(start=(mcu_x, mcu_y - 6 * G), end=c4_top)
+    gnd_dc_y = c4_bot[1] + 3 * G  # 3*G keeps GND above VCTRL wire
     sch.add_wire(start=c4_bot, end=(dcap_x, gnd_dc_y))
     sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
         value="GND", position=(dcap_x, gnd_dc_y))
     pwr_idx += 1
 
     sch.components.add(lib_id="C:C", reference="C5", value="10u",
-        position=(dcap_x + 5 * G, dcap_y))
-    c5_top = (dcap_x + 5 * G, dcap_y - 3.81)
-    c5_bot = (dcap_x + 5 * G, dcap_y + 3.81)
+        position=(dcap_x + 8 * G, dcap_y))
+    c5_top = (dcap_x + 8 * G, dcap_y - 3.81)
+    c5_bot = (dcap_x + 8 * G, dcap_y + 3.81)
     sch.add_wire(start=c4_top, end=c5_top)
-    gnd_dc2_y = c5_bot[1] + 3 * G
-    sch.add_wire(start=c5_bot, end=(dcap_x + 5 * G, gnd_dc2_y))
+    gnd_dc2_y = c5_bot[1] + 3 * G  # 3*G keeps GND above VCTRL wire
+    sch.add_wire(start=c5_bot, end=(dcap_x + 8 * G, gnd_dc2_y))
     sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
-        value="GND", position=(dcap_x + 5 * G, gnd_dc2_y))
+        value="GND", position=(dcap_x + 8 * G, gnd_dc2_y))
     pwr_idx += 1
-
-    # ═══════════════════════════════════════════════════════════════
-    # REGION 7: POWER SUPPLY
-    # +/-15V for op-amps, 3.3V for MCU
-    # Decoupling caps on each supply
-    # ═══════════════════════════════════════════════════════════════
-    pwr_x = 15 * G
-    pwr_y = 88 * G
-    sch.add_text("POWER SUPPLY", position=(pwr_x - 4 * G, 75 * G), size=3.0, bold=True)
-
-    # +15V supply with bulk decoupling
-    sch.components.add(lib_id="VCC:VCC", reference=f"#PWR0{pwr_idx:02d}",
-        value="+15V", position=(pwr_x, pwr_y - 6 * G))
-    pwr_idx += 1
-    sch.components.add(lib_id="C:C", reference="C6", value="10u",
-        position=(pwr_x, pwr_y - 2 * G))
-    c6_top = (pwr_x, pwr_y - 2 * G - 3.81)
-    c6_bot = (pwr_x, pwr_y - 2 * G + 3.81)
-    sch.add_wire(start=(pwr_x, pwr_y - 6 * G), end=c6_top)
-    sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
-        value="GND", position=(pwr_x, c6_bot[1] + 3 * G))
-    sch.add_wire(start=c6_bot, end=(pwr_x, c6_bot[1] + 3 * G))
-    pwr_idx += 1
-    sch.add_text("+15V bulk", position=(pwr_x + 4 * G, pwr_y - 4 * G), size=1.3)
-
-    # -15V supply with bulk decoupling
-    neg_x = pwr_x + 16 * G
-    sch.components.add(lib_id="VEE:VEE", reference=f"#PWR0{pwr_idx:02d}",
-        value="-15V", position=(neg_x, pwr_y - 6 * G))
-    pwr_idx += 1
-    sch.components.add(lib_id="C:C", reference="C7", value="10u",
-        position=(neg_x, pwr_y - 2 * G))
-    c7_top = (neg_x, pwr_y - 2 * G - 3.81)
-    c7_bot = (neg_x, pwr_y - 2 * G + 3.81)
-    sch.add_wire(start=(neg_x, pwr_y - 6 * G), end=c7_top)
-    sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
-        value="GND", position=(neg_x, c7_bot[1] + 3 * G))
-    sch.add_wire(start=c7_bot, end=(neg_x, c7_bot[1] + 3 * G))
-    pwr_idx += 1
-    sch.add_text("-15V bulk", position=(neg_x + 4 * G, pwr_y - 4 * G), size=1.3)
-
-    # 3.3V regulator (LDO)
-    reg_x = pwr_x + 34 * G
-    sch.components.add(lib_id="VCC:VCC", reference=f"#PWR0{pwr_idx:02d}",
-        value="3.3V", position=(reg_x, pwr_y - 6 * G))
-    pwr_idx += 1
-    sch.components.add(lib_id="C:C", reference="C8", value="100n",
-        position=(reg_x, pwr_y - 2 * G))
-    c8_top = (reg_x, pwr_y - 2 * G - 3.81)
-    c8_bot = (reg_x, pwr_y - 2 * G + 3.81)
-    sch.add_wire(start=(reg_x, pwr_y - 6 * G), end=c8_top)
-    sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
-        value="GND", position=(reg_x, c8_bot[1] + 3 * G))
-    sch.add_wire(start=c8_bot, end=(reg_x, c8_bot[1] + 3 * G))
-    pwr_idx += 1
-    sch.add_text("3.3V MCU\n(LDO from +15V)", position=(reg_x + 4 * G, pwr_y - 4 * G), size=1.3)
 
     # ═══════════════════════════════════════════════════════════════
     # ANNOTATIONS
     # ═══════════════════════════════════════════════════════════════
     sch.add_text("UART (115200 8N1) to host PC",
-                 position=(mcu_x - 6 * G, mcu_y + 4 * pin_spacing + 6 * G), size=1.5)
+                 position=(mcu_x - 8 * G, mcu_y + 4 * pin_spacing + 8 * G), size=2.0)
     sch.add_text("Timer1 capture: zero-crossing frequency measurement",
-                 position=(left_x - 4 * G, mcu_y + pin_spacing + 3 * G), size=1.2)
-    sch.add_text("f = D / (4096 * 2pi * 10k * 470p)  [25Hz - 30kHz]",
-                 position=(dac1_x - 8 * G, dac1_y + 10 * G), size=1.5)
+                 position=(left_x - 6 * G, mcu_y + pin_spacing + 4 * G), size=1.8)
 
     # ── Save ──
     sch_path = os.path.join(WORK_DIR, "oscillator.kicad_sch")
     sch.save(sch_path)
     fix_kicad_sch(sch_path, mirror_refs=["U1", "U2", "U3"])
 
-    # Scale for readability (default 2x - user wants visible without zooming)
-    sf = kwargs.get('scale_factor', 2)
+    # Scale for readability (3x default - matches build_full_system pattern)
+    sf = kwargs.get('scale_factor', 3)
     if sf and sf != 1:
         scale_schematic(sch_path, factor=sf)
 
     print(f"  Oscillator schematic saved: {sch_path}")
     print(f"  Components: 3 op-amps, 2 DAC7800, 4 Zeners, AD636, ADuCM362")
     print(f"  Net labels: HP, BP, LP, VCTRL, AIN0, BP_ZC")
+    print(f"  Layout: 3-col x 2-row grid, {sf}x scale, A3 sheet")
     return sch_path
 
 
@@ -6820,6 +6826,378 @@ def check_layout_quality(wires, labels, components):
     return issues
 
 
+# =============================================================
+# TIER 1 VERIFICATION: Connectivity & Overlap Detection
+# =============================================================
+
+def check_disconnected_labels(wires, labels, components):
+    """Detect net labels connected to only one wire endpoint (dangling labels).
+
+    A label should connect to at least 2 wire endpoints or a component pin
+    to form a useful net. Labels touching only 1 point are likely dangling -
+    they were placed but never wired to their destination.
+
+    Labels that appear 2+ times with the same name are inter-region connectors
+    (net label auto-connect) and are OK with 1 wire each, since KiCad connects
+    same-name labels implicitly.
+
+    Returns list of (severity, message) tuples.
+    """
+    TOLERANCE = 0.6
+    issues = []
+
+    # Count how many times each label name appears
+    label_name_counts = {}
+    for name, _ in labels:
+        label_name_counts[name] = label_name_counts.get(name, 0) + 1
+
+    # Collect all wire endpoints
+    wire_pts = []
+    for (p1, p2) in wires:
+        wire_pts.append(p1)
+        wire_pts.append(p2)
+
+    # Collect component positions (approximate pin locations)
+    comp_pts = []
+    for c in components:
+        comp_pts.append((c['x'], c['y']))
+
+    def count_nearby_wires(px, py):
+        """Count wire endpoints within tolerance of point."""
+        count = 0
+        for (wx, wy) in wire_pts:
+            if abs(px - wx) < TOLERANCE and abs(py - wy) < TOLERANCE:
+                count += 1
+        return count
+
+    def point_on_any_wire(px, py):
+        """Check if point lies on any wire segment (T-junction)."""
+        for (w1, w2) in wires:
+            x1, y1 = w1
+            x2, y2 = w2
+            if abs(x1 - x2) < 0.1:  # vertical wire
+                if abs(px - x1) < TOLERANCE:
+                    if min(y1, y2) - TOLERANCE <= py <= max(y1, y2) + TOLERANCE:
+                        return True
+            if abs(y1 - y2) < 0.1:  # horizontal wire
+                if abs(py - y1) < TOLERANCE:
+                    if min(x1, x2) - TOLERANCE <= px <= max(x1, x2) + TOLERANCE:
+                        return True
+        return False
+
+    disconnected = []
+    for name, (lx, ly) in labels:
+        nearby = count_nearby_wires(lx, ly)
+        on_wire = point_on_any_wire(lx, ly)
+
+        # Label is connected if it touches a wire endpoint or lies on a wire
+        if nearby == 0 and not on_wire:
+            # Label not on any wire at all
+            # Skip if this is a multi-instance label (KiCad auto-connects them)
+            if label_name_counts.get(name, 0) >= 2:
+                continue  # inter-region connector, OK
+            disconnected.append((name, lx, ly))
+
+    if disconnected:
+        issues.append(('WARNING',
+            f'{len(disconnected)} disconnected label(s) detected'))
+        for name, lx, ly in disconnected[:10]:  # limit output
+            issues.append(('WARNING',
+                f'  Label "{name}" at ({lx:.1f},{ly:.1f}) not connected to any wire'))
+    else:
+        issues.append(('PASS', 'All labels connected to wires'))
+
+    return issues
+
+
+def check_duplicate_labels(wires, labels):
+    """Detect duplicate net labels on the same net (redundant labels).
+
+    Same-name labels in different regions are inter-region connectors (OK).
+    Same-name labels in the SAME net (connected by wires) are redundant and
+    create visual clutter - only one is needed per connected region.
+
+    Also detects different-name labels on the same net, which creates
+    ambiguity about what the net is called.
+
+    Returns list of (severity, message) tuples.
+    """
+    issues = []
+
+    # Build connectivity
+    nets, net_names, all_points, parent, find = find_connected_points(wires, labels)
+
+    # Check for different-name labels on the same net
+    multi_name_nets = 0
+    for root, names in net_names.items():
+        if len(names) > 1:
+            # Filter out power net names that are expected to coexist
+            non_power = [n for n in names if n not in ('GND', 'VCC', 'VEE', 'V+', 'V-')]
+            if len(non_power) > 1:
+                multi_name_nets += 1
+                if multi_name_nets <= 5:  # limit output
+                    issues.append(('WARNING',
+                        f'Net has multiple names: {{{", ".join(sorted(non_power))}}} '
+                        f'- consider using a single name for clarity'))
+
+    # Check for same-name labels that are NOT on the same net
+    # (these are inter-region connectors - just INFO)
+    label_by_name = {}
+    label_start = len(wires) * 2
+    for i, (name, pos) in enumerate(labels):
+        idx = label_start + i
+        root = find(idx)
+        if name not in label_by_name:
+            label_by_name[name] = []
+        label_by_name[name].append((root, pos))
+
+    # Check for same-name labels on the same net (redundant)
+    redundant = 0
+    for name, entries in label_by_name.items():
+        roots = [r for r, _ in entries]
+        root_set = set(roots)
+        for root in root_set:
+            count = roots.count(root)
+            if count > 1:
+                redundant += 1
+                if redundant <= 5:
+                    issues.append(('INFO',
+                        f'Label "{name}" appears {count}x on same net '
+                        f'(redundant, only 1 needed per connected region)'))
+
+    if multi_name_nets == 0:
+        issues.append(('PASS', 'No ambiguous multi-name nets detected'))
+    else:
+        issues.append(('WARNING',
+            f'{multi_name_nets} net(s) with multiple different names'))
+
+    return issues
+
+
+def check_label_overlaps(labels, components):
+    """Detect overlapping text labels and reference designators.
+
+    Text that overlaps is unreadable. This checks:
+    1. Net labels overlapping each other
+    2. Net labels overlapping component reference designators
+    3. Reference designators overlapping each other
+
+    Uses approximate bounding boxes based on text length and standard font size.
+
+    Returns list of (severity, message) tuples.
+    """
+    issues = []
+
+    # Approximate text bounding box: each character ~2.5mm wide, ~4mm tall
+    # (at default KiCad text size of 1.27mm which renders ~2.5mm per char)
+    CHAR_W = 2.5  # mm per character width
+    TEXT_H = 4.0  # mm text height
+    MIN_OVERLAP_DIST = 1.0  # mm overlap threshold
+
+    def text_bbox(x, y, text, rotation=0):
+        """Return (x_min, y_min, x_max, y_max) bounding box for text."""
+        w = len(text) * CHAR_W
+        h = TEXT_H
+        if rotation in (90, 270):
+            w, h = h, w
+        return (x - w/2, y - h/2, x + w/2, y + h/2)
+
+    def boxes_overlap(b1, b2):
+        """Check if two bounding boxes overlap."""
+        return (b1[0] < b2[2] - MIN_OVERLAP_DIST and
+                b1[2] > b2[0] + MIN_OVERLAP_DIST and
+                b1[1] < b2[3] - MIN_OVERLAP_DIST and
+                b1[3] > b2[1] + MIN_OVERLAP_DIST)
+
+    # Build list of all text items with bounding boxes
+    text_items = []
+
+    # Net labels
+    for name, (lx, ly) in labels:
+        bbox = text_bbox(lx, ly, name)
+        text_items.append(('label', name, bbox, (lx, ly)))
+
+    # Component references (ref designators like R1, C2, U1)
+    for c in components:
+        ref = c.get('reference', '')
+        if ref and not ref.startswith('#'):  # skip power flags
+            bbox = text_bbox(c['x'], c['y'] - 5, ref)  # ref usually above component
+            text_items.append(('ref', ref, bbox, (c['x'], c['y'])))
+
+    # Check all pairs
+    overlap_count = 0
+    for i, (type1, name1, bbox1, pos1) in enumerate(text_items):
+        for j in range(i + 1, len(text_items)):
+            type2, name2, bbox2, pos2 = text_items[j]
+            if boxes_overlap(bbox1, bbox2):
+                overlap_count += 1
+                if overlap_count <= 5:
+                    issues.append(('WARNING',
+                        f'{type1} "{name1}" at ({pos1[0]:.0f},{pos1[1]:.0f}) '
+                        f'overlaps {type2} "{name2}" at ({pos2[0]:.0f},{pos2[1]:.0f})'))
+
+    if overlap_count > 5:
+        issues.append(('WARNING',
+            f'{overlap_count} total text overlaps detected (showing first 5)'))
+    elif overlap_count == 0:
+        issues.append(('PASS', 'No text overlaps detected'))
+
+    return issues
+
+
+def check_floating_wires(wires, labels, components):
+    """Detect wire segments not connected to any component pin or label.
+
+    A floating wire is one where NEITHER endpoint connects to:
+    - Another wire endpoint
+    - A component pin
+    - A net label
+
+    These wires serve no purpose and clutter the schematic.
+
+    Returns list of (severity, message) tuples.
+    """
+    TOLERANCE = 0.6
+    issues = []
+
+    # Collect all significant connection points
+    # (label positions + component approximate pin positions)
+    connection_pts = []
+    for _, pos in labels:
+        connection_pts.append(pos)
+
+    # Approximate component pin positions using PIN_DB for known types
+    for c in components:
+        cx, cy = c['x'], c['y']
+        lid = c.get('lib_id', '')
+        rot = c.get('rotation', 0)
+        mirrored = c.get('mirror_x', False)
+
+        if 'LM741' in lid:
+            pins = get_opamp_pins(c)
+            for _, (px, py) in pins.items():
+                connection_pts.append((px, py))
+        elif lid == 'R:R' or lid == 'C:C':
+            key = 'R' if 'R' in lid else 'C'
+            if rot == 0:
+                key += '_vert'
+            if key in PIN_DB:
+                for _, (dx, dy) in PIN_DB[key].items():
+                    connection_pts.append((cx + dx, cy + dy))
+        else:
+            # Generic: assume pins near component center
+            connection_pts.append((cx, cy))
+
+    # For each wire, check if at least one endpoint connects to something
+    floating = []
+    for i, (p1, p2) in enumerate(wires):
+        # Check if either endpoint matches another wire's endpoint
+        p1_connected = False
+        p2_connected = False
+
+        for j, (q1, q2) in enumerate(wires):
+            if i == j:
+                continue
+            if (abs(p1[0] - q1[0]) < TOLERANCE and abs(p1[1] - q1[1]) < TOLERANCE) or \
+               (abs(p1[0] - q2[0]) < TOLERANCE and abs(p1[1] - q2[1]) < TOLERANCE):
+                p1_connected = True
+            if (abs(p2[0] - q1[0]) < TOLERANCE and abs(p2[1] - q1[1]) < TOLERANCE) or \
+               (abs(p2[0] - q2[0]) < TOLERANCE and abs(p2[1] - q2[1]) < TOLERANCE):
+                p2_connected = True
+
+        # Also check against connection points (labels, pins)
+        for (cx, cy) in connection_pts:
+            if abs(p1[0] - cx) < TOLERANCE and abs(p1[1] - cy) < TOLERANCE:
+                p1_connected = True
+            if abs(p2[0] - cx) < TOLERANCE and abs(p2[1] - cy) < TOLERANCE:
+                p2_connected = True
+
+        # Also check T-junctions (endpoint on another wire segment)
+        for j, (q1, q2) in enumerate(wires):
+            if i == j:
+                continue
+            x1, y1 = q1
+            x2, y2 = q2
+            for px, py, flag in [(p1[0], p1[1], 'p1'), (p2[0], p2[1], 'p2')]:
+                if abs(x1 - x2) < 0.1:  # vertical
+                    if abs(px - x1) < TOLERANCE and min(y1, y2) - TOLERANCE <= py <= max(y1, y2) + TOLERANCE:
+                        if flag == 'p1':
+                            p1_connected = True
+                        else:
+                            p2_connected = True
+                elif abs(y1 - y2) < 0.1:  # horizontal
+                    if abs(py - y1) < TOLERANCE and min(x1, x2) - TOLERANCE <= px <= max(x1, x2) + TOLERANCE:
+                        if flag == 'p1':
+                            p1_connected = True
+                        else:
+                            p2_connected = True
+
+        if not p1_connected and not p2_connected:
+            floating.append((i, p1, p2))
+
+    if floating:
+        issues.append(('WARNING',
+            f'{len(floating)} floating wire(s) detected (not connected to anything)'))
+        for idx, p1, p2 in floating[:5]:
+            issues.append(('WARNING',
+                f'  Wire[{idx}] ({p1[0]:.1f},{p1[1]:.1f})->({p2[0]:.1f},{p2[1]:.1f}) '
+                f'has no connections'))
+    else:
+        issues.append(('PASS', 'No floating wires detected'))
+
+    return issues
+
+
+def check_component_wire_distance(wires, components):
+    """Check that non-power components are within wiring distance of the wire network.
+
+    Components placed far from any wire are likely misplaced or forgotten
+    during layout. Each component should have at least one wire endpoint
+    within a reasonable distance of its center.
+
+    Returns list of (severity, message) tuples.
+    """
+    TOLERANCE = 0.6
+    MAX_DIST = 30.0  # mm - maximum distance from component to nearest wire
+    issues = []
+
+    # Collect all wire endpoints
+    wire_pts = set()
+    for (p1, p2) in wires:
+        wire_pts.add(p1)
+        wire_pts.add(p2)
+    wire_list = list(wire_pts)
+
+    # Check non-power components
+    non_power = [c for c in components
+                 if 'GND' not in c.get('lib_id', '')
+                 and 'VCC' not in c.get('lib_id', '')
+                 and 'VEE' not in c.get('lib_id', '')
+                 and not c.get('reference', '').startswith('#')]
+
+    stranded = []
+    for c in non_power:
+        cx, cy = c['x'], c['y']
+        min_dist = float('inf')
+        for (wx, wy) in wire_list:
+            d = ((cx - wx)**2 + (cy - wy)**2)**0.5
+            if d < min_dist:
+                min_dist = d
+        if min_dist > MAX_DIST:
+            stranded.append((c['reference'], c.get('value', ''), cx, cy, min_dist))
+
+    if stranded:
+        issues.append(('WARNING',
+            f'{len(stranded)} component(s) far from wire network (>{MAX_DIST}mm)'))
+        for ref, val, cx, cy, dist in stranded[:5]:
+            issues.append(('WARNING',
+                f'  {ref} ({val}) at ({cx:.0f},{cy:.0f}) is {dist:.0f}mm from nearest wire'))
+    else:
+        issues.append(('PASS', 'All components within wiring distance'))
+
+    return issues
+
+
 def auto_correct_schematic(sch_path, circuit_type, layout_issues, current_kwargs):
     """Generate corrected build parameters based on detected layout issues.
 
@@ -7064,12 +7442,42 @@ def build_and_verify_loop(circuit_type, build_fn, max_attempts=3, **build_kwargs
     return sch_path, all_issues, corrections_log
 
 
-def check_pin_connectivity(wires, components):
+def detect_scale_factor(sch_path):
+    """Detect the scale factor applied to a schematic by scale_schematic().
+
+    Checks if the paper size is "User" (custom) and compares to standard sizes
+    to determine the scaling factor. Returns 1 if no scaling detected.
+    """
+    if not sch_path or not os.path.exists(sch_path):
+        return 1
+    with open(sch_path, 'r', encoding='utf-8') as f:
+        text = f.read(2000)  # paper size is near the top
+    m = re.search(r'\(paper "User" (\d+) (\d+)\)', text)
+    if not m:
+        return 1  # standard paper, no scaling
+    w, h = int(m.group(1)), int(m.group(2))
+    # Check against known standard sizes to determine scale
+    paper_sizes = {
+        'A0': (1189, 841), 'A1': (841, 594), 'A2': (594, 420),
+        'A3': (420, 297), 'A4': (297, 210),
+    }
+    for name, (pw, ph) in paper_sizes.items():
+        for scale in [2, 3, 4, 5]:
+            if abs(w - pw * scale) < 5 and abs(h - ph * scale) < 5:
+                return scale
+    return 1
+
+
+def check_pin_connectivity(wires, components, sch_path=None):
     """Check that all op-amp pins are connected to wires.
+
+    Handles scaled schematics by detecting the scale factor from the paper
+    size and scaling PIN_DB offsets accordingly.
 
     Returns list of (severity, message) for each op-amp found.
     """
-    TOLERANCE = 0.6
+    scale = detect_scale_factor(sch_path) if sch_path else 1
+    TOLERANCE = 0.6 * max(scale, 1)  # scale tolerance for scaled schematics
     issues = []
 
     # Collect all wire endpoints
@@ -7087,11 +7495,11 @@ def check_pin_connectivity(wires, components):
         for (w1, w2) in wires:
             x1, y1 = w1
             x2, y2 = w2
-            if abs(x1 - x2) < 0.1:  # vertical wire
+            if abs(x1 - x2) < 0.1 * scale:  # vertical wire
                 if abs(px - x1) < TOLERANCE:
                     if min(y1, y2) - TOLERANCE <= py <= max(y1, y2) + TOLERANCE:
                         return True
-            if abs(y1 - y2) < 0.1:  # horizontal wire
+            if abs(y1 - y2) < 0.1 * scale:  # horizontal wire
                 if abs(py - y1) < TOLERANCE:
                     if min(x1, x2) - TOLERANCE <= px <= max(x1, x2) + TOLERANCE:
                         return True
@@ -7104,7 +7512,15 @@ def check_pin_connectivity(wires, components):
         if 'LM741' not in comp['lib_id']:
             continue
         ref = comp['reference']
-        pins = get_opamp_pins(comp)
+        cx, cy = comp['x'], comp['y']
+        mirrored = comp.get('mirror_x', False)
+        # Apply scale factor to PIN_DB offsets
+        pins = {}
+        for pin_num, (dx, dy) in PIN_DB['LM741'].items():
+            sdx, sdy = dx * scale, dy * scale
+            if mirrored:
+                sdy = -sdy
+            pins[pin_num] = (cx + sdx, cy + sdy)
         all_connected = True
         for pin_num, (px, py) in sorted(pins.items()):
             connected = point_near_wire(px, py)
@@ -7296,11 +7712,18 @@ def verify_circuit(sch_path, circuit_type, sim_results=None, expected=None):
       6. Feedback path exists (inv_amp, electrometer TIA)
       7. Component count sanity check (minimum per circuit type)
 
+    TIER 1 CONNECTIVITY & OVERLAP (Session 14):
+      8. Disconnected labels (label not touching any wire)
+      9. Duplicate/ambiguous net labels (different names on same net)
+     10. Text/label overlap detection (unreadable overlapping text)
+     11. Floating wires (wire not connected to anything)
+     12. Component-to-wire distance (misplaced components)
+
     SIMULATION (ngspice results):
-      8. Output not railing at supply voltage (saturation check)
-      9. Virtual ground holding (inverting input near 0V)
-     10. Gain/transimpedance within expected tolerance
-     11. Custom per-circuit expected values
+     13. Output not railing at supply voltage (saturation check)
+     14. Virtual ground holding (inverting input near 0V)
+     15. Gain/transimpedance within expected tolerance
+     16. Custom per-circuit expected values
 
     LESSONS LEARNED (bugs that became checks):
       - [electrometer] 100nA into 1G = 100V > supply -> saturation check added
@@ -7370,6 +7793,9 @@ def verify_circuit(sch_path, circuit_type, sim_results=None, expected=None):
         required_nets = {'GND', 'VCC', 'TIA_IN', 'AIN0', 'AIN1', 'INV', 'OUT'}
     elif circuit_type == 'ce_amp':
         required_nets.update({'VCC'})  # single supply: VCC + GND only
+    elif circuit_type == 'oscillator':
+        # Oscillator uses +15V/-15V net labels (not VCC/VEE), 3.3V for MCU
+        required_nets = {'GND', 'HP', 'BP', 'LP', 'VCTRL', 'AIN0'}
 
     for net in sorted(required_nets):
         if net in all_nets:
@@ -7380,7 +7806,13 @@ def verify_circuit(sch_path, circuit_type, sim_results=None, expected=None):
 
     # Step 2b: Check input source (VSIN symbol or IN label)
     has_vsin = 'VSIN:VSIN' in comp_lib_ids
-    if circuit_type == 'relay_ladder':
+    if circuit_type == 'oscillator':
+        # Self-oscillating circuit - no external input source needed
+        if 'HP' in label_names and 'BP' in label_names:
+            issues.append(('PASS', 'Oscillator outputs present (HP, BP, LP)'))
+        else:
+            issues.append(('ERROR', 'Missing oscillator output labels'))
+    elif circuit_type == 'relay_ladder':
         # Relay ladder has INV/OUT bus labels instead of a source
         if 'INV' in label_names and 'OUT' in label_names:
             issues.append(('PASS', 'INV and OUT bus labels present'))
@@ -7534,7 +7966,7 @@ def verify_circuit(sch_path, circuit_type, sim_results=None, expected=None):
 
     # Step 4a: [all] Op-amp pin connectivity check
     # Bug: early builds had floating op-amp pins that passed all other checks
-    pin_issues = check_pin_connectivity(wires, components)
+    pin_issues = check_pin_connectivity(wires, components, sch_path)
     issues.extend(pin_issues)
 
     # Step 4b: [sig_cond, usb_ina] Wire crossing detection (visual quality)
@@ -7547,6 +7979,35 @@ def verify_circuit(sch_path, circuit_type, sim_results=None, expected=None):
     layout_issues = check_layout_quality(wires, labels, components)
     for sev, msg, rule_id in layout_issues:
         issues.append((sev, f'LAYOUT: {msg}'))
+
+    # ══════════════════════════════════════════════════════════════
+    # TIER 1: Connectivity & Overlap Detection
+    # ══════════════════════════════════════════════════════════════
+
+    # Step 4d: Disconnected label detection
+    # Labels with only 1 point in connectivity graph are likely dangling
+    disc_issues = check_disconnected_labels(wires, labels, components)
+    issues.extend(disc_issues)
+
+    # Step 4e: Duplicate / ambiguous net label detection
+    # Same output labeled twice, or different names on same net
+    dup_issues = check_duplicate_labels(wires, labels)
+    issues.extend(dup_issues)
+
+    # Step 4f: Label/text overlap detection
+    # Overlapping text is unreadable
+    overlap_issues = check_label_overlaps(labels, components)
+    issues.extend(overlap_issues)
+
+    # Step 4g: Floating wire detection
+    # Wire segments not connected to any component or label
+    float_issues = check_floating_wires(wires, labels, components)
+    issues.extend(float_issues)
+
+    # Step 4h: Component-to-wire distance check
+    # Components too far from wire network are likely misplaced
+    dist_issues = check_component_wire_distance(wires, components)
+    issues.extend(dist_issues)
 
     # Step 4c: Circuit-specific topology checks
     # [inv_amp] Bug: Rf was disconnected, no feedback path

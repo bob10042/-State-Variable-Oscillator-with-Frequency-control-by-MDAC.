@@ -1,6 +1,72 @@
 # CircuitForge - Automated Circuit Design & Simulation Platform
 
-Python-driven pipeline for circuit design, simulation, and verification using KiCad + ngspice.
+**Developer:** Bob Smith
+
+CircuitForge is a Python-driven utility that automates the entire circuit design,
+simulation, and verification workflow. Rather than manually drawing schematics in a
+GUI and hand-writing SPICE netlists, CircuitForge lets you define a circuit in Python
+and produces everything you need: a professional KiCad schematic, a SPICE netlist,
+simulation results, and publication-quality plots.
+
+## What CircuitForge Does
+
+CircuitForge takes a circuit description and drives it through a complete
+build-simulate-verify pipeline:
+
+1. **Schematic Generation** - Programmatically builds KiCad `.kicad_sch` files using
+   the `kicad-sch-api` library. Components are placed on a scaled grid layout with
+   proper wiring, power flags, and annotation. The LM741 KiCad symbol is used as a
+   generic op-amp drawing shape throughout the pipeline (it provides the standard
+   triangle symbol with inverting/non-inverting inputs and output) - the actual
+   simulated device is set independently via the component value and SPICE model
+   (e.g. the electrometer draws an LM741 symbol but simulates with LMC6001 as a
+   proxy for the ADA4530-1 femtoamp-grade amplifier).
+
+2. **Netlist Generation** - Writes SPICE `.cir` netlists independently of the
+   schematic. The netlist references real SPICE models from vendor `.lib` files
+   (National, Analog Devices, TI) stored in the `kicad_libs/` directory. Stimulus
+   sources, analysis commands (`.tran`, `.ac`), and `.control` blocks are all
+   generated automatically.
+
+3. **Simulation** - Launches ngspice (or LTspice for specialty models like the
+   ADA4530-1) in batch mode. The pipeline captures `wrdata` output files containing
+   time-series voltage and current data for all nodes of interest.
+
+4. **Result Parsing and Verification** - Parses raw simulation output, extracts
+   per-channel measurements (settle time, DC level, accuracy vs expected), and runs
+   automated pass/warn/fail checks against configurable tolerances.
+
+5. **Self-Learning Correction** - Maintains a `learned_rules.json` file of schematic
+   and netlist fixes discovered during previous runs. When the pipeline encounters a
+   known issue (duplicate references, missing power nets, encoding problems), it
+   auto-corrects before simulation, avoiding repeated manual fixes.
+
+6. **Plotting** - Generates matplotlib plots of simulation waveforms with
+   auto-scaled axes, channel annotations, and measurement markers. Plots are saved
+   as PNG files alongside the simulation data.
+
+7. **SimGUI** - A .NET 8 WinForms desktop application (using ScottPlot 5 for
+   charting) that wraps the Python pipeline with a graphical interface. It provides
+   project-selectable configurations (Electrometer, Oscillator), one-click simulation
+   runs across all parameter ranges, and interactive result browsing.
+
+8. **Firmware Generation** - Produces C source code for the ADuCM362 microcontroller
+   that runs the physical hardware: ADC configuration, multiplexer scanning, relay
+   range switching, UART streaming, and self-calibration routines.
+
+## How CircuitForge Uses Its Resources
+
+| Resource | Purpose |
+|----------|---------|
+| `kicad_pipeline.py` | Core engine (~8500 lines). Contains all circuit builders, netlist generators, simulators, plotters, and the self-learning correction loop. Run from the command line with a circuit type and parameters. |
+| `kicad_libs/` | Custom KiCad symbol libraries (`.kicad_sym`) and SPICE model files (`.lib`, `.sub`). Includes vendor models for LMC6001, LM4562, DAC7800, AD636, CD4051B, and relay drivers. The LM741 symbol library provides the generic op-amp schematic shape used across all circuit types. |
+| `sim_work/` | Working directory where all generated files land: `.kicad_sch` schematics, `.cir` netlists, `.txt` raw results, `.png` plots, and intermediate files. |
+| `learned_rules.json` | Accumulated auto-correction rules. Each entry maps a problem pattern to its fix, so the pipeline improves over successive runs. |
+| `ngspice` (`C:\Spice64\`) | Open-source SPICE simulator. CircuitForge invokes `ngspice_con.exe` in batch mode, passing the generated `.cir` netlist and collecting `wrdata` output. |
+| `LTspice` | Used as a secondary simulator for circuits requiring proprietary models (e.g. the ADA4530-1 femtoamp op-amp) not available in ngspice. |
+| `SimGUI/` | .NET 8 WinForms GUI built with ScottPlot 5. Calls `kicad_pipeline.py` as a subprocess, parses results, and provides interactive charts. Configured via `IProjectConfig` implementations for each project type. |
+| `firmware/` | C source for the ADuCM362 target MCU. Compiled with `arm-none-eabi-gcc`. Includes drivers for SPI (DAC7800), UART, ADC, GPIO (mux/relay control), and flash-based calibration storage. |
+| `StateVarOsc/` | Design documents, hand calculations, and standalone ngspice test circuits for the state variable oscillator sub-project. |
 
 ## Projects
 

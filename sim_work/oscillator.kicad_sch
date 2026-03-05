@@ -2,64 +2,65 @@
 	(version 20250114)
 	(generator "eeschema")
 	(generator_version "9.0")
-	(uuid "2a7a1bc0-6290-4f87-90a7-e2254e513f75")
-	(paper "A3")
+	(uuid "fb218613-01f4-4f10-8fe2-8f439c722abe")
+	(paper "User" 1260 891)
 	(title_block
 		(title "State Variable Oscillator - ADuCM362 + DAC7800 + AD636")
-		(rev "1.0")
-		(company "CircuitForge")
+		(rev "3.0")
+		(company "CircuitForge - Bob Smith")
 		(comment 1 "MDAC frequency control: 25Hz-30kHz")
 		(comment 2 "Zener AGC: 1V RMS output, AD636 amplitude monitoring")
+		(comment 3 "3-col x 2-row grid layout, 3x scaled")
 	)
 	(lib_symbols
 		(symbol "LM741:LM741"
 			(pin_names
-				(offset 0.254)
+				(offset 0.381)
 			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
 			(property "Reference" "U"
-				(at 0.0 12.7 0)
+				(at 0.0 19.05 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 					(justify left)
 				)
 			)
 			(property "Value" "LM741"
-				(at 0.0 7.62 0)
+				(at 0.0 11.43 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 					(justify left)
 				)
 			)
 			(property "Footprint" ""
-				(at 2.54 2.54 0)
+				(at 3.81 3.81 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
 			(property "Datasheet" "http://www.ti.com/lit/ds/symlink/lm741.pdf"
-				(at 7.62 7.62 0)
+				(at 11.43 11.43 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
@@ -70,7 +71,7 @@
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
@@ -81,7 +82,7 @@
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
@@ -92,17 +93,17 @@
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
 			(symbol "LM741_0_1"
 				(polyline
 					(pts
-						(xy -10.16 10.16) (xy 10.16 0.0) (xy -10.16 -10.16) (xy -10.16 10.16)
+						(xy -15.24 15.24) (xy 15.24 0.0) (xy -15.24 -15.24) (xy -15.24 15.24)
 					)
 					(stroke
-						(width 0.254)
+						(width 1.143)
 						(type default)
 					)
 					(fill
@@ -112,146 +113,146 @@
 			)
 			(symbol "LM741_1_1"
 				(pin input line
-					(at 0.0 -15.24 90)
-					(length 10.16)
+					(at 0.0 -22.86 90)
+					(length 15.24)
 					(name "NULL"
 						(effects
 							(font
-								(size 1.016 1.016)
+								(size 1.524 1.524)
 							)
 						)
 					)
 					(number "1"
 						(effects
 							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
 				)
 				(pin input line
-					(at -15.24 -5.08 0)
-					(length 5.08)
+					(at -22.86 -7.62 0)
+					(length 7.62)
 					(name "-"
 						(effects
 							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
 					(number "2"
 						(effects
 							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
 				)
 				(pin input line
-					(at -15.24 5.08 0)
-					(length 5.08)
+					(at -22.86 7.62 0)
+					(length 7.62)
 					(name "+"
 						(effects
 							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
 					(number "3"
 						(effects
 							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
 				)
 				(pin power_in line
-					(at -5.08 -15.24 90)
-					(length 7.62)
+					(at -7.62 -22.86 90)
+					(length 11.43)
 					(name "V-"
 						(effects
 							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
 					(number "4"
 						(effects
 							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
 				)
 				(pin input line
-					(at 5.08 -15.24 90)
-					(length 12.7)
+					(at 7.62 -22.86 90)
+					(length 19.05)
 					(name "NULL"
 						(effects
 							(font
-								(size 1.016 1.016)
+								(size 1.524 1.524)
 							)
 						)
 					)
 					(number "5"
 						(effects
 							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
 				)
 				(pin output line
-					(at 15.24 0.0 180)
-					(length 5.08)
+					(at 22.86 0.0 180)
+					(length 7.62)
 					(name ""
 						(effects
 							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
 					(number "6"
 						(effects
 							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
 				)
 				(pin power_in line
-					(at -5.08 15.24 270)
-					(length 7.62)
+					(at -7.62 22.86 270)
+					(length 11.43)
 					(name "V+"
 						(effects
 							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
 					(number "7"
 						(effects
 							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
 				)
 				(pin no_connect line
-					(at 0.0 5.08 270)
-					(length 5.08)
+					(at 0.0 7.62 270)
+					(length 7.62)
 					(hide yes)
 					(name "NC"
 						(effects
 							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
 					(number "8"
 						(effects
 							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
@@ -270,12 +271,12 @@
 			(in_bom yes)
 			(on_board yes)
 			(property "Reference" "R"
-				(at 4.064 0.0 90)
+				(at 6.096 0.0 90)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
@@ -285,18 +286,18 @@
 				(do_not_autoplace no)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
 			(property "Footprint" ""
-				(at -3.556 0.0 90)
+				(at -5.334 0.0 90)
 				(show_name no)
 				(do_not_autoplace no)
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
@@ -307,7 +308,7 @@
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
@@ -318,7 +319,7 @@
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
@@ -329,7 +330,7 @@
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
@@ -340,16 +341,16 @@
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
 			(symbol "R_0_1"
 				(rectangle
-					(start -2.032 -5.08)
-					(end 2.032 5.08)
+					(start -3.048 -7.62)
+					(end 3.048 7.62)
 					(stroke
-						(width 0.254)
+						(width 1.143)
 						(type default)
 					)
 					(fill
@@ -359,37 +360,37 @@
 			)
 			(symbol "R_1_1"
 				(pin passive line
-					(at 0.0 7.62 270)
-					(length 2.54)
+					(at 0.0 11.43 270)
+					(length 3.81)
 					(name ""
 						(effects
 							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
 					(number "1"
 						(effects
 							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
 				)
 				(pin passive line
-					(at 0.0 -7.62 90)
-					(length 2.54)
+					(at 0.0 -11.43 90)
+					(length 3.81)
 					(name ""
 						(effects
 							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
 					(number "2"
 						(effects
 							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
@@ -410,23 +411,23 @@
 			(in_bom yes)
 			(on_board yes)
 			(property "Reference" "#PWR"
-				(at 0.0 -12.7 0)
+				(at 0.0 -19.05 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
 			(property "Value" "GND"
-				(at 0.0 -7.62 0)
+				(at 0.0 -11.43 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
@@ -437,7 +438,7 @@
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
@@ -448,7 +449,7 @@
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
@@ -459,7 +460,7 @@
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
@@ -470,17 +471,17 @@
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
 			(symbol "GND_0_1"
 				(polyline
 					(pts
-						(xy 0.0 0.0) (xy 0.0 -2.54) (xy 2.54 -2.54) (xy 0.0 -5.08) (xy -2.54 -2.54) (xy 0.0 -2.54)
+						(xy 0.0 0.0) (xy 0.0 -3.81) (xy 3.81 -3.81) (xy 0.0 -7.62) (xy -3.81 -3.81) (xy 0.0 -3.81)
 					)
 					(stroke
-						(width 0)
+						(width 1.05)
 						(type default)
 					)
 					(fill
@@ -495,151 +496,14 @@
 					(name ""
 						(effects
 							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
 					(number "1"
 						(effects
 							(font
-								(size 2.54 2.54)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "VCC:VCC"
-			(power)
-			(pin_numbers
-				(hide yes)
-			)
-			(pin_names
-				(offset 0.0)
-				(hide yes)
-			)
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(property "Reference" "#PWR"
-				(at 0.0 -7.62 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 2.54 2.54)
-					)
-				)
-			)
-			(property "Value" "VCC"
-				(at 0.0 7.112 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 2.54 2.54)
-					)
-				)
-			)
-			(property "Footprint" ""
-				(at 0.0 0.0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 2.54 2.54)
-					)
-				)
-			)
-			(property "Datasheet" ""
-				(at 0.0 0.0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 2.54 2.54)
-					)
-				)
-			)
-			(property "Description" "Power symbol creates a global label with name \"VCC\""
-				(at 0.0 0.0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 2.54 2.54)
-					)
-				)
-			)
-			(property "ki_keywords" "global power"
-				(at 0.0 0.0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 2.54 2.54)
-					)
-				)
-			)
-			(symbol "VCC_0_1"
-				(polyline
-					(pts
-						(xy -1.524 2.54) (xy 0.0 5.08)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0.0 5.08) (xy 1.524 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0.0 0.0) (xy 0.0 5.08)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "VCC_1_1"
-				(pin power_in line
-					(at 0.0 0.0 90)
-					(length 0.0)
-					(name ""
-						(effects
-							(font
-								(size 2.54 2.54)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
@@ -660,23 +524,23 @@
 			(in_bom yes)
 			(on_board yes)
 			(property "Reference" "#PWR"
-				(at 0.0 -7.62 0)
+				(at 0.0 -11.43 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
 			(property "Value" "VEE"
-				(at 0.0 7.112 0)
+				(at 0.0 10.668 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
@@ -687,7 +551,7 @@
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
@@ -698,7 +562,7 @@
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
@@ -709,7 +573,7 @@
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
@@ -720,17 +584,17 @@
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
 			(symbol "VEE_0_1"
 				(polyline
 					(pts
-						(xy 0.0 0.0) (xy 0.0 5.08)
+						(xy 0.0 0.0) (xy 0.0 7.62)
 					)
 					(stroke
-						(width 0)
+						(width 1.05)
 						(type default)
 					)
 					(fill
@@ -739,10 +603,10 @@
 				)
 				(polyline
 					(pts
-						(xy 1.524 2.54) (xy -1.524 2.54) (xy 0.0 5.08) (xy 1.524 2.54)
+						(xy 2.286 3.81) (xy -2.286 3.81) (xy 0.0 7.62) (xy 2.286 3.81)
 					)
 					(stroke
-						(width 0)
+						(width 1.05)
 						(type default)
 					)
 					(fill
@@ -757,14 +621,14 @@
 					(name ""
 						(effects
 							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
 					(number "1"
 						(effects
 							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
@@ -777,41 +641,41 @@
 				(hide yes)
 			)
 			(pin_names
-				(offset 0.508)
+				(offset 0.762)
 			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
 			(property "Reference" "C"
-				(at 1.27 5.08 0)
+				(at 1.905 7.62 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 					(justify left)
 				)
 			)
 			(property "Value" "C"
-				(at 1.27 -5.08 0)
+				(at 1.905 -7.62 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 					(justify left)
 				)
 			)
 			(property "Footprint" ""
-				(at 1.9304 -7.62 0)
+				(at 2.8956 -11.43 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
@@ -822,7 +686,7 @@
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
@@ -833,7 +697,7 @@
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
@@ -844,7 +708,7 @@
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
@@ -855,17 +719,17 @@
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
 			(symbol "C_0_1"
 				(polyline
 					(pts
-						(xy -4.064 1.524) (xy 4.064 1.524)
+						(xy -6.096 2.286) (xy 6.096 2.286)
 					)
 					(stroke
-						(width 0.508)
+						(width 2.286)
 						(type default)
 					)
 					(fill
@@ -874,10 +738,10 @@
 				)
 				(polyline
 					(pts
-						(xy -4.064 -1.524) (xy 4.064 -1.524)
+						(xy -6.096 -2.286) (xy 6.096 -2.286)
 					)
 					(stroke
-						(width 0.508)
+						(width 2.286)
 						(type default)
 					)
 					(fill
@@ -887,37 +751,37 @@
 			)
 			(symbol "C_1_1"
 				(pin passive line
-					(at 0.0 7.62 270)
-					(length 5.588)
+					(at 0.0 11.43 270)
+					(length 8.382)
 					(name ""
 						(effects
 							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
 					(number "1"
 						(effects
 							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
 				)
 				(pin passive line
-					(at 0.0 -7.62 90)
-					(length 5.588)
+					(at 0.0 -11.43 90)
+					(length 8.382)
 					(name ""
 						(effects
 							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
 					(number "2"
 						(effects
 							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
@@ -927,29 +791,29 @@
 		)
 		(symbol "D:D"
 			(pin_names
-				(offset 2.032)
+				(offset 3.048)
 				(hide yes)
 			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
 			(property "Reference" "D"
-				(at 0.0 5.08 0)
+				(at 0.0 7.62 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
 			(property "Value" "D"
-				(at 0.0 -5.08 0)
+				(at 0.0 -7.62 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
@@ -960,7 +824,7 @@
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
@@ -971,7 +835,7 @@
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
@@ -982,7 +846,7 @@
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
@@ -993,7 +857,7 @@
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
@@ -1004,7 +868,7 @@
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
@@ -1015,7 +879,7 @@
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
@@ -1026,7 +890,7 @@
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
@@ -1037,17 +901,17 @@
 				(hide yes)
 				(effects
 					(font
-						(size 2.54 2.54)
+						(size 3.81 3.81)
 					)
 				)
 			)
 			(symbol "D_0_1"
 				(polyline
 					(pts
-						(xy -2.54 2.54) (xy -2.54 -2.54)
+						(xy -3.81 3.81) (xy -3.81 -3.81)
 					)
 					(stroke
-						(width 0.254)
+						(width 1.143)
 						(type default)
 					)
 					(fill
@@ -1056,10 +920,10 @@
 				)
 				(polyline
 					(pts
-						(xy 2.54 2.54) (xy 2.54 -2.54) (xy -2.54 0.0) (xy 2.54 2.54)
+						(xy 3.81 3.81) (xy 3.81 -3.81) (xy -3.81 0.0) (xy 3.81 3.81)
 					)
 					(stroke
-						(width 0.254)
+						(width 1.143)
 						(type default)
 					)
 					(fill
@@ -1068,10 +932,10 @@
 				)
 				(polyline
 					(pts
-						(xy 2.54 0.0) (xy -2.54 0.0)
+						(xy 3.81 0.0) (xy -3.81 0.0)
 					)
 					(stroke
-						(width 0)
+						(width 1.05)
 						(type default)
 					)
 					(fill
@@ -1081,37 +945,37 @@
 			)
 			(symbol "D_1_1"
 				(pin passive line
-					(at -7.62 0.0 0)
-					(length 5.08)
+					(at -11.43 0.0 0)
+					(length 7.62)
 					(name "K"
 						(effects
 							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
 					(number "1"
 						(effects
 							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
 				)
 				(pin passive line
-					(at 7.62 0.0 180)
-					(length 5.08)
+					(at 11.43 0.0 180)
+					(length 7.62)
 					(name "A"
 						(effects
 							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
 					(number "2"
 						(effects
 							(font
-								(size 2.54 2.54)
+								(size 3.81 3.81)
 							)
 						)
 					)
@@ -1122,7 +986,7 @@
 	)
 	(symbol
 		(lib_id "LM741:LM741")
-		(at 193.04 111.76 0)
+		(at 419.1 289.56 0)
 		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
@@ -1130,52 +994,52 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "075c1ae9-f538-4b01-be55-f95ce8299a9d")
+		(uuid "b33382f5-9630-404b-9a9d-28bbe6fb0c8d")
 		(property "Reference" "U1"
-			(at 193.04 124.46 0.0000)
+			(at 419.1 308.61 0.0000)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(property "Value" "LM4562"
-			(at 193.04 119.38 0.0000)
+			(at 419.1 300.99 0.0000)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(pin "1"
-			(uuid "c32dae02-3f8d-4b27-899b-74cd65036d99")
+			(uuid "00d450a5-6dd8-497a-89a2-2babc698dd18")
 		)
 		(pin "2"
-			(uuid "16c2da43-5971-46e9-9f11-0e3e7aaaf67a")
+			(uuid "a7367208-15ee-4264-bd47-6541752285b0")
 		)
 		(pin "3"
-			(uuid "520acd01-abb4-4679-8520-bdeb543d8d3a")
+			(uuid "9afc4372-4101-4c41-92ee-b4322e07bbf4")
 		)
 		(pin "4"
-			(uuid "13f5c550-98ed-4ddb-b93c-d50c3a2aab31")
+			(uuid "50109a26-12d5-4248-b5ed-0fabde2f281b")
 		)
 		(pin "5"
-			(uuid "f3df753a-42ae-4b48-9a83-0a7148af597e")
+			(uuid "3060e0a1-2b2e-4d12-9110-e3763236457d")
 		)
 		(pin "6"
-			(uuid "15036dde-2a26-4de1-bd68-16d8ceeb2a3f")
+			(uuid "ea0d6b3d-e5af-43a6-9f55-e8dc5fc71222")
 		)
 		(pin "7"
-			(uuid "085d17b6-a573-4218-bb71-6706404ead6d")
+			(uuid "7601c305-e515-45eb-ab0a-99a8d331b8a6")
 		)
 		(pin "8"
-			(uuid "d49b04f6-0998-4421-bec4-c6207b27dad9")
+			(uuid "74095de8-c38b-462f-aa88-b444698cc3b3")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
 					(reference "U1")
 					(unit 1)
 				)
@@ -1184,41 +1048,41 @@
 	)
 	(symbol
 		(lib_id "R:R")
-		(at 106.68 66.04 90)
+		(at 243.84 205.74 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "a730b0a8-8c44-450b-a1ba-1f5bbb9f5722")
+		(uuid "2654d9ca-a804-4928-a8b7-a380253feac1")
 		(property "Reference" "R1"
-			(at 106.68 70.104 180)
+			(at 243.84 211.836 180)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(property "Value" "10k"
-			(at 106.68 66.04 180)
+			(at 243.84 205.74 180)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(pin "1"
-			(uuid "ff719f22-c986-46fb-9f7b-1f9e3d48b41f")
+			(uuid "346da90a-af3f-4b08-87e1-ca866c00ac0e")
 		)
 		(pin "2"
-			(uuid "397602d9-9c37-444b-a59e-bac38d918cfa")
+			(uuid "ec6ea562-272b-4e5a-84f1-554aa08b2a9d")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
 					(reference "R1")
 					(unit 1)
 				)
@@ -1227,41 +1091,41 @@
 	)
 	(symbol
 		(lib_id "R:R")
-		(at 106.68 106.68 90)
+		(at 243.84 281.94 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "eb6f2a5c-7b69-474c-898f-e95219ccab63")
+		(uuid "a349bc2b-de75-46fc-9246-611fb4fb1d61")
 		(property "Reference" "R2"
-			(at 106.68 110.744 180)
+			(at 243.84 288.036 180)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(property "Value" "22k"
-			(at 106.68 106.68 180)
+			(at 243.84 281.94 180)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(pin "1"
-			(uuid "2fd855c4-0f02-4d2d-9dcd-d76b79ccef4a")
+			(uuid "af255b72-fe81-4d21-a1b4-f35ce1a255b2")
 		)
 		(pin "2"
-			(uuid "f0225267-9783-44ce-ac19-b50222b2ca32")
+			(uuid "c4a706f5-acb4-44eb-9728-4a3ae1725bf2")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
 					(reference "R2")
 					(unit 1)
 				)
@@ -1270,41 +1134,41 @@
 	)
 	(symbol
 		(lib_id "R:R")
-		(at 182.88 45.72 90)
+		(at 396.24 236.22 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "f5bb7e20-0441-44d3-9ea9-f5c9aaf4b8b0")
+		(uuid "943bbe7c-4da1-4d12-89b2-da3bee433288")
 		(property "Reference" "R3"
-			(at 182.88 49.784 180)
+			(at 396.24 242.316 180)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(property "Value" "10k"
-			(at 182.88 45.72 180)
+			(at 396.24 236.22 180)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(pin "1"
-			(uuid "a0f8b305-7d1d-4ba8-99ed-d76fd7b9d565")
+			(uuid "29e2d451-9bd0-42f4-b47e-5ce23a56e187")
 		)
 		(pin "2"
-			(uuid "6b48ba40-73e7-415b-abd1-4d061be4e3ab")
+			(uuid "ba0561db-3091-46b9-8117-e1df08a1daff")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
 					(reference "R3")
 					(unit 1)
 				)
@@ -1313,39 +1177,39 @@
 	)
 	(symbol
 		(lib_id "GND:GND")
-		(at 177.8 137.16 0)
+		(at 396.24 342.9 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "017d240d-f2c6-4040-8929-e514a32e3d50")
+		(uuid "64f570c4-33bc-4bdc-a25f-3e64ae9d98bf")
 		(property "Reference" "#PWR001"
-			(at 177.8 124.46 0.0000)
+			(at 396.24 323.85 0.0000)
 			(hide yes)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(property "Value" "GND"
-			(at 177.8 129.54 0.0000)
+			(at 396.24 331.47 0.0000)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(pin "1"
-			(uuid "7d1ac0b9-3887-41dd-9b0f-51740a0679fe")
+			(uuid "7843150b-2f09-45b0-8434-ffbf5eefaba5")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
 					(reference "#PWR001")
 					(unit 1)
 				)
@@ -1353,40 +1217,40 @@
 		)
 	)
 	(symbol
-		(lib_id "VCC:VCC")
-		(at 187.96 147.32 0)
+		(lib_id "VEE:VEE")
+		(at 411.48 220.98 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "dc7a1be6-9f72-45db-9b2f-f925ecdde750")
+		(uuid "ff92dfc9-daa2-473e-82ac-a2e06ec19bf6")
 		(property "Reference" "#PWR002"
-			(at 187.96 139.7 0.0000)
+			(at 411.48 209.55 0.0000)
 			(hide yes)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
-		(property "Value" "+15V"
-			(at 187.96 154.432 0.0000)
+		(property "Value" "-15V"
+			(at 411.48 231.648 0.0000)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(pin "1"
-			(uuid "ab15d6c7-be5e-42bb-abbc-8eefa5e85950")
+			(uuid "9700d280-a4ec-4ecd-9b4e-9a24d758199c")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
 					(reference "#PWR002")
 					(unit 1)
 				)
@@ -1394,49 +1258,8 @@
 		)
 	)
 	(symbol
-		(lib_id "VEE:VEE")
-		(at 187.96 76.2 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced no)
-		(uuid "f496658f-dc5f-42f3-b9fe-644b9ab3784a")
-		(property "Reference" "#PWR003"
-			(at 187.96 68.58 0.0000)
-			(hide yes)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "-15V"
-			(at 187.96 83.312 0.0000)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(pin "1"
-			(uuid "316be2c6-a147-4c70-91ea-d1dc93e6740f")
-		)
-		(instances
-			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "#PWR003")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "LM741:LM741")
-		(at 508.0 111.76 0)
+		(at 800.1 327.66 0)
 		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
@@ -1444,52 +1267,52 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "f0f96732-ad67-42ea-8408-74d59d2ed0b7")
+		(uuid "46422954-17b4-48ae-ab80-3d13af84a0a6")
 		(property "Reference" "U2"
-			(at 508.0 124.46 0.0000)
+			(at 800.1 346.71 0.0000)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(property "Value" "LM4562"
-			(at 508.0 119.38 0.0000)
+			(at 800.1 339.09 0.0000)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(pin "1"
-			(uuid "54237863-9689-4394-b173-8c407bd6d104")
+			(uuid "40a80bd3-5c3f-451f-8a6d-b8942ead2244")
 		)
 		(pin "2"
-			(uuid "11636e9f-09af-491b-b5ec-346e6429d28d")
+			(uuid "bee94b99-c0fc-4437-bbb4-113cec1b87f8")
 		)
 		(pin "3"
-			(uuid "7b38da5e-01aa-4f3a-9516-027bb0485920")
+			(uuid "72762fee-ae2e-45e0-87db-e572db3d6143")
 		)
 		(pin "4"
-			(uuid "8d7ebed2-7ace-4cfb-9cf3-f6a0e29b028f")
+			(uuid "64f79c6f-8bf0-4748-a3ac-99c9321ba3aa")
 		)
 		(pin "5"
-			(uuid "90b71cbc-3404-4625-9e9e-0b0ac2b4a535")
+			(uuid "b378fbed-0315-4956-b503-b5c5c588aea1")
 		)
 		(pin "6"
-			(uuid "5e99dcba-96b7-4aad-b717-7f70335ddbf1")
+			(uuid "e2db935d-5db6-4846-85ca-a13cfd9b006d")
 		)
 		(pin "7"
-			(uuid "572ecd13-62ba-4997-9f0d-d75d355c7ded")
+			(uuid "25610c51-4b75-4005-9b44-2d38270d9329")
 		)
 		(pin "8"
-			(uuid "43f60bc3-49b0-4150-871f-7475645b202c")
+			(uuid "4b616e87-dc8d-48f9-be70-dc4c86e1fee2")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
 					(reference "U2")
 					(unit 1)
 				)
@@ -1498,41 +1321,41 @@
 	)
 	(symbol
 		(lib_id "R:R")
-		(at 441.96 106.68 90)
+		(at 670.56 320.04 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "5e2bafc6-2f26-4930-9334-7f598d585c98")
+		(uuid "986b19e4-5514-4493-b7f7-16530c2485f2")
 		(property "Reference" "R4"
-			(at 441.96 110.744 180)
+			(at 670.56 326.136 180)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(property "Value" "10k"
-			(at 441.96 106.68 180)
+			(at 670.56 320.04 180)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(pin "1"
-			(uuid "3bd300e5-41cc-4a81-b86e-bc047331f673")
+			(uuid "30ca3122-f2fa-4793-ac48-a04efd791225")
 		)
 		(pin "2"
-			(uuid "0c1086d5-0fcf-47ee-919f-bb2f694281c0")
+			(uuid "db24e654-166c-488e-bce1-c2aeceffe885")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
 					(reference "R4")
 					(unit 1)
 				)
@@ -1541,41 +1364,41 @@
 	)
 	(symbol
 		(lib_id "C:C")
-		(at 508.0 55.88 90)
+		(at 800.1 274.32 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "03426b72-5e5c-428a-9b43-219a17e9641a")
+		(uuid "e9d615e8-18e7-45f5-8332-6b9f909f93be")
 		(property "Reference" "C1"
-			(at 502.92 57.15 90)
+			(at 792.48 276.225 90)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(property "Value" "470p"
-			(at 513.08 57.15 90)
+			(at 807.72 276.225 90)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(pin "1"
-			(uuid "c098d2f1-4138-4499-9120-686d0582abec")
+			(uuid "67b6d109-6921-4519-be54-b6001f9eca4c")
 		)
 		(pin "2"
-			(uuid "89a9e471-56cb-41a2-8aec-0982be3cacb2")
+			(uuid "ab3f3ffa-048a-4ba6-ae9c-5ae65ee61d13")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
 					(reference "C1")
 					(unit 1)
 				)
@@ -1584,41 +1407,41 @@
 	)
 	(symbol
 		(lib_id "R:R")
-		(at 508.0 25.4 90)
+		(at 800.1 243.84 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "5073002c-0142-482d-b399-17f33c044118")
+		(uuid "79bd4a22-6e70-40d7-ac96-2358046ec760")
 		(property "Reference" "R5"
-			(at 508.0 29.464 180)
+			(at 800.1 249.936 180)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(property "Value" "100M"
-			(at 508.0 25.4 180)
+			(at 800.1 243.84 180)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(pin "1"
-			(uuid "aa03a356-9e40-4612-b406-00fd3a84b95f")
+			(uuid "115b76dd-9a05-415f-a1de-a7d3d54b18da")
 		)
 		(pin "2"
-			(uuid "516f4baf-caf6-4ab6-b79c-53a14f320fdb")
+			(uuid "383c3719-07f2-4f89-8a63-33fe006bff79")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
 					(reference "R5")
 					(unit 1)
 				)
@@ -1627,41 +1450,41 @@
 	)
 	(symbol
 		(lib_id "D:D")
-		(at 487.68 -5.08 90)
+		(at 762.0 213.36 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "5f11dd1e-6a4c-4e48-85b6-20497ccac3f5")
+		(uuid "511cf116-b53d-47f7-918c-eb698ff0cd37")
 		(property "Reference" "D1"
-			(at 482.6 -5.08 90)
+			(at 762.0 220.98 0.0000)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(property "Value" "DZ09 BV=1.1"
-			(at 492.76 -5.08 90)
+			(at 762.0 205.74 0.0000)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(pin "1"
-			(uuid "4f3eef91-08e8-47a4-8a62-e984ff5b85ef")
+			(uuid "465954ec-6d87-462d-b330-061a4c565aef")
 		)
 		(pin "2"
-			(uuid "00944e2b-760e-4f41-b803-5f81a0eaad37")
+			(uuid "a085bbaa-33f4-44f6-bd68-48da3ec30387")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
 					(reference "D1")
 					(unit 1)
 				)
@@ -1670,41 +1493,41 @@
 	)
 	(symbol
 		(lib_id "D:D")
-		(at 528.32 -5.08 270)
+		(at 838.2 213.36 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "29494ca9-1b74-4095-be29-e6e6319f844d")
+		(uuid "658951e6-97d7-41cf-a2cf-1d0130c78a90")
 		(property "Reference" "D2"
-			(at 533.4 -5.08 270)
+			(at 838.2 205.74 180)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(property "Value" "DZ09 BV=1.1"
-			(at 523.24 -5.08 270)
+			(at 838.2 220.98 180)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(pin "1"
-			(uuid "de6dad25-34af-45a4-8e54-2c87c476481f")
+			(uuid "0922c91a-c71a-42d3-9e22-5e8bcecda478")
 		)
 		(pin "2"
-			(uuid "a9fe99b7-87d0-440d-bcf8-213e5d02829d")
+			(uuid "e0b42f6b-27cf-44f1-97ce-fb5616c09d25")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
 					(reference "D2")
 					(unit 1)
 				)
@@ -1713,39 +1536,80 @@
 	)
 	(symbol
 		(lib_id "GND:GND")
-		(at 492.76 137.16 0)
+		(at 777.24 381.0 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "8c1eac9a-bdd0-47af-926e-4ba912db774e")
-		(property "Reference" "#PWR004"
-			(at 492.76 124.46 0.0000)
+		(uuid "b1b71496-9dfa-472d-8a35-be5d3ae9f3e2")
+		(property "Reference" "#PWR003"
+			(at 777.24 361.95 0.0000)
 			(hide yes)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(property "Value" "GND"
-			(at 492.76 129.54 0.0000)
+			(at 777.24 369.57 0.0000)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(pin "1"
-			(uuid "67bd865b-7ac6-4818-9aed-67a76fb8f6da")
+			(uuid "050f9ac5-27c4-4a2d-b739-ec8f65084e1b")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
+					(reference "#PWR003")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "VEE:VEE")
+		(at 792.48 281.94 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced no)
+		(uuid "3fe23d23-6bd0-431e-9db5-37b8891edb0f")
+		(property "Reference" "#PWR004"
+			(at 792.48 270.51 0.0000)
+			(hide yes)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "-15V"
+			(at 792.48 292.608 0.0000)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(pin "1"
+			(uuid "3a088a34-0855-4706-8257-ade6fb04cbb5")
+		)
+		(instances
+			(project "State Variable Oscillator with MDAC Control"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
 					(reference "#PWR004")
 					(unit 1)
 				)
@@ -1753,692 +1617,42 @@
 		)
 	)
 	(symbol
-		(lib_id "VCC:VCC")
-		(at 502.92 147.32 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced no)
-		(uuid "f552258a-259b-4d6b-95b9-1183e03df3bf")
-		(property "Reference" "#PWR005"
-			(at 502.92 139.7 0.0000)
-			(hide yes)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "+15V"
-			(at 502.92 154.432 0.0000)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(pin "1"
-			(uuid "ea855d0c-5aae-4e17-b6db-813430e1fcd7")
-		)
-		(instances
-			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "#PWR005")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "VEE:VEE")
-		(at 502.92 76.2 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced no)
-		(uuid "4d838a4e-2fd5-41b1-8385-c54c5681f57d")
-		(property "Reference" "#PWR006"
-			(at 502.92 68.58 0.0000)
-			(hide yes)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "-15V"
-			(at 502.92 83.312 0.0000)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(pin "1"
-			(uuid "4561f683-2540-4ae2-84bc-4a9d3a62662d")
-		)
-		(instances
-			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "#PWR006")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "LM741:LM741")
-		(at 254.0 314.96 0)
-		(mirror x)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced no)
-		(uuid "7624822f-c5d9-4067-886b-2451b291117f")
-		(property "Reference" "U3"
-			(at 254.0 327.66 0.0000)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "LM4562"
-			(at 254.0 322.58 0.0000)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(pin "1"
-			(uuid "f4a2a814-fbc3-4f3d-baf3-142dda017d15")
-		)
-		(pin "2"
-			(uuid "eb923914-d253-4441-a3ea-175743c76d78")
-		)
-		(pin "3"
-			(uuid "d05c875d-4d9b-48cd-9779-da9d18a8daeb")
-		)
-		(pin "4"
-			(uuid "36e53e09-851b-44e6-bcec-fc5668e37475")
-		)
-		(pin "5"
-			(uuid "ed99135c-80d6-4960-bfa6-216875f0b1a7")
-		)
-		(pin "6"
-			(uuid "4fb226b9-2811-4071-8682-0c437bbf62bf")
-		)
-		(pin "7"
-			(uuid "5b985a14-6b2a-48fc-88e3-5ea2163b6514")
-		)
-		(pin "8"
-			(uuid "b54c2a5b-9a1d-4bc7-8ed1-c84170cb887f")
-		)
-		(instances
-			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "U3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "R:R")
-		(at 187.96 309.88 90)
+		(at 937.26 289.56 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "1d0c7677-6cf6-4ee4-9266-6e12f7c409c7")
-		(property "Reference" "R6"
-			(at 187.96 313.944 180)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "10k"
-			(at 187.96 309.88 180)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(pin "1"
-			(uuid "34b26aa1-c782-4d2d-a92e-abc0f050c55e")
-		)
-		(pin "2"
-			(uuid "97f4b3ca-5260-4695-80e0-bf558eb110a4")
-		)
-		(instances
-			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "R6")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "C:C")
-		(at 254.0 259.08 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced no)
-		(uuid "bacff3f3-28c3-418c-94ca-4c87fd2163c1")
-		(property "Reference" "C2"
-			(at 248.92 260.35 90)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "470p"
-			(at 259.08 260.35 90)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(pin "1"
-			(uuid "d65eb6bd-b8a4-4e99-92ed-8a9d48b1c60f")
-		)
-		(pin "2"
-			(uuid "40c90060-194a-4ae8-a50e-acd4a061eea8")
-		)
-		(instances
-			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "C2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "R:R")
-		(at 254.0 228.6 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced no)
-		(uuid "310aa906-03d8-44bb-a099-6319b79acfb3")
-		(property "Reference" "R7"
-			(at 254.0 232.664 180)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "100M"
-			(at 254.0 228.6 180)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(pin "1"
-			(uuid "2f65ac5c-600a-4d2e-b224-82f5f822a736")
-		)
-		(pin "2"
-			(uuid "d838d28a-6ee4-488d-8133-46acc3f0038c")
-		)
-		(instances
-			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "R7")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "D:D")
-		(at 233.68 198.12 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced no)
-		(uuid "fb187ac3-c53f-4f10-afa0-67803e726041")
-		(property "Reference" "D3"
-			(at 228.6 198.12 90)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "DZ09 BV=1.1"
-			(at 238.76 198.12 90)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(pin "1"
-			(uuid "d79c5e23-91d3-4342-9621-a8ba6f988bc0")
-		)
-		(pin "2"
-			(uuid "3b281aeb-7b6f-45d7-b0dc-72e703eb2c45")
-		)
-		(instances
-			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "D3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "D:D")
-		(at 274.32 198.12 270)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced no)
-		(uuid "2b42d4a1-2d22-4e26-ab5d-82f6bc549a47")
-		(property "Reference" "D4"
-			(at 279.4 198.12 270)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "DZ09 BV=1.1"
-			(at 269.24 198.12 270)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(pin "1"
-			(uuid "88982fc6-a590-4d87-a481-30d81848d285")
-		)
-		(pin "2"
-			(uuid "c288f6ad-8882-4e7e-81a1-3cd2af2239d1")
-		)
-		(instances
-			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "D4")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "GND:GND")
-		(at 238.76 340.36 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced no)
-		(uuid "d390aaa6-34f4-46c2-b6b9-d70a68f5bd27")
-		(property "Reference" "#PWR007"
-			(at 238.76 327.66 0.0000)
-			(hide yes)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "GND"
-			(at 238.76 332.74 0.0000)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(pin "1"
-			(uuid "9ae5625d-a1a3-4a81-9f2a-d413a7a486f9")
-		)
-		(instances
-			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "#PWR007")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "VCC:VCC")
-		(at 248.92 350.52 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced no)
-		(uuid "333f5f0f-609c-4af9-817c-78130baff685")
-		(property "Reference" "#PWR008"
-			(at 248.92 342.9 0.0000)
-			(hide yes)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "+15V"
-			(at 248.92 357.632 0.0000)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(pin "1"
-			(uuid "a2ccc1b0-f4ef-4854-b93a-e2680dc0bed8")
-		)
-		(instances
-			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "#PWR008")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "VEE:VEE")
-		(at 248.92 279.4 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced no)
-		(uuid "598c6407-80ab-42f5-aaa6-bdfe98e0e317")
-		(property "Reference" "#PWR009"
-			(at 248.92 271.78 0.0000)
-			(hide yes)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "-15V"
-			(at 248.92 286.512 0.0000)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(pin "1"
-			(uuid "15bfe7c1-0c84-402e-8dc3-a6ae6da641b3")
-		)
-		(instances
-			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "#PWR009")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "R:R")
-		(at 330.2 355.6 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced no)
-		(uuid "8306539f-7ccb-488b-85cd-b2c0ed48e00b")
-		(property "Reference" "R8"
-			(at 334.264 355.6 90)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "100k"
-			(at 330.2 355.6 90)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(pin "1"
-			(uuid "8d0ae3ad-9c72-4ba4-bd58-12800b38dcd0")
-		)
-		(pin "2"
-			(uuid "e997ba66-838d-42ad-b00e-923418a41fd5")
-		)
-		(instances
-			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "R8")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "GND:GND")
-		(at 330.2 383.54 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced no)
-		(uuid "fb97df2f-2789-4d00-b047-627c7807e5b1")
-		(property "Reference" "#PWR010"
-			(at 330.2 370.84 0.0000)
-			(hide yes)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "GND"
-			(at 330.2 375.92 0.0000)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(pin "1"
-			(uuid "19bac276-9d01-4c77-9e3d-15be37852469")
-		)
-		(instances
-			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "#PWR010")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "R:R")
-		(at 76.2 177.8 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced no)
-		(uuid "33bb6551-c767-4dd6-b81c-f627efcd0528")
-		(property "Reference" "R9"
-			(at 76.2 181.864 180)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "100k"
-			(at 76.2 177.8 180)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(pin "1"
-			(uuid "cea260fb-8a41-4998-a2ea-b496a8936e5d")
-		)
-		(pin "2"
-			(uuid "eeb0a829-ee46-4a3e-bcfc-cee997690766")
-		)
-		(instances
-			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "R9")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "GND:GND")
-		(at 68.58 208.28 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced no)
-		(uuid "5cb516bb-f049-4326-88b7-50a96bcfce24")
-		(property "Reference" "#PWR011"
-			(at 68.58 195.58 0.0000)
-			(hide yes)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "GND"
-			(at 68.58 200.66 0.0000)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(pin "1"
-			(uuid "e359b985-8e48-4e09-8942-5c4104fe5356")
-		)
-		(instances
-			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "#PWR011")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "R:R")
-		(at 457.2 294.64 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced no)
-		(uuid "992d5102-3de7-4e85-b480-fe2b1cb4d33c")
+		(uuid "2a09dcfd-75e0-435a-ab47-9e7a47362b6e")
 		(property "Reference" "R10"
-			(at 457.2 298.704 180)
+			(at 937.26 295.656 180)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(property "Value" "40k"
-			(at 457.2 294.64 180)
+			(at 937.26 289.56 180)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(pin "1"
-			(uuid "6b9f7042-3683-4837-800a-b860626340c2")
+			(uuid "9045eaee-2d94-4796-8778-9bd203026bd0")
 		)
 		(pin "2"
-			(uuid "7151d61b-e0ca-462f-966e-39ff85226bc7")
+			(uuid "3d2b7fe1-2662-4e11-977e-c065e43e63d8")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
 					(reference "R10")
 					(unit 1)
 				)
@@ -2447,41 +1661,41 @@
 	)
 	(symbol
 		(lib_id "R:R")
-		(at 485.14 325.12 0)
+		(at 994.41 350.52 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "38a01615-8a74-46b0-a3a7-88384ebf99fd")
+		(uuid "14c9aa07-9c83-4a96-948b-4bfec3d065e6")
 		(property "Reference" "R11"
-			(at 489.204 325.12 90)
+			(at 1000.506 350.52 90)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(property "Value" "10k"
-			(at 485.14 325.12 90)
+			(at 994.41 350.52 90)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(pin "1"
-			(uuid "ebc82192-2e3f-4715-8c39-caedb00ad363")
+			(uuid "165dced7-a253-4474-b042-5e1d72934405")
 		)
 		(pin "2"
-			(uuid "6f339e84-95c1-40fe-b103-fb8adebb2278")
+			(uuid "ab78a434-871e-4671-b02c-81e15825b30a")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
 					(reference "R11")
 					(unit 1)
 				)
@@ -2490,40 +1704,40 @@
 	)
 	(symbol
 		(lib_id "GND:GND")
-		(at 485.14 347.98 0)
+		(at 994.41 400.05 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "43bd0433-b2dd-4365-b398-b66a3f0212cf")
-		(property "Reference" "#PWR012"
-			(at 485.14 335.28 0.0000)
+		(uuid "963749ac-1732-4fbf-9fe0-75a13a2273f9")
+		(property "Reference" "#PWR005"
+			(at 994.41 381.0 0.0000)
 			(hide yes)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(property "Value" "GND"
-			(at 485.14 340.36 0.0000)
+			(at 994.41 388.62 0.0000)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(pin "1"
-			(uuid "bd458675-b425-49d7-a077-628d6561a19b")
+			(uuid "6fafbf7f-2d0f-471b-8b10-a3ede12ebbf7")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "#PWR012")
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
+					(reference "#PWR005")
 					(unit 1)
 				)
 			)
@@ -2531,41 +1745,41 @@
 	)
 	(symbol
 		(lib_id "C:C")
-		(at 576.58 325.12 0)
+		(at 1177.29 350.52 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "d79265a3-c28a-4a05-8842-d8e3d0034579")
+		(uuid "45347e4f-0a54-476a-87d7-8a690ca94483")
 		(property "Reference" "C3"
-			(at 577.85 330.2 0.0000)
+			(at 1179.195 358.14 0.0000)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(property "Value" "10u"
-			(at 577.85 320.04 0.0000)
+			(at 1179.195 342.9 0.0000)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(pin "1"
-			(uuid "a7cfcc5c-a80f-4263-beaa-0165074428a9")
+			(uuid "113aa190-3a9f-41f2-965f-b5587aba1bf8")
 		)
 		(pin "2"
-			(uuid "3fabb28d-f561-4a88-9997-03f31ce43f44")
+			(uuid "01bec29f-ac25-4f34-870a-65347112880c")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
 					(reference "C3")
 					(unit 1)
 				)
@@ -2574,331 +1788,145 @@
 	)
 	(symbol
 		(lib_id "GND:GND")
-		(at 576.58 347.98 0)
+		(at 1177.29 400.05 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "05e6d5dc-f67c-4f3f-881e-6feb050f9e9e")
-		(property "Reference" "#PWR013"
-			(at 576.58 335.28 0.0000)
+		(uuid "91981cc9-2226-4378-93eb-ded82e4a132b")
+		(property "Reference" "#PWR006"
+			(at 1177.29 381.0 0.0000)
 			(hide yes)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(property "Value" "GND"
-			(at 576.58 340.36 0.0000)
+			(at 1177.29 388.62 0.0000)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(pin "1"
-			(uuid "1e0e834a-0951-44e2-b04b-c43fb93700fa")
+			(uuid "64568d0d-156c-4fa4-9010-84dd2daa1755")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "#PWR013")
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
+					(reference "#PWR006")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "VCC:VCC")
-		(at 533.4 406.4 0)
+		(lib_id "LM741:LM741")
+		(at 457.2 647.7 0)
+		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "b0fdf8fd-6eef-417d-bbc3-3709203a8994")
-		(property "Reference" "#PWR014"
-			(at 533.4 398.78 0.0000)
-			(hide yes)
+		(uuid "e74e9db7-4e26-4983-9122-cf5d7c345be3")
+		(property "Reference" "U3"
+			(at 457.2 666.75 0.0000)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
-		(property "Value" "3.3V"
-			(at 533.4 413.512 0.0000)
+		(property "Value" "LM4562"
+			(at 457.2 659.13 0.0000)
 			(effects
 				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(pin "1"
-			(uuid "f330d44b-2460-4645-90df-0dd0a6ee3952")
-		)
-		(instances
-			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "#PWR014")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "GND:GND")
-		(at 533.4 538.48 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced no)
-		(uuid "5af4a4a7-a33e-46c4-9fe0-ed95fcc98dcd")
-		(property "Reference" "#PWR015"
-			(at 533.4 525.78 0.0000)
-			(hide yes)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "GND"
-			(at 533.4 530.86 0.0000)
-			(effects
-				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(pin "1"
-			(uuid "bf6cb44c-8e6c-4612-a1e6-ba4c63b183c9")
-		)
-		(instances
-			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "#PWR015")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "C:C")
-		(at 563.88 426.72 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced no)
-		(uuid "6136ef2c-8cb8-4f57-abea-eac1c7490592")
-		(property "Reference" "C4"
-			(at 565.15 431.8 0.0000)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "100n"
-			(at 565.15 421.64 0.0000)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(pin "1"
-			(uuid "7687acfd-40eb-4949-a83d-7740ba3c266b")
+			(uuid "2396b8b8-9b75-4131-a2f5-bf8495b82925")
 		)
 		(pin "2"
-			(uuid "f9e6ff86-1c14-4ae3-b983-739e3b745ee8")
+			(uuid "390620ac-ab54-43cd-b105-87f855a52424")
+		)
+		(pin "3"
+			(uuid "dac07c52-13fd-40bd-9419-7bd84e678c01")
+		)
+		(pin "4"
+			(uuid "38b5af9d-765e-44f4-9e5a-03ba29354328")
+		)
+		(pin "5"
+			(uuid "66967e74-b456-45cd-8074-df0163c2256b")
+		)
+		(pin "6"
+			(uuid "327a1682-d2ab-4bda-a97b-886b6d6cdd27")
+		)
+		(pin "7"
+			(uuid "0cf98044-acf7-43d0-b9f6-1170cd2fef63")
+		)
+		(pin "8"
+			(uuid "b78cb0fd-6f28-470d-82ae-c068cf51de10")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "C4")
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
+					(reference "U3")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "GND:GND")
-		(at 563.88 449.58 0)
+		(lib_id "R:R")
+		(at 327.66 640.08 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "3eff0483-567c-4072-ac6d-1bec8cb9e170")
-		(property "Reference" "#PWR016"
-			(at 563.88 436.88 0.0000)
-			(hide yes)
+		(uuid "b264ada7-08f6-4cba-b1fb-f5b25cc7cdf0")
+		(property "Reference" "R6"
+			(at 327.66 646.176 180)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
-		(property "Value" "GND"
-			(at 563.88 441.96 0.0000)
+		(property "Value" "10k"
+			(at 327.66 640.08 180)
 			(effects
 				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(pin "1"
-			(uuid "8a22c77c-9712-416d-b7e0-f31422bf566b")
-		)
-		(instances
-			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "#PWR016")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "C:C")
-		(at 589.28 426.72 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced no)
-		(uuid "1607c345-ebb9-4219-b935-e17439c7f737")
-		(property "Reference" "C5"
-			(at 590.55 431.8 0.0000)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "10u"
-			(at 590.55 421.64 0.0000)
-			(effects
-				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(pin "1"
-			(uuid "1765521c-b363-44fe-b6df-75e1de74080d")
+			(uuid "5d36267d-1f23-4abd-af37-69a848d8975c")
 		)
 		(pin "2"
-			(uuid "c0e3dc07-d828-4e93-8edb-6f1b5647fb73")
+			(uuid "b9a0fd5c-e403-45bc-98b2-a6502ab0b5ae")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "C5")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "GND:GND")
-		(at 589.28 449.58 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced no)
-		(uuid "1110d30e-cab8-4163-aa7c-4bba2013c106")
-		(property "Reference" "#PWR017"
-			(at 589.28 436.88 0.0000)
-			(hide yes)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "GND"
-			(at 589.28 441.96 0.0000)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(pin "1"
-			(uuid "c4a7c7cb-2135-4714-a3db-6e538104e3d0")
-		)
-		(instances
-			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "#PWR017")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "VCC:VCC")
-		(at 76.2 416.56 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced no)
-		(uuid "03ba13aa-870c-4411-bf9c-2db6fd3f0c03")
-		(property "Reference" "#PWR018"
-			(at 76.2 408.94 0.0000)
-			(hide yes)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "+15V"
-			(at 76.2 423.672 0.0000)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(pin "1"
-			(uuid "09c607b4-1a9b-4cc6-8ed5-f0fdff0a6c47")
-		)
-		(instances
-			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "#PWR018")
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
+					(reference "R6")
 					(unit 1)
 				)
 			)
@@ -2906,41 +1934,463 @@
 	)
 	(symbol
 		(lib_id "C:C")
-		(at 76.2 436.88 0)
+		(at 457.2 594.36 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "37a297d1-7e31-48a4-8262-b9b783c671b9")
+		(uuid "2d71df21-c4e7-477a-a963-126f3e6ccfee")
+		(property "Reference" "C2"
+			(at 449.58 596.265 90)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "470p"
+			(at 464.82 596.265 90)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(pin "1"
+			(uuid "b59ebae7-1143-489b-b33d-8a91996ca713")
+		)
+		(pin "2"
+			(uuid "3c813875-356d-4c40-b08c-442a35218851")
+		)
+		(instances
+			(project "State Variable Oscillator with MDAC Control"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
+					(reference "C2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "R:R")
+		(at 457.2 563.88 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced no)
+		(uuid "466983a7-b5fd-43b8-8fe3-57014dcc19a8")
+		(property "Reference" "R7"
+			(at 457.2 569.976 180)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100M"
+			(at 457.2 563.88 180)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(pin "1"
+			(uuid "ac0786a9-02e9-4153-982c-8f7eddc1ffa3")
+		)
+		(pin "2"
+			(uuid "052bc16c-99e5-4527-af3d-f23b7e7d2f36")
+		)
+		(instances
+			(project "State Variable Oscillator with MDAC Control"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
+					(reference "R7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "D:D")
+		(at 419.1 533.4 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced no)
+		(uuid "7de6a651-3564-40b6-a99e-65b041681e11")
+		(property "Reference" "D3"
+			(at 419.1 541.02 0.0000)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "DZ09 BV=1.1"
+			(at 419.1 525.78 0.0000)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(pin "1"
+			(uuid "6981314b-8352-487b-bbed-dfe090c291d0")
+		)
+		(pin "2"
+			(uuid "c8f326ab-cfc0-4973-a82f-61306e82e35f")
+		)
+		(instances
+			(project "State Variable Oscillator with MDAC Control"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
+					(reference "D3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "D:D")
+		(at 495.3 533.4 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced no)
+		(uuid "e0c9fb69-bd5c-46ae-9f4b-d0de687b03d4")
+		(property "Reference" "D4"
+			(at 495.3 525.78 180)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "DZ09 BV=1.1"
+			(at 495.3 541.02 180)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(pin "1"
+			(uuid "1539a72f-f8de-4d03-915e-9caaa1ec34b6")
+		)
+		(pin "2"
+			(uuid "37e08247-c005-42d9-b025-35810db600de")
+		)
+		(instances
+			(project "State Variable Oscillator with MDAC Control"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
+					(reference "D4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "GND:GND")
+		(at 434.34 701.04 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced no)
+		(uuid "8852d7bb-ef51-457d-b9be-5c071ebe4a4a")
+		(property "Reference" "#PWR007"
+			(at 434.34 681.99 0.0000)
+			(hide yes)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "GND"
+			(at 434.34 689.61 0.0000)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(pin "1"
+			(uuid "c6d34f46-c215-49b9-97bb-3ec8a6ad40ea")
+		)
+		(instances
+			(project "State Variable Oscillator with MDAC Control"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
+					(reference "#PWR007")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "VEE:VEE")
+		(at 449.58 601.98 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced no)
+		(uuid "f5df0467-ab25-4a74-b4d2-bc0275fcd1fe")
+		(property "Reference" "#PWR008"
+			(at 449.58 590.55 0.0000)
+			(hide yes)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "-15V"
+			(at 449.58 612.648 0.0000)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(pin "1"
+			(uuid "a079641b-884c-438f-a30d-d7a531546a10")
+		)
+		(instances
+			(project "State Variable Oscillator with MDAC Control"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
+					(reference "#PWR008")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "R:R")
+		(at 601.98 723.9 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced no)
+		(uuid "7cfee4c2-953b-422f-810b-9059d2e30194")
+		(property "Reference" "R8"
+			(at 608.076 723.9 90)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100k"
+			(at 601.98 723.9 90)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(pin "1"
+			(uuid "cafb0a82-9f0c-460f-927f-8b03139270ba")
+		)
+		(pin "2"
+			(uuid "3750d3ad-d584-4cba-8cd0-b19d4131f24a")
+		)
+		(instances
+			(project "State Variable Oscillator with MDAC Control"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
+					(reference "R8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "GND:GND")
+		(at 601.98 773.43 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced no)
+		(uuid "e6303793-9bf1-4a6a-8613-9a8406358c24")
+		(property "Reference" "#PWR009"
+			(at 601.98 754.38 0.0000)
+			(hide yes)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "GND"
+			(at 601.98 762.0 0.0000)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(pin "1"
+			(uuid "56bcb0b8-4a59-48f5-9056-d2e2b7cc8dc6")
+		)
+		(instances
+			(project "State Variable Oscillator with MDAC Control"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
+					(reference "#PWR009")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "R:R")
+		(at 533.4 533.4 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced no)
+		(uuid "6dfba0d6-64f6-4788-b73e-7b79a9b0f5cf")
+		(property "Reference" "R9"
+			(at 533.4 539.496 180)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100k"
+			(at 533.4 533.4 180)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(pin "1"
+			(uuid "45623474-cdf7-4e4c-8ee3-2092b582511f")
+		)
+		(pin "2"
+			(uuid "ebfef512-bb69-488e-9dd6-387fda3bd209")
+		)
+		(instances
+			(project "State Variable Oscillator with MDAC Control"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
+					(reference "R9")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "GND:GND")
+		(at 521.97 594.36 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced no)
+		(uuid "352c3ecc-6805-4978-a90f-7033e673bef9")
+		(property "Reference" "#PWR010"
+			(at 521.97 575.31 0.0000)
+			(hide yes)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "GND"
+			(at 521.97 582.93 0.0000)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(pin "1"
+			(uuid "b6bb2831-f92e-4248-9223-f8ae542cfb9e")
+		)
+		(instances
+			(project "State Variable Oscillator with MDAC Control"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
+					(reference "#PWR010")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "C:C")
+		(at 533.4 701.04 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced no)
+		(uuid "48ddf11d-58d0-400f-9395-94cab637c26c")
 		(property "Reference" "C6"
-			(at 77.47 441.96 0.0000)
+			(at 535.305 708.66 0.0000)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(property "Value" "10u"
-			(at 77.47 431.8 0.0000)
+			(at 535.305 693.42 0.0000)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(pin "1"
-			(uuid "8cfae536-dcde-42ee-97a9-6daaaef5061c")
+			(uuid "de90fa9c-737d-4b4b-843e-6ea45f5ab4d5")
 		)
 		(pin "2"
-			(uuid "1e8fe582-c9f1-472b-ba5f-05f8b835c822")
+			(uuid "79c31649-82e6-42c3-bbca-95bd736890ad")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
 					(reference "C6")
 					(unit 1)
 				)
@@ -2949,40 +2399,40 @@
 	)
 	(symbol
 		(lib_id "GND:GND")
-		(at 76.2 459.74 0)
+		(at 533.4 750.57 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "d428387f-0f1e-49f1-b6b3-a244f77c72ba")
-		(property "Reference" "#PWR019"
-			(at 76.2 447.04 0.0000)
+		(uuid "7cd6751f-f60c-42a5-9e97-ee55ec3648d1")
+		(property "Reference" "#PWR011"
+			(at 533.4 731.52 0.0000)
 			(hide yes)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(property "Value" "GND"
-			(at 76.2 452.12 0.0000)
+			(at 533.4 739.14 0.0000)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(pin "1"
-			(uuid "bc517e30-e4de-444e-a25b-87b264e79606")
+			(uuid "7ece1d5a-646c-42b8-9a91-0badfee958a1")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "#PWR019")
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
+					(reference "#PWR011")
 					(unit 1)
 				)
 			)
@@ -2990,40 +2440,40 @@
 	)
 	(symbol
 		(lib_id "VEE:VEE")
-		(at 157.48 416.56 0)
+		(at 701.04 640.08 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "42506178-dd2a-4fed-81b3-8a464ce18a8b")
-		(property "Reference" "#PWR020"
-			(at 157.48 408.94 0.0000)
+		(uuid "8be590be-d6d0-4fcc-8635-44f4d2bccb5f")
+		(property "Reference" "#PWR012"
+			(at 701.04 628.65 0.0000)
 			(hide yes)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(property "Value" "-15V"
-			(at 157.48 423.672 0.0000)
+			(at 701.04 650.748 0.0000)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(pin "1"
-			(uuid "7d0fd31b-2386-4399-98ac-7c20406dcaeb")
+			(uuid "fd7e97bf-4b68-4125-b53b-12edbb3bc3b8")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "#PWR020")
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
+					(reference "#PWR012")
 					(unit 1)
 				)
 			)
@@ -3031,41 +2481,41 @@
 	)
 	(symbol
 		(lib_id "C:C")
-		(at 157.48 436.88 0)
+		(at 701.04 701.04 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "b7123a0e-c29b-407e-86eb-8f3e10d8e14b")
+		(uuid "8cba5d8c-74dc-41e3-b99a-ec1669210874")
 		(property "Reference" "C7"
-			(at 158.75 441.96 0.0000)
+			(at 702.945 708.66 0.0000)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(property "Value" "10u"
-			(at 158.75 431.8 0.0000)
+			(at 702.945 693.42 0.0000)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(pin "1"
-			(uuid "9feeb14c-44b0-4d9e-ae79-25e40ed5de0b")
+			(uuid "8806707f-c1e7-4992-b136-5ec042d1e029")
 		)
 		(pin "2"
-			(uuid "5b7fc374-1379-490c-99ac-40a7fb1f1ed7")
+			(uuid "7a88ac4d-073a-4e0a-9c27-e16359265303")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
 					(reference "C7")
 					(unit 1)
 				)
@@ -3074,81 +2524,40 @@
 	)
 	(symbol
 		(lib_id "GND:GND")
-		(at 157.48 459.74 0)
+		(at 701.04 750.57 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "56aa3791-2e22-4eee-b78c-42f3d6f36442")
-		(property "Reference" "#PWR021"
-			(at 157.48 447.04 0.0000)
+		(uuid "6d376919-0fa1-4db0-9695-d0c009f777d4")
+		(property "Reference" "#PWR013"
+			(at 701.04 731.52 0.0000)
 			(hide yes)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(property "Value" "GND"
-			(at 157.48 452.12 0.0000)
+			(at 701.04 739.14 0.0000)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(pin "1"
-			(uuid "1e792da5-91d4-44bb-a1d8-5841a1fe77d6")
+			(uuid "3aca1934-6d85-4821-a86a-78f110b93422")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "#PWR021")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "VCC:VCC")
-		(at 248.92 416.56 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced no)
-		(uuid "f6d2d80b-4472-4727-9815-dba5ea0d0b96")
-		(property "Reference" "#PWR022"
-			(at 248.92 408.94 0.0000)
-			(hide yes)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "3.3V"
-			(at 248.92 423.672 0.0000)
-			(effects
-				(font
-					(size 2.54 2.54)
-				)
-				(justify left)
-			)
-		)
-		(pin "1"
-			(uuid "caf5b2e1-cfbe-4345-85ec-330a4619bc1f")
-		)
-		(instances
-			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "#PWR022")
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
+					(reference "#PWR013")
 					(unit 1)
 				)
 			)
@@ -3156,41 +2565,41 @@
 	)
 	(symbol
 		(lib_id "C:C")
-		(at 248.92 436.88 0)
+		(at 868.68 701.04 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "2217aa2f-8601-4537-bd01-b2244c41dcc3")
+		(uuid "84a5a82d-24cc-4da2-8e97-0d8c643fedc8")
 		(property "Reference" "C8"
-			(at 250.19 441.96 0.0000)
+			(at 870.585 708.66 0.0000)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(property "Value" "100n"
-			(at 250.19 431.8 0.0000)
+			(at 870.585 693.42 0.0000)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(pin "1"
-			(uuid "8ed23642-be2c-4b31-90af-6526f8f7266a")
+			(uuid "39a655cd-0c95-4895-a414-9537f2428200")
 		)
 		(pin "2"
-			(uuid "e86b1c93-128d-4159-b4df-1b19303fa939")
+			(uuid "90318e25-16b1-4b94-b3ea-eac49a0d4208")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
 					(reference "C8")
 					(unit 1)
 				)
@@ -3199,40 +2608,249 @@
 	)
 	(symbol
 		(lib_id "GND:GND")
-		(at 248.92 459.74 0)
+		(at 868.68 750.57 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "e9e98169-6e5f-432a-a120-3fe267c3fc79")
-		(property "Reference" "#PWR023"
-			(at 248.92 447.04 0.0000)
+		(uuid "56a83e84-df9e-4bf5-ac2a-56357212bb9b")
+		(property "Reference" "#PWR014"
+			(at 868.68 731.52 0.0000)
 			(hide yes)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(property "Value" "GND"
-			(at 248.92 452.12 0.0000)
+			(at 868.68 739.14 0.0000)
 			(effects
 				(font
-					(size 2.54 2.54)
+					(size 3.81 3.81)
 				)
 				(justify left)
 			)
 		)
 		(pin "1"
-			(uuid "2c1093cd-2d0d-4509-ad0b-f9be11143490")
+			(uuid "505d747b-3b12-49d7-96ff-f11996aa23eb")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/2a7a1bc0-6290-4f87-90a7-e2254e513f75"
-					(reference "#PWR023")
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
+					(reference "#PWR014")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "GND:GND")
+		(at 1066.8 807.72 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced no)
+		(uuid "1b3e6146-aca4-486a-8456-a9048c020b95")
+		(property "Reference" "#PWR015"
+			(at 1066.8 788.67 0.0000)
+			(hide yes)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "GND"
+			(at 1066.8 796.29 0.0000)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(pin "1"
+			(uuid "82f085f2-cfb5-4aa4-b5e4-199b7c2b28a2")
+		)
+		(instances
+			(project "State Variable Oscillator with MDAC Control"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
+					(reference "#PWR015")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "C:C")
+		(at 1143.0 548.64 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced no)
+		(uuid "e9dc7219-c860-46d3-9bf5-3971f2cf3cea")
+		(property "Reference" "C4"
+			(at 1144.905 556.26 0.0000)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "100n"
+			(at 1144.905 541.02 0.0000)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(pin "1"
+			(uuid "f56e9b21-1775-494e-8719-e7902a098f18")
+		)
+		(pin "2"
+			(uuid "35b9e004-7e76-4575-af1b-652c4dc6587a")
+		)
+		(instances
+			(project "State Variable Oscillator with MDAC Control"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
+					(reference "C4")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "GND:GND")
+		(at 1143.0 582.93 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced no)
+		(uuid "a9eb280a-812f-4b6e-b387-be65b541b8fb")
+		(property "Reference" "#PWR016"
+			(at 1143.0 563.88 0.0000)
+			(hide yes)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "GND"
+			(at 1143.0 571.5 0.0000)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(pin "1"
+			(uuid "cf9dadca-e29b-4e83-8905-cc4deef8c57f")
+		)
+		(instances
+			(project "State Variable Oscillator with MDAC Control"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
+					(reference "#PWR016")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "C:C")
+		(at 1203.96 548.64 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced no)
+		(uuid "1e08b6d6-2b50-46a7-a44c-9b9367e2a269")
+		(property "Reference" "C5"
+			(at 1205.865 556.26 0.0000)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10u"
+			(at 1205.865 541.02 0.0000)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(pin "1"
+			(uuid "b45c1399-7f3d-4a58-8c35-8ef657c516c2")
+		)
+		(pin "2"
+			(uuid "f4891dcd-034b-449d-a399-c3b200715917")
+		)
+		(instances
+			(project "State Variable Oscillator with MDAC Control"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
+					(reference "C5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "GND:GND")
+		(at 1203.96 582.93 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced no)
+		(uuid "272ef82f-5e62-41d8-b0cb-d1e6e30d8e5d")
+		(property "Reference" "#PWR017"
+			(at 1203.96 563.88 0.0000)
+			(hide yes)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "GND"
+			(at 1203.96 571.5 0.0000)
+			(effects
+				(font
+					(size 3.81 3.81)
+				)
+				(justify left)
+			)
+		)
+		(pin "1"
+			(uuid "0ce136db-a294-47ce-859f-ed2813c723f5")
+		)
+		(instances
+			(project "State Variable Oscillator with MDAC Control"
+				(path "/fb218613-01f4-4f10-8fe2-8f439c722abe"
+					(reference "#PWR017")
 					(unit 1)
 				)
 			)
@@ -3240,1486 +2858,1526 @@
 	)
 	(wire
 		(pts
-			(xy 114.3 66.04) (xy 157.48 66.04)
+			(xy 255.27 205.74) (xy 350.52 205.74)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "3445ae21-67f8-4a8e-96bc-e5db3d78ff18")
+		(uuid "07b9be35-9238-452b-9da0-567b1bb88116")
 	)
 	(wire
 		(pts
-			(xy 157.48 66.04) (xy 157.48 106.68)
+			(xy 350.52 205.74) (xy 350.52 281.94)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "c9034f01-3a36-467b-bc36-dae4c78bf18e")
+		(uuid "095f2fd2-8392-4edb-8c7c-fcd5ff19865c")
 	)
 	(wire
 		(pts
-			(xy 78.74 66.04) (xy 99.06 66.04)
+			(xy 186.69 205.74) (xy 232.41 205.74)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "0904321f-3400-4e54-96d8-17e13822d72a")
+		(uuid "b670051f-3261-4ce7-b85c-68c314464a79")
 	)
 	(wire
 		(pts
-			(xy 114.3 106.68) (xy 157.48 106.68)
+			(xy 255.27 281.94) (xy 350.52 281.94)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "8b76ba88-e150-4534-bba2-86527b7c3d3f")
+		(uuid "253689da-8800-44e0-b2d7-783eac104f89")
 	)
 	(wire
 		(pts
-			(xy 78.74 106.68) (xy 99.06 106.68)
+			(xy 186.69 281.94) (xy 232.41 281.94)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "7fdce881-62b2-4825-9b2b-cf0126397ba1")
+		(uuid "72b3d7b2-3d9e-4de9-b751-af69a652198d")
 	)
 	(wire
 		(pts
-			(xy 157.48 106.68) (xy 157.48 45.72)
+			(xy 350.52 281.94) (xy 350.52 236.22)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "27813b88-e0d6-4c23-9269-3a89ba7a2b79")
+		(uuid "d3c28870-0dc3-4f3b-af20-875df09031c8")
 	)
 	(wire
 		(pts
-			(xy 157.48 45.72) (xy 175.26 45.72)
+			(xy 350.52 236.22) (xy 384.81 236.22)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "fe4a2cb0-7f95-4d7a-9cfc-38026b820a4f")
+		(uuid "3bc02d4b-f12a-413f-b875-a2d94a314435")
 	)
 	(wire
 		(pts
-			(xy 190.5 45.72) (xy 208.28 45.72)
+			(xy 407.67 236.22) (xy 441.96 236.22)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "cdb38e5b-08a7-41cd-8e16-d75fe704a0ce")
+		(uuid "c1ecf6cc-f074-48e9-923e-be90a53976ea")
 	)
 	(wire
 		(pts
-			(xy 208.28 45.72) (xy 208.28 111.76)
+			(xy 441.96 236.22) (xy 441.96 289.56)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "326ea285-a17b-417b-8b1e-fa63cf35b4cf")
+		(uuid "cb6425d4-1f26-4b05-9927-d510f0bb9b28")
 	)
 	(wire
 		(pts
-			(xy 157.48 106.68) (xy 177.8 106.68)
+			(xy 350.52 281.94) (xy 396.24 281.94)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "33bf7b20-32b3-4567-911f-ba7e92dcc18f")
+		(uuid "4201264e-6fa9-4858-b2c0-2a891c123b5c")
 	)
 	(wire
 		(pts
-			(xy 177.8 116.84) (xy 177.8 137.16)
+			(xy 396.24 297.18) (xy 396.24 342.9)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "6226ada4-87d6-44f0-a045-a598f14ad679")
+		(uuid "091a4a32-cbd8-4719-bca9-70c753729bb0")
 	)
 	(wire
 		(pts
-			(xy 187.96 127.0) (xy 187.96 147.32)
+			(xy 411.48 312.42) (xy 411.48 358.14)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "eb9e40cd-c80b-45ba-b422-4d68aafea6bd")
+		(uuid "01268dae-2170-4569-802c-ca19c4f5648f")
 	)
 	(wire
 		(pts
-			(xy 187.96 76.2) (xy 187.96 96.52)
+			(xy 411.48 220.98) (xy 411.48 266.7)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "bf5dd3bd-6563-4028-9b30-d151eed2bbb1")
+		(uuid "68e349a4-2ec6-4e1c-967b-2b34b56e4e7b")
 	)
 	(wire
 		(pts
-			(xy 208.28 111.76) (xy 238.76 111.76)
+			(xy 441.96 289.56) (xy 502.92 289.56)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "393573d1-959e-4ecb-a770-3fa106e7e540")
+		(uuid "6fa3c03f-8b1b-4f6c-b646-033637932774")
 	)
 	(wire
 		(pts
-			(xy 340.36 106.68) (xy 360.68 106.68)
+			(xy 487.68 320.04) (xy 533.4 320.04)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "e2d59ff7-8b1a-45e2-a285-27392c4f4c71")
+		(uuid "1c61c245-41fa-40a5-89a0-779eda0a07dc")
 	)
 	(wire
 		(pts
-			(xy 360.68 106.68) (xy 434.34 106.68)
+			(xy 533.4 320.04) (xy 659.13 320.04)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "7f49cf6a-993f-4f27-868e-ce110cae2ba7")
+		(uuid "c1cb0aba-c09b-43f7-99a7-23b0e111c994")
 	)
 	(wire
 		(pts
-			(xy 449.58 106.68) (xy 492.76 106.68)
+			(xy 681.99 320.04) (xy 777.24 320.04)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "87bf6c9a-bb80-4924-a17b-889b1538645b")
+		(uuid "9962eeb1-7edb-446a-bf46-3c6b4084e395")
 	)
 	(wire
 		(pts
-			(xy 449.58 106.68) (xy 502.92 106.68)
+			(xy 681.99 320.04) (xy 788.67 320.04)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "f5491857-a099-47c5-ab8d-b591b2246aee")
+		(uuid "59ae2384-3595-47a6-83c4-3c621f598230")
 	)
 	(wire
 		(pts
-			(xy 502.92 106.68) (xy 502.92 55.88)
+			(xy 788.67 320.04) (xy 788.67 274.32)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "34f17d3e-39f3-428d-ad44-3e5d265de619")
+		(uuid "80eefe9e-1d3b-4818-b7c8-7ca1c745fa34")
 	)
 	(wire
 		(pts
-			(xy 502.92 55.88) (xy 500.38 55.88)
+			(xy 788.67 274.32) (xy 788.67 274.32)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "0e6d403c-4ebb-45e7-855e-27a6b6b816f1")
+		(uuid "5c44bbbb-1a39-4874-a184-bf3341bf5de2")
 	)
 	(wire
 		(pts
-			(xy 515.62 55.88) (xy 523.24 55.88)
+			(xy 811.53 274.32) (xy 822.96 274.32)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "550f9911-ca97-4c37-a231-336579a01bf6")
+		(uuid "46d6af25-0a43-464a-95a5-27b32521b431")
 	)
 	(wire
 		(pts
-			(xy 523.24 55.88) (xy 523.24 111.76)
+			(xy 822.96 274.32) (xy 822.96 327.66)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "1d6158bd-65f6-4464-a428-1e8686ffa82a")
+		(uuid "e7631022-2d80-4c0b-9455-a68e5345fa10")
 	)
 	(wire
 		(pts
-			(xy 502.92 55.88) (xy 502.92 25.4)
+			(xy 788.67 274.32) (xy 788.67 243.84)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "674718e9-6752-4600-8d5c-32009e8feb0e")
+		(uuid "274e366e-7f95-4c4f-961a-0d5c3809b6f8")
 	)
 	(wire
 		(pts
-			(xy 502.92 25.4) (xy 500.38 25.4)
+			(xy 788.67 243.84) (xy 788.67 243.84)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "9e1786de-636c-4eb7-bfaa-8f375aa6eda2")
+		(uuid "5f6342d4-471c-482b-812b-cf42ff4b32e0")
 	)
 	(wire
 		(pts
-			(xy 515.62 25.4) (xy 523.24 25.4)
+			(xy 811.53 243.84) (xy 822.96 243.84)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "f5684206-95b5-4ee0-aaaf-e93060647f3a")
+		(uuid "9f737bc5-0a3b-4bf4-8baf-2426fe5af2aa")
 	)
 	(wire
 		(pts
-			(xy 523.24 25.4) (xy 523.24 55.88)
+			(xy 822.96 243.84) (xy 822.96 274.32)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "754012df-b1b2-4666-9eff-144b8997dc18")
+		(uuid "3d773d2f-7da9-4541-ab02-2dee19a50327")
 	)
 	(wire
 		(pts
-			(xy 495.3 -5.08) (xy 520.7 -5.08)
+			(xy 773.43 213.36) (xy 826.77 213.36)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "0bd2ca8b-2f6c-44c1-97d2-9f4e7fc527fa")
+		(uuid "20696467-37e7-438b-a00b-d026cd0d2c0c")
 	)
 	(wire
 		(pts
-			(xy 480.06 -5.08) (xy 502.92 -5.08)
+			(xy 750.57 213.36) (xy 788.67 213.36)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "c5d62aeb-3b83-4945-8c7e-3f55f76de7ba")
+		(uuid "1a193b3c-5100-4dcc-be7e-03b501eace33")
 	)
 	(wire
 		(pts
-			(xy 502.92 -5.08) (xy 502.92 25.4)
+			(xy 788.67 213.36) (xy 788.67 243.84)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "0b9f827c-a269-45c6-a873-6d626bf5adcf")
+		(uuid "c6ec0f12-cffd-49df-b29e-054f6a91b22a")
 	)
 	(wire
 		(pts
-			(xy 535.94 -5.08) (xy 523.24 -5.08)
+			(xy 849.63 213.36) (xy 822.96 213.36)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "42a3ef01-f96b-404a-8770-f5c2f1e6aea0")
+		(uuid "6226fcab-64ba-42f9-b0bf-8f88a8db0560")
 	)
 	(wire
 		(pts
-			(xy 523.24 -5.08) (xy 523.24 25.4)
+			(xy 822.96 213.36) (xy 822.96 243.84)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "4cb258bb-a78c-4247-a315-f773dcd3b0ac")
+		(uuid "21a62851-deb7-4f65-b0b3-e5b20f265051")
 	)
 	(wire
 		(pts
-			(xy 492.76 116.84) (xy 492.76 137.16)
+			(xy 777.24 335.28) (xy 777.24 381.0)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "791178cd-f7f0-4d28-8cc6-a3f489d359f6")
+		(uuid "6f0a51f8-82a3-4075-9086-3c4f4630d913")
 	)
 	(wire
 		(pts
-			(xy 502.92 127.0) (xy 502.92 147.32)
+			(xy 792.48 350.52) (xy 792.48 396.24)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "aa6119eb-84b1-4783-a1e4-cab350a00774")
+		(uuid "852dde8c-993e-4549-b7b0-ae81a84747f8")
 	)
 	(wire
 		(pts
-			(xy 502.92 76.2) (xy 502.92 96.52)
+			(xy 792.48 281.94) (xy 792.48 304.8)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "f8d86027-595d-47c4-bae6-56b3dcfa7bd2")
+		(uuid "12985ace-c6aa-4f4e-bf29-6613da3e8331")
 	)
 	(wire
 		(pts
-			(xy 523.24 111.76) (xy 553.72 111.76)
+			(xy 822.96 327.66) (xy 883.92 327.66)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "41e846cd-3e1d-4625-8e0f-decb3152c405")
+		(uuid "1b0badba-c8cf-4723-bb42-ff4368ce64ff")
 	)
 	(wire
 		(pts
-			(xy 86.36 309.88) (xy 106.68 309.88)
+			(xy 880.11 289.56) (xy 925.83 289.56)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "c1e3e5b1-2e69-44c0-9967-90c327cb1311")
+		(uuid "bba3d8df-5ca1-4c69-a7f4-8d9c9cd04a4d")
 	)
 	(wire
 		(pts
-			(xy 106.68 309.88) (xy 180.34 309.88)
+			(xy 948.69 289.56) (xy 994.41 289.56)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "54700a5c-e5a5-4d89-ab59-4ad6a0561c4d")
+		(uuid "a3cec70c-3e1a-4caa-af2f-0e9486c3b007")
 	)
 	(wire
 		(pts
-			(xy 195.58 309.88) (xy 238.76 309.88)
+			(xy 994.41 289.56) (xy 994.41 339.09)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "8e0a39d6-af21-4b75-8ba5-4f150f41a1fc")
+		(uuid "3e31110c-857a-4a21-9fd0-f4b09effe8fb")
 	)
 	(wire
 		(pts
-			(xy 195.58 309.88) (xy 248.92 309.88)
+			(xy 994.41 361.95) (xy 994.41 400.05)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "91770607-2844-4129-86bb-0e2dfc1cc66d")
+		(uuid "1b2cb3e0-42c6-4f08-ac86-8e1276f3c934")
 	)
 	(wire
 		(pts
-			(xy 248.92 309.88) (xy 248.92 259.08)
+			(xy 994.41 289.56) (xy 1116.33 289.56)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "6c69ec5e-2c98-4eef-b158-aaae8a881ab5")
+		(uuid "87d4ccc6-c25d-4f13-a667-17b3e7d11b9b")
 	)
 	(wire
 		(pts
-			(xy 248.92 259.08) (xy 246.38 259.08)
+			(xy 1162.05 289.56) (xy 1177.29 289.56)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "1283460c-1258-478d-bb33-48c005a425f6")
+		(uuid "0ff5318e-382a-4978-b17e-a5c2d115071b")
 	)
 	(wire
 		(pts
-			(xy 261.62 259.08) (xy 269.24 259.08)
+			(xy 1177.29 289.56) (xy 1177.29 339.09)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "45134991-8915-497f-97a5-f9a036c2f013")
+		(uuid "198562f3-6e79-4c67-b707-de550db613c0")
 	)
 	(wire
 		(pts
-			(xy 269.24 259.08) (xy 269.24 314.96)
+			(xy 1177.29 361.95) (xy 1177.29 400.05)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "df137207-b4f3-4172-b331-46f8ec88b190")
+		(uuid "e3bc5945-d58f-49fd-b1de-f59638ff504f")
 	)
 	(wire
 		(pts
-			(xy 248.92 259.08) (xy 248.92 228.6)
+			(xy 1177.29 289.56) (xy 1268.73 289.56)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "90733c8c-933c-4d76-8afc-5bb3bfa1490a")
+		(uuid "ddef3150-1a35-4ad4-9ebc-ccfa0169e54c")
 	)
 	(wire
 		(pts
-			(xy 248.92 228.6) (xy 246.38 228.6)
+			(xy 144.78 640.08) (xy 190.5 640.08)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "8fb7eb1f-7c38-4731-b65a-2fd575d25d8b")
+		(uuid "c6c82554-e891-45d2-a9e1-66851e3c2111")
 	)
 	(wire
 		(pts
-			(xy 261.62 228.6) (xy 269.24 228.6)
+			(xy 190.5 640.08) (xy 316.23 640.08)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "02a9da3e-0820-4632-9431-744bd4b5c93a")
+		(uuid "b8c8f962-5fc3-4a5c-84dc-ae8b31ad1964")
 	)
 	(wire
 		(pts
-			(xy 269.24 228.6) (xy 269.24 259.08)
+			(xy 339.09 640.08) (xy 434.34 640.08)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "ca62a441-52ff-48d9-9767-b996de763177")
+		(uuid "ea0869cf-42b3-4f1d-9aef-86918e7be4b3")
 	)
 	(wire
 		(pts
-			(xy 241.3 198.12) (xy 266.7 198.12)
+			(xy 339.09 640.08) (xy 445.77 640.08)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "fc58b16f-467e-4a46-a28b-0a4aa31fd713")
+		(uuid "f8aa90f2-2217-4fa0-b17d-b9dd345b3ab0")
 	)
 	(wire
 		(pts
-			(xy 226.06 198.12) (xy 248.92 198.12)
+			(xy 445.77 640.08) (xy 445.77 594.36)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "b75dea5c-33c7-40dc-a3b3-171e15fa4255")
+		(uuid "1c02946b-3f3e-44b1-a709-85b88c162d5d")
 	)
 	(wire
 		(pts
-			(xy 248.92 198.12) (xy 248.92 228.6)
+			(xy 445.77 594.36) (xy 445.77 594.36)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "9d5494a7-e0bc-4d7c-a958-cd35b976f161")
+		(uuid "094bad0b-6c44-4ced-bd68-6fcf54a9dfc6")
 	)
 	(wire
 		(pts
-			(xy 281.94 198.12) (xy 269.24 198.12)
+			(xy 468.63 594.36) (xy 480.06 594.36)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "0035e44b-6e26-483e-a737-9b7dea203ebf")
+		(uuid "5af6fd87-f0d6-47e9-9896-8adb875fcaf4")
 	)
 	(wire
 		(pts
-			(xy 269.24 198.12) (xy 269.24 228.6)
+			(xy 480.06 594.36) (xy 480.06 647.7)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "77847a7c-7364-4f4a-aa60-0388d6e4a224")
+		(uuid "57bfb4bc-1e4f-43ef-a788-6c53dce9626a")
 	)
 	(wire
 		(pts
-			(xy 238.76 320.04) (xy 238.76 340.36)
+			(xy 445.77 594.36) (xy 445.77 563.88)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "ce13bdc4-1374-492a-95b0-5f6a42f70bd2")
+		(uuid "3e9f05f7-bc11-44a1-bcf8-5f8e5a72a97d")
 	)
 	(wire
 		(pts
-			(xy 248.92 330.2) (xy 248.92 350.52)
+			(xy 445.77 563.88) (xy 445.77 563.88)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "b3fe139a-ba34-4400-ba70-4c29e0977aae")
+		(uuid "0e1bc2b4-d2f9-42a1-9e70-92ba91f60ac1")
 	)
 	(wire
 		(pts
-			(xy 248.92 279.4) (xy 248.92 299.72)
+			(xy 468.63 563.88) (xy 480.06 563.88)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "8169c1fb-c599-4048-b056-0c54de5ba9ce")
+		(uuid "1c0a16d7-7988-4c66-910b-d272ecc00997")
 	)
 	(wire
 		(pts
-			(xy 269.24 314.96) (xy 299.72 314.96)
+			(xy 480.06 563.88) (xy 480.06 594.36)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "bcb1f3cd-faf1-4d05-9485-afd4a50922e4")
+		(uuid "63ab438b-91c1-4d6f-aaaa-660f69d836f7")
 	)
 	(wire
 		(pts
-			(xy 330.2 347.98) (xy 350.52 347.98)
+			(xy 430.53 533.4) (xy 483.87 533.4)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "d61488df-2f68-4ccf-9594-60071aff3b39")
+		(uuid "a08a6bfd-15fd-4a05-b9fd-bc042e68e857")
 	)
 	(wire
 		(pts
-			(xy 330.2 363.22) (xy 330.2 383.54)
+			(xy 407.67 533.4) (xy 445.77 533.4)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "96b355c0-0df5-4a92-9280-5089e4b88d1c")
+		(uuid "ba835a33-12c9-4a50-879b-642f9f0acddc")
 	)
 	(wire
 		(pts
-			(xy 83.82 177.8) (xy 104.14 177.8)
+			(xy 445.77 533.4) (xy 445.77 563.88)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "737b903e-78a1-4f96-9c8a-d93f415f3286")
+		(uuid "8ffa42a9-7401-4718-ac60-e6891ae948f2")
 	)
 	(wire
 		(pts
-			(xy 68.58 177.8) (xy 68.58 208.28)
+			(xy 506.73 533.4) (xy 480.06 533.4)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "a933050d-3886-42e6-a1e4-84358c78ecab")
+		(uuid "7221c84c-e4ca-4caf-a3b0-746f2b6a8ca1")
 	)
 	(wire
 		(pts
-			(xy 429.26 294.64) (xy 449.58 294.64)
+			(xy 480.06 533.4) (xy 480.06 563.88)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "ecb737d5-492c-4401-8fe8-ea2621e94c41")
+		(uuid "745760a3-76ed-4b30-86ce-26b5f7fea114")
 	)
 	(wire
 		(pts
-			(xy 464.82 294.64) (xy 485.14 294.64)
+			(xy 434.34 655.32) (xy 434.34 701.04)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "92c8dcbe-96cf-4b1a-917d-2678cff298fc")
+		(uuid "5fd01385-3c5d-411e-b23c-aae771532e12")
 	)
 	(wire
 		(pts
-			(xy 485.14 294.64) (xy 485.14 317.5)
+			(xy 449.58 670.56) (xy 449.58 716.28)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "c6bafb5f-fee1-4b08-a94e-ea6f29e4322c")
+		(uuid "155425e4-56fb-4fc7-a54e-05f81626b775")
 	)
 	(wire
 		(pts
-			(xy 485.14 332.74) (xy 485.14 347.98)
+			(xy 449.58 601.98) (xy 449.58 624.84)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "8dd12809-2826-42a3-9f79-6e5a4ce03dc4")
+		(uuid "99cb0ce9-a39a-4bb5-850f-631bda827571")
 	)
 	(wire
 		(pts
-			(xy 485.14 294.64) (xy 546.1 294.64)
+			(xy 480.06 647.7) (xy 541.02 647.7)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "c024c2d4-9266-4631-89dc-e1cc97278039")
+		(uuid "156618c1-5e0b-4c94-8364-6d767d66a51a")
 	)
 	(wire
 		(pts
-			(xy 566.42 294.64) (xy 576.58 294.64)
+			(xy 601.98 712.47) (xy 647.7 712.47)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "027134db-63c5-498c-88ac-c1c3bfd2e9e8")
+		(uuid "daf83bac-6d8c-4dd2-ae70-9c0b79a6ac85")
 	)
 	(wire
 		(pts
-			(xy 576.58 294.64) (xy 576.58 317.5)
+			(xy 601.98 735.33) (xy 601.98 773.43)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "d7c7843f-85af-4075-8bf1-43180f9a39c2")
+		(uuid "340dd42e-ec3c-4d36-845f-5ea7475d6b0c")
 	)
 	(wire
 		(pts
-			(xy 576.58 332.74) (xy 576.58 347.98)
+			(xy 544.83 533.4) (xy 590.55 533.4)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "90063d5a-ddb6-4ee4-8907-c66334f56859")
+		(uuid "f6f62f58-6385-4414-8c40-333aa2bfc8c5")
 	)
 	(wire
 		(pts
-			(xy 576.58 294.64) (xy 617.22 294.64)
+			(xy 521.97 533.4) (xy 521.97 594.36)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "6ee646c6-15de-4acd-b49b-09514e224950")
+		(uuid "7ecf2e61-f52d-471f-8785-30c6c5794788")
 	)
 	(wire
 		(pts
-			(xy 472.44 447.04) (xy 513.08 447.04)
+			(xy 533.4 640.08) (xy 533.4 689.61)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "0d808745-b835-4067-a770-3186416f1c62")
+		(uuid "9dfaba53-1b05-4032-8148-aed836924794")
 	)
 	(wire
 		(pts
-			(xy 472.44 467.36) (xy 513.08 467.36)
+			(xy 533.4 712.47) (xy 533.4 750.57)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "5501667a-5f38-41b4-bea0-cc5a57441f52")
+		(uuid "18b18be2-5fbf-4aea-ac36-bd85e5f8b578")
 	)
 	(wire
 		(pts
-			(xy 472.44 487.68) (xy 513.08 487.68)
+			(xy 701.04 640.08) (xy 701.04 689.61)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "7286cd16-f9ef-48f8-abad-740bc188401b")
+		(uuid "eca5e5db-97e5-44bc-9ad9-d0a92265ece4")
 	)
 	(wire
 		(pts
-			(xy 452.12 447.04) (xy 472.44 447.04)
+			(xy 701.04 712.47) (xy 701.04 750.57)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "e644398b-04f9-4176-a803-cd8f1dce8b97")
+		(uuid "56f044e3-957d-419d-84df-06cc3484340b")
 	)
 	(wire
 		(pts
-			(xy 452.12 467.36) (xy 472.44 467.36)
+			(xy 868.68 640.08) (xy 868.68 689.61)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "6d2d3cce-5d45-40a1-9f9f-5f50fc4d1171")
+		(uuid "589ba8c1-d7b7-402e-bd04-f36194b300cc")
 	)
 	(wire
 		(pts
-			(xy 553.72 447.04) (xy 594.36 447.04)
+			(xy 868.68 712.47) (xy 868.68 750.57)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "e4128908-f46c-4e38-844f-4a129323e930")
+		(uuid "b97a9bfa-c6bf-4d0f-aac9-1f57d12e881d")
 	)
 	(wire
 		(pts
-			(xy 553.72 467.36) (xy 594.36 467.36)
+			(xy 944.88 594.36) (xy 1021.08 594.36)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "e24a0658-a873-4ca6-9cd4-462bfbbfb1b5")
+		(uuid "b5f67456-1bb2-418e-910b-d3978daf0c5a")
 	)
 	(wire
 		(pts
-			(xy 553.72 487.68) (xy 594.36 487.68)
+			(xy 944.88 640.08) (xy 1021.08 640.08)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "369a87cf-6454-4ee6-88b7-1306132b600e")
+		(uuid "91ee17e4-b519-4823-b0ed-39fa2800f75d")
 	)
 	(wire
 		(pts
-			(xy 553.72 508.0) (xy 594.36 508.0)
+			(xy 944.88 685.8) (xy 1021.08 685.8)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "79e84d10-cb52-4a8f-8b56-7d50f4713981")
+		(uuid "8ee47c09-aa73-4297-a396-fa28befaf1ba")
 	)
 	(wire
 		(pts
-			(xy 594.36 447.04) (xy 624.84 447.04)
+			(xy 899.16 594.36) (xy 944.88 594.36)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "c51181e8-af8b-4a6b-a854-a5d551e09637")
+		(uuid "4f270b7a-18c2-46ba-8468-48c4ecc387c2")
 	)
 	(wire
 		(pts
-			(xy 533.4 406.4) (xy 533.4 426.72)
+			(xy 899.16 640.08) (xy 944.88 640.08)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "439758e2-1f7a-4c0b-b2bf-c69efce81aea")
+		(uuid "40584bf9-601e-469e-bb78-351f93389a2e")
 	)
 	(wire
 		(pts
-			(xy 533.4 513.08) (xy 533.4 538.48)
+			(xy 899.16 685.8) (xy 944.88 685.8)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "0b79688e-3cfa-47de-8ad1-c387a2e42506")
+		(uuid "6fee29e4-10c8-4419-b50a-a351f3729f6b")
 	)
 	(wire
 		(pts
-			(xy 533.4 426.72) (xy 563.88 419.1)
+			(xy 1112.52 594.36) (xy 1188.72 594.36)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "ca56d22a-8c8c-4b68-9ad5-5b377c34d143")
+		(uuid "92f8ceab-b4ce-40ff-860b-4f7ad73900f3")
 	)
 	(wire
 		(pts
-			(xy 563.88 434.34) (xy 563.88 449.58)
+			(xy 1112.52 640.08) (xy 1188.72 640.08)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "febedb6f-9fb8-4686-873d-d7ff729f06de")
+		(uuid "69f1c47f-941c-4caf-859c-52a9abe7dab6")
 	)
 	(wire
 		(pts
-			(xy 563.88 419.1) (xy 589.28 419.1)
+			(xy 1112.52 685.8) (xy 1188.72 685.8)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "62b36a5e-cbe1-4e3a-9af8-0f12ebea783f")
+		(uuid "42f39e2a-0a32-4ce8-870f-f8a238176988")
 	)
 	(wire
 		(pts
-			(xy 589.28 434.34) (xy 589.28 449.58)
+			(xy 1112.52 731.52) (xy 1188.72 731.52)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "b039d646-67d9-423e-82c9-36a9316b108e")
+		(uuid "8536524b-5180-48f8-b8eb-a6cb878cfc2c")
 	)
 	(wire
 		(pts
-			(xy 76.2 416.56) (xy 76.2 429.26)
+			(xy 1066.8 502.92) (xy 1066.8 548.64)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "cc1ab027-82a6-43c3-96a6-ea31358d7519")
+		(uuid "64e3b4f0-42ca-4d3a-abc7-9312aefd9487")
 	)
 	(wire
 		(pts
-			(xy 76.2 444.5) (xy 76.2 459.74)
+			(xy 1066.8 746.76) (xy 1066.8 807.72)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "f5558150-28c0-4168-9c56-e582f5cee11b")
+		(uuid "b33f14a2-e9cb-474f-818b-102cbcc9733e")
 	)
 	(wire
 		(pts
-			(xy 157.48 416.56) (xy 157.48 429.26)
+			(xy 1066.8 548.64) (xy 1143.0 537.21)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "b90c8b4b-3020-43ff-80c6-a4cde91c3c2d")
+		(uuid "a947577f-3d4f-49c3-a755-e938948244eb")
 	)
 	(wire
 		(pts
-			(xy 157.48 444.5) (xy 157.48 459.74)
+			(xy 1143.0 560.07) (xy 1143.0 582.93)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "6f6806f3-05b0-4363-beb0-f670e3ab6cb7")
+		(uuid "b07983e8-0f88-493d-a04f-502efb686cb8")
 	)
 	(wire
 		(pts
-			(xy 248.92 416.56) (xy 248.92 429.26)
+			(xy 1143.0 537.21) (xy 1203.96 537.21)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "8a64f7ef-f37f-4114-924f-c2a0811e19b9")
+		(uuid "0fd691e9-86ee-47ae-bf04-1b179dcc7018")
 	)
 	(wire
 		(pts
-			(xy 248.92 444.5) (xy 248.92 459.74)
+			(xy 1203.96 560.07) (xy 1203.96 582.93)
 		)
 		(stroke
-			(width 0)
+			(width 1.05)
 			(type default)
 		)
-		(uuid "4960db0e-b457-4efc-9983-0c8789b588bf")
+		(uuid "bba9f588-4fe3-41c6-b427-0d3ca75b7174")
 	)
 	(junction
-		(at 157.48 106.68)
+		(at 350.52 281.94)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "ecdd8592-c88b-48ab-8660-9cc08f00828c")
+		(uuid "af21f54b-1108-4912-afd5-7df119ccde94")
 	)
 	(junction
-		(at 208.28 111.76)
+		(at 441.96 289.56)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "67375901-d69c-49cc-830f-22f2b057c76d")
+		(uuid "9706446f-ac0c-4780-a7fb-16dbe452a9ed")
 	)
 	(junction
-		(at 502.92 106.68)
+		(at 788.67 320.04)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "a98558dc-f632-420a-b387-53adb871c9a2")
+		(uuid "3a369dd4-0bed-4494-9dd8-add6e7d91131")
 	)
 	(junction
-		(at 502.92 55.88)
+		(at 788.67 274.32)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "ff14197e-f1f4-4909-bc3c-2d78047bfca2")
+		(uuid "63f005db-55b7-46fc-abea-b8829f80f1fb")
 	)
 	(junction
-		(at 523.24 55.88)
+		(at 822.96 274.32)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "a10ee684-270f-48e7-8b02-87c2bd89fa84")
+		(uuid "d4948918-b3bd-416c-add3-7bf30a6dc220")
 	)
 	(junction
-		(at 502.92 25.4)
+		(at 788.67 243.84)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "b82b1afc-6584-4824-8505-646de94cddb4")
+		(uuid "e7b84bbd-acee-40e8-9862-226524bf08a6")
 	)
 	(junction
-		(at 523.24 25.4)
+		(at 822.96 243.84)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "06523d35-fe72-47b5-a27a-2357cdd780cb")
+		(uuid "8781e2e2-730b-4d4e-8e5b-5c0714511404")
 	)
 	(junction
-		(at 523.24 111.76)
+		(at 822.96 327.66)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "58fd8892-4dfa-4a93-8905-f4e41a0f5d85")
+		(uuid "954164f0-ef2b-43da-99cb-e881184a0d26")
 	)
 	(junction
-		(at 248.92 309.88)
+		(at 994.41 289.56)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "390778ed-85c5-42e0-8289-4cd7bd3437c2")
+		(uuid "41649c59-74f3-42ed-a282-ee7de509ddc1")
 	)
 	(junction
-		(at 248.92 259.08)
+		(at 1177.29 289.56)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "d55ec230-bbd1-4cab-b2cd-4640eaeed8e9")
+		(uuid "3fd7cf24-f18d-4821-ad86-2e7876f1009f")
 	)
 	(junction
-		(at 269.24 259.08)
+		(at 445.77 640.08)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "e65e92af-ca88-442b-a4af-4fd783e0d40e")
+		(uuid "402202a6-4fda-4c3e-bc8e-a543a5e8fce5")
 	)
 	(junction
-		(at 248.92 228.6)
+		(at 445.77 594.36)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "62f7fcfb-6601-47a1-a1f0-9e7f38c2ccaf")
+		(uuid "a32190cb-f214-4856-bf9b-7b781518344e")
 	)
 	(junction
-		(at 269.24 228.6)
+		(at 480.06 594.36)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "4d555ea2-bc6e-4605-8b2c-27dbee535b85")
+		(uuid "3e88f1ec-4c05-4bd9-be79-96991a9f22d9")
 	)
 	(junction
-		(at 269.24 314.96)
+		(at 445.77 563.88)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "c7cc103b-66ac-4f47-add2-27fc807e3121")
+		(uuid "1a85b06f-83ec-486f-a03a-44bf81e41065")
 	)
 	(junction
-		(at 485.14 294.64)
+		(at 480.06 563.88)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "c357e0cb-3265-4453-82b7-be57eafc2c90")
+		(uuid "2322fc16-540c-41a6-b7c6-69c3c290fc14")
 	)
 	(junction
-		(at 576.58 294.64)
+		(at 480.06 647.7)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "a91f4711-c7f0-4eeb-b8ce-34948efe1205")
+		(uuid "8abe8769-bcd3-4671-9781-f131d207d938")
 	)
 	(label "LP"
-		(at 78.74 66.04 0)
+		(at 186.69 205.74 0)
 		(effects
 			(font
-				(size 2.54 2.54)
+				(size 3.81 3.81)
 			)
 			(justify left bottom)
 		)
-		(uuid "38a55396-7d28-4e3d-9169-3710999d98e4")
+		(uuid "810f189f-13f0-4b0b-bc05-9f4c0b4aaf2d")
 	)
 	(label "BP"
-		(at 78.74 106.68 0)
+		(at 186.69 281.94 0)
 		(effects
 			(font
-				(size 2.54 2.54)
+				(size 3.81 3.81)
 			)
 			(justify left bottom)
 		)
-		(uuid "e048ffc7-1da8-4899-af44-018e4d6a2a61")
+		(uuid "4c0be573-5cef-4dfc-9da4-1dde8c421c25")
+	)
+	(label "+15V"
+		(at 411.48 358.14 0)
+		(effects
+			(font
+				(size 3.81 3.81)
+			)
+			(justify left bottom)
+		)
+		(uuid "77303287-1524-4238-b7fc-00688c279d3b")
 	)
 	(label "HP"
-		(at 238.76 111.76 0)
+		(at 502.92 289.56 0)
 		(effects
 			(font
-				(size 2.54 2.54)
+				(size 3.81 3.81)
 			)
 			(justify left bottom)
 		)
-		(uuid "994fee95-a030-402b-ba95-99b124905e6c")
+		(uuid "d1e312b1-e9c9-4877-ae0e-8b543a9e4e3a")
 	)
 	(label "HP"
-		(at 340.36 106.68 0)
+		(at 487.68 320.04 0)
 		(effects
 			(font
-				(size 2.54 2.54)
+				(size 3.81 3.81)
 			)
 			(justify left bottom)
 		)
-		(uuid "05f6ced4-53e3-44f7-8830-01332cba58da")
+		(uuid "1d625785-b72e-478d-9d96-32ae14dffa9f")
 	)
 	(label "VCTRL"
-		(at 370.84 137.16 0)
+		(at 548.64 381.0 0)
 		(effects
 			(font
-				(size 2.54 2.54)
+				(size 3.81 3.81)
 			)
 			(justify left bottom)
 		)
-		(uuid "1c4f74b0-c7ce-47b1-bca5-d92819dc01b7")
+		(uuid "f55f8949-a2f6-40bf-a865-a98a93aa632f")
+	)
+	(label "+15V"
+		(at 792.48 396.24 0)
+		(effects
+			(font
+				(size 3.81 3.81)
+			)
+			(justify left bottom)
+		)
+		(uuid "8b82c823-d950-4f86-96bc-7e61e9ca5245")
 	)
 	(label "BP"
-		(at 553.72 111.76 0)
+		(at 883.92 327.66 0)
 		(effects
 			(font
-				(size 2.54 2.54)
+				(size 3.81 3.81)
 			)
 			(justify left bottom)
 		)
-		(uuid "c4ac0a85-74ce-4b97-92d0-596925212d9f")
+		(uuid "3a84fc0e-93a8-4bfd-8eba-620ae4f64534")
 	)
 	(label "BP"
-		(at 86.36 309.88 0)
+		(at 880.11 289.56 0)
 		(effects
 			(font
-				(size 2.54 2.54)
+				(size 3.81 3.81)
 			)
 			(justify left bottom)
 		)
-		(uuid "c7cc3658-4ece-43ae-838d-a578c043f6ca")
+		(uuid "600ac253-161c-4750-a05d-497464dd7730")
+	)
+	(label "AIN0"
+		(at 1268.73 289.56 0)
+		(effects
+			(font
+				(size 3.81 3.81)
+			)
+			(justify left bottom)
+		)
+		(uuid "40f233f5-13f9-4975-876f-44c8247b7ec0")
+	)
+	(label "BP"
+		(at 144.78 640.08 0)
+		(effects
+			(font
+				(size 3.81 3.81)
+			)
+			(justify left bottom)
+		)
+		(uuid "23a07d22-845d-493b-9320-5669995edba6")
 	)
 	(label "VCTRL"
-		(at 116.84 340.36 0)
+		(at 205.74 701.04 0)
 		(effects
 			(font
-				(size 2.54 2.54)
+				(size 3.81 3.81)
 			)
 			(justify left bottom)
 		)
-		(uuid "a3d019e1-2472-4c43-990f-2fff6e2ce0d6")
+		(uuid "07d726a7-5f60-45a3-a875-e6b0b9d3d6c1")
+	)
+	(label "+15V"
+		(at 449.58 716.28 0)
+		(effects
+			(font
+				(size 3.81 3.81)
+			)
+			(justify left bottom)
+		)
+		(uuid "ff65fa0e-8171-4acb-82b0-fbfd6d7c41f6")
 	)
 	(label "LP"
-		(at 299.72 314.96 0)
+		(at 541.02 647.7 0)
 		(effects
 			(font
-				(size 2.54 2.54)
+				(size 3.81 3.81)
 			)
 			(justify left bottom)
 		)
-		(uuid "77433177-5ff9-42b6-b8e1-e0583f04064f")
+		(uuid "8eb00dfe-b12e-4ff8-94ee-5c7b66a2af52")
 	)
 	(label "BP"
-		(at 350.52 347.98 0)
+		(at 647.7 712.47 0)
 		(effects
 			(font
-				(size 2.54 2.54)
+				(size 3.81 3.81)
 			)
 			(justify left bottom)
 		)
-		(uuid "dfd288ec-236b-478b-a322-7d0f64501ed1")
+		(uuid "df49b8c8-0b73-4504-b816-c645b6472f43")
 	)
 	(label "HP"
-		(at 104.14 177.8 0)
+		(at 590.55 533.4 0)
 		(effects
 			(font
-				(size 2.54 2.54)
+				(size 3.81 3.81)
 			)
 			(justify left bottom)
 		)
-		(uuid "1ba711b3-2c7f-492b-afa7-db02f99fae58")
+		(uuid "69b796d4-0013-4126-b6ce-8a2e35df6c7b")
 	)
-	(label "BP"
-		(at 429.26 294.64 0)
+	(label "+15V"
+		(at 533.4 640.08 0)
 		(effects
 			(font
-				(size 2.54 2.54)
+				(size 3.81 3.81)
 			)
 			(justify left bottom)
 		)
-		(uuid "39279b9d-e923-4640-811f-9bcb56776137")
+		(uuid "a57e1779-6c9a-40db-b1db-96dcce4b93f8")
+	)
+	(label "3.3V"
+		(at 868.68 640.08 0)
+		(effects
+			(font
+				(size 3.81 3.81)
+			)
+			(justify left bottom)
+		)
+		(uuid "8ba08fe8-5632-44a5-a631-48f610a38e99")
 	)
 	(label "AIN0"
-		(at 617.22 294.64 0)
+		(at 899.16 594.36 0)
 		(effects
 			(font
-				(size 2.54 2.54)
+				(size 3.81 3.81)
 			)
 			(justify left bottom)
 		)
-		(uuid "6a312dd3-4196-4a31-bcf4-81dce30d9608")
-	)
-	(label "AIN0"
-		(at 452.12 447.04 0)
-		(effects
-			(font
-				(size 2.54 2.54)
-			)
-			(justify left bottom)
-		)
-		(uuid "08e09dbc-2293-465c-a920-a37836abc55a")
+		(uuid "3e914e2e-6150-4237-a483-e6349b3ab457")
 	)
 	(label "BP_ZC"
-		(at 452.12 467.36 0)
+		(at 899.16 640.08 0)
 		(effects
 			(font
-				(size 2.54 2.54)
+				(size 3.81 3.81)
 			)
 			(justify left bottom)
 		)
-		(uuid "13771a8c-aefd-44fe-b326-8630929e6f0e")
+		(uuid "12553a6f-3e2d-4ae0-a1a1-abf07670f589")
 	)
-	(label "VCTRL"
-		(at 624.84 447.04 0)
+	(label "UART_RX"
+		(at 899.16 685.8 0)
 		(effects
 			(font
-				(size 2.54 2.54)
+				(size 3.81 3.81)
 			)
 			(justify left bottom)
 		)
-		(uuid "9c9b19be-cdbc-4965-94a8-704a20c5acec")
+		(uuid "66af08ce-6e7c-4726-95a2-097ad8adb076")
+	)
+	(label "SPI0_CLK"
+		(at 1188.72 594.36 0)
+		(effects
+			(font
+				(size 3.81 3.81)
+			)
+			(justify left bottom)
+		)
+		(uuid "27837bec-4517-4806-801e-8744a4444d1e")
+	)
+	(label "SPI0_MOSI"
+		(at 1188.72 640.08 0)
+		(effects
+			(font
+				(size 3.81 3.81)
+			)
+			(justify left bottom)
+		)
+		(uuid "47a02505-8553-43ab-a13f-81999cddbc3c")
+	)
+	(label "DAC_CS"
+		(at 1188.72 685.8 0)
+		(effects
+			(font
+				(size 3.81 3.81)
+			)
+			(justify left bottom)
+		)
+		(uuid "0d540ec7-3fe5-4b1b-a74e-5d16c5a3a501")
+	)
+	(label "UART_TX"
+		(at 1188.72 731.52 0)
+		(effects
+			(font
+				(size 3.81 3.81)
+			)
+			(justify left bottom)
+		)
+		(uuid "f57a95b2-641c-48eb-82c6-1ef6d5acac1e")
+	)
+	(label "3.3V"
+		(at 1066.8 502.92 0)
+		(effects
+			(font
+				(size 3.81 3.81)
+			)
+			(justify left bottom)
+		)
+		(uuid "4df9a185-7604-44ab-9ecf-e7bfc583f8cc")
 	)
 	(text "SUMMING AMPLIFIER"
 		(exclude_from_sim no)
-		(at 76.2 25.4 0.0000)
+		(at 114.3 60.96 0.0000)
 		(effects
 			(font
-				(size 6.0 6.0)
+				(size 15.0 15.0)
 				(bold yes)
 			)
 		)
-		(uuid "1b4c73fa-abcc-4711-9fc0-cd17ea97d95d")
+		(uuid "76fee581-48ba-4a97-97e7-2b2af0de1a42")
 	)
 	(text "INTEGRATOR 1 (HP->BP) + MDAC"
 		(exclude_from_sim no)
-		(at 330.2 25.4 0.0000)
+		(at 457.2 60.96 0.0000)
 		(effects
 			(font
-				(size 6.0 6.0)
+				(size 15.0 15.0)
 				(bold yes)
 			)
 		)
-		(uuid "28c963de-a18a-4742-92ae-332fa2f9241a")
+		(uuid "e72c8059-69fd-4f0a-b60e-54a1106fbb98")
 	)
 	(text "XDAC1\nDAC7800"
 		(exclude_from_sim no)
-		(at 370.84 91.44 0.0000)
+		(at 548.64 289.56 0.0000)
 		(effects
 			(font
-				(size 3.6 3.6)
+				(size 7.5 7.5)
 			)
 		)
-		(uuid "90f8fed7-bbc5-488b-ac5f-43d35c1545b5")
+		(uuid "2ef2e443-8464-4f4a-8cc3-3597013d83a7")
 	)
 	(text "Zener AGC\nBV=1.1V"
 		(exclude_from_sim no)
-		(at 508.0 15.24 0.0000)
-		(effects
-			(font
-				(size 3.0 3.0)
-			)
-		)
-		(uuid "56305ca7-6330-4961-98b2-3c059b046559")
-	)
-	(text "INTEGRATOR 2 (BP->LP) + MDAC"
-		(exclude_from_sim no)
-		(at 76.2 228.6 0.0000)
+		(at 784.86 251.46 0.0000)
 		(effects
 			(font
 				(size 6.0 6.0)
-				(bold yes)
 			)
 		)
-		(uuid "e6164f56-261a-4480-8020-ceac7d5c4200")
+		(uuid "dbcdd449-0c68-434b-a492-224dcb72ca52")
 	)
-	(text "XDAC2\nDAC7800"
+	(text "f = D / (4096 * 2pi * 10k * 470p)\n[25Hz - 30kHz]"
 		(exclude_from_sim no)
-		(at 116.84 294.64 0.0000)
+		(at 472.44 502.92 0.0000)
 		(effects
 			(font
-				(size 3.6 3.6)
+				(size 6.0 6.0)
 			)
 		)
-		(uuid "7bdf1e71-c649-42bf-934c-0e969bebcace")
-	)
-	(text "Zener AGC\nBV=1.1V"
-		(exclude_from_sim no)
-		(at 254.0 218.44 0.0000)
-		(effects
-			(font
-				(size 3.0 3.0)
-			)
-		)
-		(uuid "3c8c22b0-0b52-42a4-9c99-10a4f9ce09a0")
-	)
-	(text "Startup\nKick"
-		(exclude_from_sim no)
-		(at 35.56 162.56 0.0000)
-		(effects
-			(font
-				(size 3.0 3.0)
-			)
-		)
-		(uuid "90175293-2661-4be1-ada3-adb9d93a2983")
-	)
-	(text "PULSE 0.1V 10us"
-		(exclude_from_sim no)
-		(at 25.4 187.96 0.0000)
-		(effects
-			(font
-				(size 2.4 2.4)
-			)
-		)
-		(uuid "c181cb2a-0e81-4233-9344-345fc9b070d1")
+		(uuid "61e23d8e-fa31-41db-96f5-4e36f8a53dcf")
 	)
 	(text "AD636 RMS DETECTOR"
 		(exclude_from_sim no)
-		(at 431.8 228.6 0.0000)
+		(at 800.1 60.96 0.0000)
 		(effects
 			(font
-				(size 6.0 6.0)
+				(size 15.0 15.0)
 				(bold yes)
 			)
 		)
-		(uuid "5d64075b-653c-4b06-b969-4028b3777cfc")
+		(uuid "c1add5cc-3f80-442a-9d88-df96e59ef436")
 	)
-	(text "1/5 atten\nVin/5 to AD636"
+	(text "1/5 attenuator\nVin/5 to AD636"
 		(exclude_from_sim no)
-		(at 505.46 294.64 0.0000)
+		(at 1032.51 289.56 0.0000)
 		(effects
 			(font
-				(size 2.6 2.6)
+				(size 6.0 6.0)
 			)
 		)
-		(uuid "09df1099-91ca-4b79-8dc2-2322b248a785")
+		(uuid "bf14e8a8-33a2-4874-aafb-77fa85281688")
 	)
 	(text "U4\nAD636\nRMS-to-DC"
 		(exclude_from_sim no)
-		(at 556.26 269.24 0.0000)
+		(at 1131.57 236.22 0.0000)
 		(effects
 			(font
-				(size 4.0 4.0)
+				(size 7.5 7.5)
 			)
 		)
-		(uuid "37be73fc-598a-440b-b36f-d2ac6171a6b5")
+		(uuid "1c7baa3b-69d8-498c-b9b8-2031ad98331a")
 	)
 	(text "CAV"
 		(exclude_from_sim no)
-		(at 591.82 325.12 0.0000)
-		(effects
-			(font
-				(size 2.6 2.6)
-			)
-		)
-		(uuid "4c0f22fe-65fa-4666-8db3-a7fd37fa512b")
-	)
-	(text "ADuCM362 MCU"
-		(exclude_from_sim no)
-		(at 431.8 381.0 0.0000)
+		(at 1207.77 350.52 0.0000)
 		(effects
 			(font
 				(size 6.0 6.0)
+			)
+		)
+		(uuid "c32c49c3-7733-441f-91cd-ec55baaf6d03")
+	)
+	(text "INTEGRATOR 2 (BP->LP) + MDAC"
+		(exclude_from_sim no)
+		(at 114.3 381.0 0.0000)
+		(effects
+			(font
+				(size 15.0 15.0)
 				(bold yes)
 			)
 		)
-		(uuid "72cdcf3a-5c5e-4c1c-a06c-d4a69411863f")
+		(uuid "814cc810-3694-4992-946a-1e3eadaf1bcb")
 	)
-	(text "U5\nADuCM362\nARM Cortex-M3"
+	(text "XDAC2\nDAC7800"
 		(exclude_from_sim no)
-		(at 502.92 416.56 0.0000)
+		(at 205.74 609.6 0.0000)
 		(effects
 			(font
-				(size 4.0 4.0)
-				(bold yes)
+				(size 7.5 7.5)
 			)
 		)
-		(uuid "7ced6d30-f8c4-4a89-9b57-42d0a99fb7b3")
+		(uuid "74087f70-37f9-4358-84ac-9357e6163963")
 	)
-	(text "AIN0"
+	(text "Zener AGC\nBV=1.1V"
 		(exclude_from_sim no)
-		(at 462.28 447.04 0.0000)
-		(effects
-			(font
-				(size 2.6 2.6)
-			)
-		)
-		(uuid "7e34ffe0-865e-40b2-afb2-25e8e0202b05")
-	)
-	(text "P0.5_ZC"
-		(exclude_from_sim no)
-		(at 462.28 467.36 0.0000)
-		(effects
-			(font
-				(size 2.6 2.6)
-			)
-		)
-		(uuid "97133466-2436-46bb-a4d5-da09f0dd19a3")
-	)
-	(text "UART_RX"
-		(exclude_from_sim no)
-		(at 462.28 487.68 0.0000)
-		(effects
-			(font
-				(size 2.6 2.6)
-			)
-		)
-		(uuid "d850f9e9-77d7-4896-aefc-a343ed75139a")
-	)
-	(text "SPI0_CLK"
-		(exclude_from_sim no)
-		(at 599.44 447.04 0.0000)
-		(effects
-			(font
-				(size 2.6 2.6)
-			)
-		)
-		(uuid "ce18a7c9-5234-49fc-b8fc-fa1e9868fb34")
-	)
-	(text "SPI0_MOSI"
-		(exclude_from_sim no)
-		(at 599.44 467.36 0.0000)
-		(effects
-			(font
-				(size 2.6 2.6)
-			)
-		)
-		(uuid "e108cf2c-1f8b-45cd-9176-8726f6ad05a5")
-	)
-	(text "DAC_CS"
-		(exclude_from_sim no)
-		(at 599.44 487.68 0.0000)
-		(effects
-			(font
-				(size 2.6 2.6)
-			)
-		)
-		(uuid "5983487e-67ca-4275-a348-6d08b594a754")
-	)
-	(text "UART_TX"
-		(exclude_from_sim no)
-		(at 599.44 508.0 0.0000)
-		(effects
-			(font
-				(size 2.6 2.6)
-			)
-		)
-		(uuid "9c3b7521-c92d-4f3d-928b-1a14ecffe204")
-	)
-	(text "SPI0 -> DAC7800\ncontrols frequency"
-		(exclude_from_sim no)
-		(at 599.44 523.24 0.0000)
-		(effects
-			(font
-				(size 2.4 2.4)
-			)
-		)
-		(uuid "d479dc32-47c4-4281-a9e0-a7eee9216ed6")
-	)
-	(text "3.3V"
-		(exclude_from_sim no)
-		(at 543.56 406.4 0.0000)
-		(effects
-			(font
-				(size 3.0 3.0)
-			)
-		)
-		(uuid "bd9390e1-27f5-45d7-b6b7-07fecd8f002b")
-	)
-	(text "POWER SUPPLY"
-		(exclude_from_sim no)
-		(at 55.88 381.0 0.0000)
+		(at 441.96 571.5 0.0000)
 		(effects
 			(font
 				(size 6.0 6.0)
+			)
+		)
+		(uuid "989bd49d-8381-406c-a2f3-641d63307dfc")
+	)
+	(text "STARTUP KICK + POWER SUPPLY"
+		(exclude_from_sim no)
+		(at 457.2 381.0 0.0000)
+		(effects
+			(font
+				(size 15.0 15.0)
 				(bold yes)
 			)
 		)
-		(uuid "af664fa8-867a-4698-9f43-935fd8d77901")
+		(uuid "bed737a8-5c5f-40f5-9cda-4b556804755c")
 	)
-	(text "+15V bulk"
+	(text "Startup Kick\nPULSE 0.1V 10us"
 		(exclude_from_sim no)
-		(at 96.52 426.72 0.0000)
+		(at 457.2 495.3 0.0000)
 		(effects
 			(font
-				(size 2.6 2.6)
+				(size 6.0 6.0)
 			)
 		)
-		(uuid "4613096c-33d5-491b-95bb-d4189a434021")
+		(uuid "a11ac343-944a-42b6-a010-b9ef41cdc53c")
 	)
-	(text "-15V bulk"
+	(text "+15V\nbulk"
 		(exclude_from_sim no)
-		(at 177.8 426.72 0.0000)
+		(at 571.5 670.56 0.0000)
 		(effects
 			(font
-				(size 2.6 2.6)
+				(size 6.0 6.0)
 			)
 		)
-		(uuid "97ab927b-a771-473c-8b68-d335312abda5")
+		(uuid "321f96ed-699e-4672-ab92-5da60405e788")
+	)
+	(text "-15V\nbulk"
+		(exclude_from_sim no)
+		(at 739.14 670.56 0.0000)
+		(effects
+			(font
+				(size 6.0 6.0)
+			)
+		)
+		(uuid "e75e5de6-6331-4443-9e2d-35984e68ff30")
 	)
 	(text "3.3V MCU\n(LDO from +15V)"
 		(exclude_from_sim no)
-		(at 269.24 426.72 0.0000)
+		(at 906.78 670.56 0.0000)
 		(effects
 			(font
-				(size 2.6 2.6)
+				(size 6.0 6.0)
 			)
 		)
-		(uuid "0e283e4f-2ac2-4efa-adf4-004f3db52644")
+		(uuid "78c6fd5b-0d7d-4842-9776-5b6d7a9ac893")
+	)
+	(text "ADuCM362 MCU"
+		(exclude_from_sim no)
+		(at 800.1 381.0 0.0000)
+		(effects
+			(font
+				(size 15.0 15.0)
+				(bold yes)
+			)
+		)
+		(uuid "79dc9058-81aa-4743-8f39-7fc489bc29db")
+	)
+	(text "U5\nADuCM362\nARM Cortex-M3"
+		(exclude_from_sim no)
+		(at 1005.84 533.4 0.0000)
+		(effects
+			(font
+				(size 7.5 7.5)
+				(bold yes)
+			)
+		)
+		(uuid "b5fc1155-dc39-4501-9c33-b3ca3b35509e")
+	)
+	(text "AIN0"
+		(exclude_from_sim no)
+		(at 922.02 594.36 0.0000)
+		(effects
+			(font
+				(size 5.4 5.4)
+			)
+		)
+		(uuid "70533fc0-542f-42d3-9f8e-2dcdfa217365")
+	)
+	(text "P0.5_ZC"
+		(exclude_from_sim no)
+		(at 922.02 640.08 0.0000)
+		(effects
+			(font
+				(size 5.4 5.4)
+			)
+		)
+		(uuid "c78dfeb5-3c34-4ff7-a652-103c4a2a058f")
+	)
+	(text "UART_RX"
+		(exclude_from_sim no)
+		(at 922.02 685.8 0.0000)
+		(effects
+			(font
+				(size 5.4 5.4)
+			)
+		)
+		(uuid "534e8c2e-a106-4fde-a91b-eb2a09b9341b")
+	)
+	(text "SPI0 -> DAC7800\ncontrols VCTRL"
+		(exclude_from_sim no)
+		(at 1203.96 762.0 0.0000)
+		(effects
+			(font
+				(size 5.4 5.4)
+			)
+		)
+		(uuid "239571d4-aaae-4cfe-a2e7-729d86508cbf")
 	)
 	(text "UART (115200 8N1) to host PC"
 		(exclude_from_sim no)
-		(at 502.92 558.8 0.0000)
+		(at 1005.84 838.2 0.0000)
 		(effects
 			(font
-				(size 3.0 3.0)
+				(size 6.0 6.0)
 			)
 		)
-		(uuid "49fb8951-2b4b-4cab-9c1f-7254113c3899")
+		(uuid "2175b8c0-1414-41fc-a100-76183b7d7978")
 	)
 	(text "Timer1 capture: zero-crossing frequency measurement"
 		(exclude_from_sim no)
-		(at 452.12 482.6 0.0000)
+		(at 899.16 670.56 0.0000)
 		(effects
 			(font
-				(size 2.4 2.4)
+				(size 5.4 5.4)
 			)
 		)
-		(uuid "942c8858-37f8-437c-8bda-d185c57a706f")
-	)
-	(text "f = D / (4096 * 2pi * 10k * 470p)  [25Hz - 30kHz]"
-		(exclude_from_sim no)
-		(at 340.36 157.48 0.0000)
-		(effects
-			(font
-				(size 3.0 3.0)
-			)
-		)
-		(uuid "47a542af-0b91-4a03-a33f-893308d2ba9a")
+		(uuid "1c366f7d-b0bd-41c5-9fe4-ecd0a6f88db7")
 	)
 	(sheet_instances
 		(path "/"
