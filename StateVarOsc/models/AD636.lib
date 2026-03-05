@@ -1,0 +1,82 @@
+* ============================================================
+* AD636 Behavioural True RMS-to-DC Converter for ngspice
+* Based on Analog Devices AD636 datasheet specifications
+*
+* Key specs modelled:
+*   Input range:     0 to 200 mV rms (direct input)
+*   Extended range:  0 to 7V rms (with 1/35 input attenuator)
+*   Accuracy:        +/-1 mV +/- 0.5% of reading
+*   Bandwidth:       1 MHz (-3dB at 200mV input)
+*   Supply:          +/-5V to +/-16.5V
+*   Supply current:  800 uA typ
+*   Output Rout:     ~1 ohm
+*   Averaging:       internal 8k ohm + external CAV capacitor
+*   Time constant:   tau = 8k * CAV
+*
+* RMS Algorithm:
+*   1. Square the input:      V^2 = Vin * Vin
+*   2. Average (lowpass):     <V^2> via R_avg + CAV
+*   3. Square root:           Vrms = sqrt(<V^2>)
+*
+* Implementation:
+*   - B-source for squaring
+*   - RC filter for averaging (8k internal + external CAV)
+*   - B-source for square root
+*   - Bandwidth limiting at input
+*
+* Pins: VIN CAV VOUT VCC VEE COM
+*   VIN  = signal input
+*   CAV  = averaging capacitor (connect external cap to COM)
+*   VOUT = DC output = RMS of input
+*   VCC  = positive supply
+*   VEE  = negative supply
+*   COM  = common/ground reference for output
+*
+* Instance: XRMS vin cav vout vcc vee com AD636
+*
+* External wiring:
+*   CAV pin to COM pin via capacitor (e.g., 10uF)
+*   For 1V RMS input: use external 1/5 attenuator (4x 10k + 2.5k)
+* ============================================================
+
+.subckt AD636 vin cav vout vcc vee com
+
+* === Parameters ===
+.param Ravg   = 8e3      ; 8k internal averaging resistor
+.param BW_in  = 1e6      ; 1 MHz input bandwidth
+.param Rout   = 1        ; 1 ohm output impedance
+.param Rin    = 1e6      ; 1 Mohm input impedance
+
+* === Input stage ===
+* Unity-gain buffer with 1 MHz bandwidth limit
+* Input impedance provided by Rin to ground
+* RC lowpass: 100 ohm + Cin gives -3dB at 1 MHz
+Rin1 vin com {Rin}
+.param Cin_val = {1 / (2 * 3.14159265 * BW_in * 100)}
+Rbw vin vin_filt 100
+Cin1 vin_filt com {Cin_val}
+
+* === Squaring stage ===
+* V_sq = Vin^2 (always positive)
+* B-source computes the square of the filtered input
+B_square sq_out com V = V(vin_filt, com) * V(vin_filt, com)
+
+* === Averaging stage ===
+* Internal 8k resistor + external CAV capacitor
+* The CAV pin connects to external cap, other end to COM
+* Time constant = 8k * CAV
+Ravg1 sq_out cav {Ravg}
+
+* === Square root stage ===
+* Vrms = sqrt(V_avg)
+* Protect against negative values from numerical noise
+B_sqrt rms_raw com V = sqrt(abs(V(cav, com)) + 1e-20)
+
+* === Output buffer ===
+* Low impedance output with rail clamping
+Rout1 rms_raw vout {Rout}
+
+* === Supply current (quiescent load) ===
+Rq vcc vee 20e3
+
+.ends AD636

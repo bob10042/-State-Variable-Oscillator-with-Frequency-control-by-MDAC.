@@ -1,0 +1,66 @@
+* ============================================================
+* Test: AD636 Behavioural RMS-to-DC Converter
+* Circuit: Apply 1kHz sine wave, verify DC output = RMS
+* Verify:
+*   100mV peak sine -> RMS = 70.7mV -> Vout = 70.7mV
+*   200mV peak sine -> RMS = 141.4mV -> Vout = 141.4mV
+* ============================================================
+
+.title AD636 Behavioural RMS Detector Test
+
+* Include the model
+.include ../models/AD636.lib
+
+* === Power Supply ===
+VCC vcc 0 DC 5
+VEE vee 0 DC -5
+
+* === Input Signal ===
+* 1kHz sine, 141.4mV peak = 100mV RMS
+Vin in 0 SIN(0 0.14142 1k)
+
+* === AD636 instance ===
+* Pins: VIN CAV VOUT VCC VEE COM
+XRMS in cav rms_out vcc vee 0 AD636
+
+* === Averaging capacitor ===
+* CAV = 10uF -> tau = 8k * 10u = 80ms
+* At 1kHz, 80 cycles per time constant — good averaging
+Cav cav 0 10u IC=0
+
+* === Analysis ===
+* Run long enough for RMS to settle (5 time constants = 400ms)
+.tran 10u 500m UIC
+
+.control
+echo "=== AD636 RMS Detector Test ==="
+echo ""
+echo "Input: 1kHz sine, 141.4mV peak = 100mV RMS"
+echo "Expected output: ~100mV DC (after settling)"
+echo ""
+
+tran 10u 500m uic
+
+* Measure settled RMS output (last 100ms)
+meas tran rms_settled avg v(rms_out) from=400m to=500m
+echo "Measured RMS output (settled):"
+print rms_settled
+
+echo ""
+echo "Expected: 100.0 mV (0.1V)"
+let error_pct = 100 * (rms_settled - 0.1) / 0.1
+echo "Error (%):"
+print error_pct
+
+* Also measure input peak for reference
+meas tran vin_pp pp v(in) from=400m to=500m
+echo ""
+echo "Input Vpp (should be 283mV):"
+print vin_pp
+
+echo ""
+echo "=== AD636 TEST COMPLETE ==="
+quit
+.endc
+
+.end

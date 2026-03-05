@@ -1,0 +1,130 @@
+* ============================================================
+* State Variable Oscillator — Full Circuit with Amplitude Control (v3)
+*
+* Amplitude control: back-to-back Zener diodes across each
+*   integrating cap. Clamps V(cap) at ±~1.45V peak (1.03V RMS).
+*   - When |V(bp)| or |V(lp)| exceed ~1.45V, Zeners conduct
+*   - Discharges cap, preventing amplitude from growing further
+*   - Uses real SPICE diode models (no B-source convergence issues)
+*   - Direct LP feedback (no B-source in signal path)
+*
+* Back-to-back Zener: anode-to-anode (mid node)
+*   D1: mid to node_a (cathode=node_a)
+*   D2: mid to node_b (cathode=node_b)
+*   Clamps |V(a)-V(b)| at BV+Vf per direction
+*   BV=1.1V + Vf≈0.35V = ~1.45V threshold (tuned)
+*
+* Test progression:
+*   v1: J113 in BP — LP unity gain prevents damping
+*   v2: J113 in LP — killed oscillation, freq shift, AGC too slow
+*   v3-VCA: B-source VCA + error integrator — unstable
+*   v3-HP-hard: max/min limiter on HP — freq shifted to 346 Hz
+*   v3-LP-hard: max/min on LP — oscillation killed
+*   v3-LP-tanh: tanh on LP — also killed (B-source in LP path issue)
+*   v3-Zener: Zener caps (THIS) — real diodes, no B-source in path
+* ============================================================
+
+.title State Variable Oscillator — Zener AGC v3
+
+.include ../models/LM4562.lib
+.include ../models/DAC7800.lib
+
+* === Power Supply ===
+VCC vcc 0 DC 15
+VEE vee 0 DC -15
+
+* === MDAC Control Voltage ===
+.param VCTRL_SET = 0.1477
+Vctrl ctrl_node 0 DC {VCTRL_SET}
+
+* ===========================================================
+* OSCILLATOR CORE
+* ===========================================================
+
+* === Summing Amplifier (U1a) ===
+* Direct LP feedback (no B-source in path)
+R_lp lp sum_inv 10k
+
+* BP excitation for startup/sustain
+R_bp bp sum_inv 22k
+
+* Feedback
+Rf_sum hp sum_inv 10k
+
+* Op-amp
+XU1a 0 sum_inv vcc vee hp LM4562
+
+* === Integrator 1: HP → BP (via MDAC) ===
+XDAC1 hp mdac1_out ctrl_node rfb1_nc DAC7800
+Rint1 mdac1_out int1_inv 10k
+Cint1 int1_inv bp 470p
+R_damp1 int1_inv bp 100Meg
+XU1b 0 int1_inv vcc vee bp LM4562
+
+* Zener clamp on BP integrator: limits |V(bp)| to ~1.5V
+Dz1 z_mid1 int1_inv DZ09
+Dz2 z_mid1 bp DZ09
+
+* === Integrator 2: BP → LP (via MDAC) ===
+XDAC2 bp mdac2_out ctrl_node rfb2_nc DAC7800
+Rint2 mdac2_out int2_inv 10k
+Cint2 int2_inv lp 470p
+R_damp2 int2_inv lp 100Meg
+XU2a 0 int2_inv vcc vee lp LM4562
+
+* Zener clamp on LP integrator: limits |V(lp)| to ~1.5V
+Dz3 z_mid2 int2_inv DZ09
+Dz4 z_mid2 lp DZ09
+
+* Zener model: BV=1.1V, threshold = BV+Vf ≈ 1.1+0.6 = 1.7V
+* Tuned from BV=0.9 (gave 2.49Vpp) to BV=1.1 (gives 2.91Vpp ≈ 1.03V RMS)
+.model DZ09 D(Is=1e-14 BV=1.1 IBV=1e-3 N=1)
+
+* === Startup kick pulse ===
+Vkick kick_node 0 PULSE(0 0.1 0.1m 1n 1n 10u 1)
+Rkick kick_node hp 100k
+
+* === Output load ===
+RL bp 0 100k
+
+* ===========================================================
+* ANALYSIS
+* ===========================================================
+.tran 1u 0.5 UIC
+
+.control
+echo "=== SVO v3: Zener Clamp AGC ==="
+echo ""
+
+tran 1u 0.5 uic
+
+* Frequency
+meas tran t1 when v(bp)=0 rise=100
+meas tran t2 when v(bp)=0 rise=101
+let period = t2 - t1
+let freq = 1 / period
+echo "Frequency (expected ~880 Hz):"
+print freq
+
+* Amplitude (last 100ms)
+meas tran bp_pp pp v(bp) from=400m to=500m
+let bp_rms = bp_pp / (2 * 1.41421)
+echo "BP Vpp (target ~3.0V = 2x1.5V peak):"
+print bp_pp
+echo "BP RMS (target ~1.06V):"
+print bp_rms
+
+meas tran hp_pp pp v(hp) from=400m to=500m
+echo "HP Vpp:"
+print hp_pp
+
+meas tran lp_pp pp v(lp) from=400m to=500m
+echo "LP Vpp:"
+print lp_pp
+
+echo ""
+echo "=== TEST COMPLETE ==="
+quit
+.endc
+
+.end

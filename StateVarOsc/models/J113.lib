@@ -1,0 +1,23 @@
+* ============================================================
+* J113 N-Channel JFET Model
+* Source: LTspice standard.jft (Linear Systems)
+*
+* Key specs:
+*   Vto (pinch-off) = -1.382 V
+*   Beta = 9.109 mA/V^2
+*   Idss ~ 30 mA
+*   Rds(on) ~ 30 ohms at Vgs=0
+*   Cgs = 5.74 pF, Cgd = 6.46 pF
+*
+* Usage in AGC: drain-source as voltage-controlled resistor
+*   Vgs = 0    -> Rds ~ 30 ohms
+*   Vgs -> Vto -> Rds > 10k ohms
+*
+* Pins: D G S (drain, gate, source)
+* Instance: J1 drain gate source J113
+* ============================================================
+
+.model J113 NJF(Beta=9.109m Betatce=-0.5 Vto=-1.382 Vtotc=-2.5m
++ Lambda=8m Is=205.2f Xti=3 Isr=1988f Nr=2 Alpha=20.98u N=1
++ Rd=1 Rs=1 Cgd=6.46p Cgs=5.74p Fc=0.5 Vk=123.7 M=407m Pb=1
++ Kf=12300f Af=1)

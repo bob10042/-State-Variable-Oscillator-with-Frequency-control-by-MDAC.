@@ -1,0 +1,82 @@
+* ============================================================
+* Test: DAC7800 Behavioural MDAC
+* Circuit: Apply 1V reference, sweep control voltage
+* Verify: Output = Vin * Vctrl/5.0
+*         Vctrl=0 -> Vout=0, Vctrl=2.5 -> Vout=0.5, Vctrl=5 -> Vout=1
+* ============================================================
+
+.title DAC7800 Behavioural MDAC Test
+
+* Include the model
+.include ../models/DAC7800.lib
+
+* === Power Supply (for reference) ===
+VCC vcc 0 DC 5
+VEE vee 0 DC -5
+
+* === Test 1: DC Transfer — sweep control voltage ===
+* Apply 1V DC reference input
+Vref vin 0 DC 1.0
+
+* Control voltage: sweep 0 to 5V (represents DAC code 0 to 4095)
+Vctrl vctrl 0 DC 0
+
+* MDAC instance
+XDAC vin vout vctrl rfb DAC7800
+
+* RFB is left open (not used in voltage-mode output test)
+
+* === Test 2: AC multiply — 1kHz sine input, fixed code ===
+* (run separately)
+
+* === Analysis ===
+
+.control
+echo "=== DAC7800 MDAC Test ==="
+echo ""
+
+* Test 1: DC sweep control voltage
+echo "--- Test 1: Vout vs Vctrl (Vin = 1V DC) ---"
+echo "Expected: Vout = Vin * Vctrl/5.0"
+dc Vctrl 0 5 0.01
+
+echo ""
+meas dc vout_zero find v(vout) at=0
+echo "Vctrl=0V (code 0): Vout should be 0"
+print vout_zero
+
+meas dc vout_quarter find v(vout) at=1.25
+echo "Vctrl=1.25V (code 1024): Vout should be 0.25V"
+print vout_quarter
+
+meas dc vout_half find v(vout) at=2.5
+echo "Vctrl=2.5V (code 2048): Vout should be 0.5V"
+print vout_half
+
+meas dc vout_full find v(vout) at=5.0
+echo "Vctrl=5V (code 4095): Vout should be 1.0V"
+print vout_full
+
+* Test 2: AC input multiply
+echo ""
+echo "--- Test 2: 1kHz sine * 0.5 gain (Vctrl=2.5V) ---"
+alter Vref DC 0 AC 1 SIN(0 1 1k)
+alter Vctrl DC 2.5
+
+tran 10u 5m
+
+echo ""
+meas tran vout_pp pp v(vout) from=2m to=5m
+echo "Output Vpp: should be ~1.0 (half of 2Vpp input)"
+print vout_pp
+
+meas tran vin_pp pp v(vin) from=2m to=5m
+echo "Input Vpp:"
+print vin_pp
+
+echo ""
+echo "=== DAC7800 TEST COMPLETE ==="
+quit
+.endc
+
+.end

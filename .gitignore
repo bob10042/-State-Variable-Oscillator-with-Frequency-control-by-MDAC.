@@ -1,0 +1,36 @@
+# Ignore everything by default (this repo is oscillator-specific)
+*
+
+# ── Root files ──
+!.gitignore
+!README.md
+!kicad_pipeline.py
+
+# ── StateVarOsc design docs, models, tests ──
+!StateVarOsc/
+!StateVarOsc/**
+
+# ── ADuCM362 oscillator firmware ──
+!firmware/
+!firmware/oscillator/
+!firmware/oscillator/**
+
+# ── Simulation work files (oscillator only) ──
+!sim_work/
+!sim_work/oscillator*
+
+# ── SimGUI (full app needed for oscillator project) ──
+!SimGUI/
+!SimGUI/**
+
+# Exclude SimGUI build artifacts
+SimGUI/**/bin/
+SimGUI/**/obj/
+SimGUI/**/.vs/
+*.csproj.user
+
+# ── General excludes ──
+*.pyc
+__pycache__/
+*.raw
+*.log

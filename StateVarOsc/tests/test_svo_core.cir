@@ -1,0 +1,116 @@
+* ============================================================
+* State Variable Oscillator — Core Test (Phase 2)
+* Fixed frequency, no MDAC, no AGC
+*
+* Topology:
+*   U1a: Summing amp  (HP output)
+*   U1b: Integrator 1 (BP output = sine)
+*   U2a: Integrator 2 (LP output)
+*
+* For oscillation, the summing amp has:
+*   V_HP = -V_LP - (Rq/R1)*V_BP
+*   Rq controls Q. For sustained oscillation, Rq must be
+*   tuned so loop gain = 1.  Here we set Rq to slightly
+*   above the oscillation threshold to ensure startup.
+*
+* Fixed frequency: f = 1/(2*pi*Rint*Cint) = 1/(2*pi*10k*470p) = 33.86 kHz
+* (Using R=10k directly, no MDAC for this test)
+*
+* Expected: Oscillation at ~34 kHz, growing amplitude
+*           (no AGC so it will clip at rails)
+* ============================================================
+
+.title State Variable Oscillator — Core Test
+
+.include ../models/LM4562.lib
+
+* === Power Supply ===
+VCC vcc 0 DC 15
+VEE vee 0 DC -15
+
+* === Summing Amplifier (U1a) ===
+* V_HP = -(R2/R1)*V_LP - (Rq/R1)*V_BP
+* R1 = R2 = 10k, Rq controls Q
+*
+* For oscillation, need Rq/R1 ≥ 2 (Q ≥ 1)
+* Set Rq = 22k for Q ≈ 1.1 (slight excess gain for startup)
+
+R1_lp  lp  sum_inv 10k
+R1_bp  bp  sum_inv 22k
+
+* Summing amp output = HP
+* IN+ = ground, IN- = sum_inv
+XU1a 0 sum_inv vcc vee hp LM4562
+
+* Feedback from output to inverting input
+Rf_sum hp sum_inv 10k
+
+* === Integrator 1: HP → BP ===
+* V_BP = -1/(Rint*Cint) * ∫ V_HP dt
+Rint1 hp int1_inv 10k
+Cint1 int1_inv bp 470p
+
+* IN+ = ground, IN- = int1_inv
+XU1b 0 int1_inv vcc vee bp LM4562
+
+* === Integrator 2: BP → LP ===
+* V_LP = -1/(Rint*Cint) * ∫ V_BP dt
+Rint2 bp int2_inv 10k
+Cint2 int2_inv lp 470p
+
+* IN+ = ground, IN- = int2_inv
+XU2a 0 int2_inv vcc vee lp LM4562
+
+* === Initial perturbation to kick-start oscillation ===
+* Small noise source at HP node (pulse to nudge startup)
+Vkick kick_node 0 PULSE(0 0.01 0.1m 1n 1n 10u 1)
+Rkick kick_node hp 100k
+
+* === Load on BP output (the sine output) ===
+RL bp 0 100k
+
+* === Analysis ===
+.tran 1u 10m UIC
+
+.control
+echo "=== State Variable Oscillator Core Test ==="
+echo "Expected: oscillation at ~34 kHz"
+echo ""
+
+tran 1u 10m uic
+
+* Measure oscillation frequency from BP output (sine)
+meas tran t1 when v(bp)=0 rise=5
+meas tran t2 when v(bp)=0 rise=6
+let period = t2 - t1
+let freq = 1 / period
+
+echo ""
+echo "Measured period:"
+print period
+echo "Measured frequency (Hz):"
+print freq
+echo "Expected: ~33,860 Hz"
+
+echo ""
+echo "BP (sine) amplitude:"
+meas tran bp_pp pp v(bp) from=5m to=10m
+print bp_pp
+
+echo "HP amplitude:"
+meas tran hp_pp pp v(hp) from=5m to=10m
+print hp_pp
+
+echo "LP amplitude:"
+meas tran lp_pp pp v(lp) from=5m to=10m
+print lp_pp
+
+* Write results for plotting
+wrdata ../sim_work/svo_core_results.raw v(bp) v(hp) v(lp)
+
+echo ""
+echo "=== SVO CORE TEST COMPLETE ==="
+quit
+.endc
+
+.end

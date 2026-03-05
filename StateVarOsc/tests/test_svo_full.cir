@@ -1,0 +1,156 @@
+* ============================================================
+* State Variable Oscillator — Full Circuit with AGC (v2)
+*
+* AGC Design:
+*   The SVF loop has unity gain at resonance (LP path).
+*   Small fixed BP excitation (R_bp = 100k) provides ~10% excess gain.
+*   J113 in series with R_lp reduces LP gain → controls amplitude.
+*
+*   - J113 Rds LOW → LP gain ≈ 1.0 + BP excitation → grows
+*   - J113 Rds HIGH → LP gain < 1.0, net gain < 1 → decays
+*   - AGC finds equilibrium Rds where gain = 1 exactly
+*
+* Error integrator:
+*   IN+ = Vref (200mV), IN- = V_rms through Ri
+*   When V_rms > Vref: output goes negative → gate more neg → Rds up
+*     → LP gain down → amplitude drops
+*   When V_rms < Vref: output goes positive → gate less neg → Rds down
+*     → LP gain up → amplitude grows
+*
+* Equilibrium: Rds ≈ 1.1k, Vgs ≈ -1.33V
+* ============================================================
+
+.title State Variable Oscillator — Full Circuit v2
+
+.include ../models/LM4562.lib
+.include ../models/DAC7800.lib
+.include ../models/AD636.lib
+.include ../models/J113.lib
+
+* === Power Supply ===
+VCC vcc 0 DC 15
+VEE vee 0 DC -15
+
+* === MDAC Control Voltage ===
+* f ~ 1 kHz: D = 121, Vctrl = 5*121/4096 = 0.1477V
+.param VCTRL_SET = 0.1477
+Vctrl ctrl_node 0 DC {VCTRL_SET}
+
+* ===========================================================
+* OSCILLATOR CORE
+* ===========================================================
+
+* === Summing Amplifier (U1a) ===
+* IN- = sum_inv, IN+ = ground
+*
+* LP path: through J113 (AGC-controlled)
+*   Effective R_lp = 10k + Rds(J113)
+*   LP gain = -Rf / (10k + Rds)
+R_lp lp j1_d 10k
+J1 j1_d agc_gate sum_inv J113
+
+* BP excitation: fixed, provides startup energy
+*   BP gain = -Rf / 100k = -0.1
+R_bp bp sum_inv 100k
+
+* Feedback
+Rf_sum hp sum_inv 10k
+
+* Op-amp
+XU1a 0 sum_inv vcc vee hp LM4562
+
+* === Integrator 1: HP → BP (via MDAC) ===
+XDAC1 hp mdac1_out ctrl_node rfb1_nc DAC7800
+Rint1 mdac1_out int1_inv 10k
+Cint1 int1_inv bp 470p
+XU1b 0 int1_inv vcc vee bp LM4562
+
+* === Integrator 2: BP → LP (via MDAC) ===
+XDAC2 bp mdac2_out ctrl_node rfb2_nc DAC7800
+Rint2 mdac2_out int2_inv 10k
+Cint2 int2_inv lp 470p
+XU2a 0 int2_inv vcc vee lp LM4562
+
+* ===========================================================
+* AGC LOOP
+* ===========================================================
+
+* === Attenuator: BP → AD636 input ===
+R_att1 bp att_out 40k
+R_att2 att_out 0 10k
+
+* === AD636 RMS Detector ===
+XRMS att_out cav_node rms_dc vcc vee 0 AD636
+Cav cav_node 0 10u IC=0
+
+* === Error Integrator (U2b) ===
+* Standard inverting integrator with reference at IN+
+* V_out = -(1/(Ri*Cf)) × integral(V_rms - V_ref) dt
+*
+* V_ref = 200mV (= 1V RMS × 1/5 attenuator)
+Vref ref_node 0 DC 0.2
+
+* Ri from RMS detector to inverting input
+Ri_err rms_dc err_inv 100k
+
+* Integrating cap in feedback
+Cf_err err_inv agc_int 10u
+
+* IN+ = reference voltage
+XU2b ref_node err_inv vcc vee agc_int LM4562
+
+* === AGC output conditioning ===
+* Lowpass filter to smooth gate drive
+R_agc agc_int agc_gate 10k
+C_agc agc_gate 0 100n
+
+* Set initial gate voltage for controlled startup
+* Start at -0.7V (mid-range Rds ~ 200 ohms)
+.ic V(agc_gate)=-0.7 V(agc_int)=-0.7
+
+* === Output load ===
+RL bp 0 100k
+
+* ===========================================================
+* ANALYSIS
+* ===========================================================
+.tran 10u 1 UIC
+
+.control
+echo "=== SVO Full v2: J113 in LP path, BP excitation ==="
+echo ""
+
+tran 10u 1 uic
+
+* Frequency measurement
+meas tran t1 when v(bp)=0 rise=500
+meas tran t2 when v(bp)=0 rise=501
+let period = t2 - t1
+let freq = 1 / period
+echo "Frequency:"
+print freq
+
+* Amplitude
+meas tran bp_pp pp v(bp) from=800m to=1
+let bp_rms = bp_pp / (2 * 1.41421)
+echo "BP Vpp (last 200ms):"
+print bp_pp
+echo "BP RMS:"
+print bp_rms
+
+* RMS detector
+meas tran rms_val avg v(rms_dc) from=800m to=1
+echo "AD636 output (target 200mV):"
+print rms_val
+
+* AGC voltage
+meas tran agc_val avg v(agc_gate) from=800m to=1
+echo "AGC gate voltage:"
+print agc_val
+
+echo ""
+echo "=== TEST COMPLETE ==="
+quit
+.endc
+
+.end

@@ -1,0 +1,37 @@
+* ============================================================
+* Test: DAC7800 Behavioural MDAC — AC Multiply
+* 1kHz sine input * 0.5 gain (Vctrl=2.5V)
+* Expected: 1Vpk input * 0.5 = 0.5Vpk output
+* ============================================================
+
+.title DAC7800 AC Multiply Test
+
+.include ../models/DAC7800.lib
+
+Vin sig_in 0 SIN(0 1 1k)
+Vctrl ctrl_in 0 DC 2.5
+
+XDAC sig_in sig_out ctrl_in rfb_node DAC7800
+
+.control
+echo "=== DAC7800 AC Multiply Test ==="
+tran 10u 5m
+
+meas tran vin_pp pp v(sig_in) from=2m to=5m
+meas tran vout_pp pp v(sig_out) from=2m to=5m
+
+echo ""
+echo "Input Vpp (should be ~2.0V):"
+print vin_pp
+echo "Output Vpp (should be ~1.0V = 0.5 gain):"
+print vout_pp
+echo "Gain (should be ~0.5):"
+let gain = vout_pp / vin_pp
+print gain
+
+echo ""
+echo "=== DAC7800 AC TEST COMPLETE ==="
+quit
+.endc
+
+.end

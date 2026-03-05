@@ -1,0 +1,89 @@
+* ============================================================
+* DAC7800 Behavioural MDAC Model for ngspice
+* 12-bit Multiplying Digital-to-Analog Converter
+* Based on TI DAC7800 datasheet specifications
+*
+* Key specs modelled:
+*   Resolution:  12 bits (codes 0-4095)
+*   Rfb:         10 kohm (internal feedback resistor)
+*   Cout:        50 pF (code-dependent, using average)
+*   Rout:        10 kohm (output impedance at mid-code)
+*   Settling:    1 us to 0.01%
+*   Vref range:  +/-10V
+*
+* MDAC Operation Modes:
+*   Current mode: Iout = (D/4096) * Vref/Rfb
+*   Voltage mode (with external op-amp): Vout = -Vref * D/4096
+*   Variable resistor: Reff = Rfb * 4096/D
+*
+* This model implements the VOLTAGE-MODE multiplying function:
+*   Vout = Vin * D/4096
+*
+* The DAC code is set via parameter or control voltage:
+*   - Static: set .param DAC_CODE before simulation
+*   - Dynamic: apply voltage to VCTRL pin (0-5V maps to 0-4095)
+*
+* Pins: VIN VOUT VCTRL RFB_OUT
+*   VIN     = analog reference/signal input
+*   VOUT    = multiplied output
+*   VCTRL   = control voltage (0-5V = code 0-4095)
+*   RFB_OUT = feedback resistor output (for TIA config)
+*
+* Instance: XDAC vin vout vctrl rfb DAC7800
+* ============================================================
+
+.subckt DAC7800 sig_in sig_out ctrl_in rfb_pin
+
+* === Parameters ===
+.param Rfb_val  = 10e3    ; 10k internal feedback resistor
+.param Cout_val = 50e-12  ; 50 pF average output capacitance
+.param Rout_val = 100     ; output series resistance
+
+* === Feedback resistor (between RFB and output) ===
+Rfb1 rfb_pin mult_out {Rfb_val}
+
+* === Multiplying function ===
+* Vout = Vsig * (Vctrl / 5.0)
+* Vctrl = 0-5V maps to DAC code 0-4095
+* Clamp ctrl to 0-5V using min/max (ngspice compatible)
+B_mult mult_out 0 V = V(sig_in) * max(min(V(ctrl_in), 5), 0) / 5.0
+
+* === Output filtering (bandwidth + capacitance) ===
+Rout1 mult_out filt_out {Rout_val}
+Cout1 filt_out 0 {Cout_val}
+
+* === Output buffer ===
+Eout sig_out 0 filt_out 0 1
+
+.ends DAC7800
+
+
+* ============================================================
+* DAC7800_STATIC — Simplified static-code version
+* Use when DAC code is fixed during simulation
+*
+* This model uses a .param for the code instead of a control pin.
+* Simpler and faster for frequency sweeps where code is stepped
+* between simulation runs (as in SimGUI).
+*
+* Pins: VIN VOUT RFB_OUT
+* Instance: XDAC vin vout rfb DAC7800_STATIC
+* Set code: .param DAC_CODE=2048 (before .subckt instantiation)
+* ============================================================
+
+.subckt DAC7800_STATIC sig_in sig_out rfb_pin
+
+.param Rfb_val  = 10e3
+.param Cout_val = 50e-12
+.param Rout_val = 100
+
+* Gain = DAC_CODE / 4096 (DAC_CODE set externally via .param)
+.param GAIN = {DAC_CODE / 4096.0}
+
+Rfb1 rfb_pin mult_out {Rfb_val}
+B_mult mult_out 0 V = V(sig_in) * GAIN
+Rout1 mult_out filt_out {Rout_val}
+Cout1 filt_out 0 {Cout_val}
+Eout sig_out 0 filt_out 0 1
+
+.ends DAC7800_STATIC

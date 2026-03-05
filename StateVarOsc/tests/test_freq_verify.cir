@@ -1,0 +1,58 @@
+* Quick test: verify oscillation frequency at D=121 (expected ~1kHz)
+* No AGC, no limiter - just raw SVF with MDAC
+
+.title Frequency Verification at D=121
+
+.include ../models/LM4562.lib
+.include ../models/DAC7800.lib
+
+VCC vcc 0 DC 15
+VEE vee 0 DC -15
+
+.param VCTRL_SET = 0.1477
+Vctrl ctrl_node 0 DC {VCTRL_SET}
+
+* Summing amp (LP unity gain + BP excitation for startup)
+R_lp lp sum_inv 10k
+R_bp bp sum_inv 22k
+Rf_sum hp sum_inv 10k
+XU1a 0 sum_inv vcc vee hp LM4562
+
+* Integrator 1
+XDAC1 hp mdac1_out ctrl_node rfb1_nc DAC7800
+Rint1 mdac1_out int1_inv 10k
+Cint1 int1_inv bp 470p
+XU1b 0 int1_inv vcc vee bp LM4562
+
+* Integrator 2
+XDAC2 bp mdac2_out ctrl_node rfb2_nc DAC7800
+Rint2 mdac2_out int2_inv 10k
+Cint2 int2_inv lp 470p
+XU2a 0 int2_inv vcc vee lp LM4562
+
+* Kick pulse for startup
+Vkick kick_node 0 PULSE(0 0.01 0.1m 1n 1n 10u 1)
+Rkick kick_node hp 100k
+
+RL bp 0 100k
+
+.tran 1u 100m UIC
+
+.control
+tran 1u 100m uic
+
+meas tran t1 when v(bp)=0 rise=20
+meas tran t2 when v(bp)=0 rise=21
+let period = t2 - t1
+let freq = 1 / period
+echo "Frequency (expected ~1000 Hz):"
+print freq
+
+meas tran bp_pp pp v(bp) from=50m to=100m
+echo "BP Vpp (will clip without AGC):"
+print bp_pp
+
+quit
+.endc
+
+.end

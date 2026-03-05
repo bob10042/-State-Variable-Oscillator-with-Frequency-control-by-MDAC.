@@ -1,0 +1,73 @@
+* ============================================================
+* LM4562 Behavioural Op-Amp Model for ngspice
+* Based on TI LM4562 datasheet specifications
+*
+* Key specs modelled:
+*   Aol  = 140 dB (10 million V/V)
+*   GBW  = 55 MHz
+*   SR   = 20 V/us
+*   Vos  = 0.1 mV
+*   Ib   = 10 nA
+*   Rin  = 10 Megohm (differential)
+*   Rout = 50 ohms (open-loop)
+*   Vs   = +/-2.5 to +/-17 V
+*   Vswing = +/-(Vs - 1.5V)
+*
+* Architecture:
+*   Input stage:  differential Rin, bias currents, offset
+*   Gain stage:   Gm into R||C dominant pole (Aol = Gm*Rint)
+*   Output stage: B-source limiter with Rout
+*
+* Pins: IN+ IN- VCC VEE OUT
+* Instance: XU1 inp inn vcc vee out LM4562
+*
+* Note: This is a SINGLE op-amp subcircuit.
+* The physical LM4562 is dual - instantiate twice for both halves.
+* ============================================================
+
+.subckt LM4562 inp inn vcc vee out
+
+* === Design parameters ===
+* Gm = 10 mA/V (reasonable for macromodel)
+* Rint = Aol / Gm = 1e7 / 0.01 = 1 Gohm
+* fp = GBW / Aol = 55e6 / 1e7 = 5.5 Hz
+* Cp = 1/(2*pi*fp*Rint) = 1/(2*pi*5.5*1e9) = 28.9 pF
+
+.param Gm_val = 0.01
+.param Rint_val = 1e9
+.param Cp_val = 28.9e-12
+.param Rin_val = 10e6
+.param Vos_val = 0.1e-3
+.param Ib_val = 10e-9
+.param Rout_val = 50
+.param Vdrop_val = 1.5
+
+* === Input stage ===
+Rin1 inp inn {Rin_val}
+Ib1 inp 0 {Ib_val}
+Ib2 inn 0 {Ib_val}
+Vos1 inp inp_os {Vos_val}
+
+* === Gain stage ===
+* Gm: differential voltage -> current into high-Z node
+Gm1 0 int1 inp_os inn {Gm_val}
+
+* Dominant pole: Rint || Cp
+Rint1 int1 0 {Rint_val}
+Cp1 int1 0 {Cp_val}
+
+* === Gain node clamping (prevents runaway) ===
+* Clamp int1 to supply rails
+D_clp1 int1 vcc DCLAMP
+D_clp2 vee int1 DCLAMP
+.model DCLAMP D(Is=1e-14 N=1 Rs=100)
+
+* === Output stage ===
+* B-source with hard rail clamping
+* Output = int1 clamped to +/-(Vs - Vdrop)
+B_out out_raw 0 V = min(max(V(int1), V(vee)+1.5), V(vcc)-1.5)
+
+* Output resistance
+Rout1 out_raw out {Rout_val}
+
+.ends LM4562

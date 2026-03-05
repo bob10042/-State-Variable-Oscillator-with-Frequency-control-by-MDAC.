@@ -1,0 +1,82 @@
+* ============================================================
+* Test: LM4562 Behavioural Op-Amp
+* Circuit: Inverting amplifier, gain = -10
+* Verify: DC gain, AC bandwidth, transient slew rate
+* Expected: Gain = -10, BW = GBW/11 = 5 MHz, SR = 20V/us
+* ============================================================
+
+.title LM4562 Behavioural Model Test
+
+* Include the model
+.include ../models/LM4562.lib
+
+* === Power Supply ===
+VCC vcc 0 DC 15
+VEE vee 0 DC -15
+
+* === Input Signal ===
+* AC test: 100mV amplitude
+Vin in 0 DC 0 AC 0.1 SIN(0 0.1 1k)
+
+* === Inverting Amplifier G = -10 ===
+* Rf/Rin = 10k/1k = 10
+Rin1 in inv_in 1k
+Rf1 inv_in out 10k
+
+* Op-amp: IN+ = ground, IN- = inv_in
+XU1 0 inv_in vcc vee out LM4562
+
+* === Load ===
+RL out 0 10k
+
+* === Analysis ===
+* DC operating point
+.op
+
+* AC sweep: check bandwidth
+.ac dec 100 1 100e6
+
+* Transient: check slew rate with large step
+* .tran 0.1u 100u
+
+.control
+* Run AC analysis
+ac dec 100 1 100e6
+
+* Plot gain magnitude
+let gain_db = db(v(out)/v(in))
+let phase = 180/PI * cph(v(out)/v(in))
+
+echo "=== LM4562 Inverting Amp Test ==="
+echo "Expected: Gain = -10 (20 dB), BW = ~5 MHz"
+echo ""
+
+* Measure DC gain
+meas ac dc_gain find vdb(out) at=10
+meas ac bw_3db when vdb(out)=17 fall=1
+
+echo ""
+echo "DC Gain (dB): should be ~20 dB"
+print dc_gain
+echo "3dB Bandwidth: should be ~5 MHz"
+print bw_3db
+
+* Save results
+set hcopydevtype = postscript
+hardcopy test_lm4562_ac.ps vdb(out) title 'LM4562 AC Response'
+
+* Run transient
+tran 1u 5m
+echo ""
+echo "=== Transient Test ==="
+meas tran vout_pp pp v(out)
+echo "Output peak-to-peak at 1kHz, should be ~2Vpp (10x 0.2Vpp input)"
+print vout_pp
+
+echo ""
+echo "=== LM4562 TEST COMPLETE ==="
+
+quit
+.endc
+
+.end

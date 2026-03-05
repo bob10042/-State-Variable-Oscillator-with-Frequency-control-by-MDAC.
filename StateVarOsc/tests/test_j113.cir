@@ -1,0 +1,74 @@
+* ============================================================
+* Test: J113 N-Channel JFET
+* Circuit: Drain characteristics + Rds vs Vgs
+* Verify: Vto ~ -1.4V, Rds(on) ~ 30 ohms, Idss ~ 30mA
+*
+* Test 1: DC sweep Vgs from 0 to -2V, measure Ids at Vds=0.1V
+*         This gives Rds = Vds/Ids as function of Vgs
+* Test 2: DC sweep Vds from 0 to 5V at Vgs=0 (saturation curve)
+* ============================================================
+
+.title J113 JFET Model Test
+
+* Include the model
+.include ../models/J113.lib
+
+* === Test Circuit: JFET as variable resistor ===
+* Small Vds (100mV) to stay in linear/triode region
+Vds drain 0 DC 0.1
+Vgs gate 0 DC 0
+
+* JFET instance
+J1 drain gate 0 J113
+
+* === Analysis ===
+
+.control
+echo "=== J113 JFET Test ==="
+echo ""
+
+* Test 1: Rds vs Vgs
+* Sweep Vgs from 0 to -1.5V, Vds fixed at 0.1V
+echo "--- Test 1: Rds vs Vgs (Vds = 0.1V) ---"
+dc Vgs 0 -1.5 -0.01
+
+let ids = -i(Vds)
+let rds = 0.1 / ids
+
+echo ""
+echo "Vgs=0V: Rds should be ~30 ohms"
+meas dc rds_on find rds at=0
+print rds_on
+
+echo ""
+echo "Vgs=-0.5V: Rds should increase"
+meas dc rds_half find rds at=-0.5
+print rds_half
+
+echo ""
+echo "Vgs=-1.0V: Rds should be high"
+meas dc rds_1v find rds at=-1.0
+print rds_1v
+
+echo ""
+echo "Vgs=-1.3V: Near pinch-off, Rds very high"
+meas dc rds_pinch find rds at=-1.3
+print rds_pinch
+
+* Test 2: Output characteristics
+echo ""
+echo "--- Test 2: Ids vs Vds (Vgs = 0) ---"
+dc Vds 0 5 0.01
+
+let ids2 = -i(Vds)
+echo ""
+echo "Idss (at Vds=5V, Vgs=0): should be ~30mA"
+meas dc idss find ids2 at=5
+print idss
+
+echo ""
+echo "=== J113 TEST COMPLETE ==="
+quit
+.endc
+
+.end

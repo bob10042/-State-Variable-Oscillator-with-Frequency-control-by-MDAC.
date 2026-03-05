@@ -1,0 +1,93 @@
+* ============================================================
+* State Variable Oscillator — MDAC Frequency Control Test (Phase 3)
+*
+* Replaces fixed 10k integrator resistors with DAC7800 MDAC
+* DAC code sets frequency: f = D / (4096 * 2*pi * Rfb * Cint)
+*
+* Test: Set DAC code via Vctrl, verify frequency
+*   Vctrl = 0.1477V → D=121 → f ≈ 1 kHz
+*   Vctrl = 1.478V  → D=1211 → f ≈ 10 kHz
+*   Vctrl = 4.432V  → D=3632 → f ≈ 30 kHz
+*
+* Using Vctrl = 1.478V for ~10 kHz test
+* ============================================================
+
+.title State Variable Oscillator — MDAC Frequency Control
+
+.include ../models/LM4562.lib
+.include ../models/DAC7800.lib
+
+* === Power Supply ===
+VCC vcc 0 DC 15
+VEE vee 0 DC -15
+
+* === MDAC Control Voltage ===
+* Vctrl = 5 * D/4096
+* For f = 1 kHz: D = 1000 * 0.1211 = 121, Vctrl = 5 * 121/4096 = 0.1477V
+* For f = 10 kHz: D = 10000 * 0.1211 = 1211, Vctrl = 5 * 1211/4096 = 1.478V
+.param VCTRL_SET = 1.478
+Vctrl ctrl_node 0 DC {VCTRL_SET}
+
+* === Summing Amplifier (U1a) ===
+* V_HP = -(R2/R1)*V_LP - (Rq/R1)*V_BP
+* Rq = 22k for slight excess gain (startup without AGC)
+R1_lp  lp  sum_inv 10k
+R1_bp  bp  sum_inv 22k
+Rf_sum hp  sum_inv 10k
+XU1a 0 sum_inv vcc vee hp LM4562
+
+* === Integrator 1: HP → BP (via MDAC1) ===
+* MDAC multiplies HP by D/4096, then feeds through Rfb (10k) into integrator
+* This gives: V_BP = -(D/(4096*Rfb*C)) * integral(V_HP) dt
+* f_osc = D / (4096 * 2*pi * Rfb * C)
+XDAC1 hp mdac1_out ctrl_node rfb1_nc DAC7800
+Rint1 mdac1_out int1_inv 10k
+Cint1 int1_inv bp 470p
+XU1b 0 int1_inv vcc vee bp LM4562
+
+* === Integrator 2: BP → LP (via MDAC2) ===
+XDAC2 bp mdac2_out ctrl_node rfb2_nc DAC7800
+Rint2 mdac2_out int2_inv 10k
+Cint2 int2_inv lp 470p
+XU2a 0 int2_inv vcc vee lp LM4562
+
+* === Initial perturbation ===
+Vkick kick_node 0 PULSE(0 0.01 0.1m 1n 1n 10u 1)
+Rkick kick_node hp 100k
+
+* === Load ===
+RL bp 0 100k
+
+* === Analysis ===
+.tran 0.5u 5m UIC
+
+.control
+echo "=== SVO MDAC Frequency Control Test ==="
+echo "MDAC Vctrl = 1.478V (D=1211, expected f ~ 10 kHz)"
+echo ""
+
+tran 0.5u 5m uic
+
+* Measure frequency
+meas tran t1 when v(bp)=0 rise=10
+meas tran t2 when v(bp)=0 rise=11
+let period = t2 - t1
+let freq = 1 / period
+
+echo "Measured period:"
+print period
+echo "Measured frequency (Hz):"
+print freq
+echo "Expected: ~10,000 Hz"
+
+echo ""
+echo "BP amplitude:"
+meas tran bp_pp pp v(bp) from=3m to=5m
+print bp_pp
+
+echo ""
+echo "=== SVO MDAC TEST COMPLETE ==="
+quit
+.endc
+
+.end

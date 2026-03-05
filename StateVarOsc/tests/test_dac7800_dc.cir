@@ -1,0 +1,42 @@
+* ============================================================
+* Test: DAC7800 Behavioural MDAC — DC Transfer
+* Verify: Vout = Vin * Vctrl/5.0
+* ============================================================
+
+.title DAC7800 DC Transfer Test
+
+.include ../models/DAC7800.lib
+
+Vref sig_in 0 DC 1.0
+Vctrl ctrl_in 0 DC 0
+
+XDAC sig_in sig_out ctrl_in rfb_node DAC7800
+
+.control
+echo "=== DAC7800 DC Transfer Test ==="
+dc Vctrl 0 5 0.01
+
+meas dc v0   find v(sig_out) at=0
+meas dc v1   find v(sig_out) at=1.25
+meas dc v2   find v(sig_out) at=2.5
+meas dc v3   find v(sig_out) at=3.75
+meas dc v4   find v(sig_out) at=5.0
+
+echo ""
+echo "Vctrl=0V   (code 0):    Vout should be 0V"
+print v0
+echo "Vctrl=1.25V (code 1024): Vout should be 0.25V"
+print v1
+echo "Vctrl=2.5V  (code 2048): Vout should be 0.5V"
+print v2
+echo "Vctrl=3.75V (code 3072): Vout should be 0.75V"
+print v3
+echo "Vctrl=5.0V  (code 4095): Vout should be 1.0V"
+print v4
+
+echo ""
+echo "=== DAC7800 DC TEST COMPLETE ==="
+quit
+.endc
+
+.end
