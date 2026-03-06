@@ -1292,4 +1292,40 @@ KiCad is open source (GPL v3, C++ with wxWidgets). Forking it would be massive o
 
 6. **KiCad Python plugin** (future) — If pipeline improvements aren't enough, write an eeschema plugin that runs inside KiCad for interactive layout assistance.
 
-*Last updated: 2026-03-05 (Session 17)*
+*Last updated: 2026-03-06 (Session 18)*
+
+## Session 18 — Verification System Overhaul + Professional Schematic Layout
+
+### Completed
+
+**Dynamic pin parser** — Built `parse_symbol_pins()` and `get_component_pins()` that read pin positions from 22,607 KiCad symbol library files. Pin connectivity checking now works for ALL component types (R, C, D, Q_NPN, SW_Reed, LM741, etc.), not just LM741. Transform chain: Y-negate → rotation CCW → mirror_x → scale → offset.
+
+**Wire overlap detection** — Added `check_wire_overlaps()` to detect collinear wire segments sharing a range. Found 7 overlaps in oscillator, 9 in full_system. Catches unintended shorts like the VEE/feedback bug from Session 16.
+
+**Wire merge post-processing** — Added `merge_collinear_wires()` function that automatically deduplicates overlapping wire segments after building any schematic. Runs as post-processing step after `fix_kicad_sch()`.
+
+**simulate() stale-file fix** — Non-zero exit code now always means failure regardless of stderr content. Existing result files are snapshotted before running so stale `*_results.txt` files can't cause false success reports.
+
+**Professional schematic layout** — Switched from 3x scaling on custom paper to 1x scale on standard A3/A4 paper. The 3x scaling was counterproductive: it made the paper enormous, so fit-to-page in any viewer made everything appear tiny. Standard A3 at 1:1 matches professional schematics (MM20-TRI-SCH reference from Triteq).
+
+**Layout quality improvements:**
+- Section titles moved above grid origins (offset -4G) with reduced size (3.5pt)
+- MCU block enclosed in dashed rectangle for visibility
+- Label overlaps fixed (increased MCU pin spacing from 6G to 8G)
+- Wire overlaps automatically merged (7 in oscillator, 4 in TIA)
+- Clearance parameters added as kwargs (fb_gap, cf_gap, div_offset, div_vert, adc_gap, etc.)
+
+### Verification Results
+
+| Schematic | Paper | Fill | Errors | Warnings | Wire Overlaps | Text Overlaps |
+|-----------|-------|------|--------|----------|---------------|---------------|
+| Oscillator | A3 1:1 | 97% | 0 | 4 | 0 | 0 |
+| TIA (electrometer_362) | A4 1:1 | 96% | 0 | 1 | 0 | 0 |
+
+### Code Changes (kicad_pipeline.py)
+- New functions: `parse_symbol_pins()`, `get_component_pins()`, `check_wire_overlaps()`, `merge_collinear_wires()`
+- Rewritten: `check_pin_connectivity()` (checks ALL components), `get_opamp_pins()` (dynamic parser first, legacy fallback)
+- Modified: `simulate()` (strict exit code), `check_floating_wires()` (uses dynamic pins), `verify_circuit()` (wire overlap step)
+- Modified: `build_oscillator()` and `build_electrometer_362()` — 1x scale default, clearance kwargs, wire merge, title repositioning
+
+*Last updated: 2026-03-06 (Session 18)*

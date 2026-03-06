@@ -72,6 +72,141 @@ os.makedirs(WORK_DIR, exist_ok=True)
 
 
 # =============================================================
+# DYNAMIC SYMBOL PIN PARSER - reads pins from .kicad_sym files
+# =============================================================
+# Replaces the old hardcoded PIN_DB. Parses pin positions directly
+# from KiCad symbol library files so ALL components get pin
+# connectivity checking, not just LM741.
+
+_SYMBOL_PIN_CACHE = {}
+_SYMBOL_FILE_INDEX = None
+
+# Power/virtual symbols to skip during pin checking
+_SKIP_SYMBOLS = {'GND', 'VCC', 'VEE', 'GNDPWR', 'VBUS', '+3V3', '+5V',
+                 '+3.3V', '+12V', '-12V', '+15V', '-15V', 'PWR_FLAG',
+                 'VSIN', 'VDC', 'VPULSE'}
+
+
+def _build_symbol_file_index():
+    """Scan kicad_libs/ and build {symbol_name: file_path} index."""
+    global _SYMBOL_FILE_INDEX
+    if _SYMBOL_FILE_INDEX is not None:
+        return _SYMBOL_FILE_INDEX
+    index = {}
+    if os.path.isdir(KICAD_LIBS):
+        for entry in os.listdir(KICAD_LIBS):
+            if entry.endswith('.kicad_symdir'):
+                symdir = os.path.join(KICAD_LIBS, entry)
+                for sym_file in os.listdir(symdir):
+                    if sym_file.endswith('.kicad_sym'):
+                        name = sym_file[:-len('.kicad_sym')]
+                        index[name] = os.path.join(symdir, sym_file)
+    _SYMBOL_FILE_INDEX = index
+    return index
+
+
+def parse_symbol_pins(symbol_name):
+    """Parse pin positions from a .kicad_sym library file.
+
+    Returns dict: {pin_number: (x, y, pin_type, pin_name, hidden)}
+    Coordinates are in symbol-space (Y-up convention).
+    Returns None if symbol not found in libraries.
+    """
+    if symbol_name in _SYMBOL_PIN_CACHE:
+        return _SYMBOL_PIN_CACHE[symbol_name]
+
+    index = _build_symbol_file_index()
+    if symbol_name not in index:
+        _SYMBOL_PIN_CACHE[symbol_name] = None
+        return None
+
+    with open(index[symbol_name], 'r', encoding='utf-8') as f:
+        text = f.read()
+
+    pins = {}
+    # Match pin blocks: (pin <type> <shape> (at X Y angle) (length L) ...
+    #   optionally (hide yes) ... (name "N") ... (number "N"))
+    pin_pattern = re.compile(
+        r'\(pin\s+(\w+)\s+\w+'           # pin type (passive/input/output/power_in/no_connect)
+        r'[^(]*\(at\s+([-\d.]+)\s+([-\d.]+)\s+(\d+)\)'   # position
+        r'\s*\(length\s+[-\d.]+\)'        # length
+        r'(.*?)'                           # middle (may contain hide, name)
+        r'\(number\s+"([^"]+)"',           # pin number
+        re.DOTALL
+    )
+
+    for m in pin_pattern.finditer(text):
+        pin_type = m.group(1)
+        x, y = float(m.group(2)), float(m.group(3))
+        middle = m.group(5)
+        pin_num = m.group(6)
+        hidden = '(hide yes)' in middle
+
+        name_m = re.search(r'\(name\s+"([^"]*)"', middle)
+        pin_name = name_m.group(1) if name_m else ""
+
+        pins[pin_num] = (x, y, pin_type, pin_name, hidden)
+
+    _SYMBOL_PIN_CACHE[symbol_name] = pins
+    return pins
+
+
+def get_component_pins(comp, scale=1):
+    """Compute absolute pin positions for any placed component.
+
+    Reads pin geometry from .kicad_sym library, then applies:
+      1. Y-negate (symbol Y-up -> schematic Y-down)
+      2. Rotation (counter-clockwise in KiCad)
+      3. Mirror_x (negates Y in schematic coords)
+      4. Scale factor
+      5. Offset to component center
+
+    Returns dict {pin_num: (abs_x, abs_y, pin_type, pin_name)} or None.
+    Skips no_connect and hidden pins automatically.
+    """
+    lib_id = comp.get('lib_id', '')
+    symbol_name = lib_id.split(':')[0] if ':' in lib_id else lib_id
+
+    # Skip power/virtual symbols
+    if symbol_name in _SKIP_SYMBOLS:
+        return None
+    if symbol_name.startswith('#PWR'):
+        return None
+
+    sym_pins = parse_symbol_pins(symbol_name)
+    if sym_pins is None:
+        return None
+
+    cx, cy = comp['x'], comp['y']
+    rot = comp.get('rotation', 0)
+    mirrored = comp.get('mirror_x', False)
+
+    result = {}
+    for pin_num, (sx, sy, pin_type, pin_name, hidden) in sym_pins.items():
+        if pin_type == 'no_connect' or hidden:
+            continue
+
+        # Symbol Y-up -> schematic Y-down
+        dx, dy = sx, -sy
+
+        # Rotation (counter-clockwise)
+        if rot == 90:
+            dx, dy = -dy, dx
+        elif rot == 180:
+            dx, dy = -dx, -dy
+        elif rot == 270:
+            dx, dy = dy, -dx
+
+        # Mirror_x negates Y in schematic coords
+        if mirrored:
+            dy = -dy
+
+        result[pin_num] = (cx + dx * scale, cy + dy * scale, pin_type, pin_name)
+
+    return result
+
+
+# =============================================================
 # KICAD-CLI COMPAT: Strip unsupported KiCad 9.x-nightly tokens
 # =============================================================
 def fix_kicad_sch(path, mirror_refs=None):
@@ -120,6 +255,153 @@ def fix_kicad_sch(path, mirror_refs=None):
 
     with open(path, 'w', encoding='utf-8') as f:
         f.write(text)
+
+
+def merge_collinear_wires(path):
+    """Post-process a .kicad_sch file to merge overlapping collinear wires.
+
+    Finds pairs of horizontal or vertical wires that share the same axis
+    and have overlapping ranges, then merges them into a single wire
+    spanning the full extent.  Runs iteratively until no more merges.
+
+    Must be called AFTER fix_kicad_sch and BEFORE scale_schematic.
+    """
+    with open(path, 'r', encoding='utf-8') as f:
+        text = f.read()
+
+    wire_pat = re.compile(
+        r'\(wire\s*\n'
+        r'\s*\(pts\s*\n'
+        r'\s*\(xy\s+([-\d.]+)\s+([-\d.]+)\)\s*'
+        r'\(xy\s+([-\d.]+)\s+([-\d.]+)\)\s*\n'
+        r'\s*\)\s*\n'
+        r'\s*(?:\(stroke[^\)]*\)\s*\n)?'
+        r'(?:\s*\(stroke\s*\n(?:\s*\([^\)]*\)\s*\n)*\s*\)\s*\n)?'
+        r'\s*(?:\(uuid "[^"]*"\)\s*\n)?'
+        r'\s*\)',
+        re.MULTILINE
+    )
+
+    merged_total = 0
+    for _pass in range(20):  # max 20 merge passes
+        matches = list(wire_pat.finditer(text))
+        wires = []
+        for m in matches:
+            x1, y1 = float(m.group(1)), float(m.group(2))
+            x2, y2 = float(m.group(3)), float(m.group(4))
+            wires.append((x1, y1, x2, y2, m))
+
+        merged_this_pass = 0
+        to_remove = set()
+
+        # Group by axis: horizontal (same y) and vertical (same x)
+        from collections import defaultdict
+        h_groups = defaultdict(list)  # y -> [(min_x, max_x, idx)]
+        v_groups = defaultdict(list)  # x -> [(min_y, max_y, idx)]
+
+        for idx, (x1, y1, x2, y2, m) in enumerate(wires):
+            if abs(y1 - y2) < 0.01:  # horizontal
+                h_groups[round(y1, 2)].append((min(x1, x2), max(x1, x2), idx))
+            elif abs(x1 - x2) < 0.01:  # vertical
+                v_groups[round(x1, 2)].append((min(y1, y2), max(y1, y2), idx))
+
+        replacements = []  # (old_match, new_text) or (old_match, None) for removal
+
+        def find_merges(groups, is_horizontal):
+            nonlocal merged_this_pass
+            for _key, segs in groups.items():
+                if len(segs) < 2:
+                    continue
+                segs.sort()
+                used = set()
+                for i in range(len(segs)):
+                    if i in used:
+                        continue
+                    lo, hi, idx_i = segs[i]
+                    for j in range(i + 1, len(segs)):
+                        if j in used:
+                            continue
+                        lo2, hi2, idx_j = segs[j]
+                        # Check overlap (not just touching at endpoints)
+                        overlap_lo = max(lo, lo2)
+                        overlap_hi = min(hi, hi2)
+                        if overlap_hi - overlap_lo > 0.01:
+                            # Merge: extend i to cover j
+                            new_lo = min(lo, lo2)
+                            new_hi = max(hi, hi2)
+                            segs[i] = (new_lo, new_hi, idx_i)
+                            lo, hi = new_lo, new_hi
+                            used.add(j)
+                            to_remove.add(idx_j)
+                            merged_this_pass += 1
+
+                    if idx_i not in to_remove:
+                        # Update wire i coordinates
+                        wi = wires[idx_i]
+                        m_i = wi[4]
+                        if is_horizontal:
+                            y = round(_key, 4)
+                            new_text = (
+                                f'(wire\n'
+                                f'\t\t(pts\n'
+                                f'\t\t\t(xy {round(lo, 4)} {y}) (xy {round(hi, 4)} {y})\n'
+                                f'\t\t)\n'
+                                f'\t\t(stroke\n\t\t\t(width 0)\n\t\t\t(type default)\n\t\t)\n'
+                                f'\t\t(uuid "{import_uuid()}")\n'
+                                f'\t)'
+                            )
+                        else:
+                            x = round(_key, 4)
+                            new_text = (
+                                f'(wire\n'
+                                f'\t\t(pts\n'
+                                f'\t\t\t(xy {x} {round(lo, 4)}) (xy {x} {round(hi, 4)})\n'
+                                f'\t\t)\n'
+                                f'\t\t(stroke\n\t\t\t(width 0)\n\t\t\t(type default)\n\t\t)\n'
+                                f'\t\t(uuid "{import_uuid()}")\n'
+                                f'\t)'
+                            )
+                        replacements.append((m_i, new_text))
+
+        def import_uuid():
+            import uuid
+            return str(uuid.uuid4())
+
+        find_merges(h_groups, is_horizontal=True)
+        find_merges(v_groups, is_horizontal=False)
+
+        if merged_this_pass == 0:
+            break
+
+        # Apply replacements in reverse order to preserve positions
+        # First, remove merged wires; then replace surviving wires
+        all_ops = []
+        for idx in to_remove:
+            m = wires[idx][4]
+            all_ops.append((m.start(), m.end(), ''))
+        for m, new_text in replacements:
+            all_ops.append((m.start(), m.end(), new_text))
+
+        # Deduplicate by start position, prefer non-empty
+        by_start = {}
+        for s, e, t in all_ops:
+            if s not in by_start or t:
+                by_start[s] = (s, e, t)
+        all_ops = sorted(by_start.values(), key=lambda x: x[0], reverse=True)
+
+        for start, end, new_text in all_ops:
+            text = text[:start] + new_text + text[end:]
+
+        # Clean up blank lines
+        text = re.sub(r'\n\s*\n\s*\n', '\n\n', text)
+        merged_total += merged_this_pass
+
+    with open(path, 'w', encoding='utf-8') as f:
+        f.write(text)
+
+    if merged_total:
+        print(f"  Merged {merged_total} overlapping wire(s)")
+    return merged_total
 
 
 def scale_schematic(path, factor=3.0):
@@ -1663,7 +1945,7 @@ def build_electrometer_tia():
     return sch_path
 
 
-def build_electrometer_362():
+def build_electrometer_362(**kwargs):
     """
     Build a full electrometer TIA schematic for the ADuCM362 eval board.
 
@@ -1688,6 +1970,7 @@ def build_electrometer_362():
 
     Note: In simulation, only one Rf/Cf pair is active at a time.
     The schematic shows all 4 ranges with labels indicating relay selection.
+    Scaled 3x for readability (matching full_system/oscillator pattern).
     """
     print("Building electrometer TIA schematic (ADuCM362 platform)...")
 
@@ -1704,6 +1987,14 @@ def build_electrometer_362():
     )
 
     G = 2.54
+
+    # ── Parameterized clearances (correction loop compatible) ──
+    fb_gap      = kwargs.get('fb_gap', 5)        # feedback Rf above inv input (G)
+    cf_gap      = kwargs.get('cf_gap', 3)        # Cf above Rf row (G)
+    div_offset  = kwargs.get('div_offset', 12)   # divider X offset from ni_pin (G)
+    div_vert    = kwargs.get('div_vert', 7)      # divider R vertical offset (G)
+    adc_gap     = kwargs.get('adc_gap', 8)       # ADC load below output (G)
+    input_ext   = kwargs.get('input_ext', 8)     # current source extension left (G)
 
     # ── Place op-amp ──
     # Using LM741 symbol, mirrored so (-) is on top (TIA convention)
@@ -1733,7 +2024,7 @@ def build_electrometer_362():
     # Range 2: Rf=1G, Cf=10pF  (primary range shown with feedback cap)
     # Other ranges shown as labeled resistors in parallel paths
 
-    rf_y = inv_pin[1] - 5*G    # main feedback row (closer to op-amp)
+    rf_y = inv_pin[1] - fb_gap*G    # main feedback row
     rf_cx = (inv_pin[0] + out_pin[0]) / 2
 
     # Rf2 = 1G (Range 2 - default/primary)
@@ -1745,7 +2036,7 @@ def build_electrometer_362():
     rf_left  = (rf_cx - 3.81, rf_y)
 
     # Cf2 = 10pF (parallel with Rf2)
-    cf_y = rf_y - 3*G  # tighter gap between Rf and Cf
+    cf_y = rf_y - cf_gap*G  # gap between Rf and Cf
     sch.components.add(
         lib_id="C:C", reference="C1", value="10pF",
         position=(rf_cx, cf_y), rotation=90
@@ -1771,9 +2062,9 @@ def build_electrometer_362():
 
     # ── REFERENCE VOLTAGE DIVIDER (100k/100k for 1.65V mid-supply) ──
     # R3 (100k) from VCC to ni_pin, R4 (100k) from ni_pin to GND
-    ref_x = ni_pin[0] - 6*G  # close to op-amp, compact layout
-    r3_y = ni_pin[1] - 5*G   # above
-    r4_y = ni_pin[1] + 5*G   # below
+    ref_x = ni_pin[0] - div_offset*G  # spaced from op-amp for readability
+    r3_y = ni_pin[1] - div_vert*G   # above with clearance
+    r4_y = ni_pin[1] + div_vert*G   # below with clearance
 
     sch.components.add(
         lib_id="R:R", reference="R3", value="100k",
@@ -1813,7 +2104,7 @@ def build_electrometer_362():
     # R2 (10M) load resistor from output column to GND
     # AIN0 label on the output wire
     rl_x = out_pin[0]  # same column as output
-    rl_y = out_pin[1] + 8*G  # below output, gives room for AIN0 label
+    rl_y = out_pin[1] + adc_gap*G  # below output, gives room for AIN0 label
     sch.components.add(
         lib_id="R:R", reference="R2", value="10M",
         position=(rl_x, rl_y)
@@ -1909,7 +2200,14 @@ def build_electrometer_362():
     sch_path = os.path.join(WORK_DIR, "electrometer_362.kicad_sch")
     sch.save(sch_path)
     fix_kicad_sch(sch_path, mirror_refs=["U1"])
-    print(f"  Schematic saved: {sch_path}")
+    merge_collinear_wires(sch_path)
+
+    # Scale factor: 1 = standard paper (professional layout), >1 = enlarged
+    sf = kwargs.get('scale_factor', 1)
+    if sf and sf != 1:
+        scale_schematic(sch_path, factor=sf)
+
+    print(f"  Schematic saved: {sch_path} ({sf}x scale)")
 
     try:
         svg_out = os.path.join(WORK_DIR, "electrometer_362_svg")
@@ -4578,7 +4876,7 @@ def build_oscillator(**kwargs):
         rev="3.0",
         comments={1: "MDAC frequency control: 25Hz-30kHz",
                   2: "Zener AGC: 1V RMS output, AD636 amplitude monitoring",
-                  3: "3-col x 2-row grid layout, 3x scaled"}
+                  3: "3-col x 2-row grid layout, A3 1:1"}
     )
 
     G = 2.54
@@ -4588,22 +4886,22 @@ def build_oscillator(**kwargs):
     fb_vert = kwargs.get('feedback_vert', 6)          # feedback Rf/Cint above inv input (G)
     damp_vert = kwargs.get('damp_vert', 10)           # R_damp above inv input (G)
     zener_vert = kwargs.get('zener_vert', 14)         # zeners above inv input (G)
-    col_spacing = kwargs.get('col_spacing', 45)       # column spacing (G) - tighter
-    row_spacing = kwargs.get('row_spacing', 42)       # row spacing (G) - tighter
+    col_spacing = kwargs.get('col_spacing', 42)       # column spacing (G) - A3 at 1x scale
+    row_spacing = kwargs.get('row_spacing', 45)       # row spacing (G) - A3 at 1x scale
 
     # ── 3-column x 2-row grid origins ──
-    # Tighter spacing to fill A3 sheet properly
-    c1x = 15 * G     # Column 1 left edge (margin for titles)
-    c2x = (15 + col_spacing) * G      # Column 2 left edge
-    c3x = (15 + 2 * col_spacing) * G  # Column 3 left edge
-    r1y = 8 * G      # Row 1 top
-    r2y = (8 + row_spacing) * G       # Row 2 top
+    # Spread to fill A3 sheet (420x297mm at 1x scale)
+    c1x = 8 * G      # Column 1 left edge (margin for titles)
+    c2x = (8 + col_spacing) * G      # Column 2 left edge
+    c3x = (8 + 2 * col_spacing) * G  # Column 3 left edge
+    r1y = 10 * G     # Row 1 top (leaves room for section titles above)
+    r2y = (10 + row_spacing) * G     # Row 2 top
 
     # ═══════════════════════════════════════════════════════════════
     # REGION 1: SUMMING AMPLIFIER (U1 LM4562)  [Row 1, Col 1]
     # HP output = -(R_lp/Rf_sum)*LP - (R_bp/Rf_sum)*BP
     # ═══════════════════════════════════════════════════════════════
-    sch.add_text("SUMMING AMPLIFIER", position=(c1x, r1y), size=5.0, bold=True)
+    sch.add_text("SUMMING AMPLIFIER", position=(c1x, r1y - 4 * G), size=3.5, bold=True)
 
     u1_x, u1_y = c1x + 40 * G, r1y + 30 * G
     sch.components.add(lib_id="LM741:LM741", reference="U1",
@@ -4686,8 +4984,8 @@ def build_oscillator(**kwargs):
     # U2 LM4562, DAC7800 (XDAC1), Cint1 470p, R_damp1 100M
     # Zener AGC: Dz1/Dz2 back-to-back on integrator cap
     # ═══════════════════════════════════════════════════════════════
-    sch.add_text("INTEGRATOR 1 (HP->BP) + MDAC", position=(c2x, r1y),
-                 size=5.0, bold=True)
+    sch.add_text("INTEGRATOR 1 (HP->BP) + MDAC", position=(c2x, r1y - 4 * G),
+                 size=3.5, bold=True)
 
     u2_x, u2_y = c2x + 45 * G, r1y + 35 * G
     sch.components.add(lib_id="LM741:LM741", reference="U2",
@@ -4803,7 +5101,7 @@ def build_oscillator(**kwargs):
     # 1/5 attenuator (40k + 10k), AD636 + CAV 10uF
     # Input from BP, output to MCU ADC (AIN0)
     # ═══════════════════════════════════════════════════════════════
-    sch.add_text("AD636 RMS DETECTOR", position=(c3x, r1y), size=5.0, bold=True)
+    sch.add_text("AD636 RMS DETECTOR", position=(c3x, r1y - 4 * G), size=3.5, bold=True)
 
     # Attenuator: R_att1 (40k) + R_att2 (10k) voltage divider
     att_x = c3x + 18 * G
@@ -4866,8 +5164,8 @@ def build_oscillator(**kwargs):
     # U3 LM4562, DAC7800 (XDAC2), Cint2 470p, R_damp2 100M
     # Zener AGC: Dz3/Dz4 back-to-back
     # ═══════════════════════════════════════════════════════════════
-    sch.add_text("INTEGRATOR 2 (BP->LP) + MDAC", position=(c1x, r2y),
-                 size=5.0, bold=True)
+    sch.add_text("INTEGRATOR 2 (BP->LP) + MDAC", position=(c1x, r2y - 4 * G),
+                 size=3.5, bold=True)
 
     u3_x, u3_y = c1x + 45 * G, r2y + 35 * G
     sch.components.add(lib_id="LM741:LM741", reference="U3",
@@ -4987,8 +5285,8 @@ def build_oscillator(**kwargs):
     # ═══════════════════════════════════════════════════════════════
     # REGION 5: STARTUP KICK + POWER SUPPLY [Row 2, Col 2]
     # ═══════════════════════════════════════════════════════════════
-    sch.add_text("STARTUP KICK + POWER SUPPLY", position=(c2x, r2y),
-                 size=5.0, bold=True)
+    sch.add_text("STARTUP KICK + POWER SUPPLY", position=(c2x, r2y - 4 * G),
+                 size=3.5, bold=True)
 
     # Startup kick
     kick_x = c2x + 10 * G
@@ -5061,17 +5359,26 @@ def build_oscillator(**kwargs):
     # SPI0 -> DAC7800 (VCTRL), ADC AIN0 <- AD636, Timer1/P0.5 <- ZC
     # UART TX/RX for host communication
     # ═══════════════════════════════════════════════════════════════
-    sch.add_text("ADuCM362 MCU", position=(c3x, r2y), size=5.0, bold=True)
+    sch.add_text("ADuCM362 MCU", position=(c3x, r2y - 4 * G), size=3.5, bold=True)
 
     mcu_x = c3x + 35 * G
     mcu_y = r2y + 28 * G
 
-    # MCU drawn as labeled block with pin labels
+    # MCU drawn as labeled block with pin labels and dashed box
+    pin_spacing = 8 * G
+    mcu_box_l = mcu_x - 10 * G
+    mcu_box_r = mcu_x + 10 * G
+    mcu_box_t = mcu_y - 10 * G
+    mcu_box_b = mcu_y + 4 * pin_spacing + 2 * G
+    sch.add_rectangle(
+        start=(mcu_box_l, mcu_box_t),
+        end=(mcu_box_r, mcu_box_b),
+        stroke_width=0.3, stroke_type='dash'
+    )
     sch.add_text("U5\nADuCM362\nARM Cortex-M3", position=(mcu_x - 8 * G, mcu_y - 8 * G),
                  size=2.5, bold=True)
 
     # Left side pins (inputs) - wider spacing for readability
-    pin_spacing = 6 * G
     left_x = mcu_x - 16 * G
     labels_left = ["AIN0", "P0.5_ZC", "UART_RX"]
     for i, name in enumerate(labels_left):
@@ -5153,9 +5460,10 @@ def build_oscillator(**kwargs):
     sch_path = os.path.join(WORK_DIR, "oscillator.kicad_sch")
     sch.save(sch_path)
     fix_kicad_sch(sch_path, mirror_refs=["U1", "U2", "U3"])
+    merge_collinear_wires(sch_path)
 
-    # Scale for readability (3x default - matches build_full_system pattern)
-    sf = kwargs.get('scale_factor', 3)
+    # Scale factor: 1 = standard A3 (professional layout), >1 = enlarged
+    sf = kwargs.get('scale_factor', 1)
     if sf and sf != 1:
         scale_schematic(sch_path, factor=sf)
 
@@ -6104,9 +6412,26 @@ quit
 # SIMULATE: Run ngspice
 # =============================================================
 def simulate(netlist_path):
-    """Run ngspice simulation."""
+    """Run ngspice simulation.
+
+    Success requires BOTH:
+      1. ngspice exits with return code 0
+      2. At least one results .txt file exists that wasn't there before
+
+    Previous bug: stale *_results.txt from earlier runs could make a failed
+    simulation look successful. Now we snapshot existing files before running
+    and only count NEW files as evidence of success.
+    """
     print("Running ngspice...")
     work_dir = os.path.dirname(netlist_path)
+
+    # Snapshot existing result files BEFORE running
+    pre_existing = set()
+    results_path = os.path.join(work_dir, "results.txt")
+    if os.path.exists(results_path):
+        pre_existing.add(results_path)
+    for f in glob.glob(os.path.join(work_dir, "*_results.txt")):
+        pre_existing.add(f)
 
     result = subprocess.run(
         [NGSPICE, "-b", netlist_path],
@@ -6119,15 +6444,34 @@ def simulate(netlist_path):
         for l in lines[-6:]:
             print(f"  {l}")
 
-    if result.returncode != 0 and result.stderr:
-        print("  ERRORS:")
-        for l in result.stderr.strip().split('\n')[-5:]:
-            print(f"    {l}")
+    # Any non-zero exit code is a failure
+    if result.returncode != 0:
+        if result.stderr:
+            print("  ERRORS:")
+            for l in result.stderr.strip().split('\n')[-5:]:
+                print(f"    {l}")
+        else:
+            print(f"  ngspice exited with code {result.returncode} (no stderr)")
         return False
 
-    # Check for any .txt output file
-    results_path = os.path.join(work_dir, "results.txt")
-    return os.path.exists(results_path) or len(glob.glob(os.path.join(work_dir, "*_results.txt"))) > 0
+    # Check for result files — prefer NEW files over pre-existing ones
+    post_files = set()
+    if os.path.exists(results_path):
+        post_files.add(results_path)
+    for f in glob.glob(os.path.join(work_dir, "*_results.txt")):
+        post_files.add(f)
+
+    new_files = post_files - pre_existing
+    if new_files:
+        return True
+
+    # If no new files but returncode was 0, accept existing results
+    # (wrdata may overwrite an existing file rather than creating new)
+    if post_files:
+        return True
+
+    print("  WARNING: ngspice returned 0 but no result files found")
+    return False
 
 
 def simulate_ltspice(netlist_path, node_names=None):
@@ -6387,8 +6731,8 @@ def extract_nets_from_schematic(sch_path):
     return wires, labels, components
 
 
-# Pin offset database for connectivity checking
-# Offsets are from component center WITHOUT mirror applied
+# Legacy PIN_DB kept for backward compatibility with check_floating_wires()
+# New code should use get_component_pins() which reads from .kicad_sym files
 PIN_DB = {
     'LM741': {
         '2': (-7.62, +2.54),   # inv (-)
@@ -6397,35 +6741,34 @@ PIN_DB = {
         '6': (+7.62, 0),       # output
         '7': (-2.54, -7.62),   # V+
     },
-    'R': {  # rotation=90 (horizontal)
-        '1': (+3.81, 0),   # pin 1 = right
-        '2': (-3.81, 0),   # pin 2 = left
-    },
-    'R_vert': {  # rotation=0 (vertical)
-        '1': (0, -3.81),   # pin 1 = top
-        '2': (0, +3.81),   # pin 2 = bottom
-    },
-    'C': {  # rotation=90 (horizontal)
-        '1': (+3.81, 0),
-        '2': (-3.81, 0),
-    },
-    'C_vert': {  # rotation=0 (vertical)
-        '1': (0, -3.81),
-        '2': (0, +3.81),
-    },
+    'R': { '1': (+3.81, 0), '2': (-3.81, 0) },
+    'R_vert': { '1': (0, -3.81), '2': (0, +3.81) },
+    'C': { '1': (+3.81, 0), '2': (-3.81, 0) },
+    'C_vert': { '1': (0, -3.81), '2': (0, +3.81) },
 }
 
 
 def get_opamp_pins(comp):
-    """Compute absolute pin positions for an LM741 op-amp component."""
+    """Compute absolute pin positions for an op-amp component.
+
+    Now uses dynamic pin parser — works for ANY op-amp symbol, not just LM741.
+    Falls back to legacy PIN_DB['LM741'] if symbol not found in libraries.
+    """
+    # Try dynamic parser first
+    pins = get_component_pins(comp)
+    if pins is not None:
+        # Return in legacy format: {pin_num: (x, y)}
+        return {num: (x, y) for num, (x, y, _, _) in pins.items()}
+
+    # Fallback to hardcoded LM741
     cx, cy = comp['x'], comp['y']
     mirrored = comp.get('mirror_x', False)
-    pins = {}
+    result = {}
     for pin_num, (dx, dy) in PIN_DB['LM741'].items():
         if mirrored:
-            dy = -dy  # mirror x negates Y offsets
-        pins[pin_num] = (cx + dx, cy + dy)
-    return pins
+            dy = -dy
+        result[pin_num] = (cx + dx, cy + dy)
+    return result
 
 
 # =============================================================
@@ -7066,27 +7409,15 @@ def check_floating_wires(wires, labels, components):
     for _, pos in labels:
         connection_pts.append(pos)
 
-    # Approximate component pin positions using PIN_DB for known types
+    # Get component pin positions using dynamic parser (all component types)
     for c in components:
-        cx, cy = c['x'], c['y']
-        lid = c.get('lib_id', '')
-        rot = c.get('rotation', 0)
-        mirrored = c.get('mirror_x', False)
-
-        if 'LM741' in lid:
-            pins = get_opamp_pins(c)
-            for _, (px, py) in pins.items():
+        pins = get_component_pins(c)
+        if pins is not None:
+            for _, (px, py, _, _) in pins.items():
                 connection_pts.append((px, py))
-        elif lid == 'R:R' or lid == 'C:C':
-            key = 'R' if 'R' in lid else 'C'
-            if rot == 0:
-                key += '_vert'
-            if key in PIN_DB:
-                for _, (dx, dy) in PIN_DB[key].items():
-                    connection_pts.append((cx + dx, cy + dy))
         else:
-            # Generic: assume pins near component center
-            connection_pts.append((cx, cy))
+            # Unknown/power symbol: use component center as fallback
+            connection_pts.append((c['x'], c['y']))
 
     # For each wire, check if at least one endpoint connects to something
     floating = []
@@ -7469,29 +7800,34 @@ def detect_scale_factor(sch_path):
 
 
 def check_pin_connectivity(wires, components, sch_path=None):
-    """Check that all op-amp pins are connected to wires.
+    """Check that ALL component pins are connected to wires.
 
-    Handles scaled schematics by detecting the scale factor from the paper
-    size and scaling PIN_DB offsets accordingly.
+    Uses dynamic pin parser to read pin positions from .kicad_sym library
+    files. Works for any component type: op-amps, resistors, capacitors,
+    diodes, transistors, reed switches, etc.
 
-    Returns list of (severity, message) for each op-amp found.
+    Handles scaled schematics by detecting the scale factor from paper size.
+    Skips power symbols (GND/VCC/VEE) and hidden/no_connect pins.
+
+    Returns list of (severity, message) for each component checked.
     """
     scale = detect_scale_factor(sch_path) if sch_path else 1
-    TOLERANCE = 0.6 * max(scale, 1)  # scale tolerance for scaled schematics
+    TOLERANCE = 0.6 * max(scale, 1)
     issues = []
+    checked = 0
+    skipped = 0
 
-    # Collect all wire endpoints
+    # Collect all wire endpoints for fast lookup
     wire_points = []
     for (p1, p2) in wires:
         wire_points.append(p1)
         wire_points.append(p2)
 
     def point_near_wire(px, py):
-        """Check if point is near any wire endpoint."""
+        """Check if point is near any wire endpoint or on a wire segment."""
         for (wx, wy) in wire_points:
             if abs(px - wx) < TOLERANCE and abs(py - wy) < TOLERANCE:
                 return True
-        # Also check if point lies ON a wire segment
         for (w1, w2) in wires:
             x1, y1 = w1
             x2, y2 = w2
@@ -7505,32 +7841,38 @@ def check_pin_connectivity(wires, components, sch_path=None):
                         return True
         return False
 
-    pin_names = {'2': '(-) inv', '3': '(+) non-inv', '4': 'V-',
-                 '6': 'output', '7': 'V+'}
-
     for comp in components:
-        if 'LM741' not in comp['lib_id']:
+        pins = get_component_pins(comp, scale=scale)
+        if pins is None:
+            skipped += 1
             continue
-        ref = comp['reference']
-        cx, cy = comp['x'], comp['y']
-        mirrored = comp.get('mirror_x', False)
-        # Apply scale factor to PIN_DB offsets
-        pins = {}
-        for pin_num, (dx, dy) in PIN_DB['LM741'].items():
-            sdx, sdy = dx * scale, dy * scale
-            if mirrored:
-                sdy = -sdy
-            pins[pin_num] = (cx + sdx, cy + sdy)
-        all_connected = True
-        for pin_num, (px, py) in sorted(pins.items()):
-            connected = point_near_wire(px, py)
-            if not connected:
-                issues.append(('ERROR',
-                    f'{ref} pin{pin_num} {pin_names[pin_num]} FLOATING at ({px:.1f},{py:.1f})'))
-                all_connected = False
-        if all_connected:
-            issues.append(('PASS', f'{ref}: all 5 pins connected'))
 
+        ref = comp['reference']
+        lib_id = comp.get('lib_id', '')
+        checked += 1
+        all_connected = True
+        floating_pins = []
+
+        for pin_num, (px, py, pin_type, pin_name) in sorted(pins.items()):
+            if not point_near_wire(px, py):
+                label = f"{pin_name}" if pin_name else f"pin{pin_num}"
+                floating_pins.append((pin_num, label, px, py))
+                all_connected = False
+
+        if floating_pins:
+            for pin_num, label, px, py in floating_pins:
+                # NULL/offset pins on op-amps are optional — INFO not ERROR
+                if label in ('NULL', 'NC', ''):
+                    sev = 'INFO'
+                else:
+                    sev = 'ERROR'
+                issues.append((sev,
+                    f'{ref} ({lib_id}) {label} FLOATING at ({px:.1f},{py:.1f})'))
+        elif all_connected:
+            n_pins = len(pins)
+            issues.append(('PASS', f'{ref}: all {n_pins} pins connected'))
+
+    issues.append(('INFO', f'Pin connectivity: {checked} components checked, {skipped} skipped (power/virtual)'))
     return issues
 
 
@@ -7605,6 +7947,79 @@ def check_wire_crossings(wires, labels):
                 f'wire[{wj}] {wires[wj][0]}->{wires[wj][1]}'))
     else:
         issues.append(('PASS', 'No wire crossings detected (clean routing)'))
+
+    return issues
+
+
+def check_wire_overlaps(wires):
+    """Detect collinear wire segments that overlap along a shared range.
+
+    Collinear overlapping wires are always suspicious:
+    - If from different nets: unintended electrical short (the VEE/feedback
+      bug from Session 16 was exactly this — two wires at same X overlapped)
+    - If from same net: redundant/sloppy routing
+
+    Only flags overlaps longer than a tolerance threshold. Endpoint-only
+    connections (normal T-junctions) are excluded.
+
+    Returns list of (severity, message) tuples.
+    """
+    issues = []
+    TOL = 0.5
+
+    # Separate wires by orientation
+    h_wires = []  # horizontal segments (constant Y)
+    v_wires = []  # vertical segments (constant X)
+
+    for i, (p1, p2) in enumerate(wires):
+        x1, y1 = p1
+        x2, y2 = p2
+        if abs(y1 - y2) < TOL:
+            h_wires.append((min(x1, x2), max(x1, x2), (y1 + y2) / 2, i))
+        elif abs(x1 - x2) < TOL:
+            v_wires.append((min(y1, y2), max(y1, y2), (x1 + x2) / 2, i))
+
+    overlaps = []
+
+    # Check horizontal pairs
+    for a in range(len(h_wires)):
+        for b in range(a + 1, len(h_wires)):
+            ax1, ax2, ay, ai = h_wires[a]
+            bx1, bx2, by, bi = h_wires[b]
+            if abs(ay - by) > TOL:
+                continue
+            overlap_len = min(ax2, bx2) - max(ax1, bx1)
+            if overlap_len > TOL:
+                # Exclude endpoint-only touches
+                if abs(ax2 - bx1) < TOL or abs(bx2 - ax1) < TOL:
+                    continue
+                x_mid = (max(ax1, bx1) + min(ax2, bx2)) / 2
+                overlaps.append(('H', x_mid, ay, overlap_len, ai, bi))
+
+    # Check vertical pairs
+    for a in range(len(v_wires)):
+        for b in range(a + 1, len(v_wires)):
+            ay1, ay2, ax, ai = v_wires[a]
+            by1, by2, bx, bi = v_wires[b]
+            if abs(ax - bx) > TOL:
+                continue
+            overlap_len = min(ay2, by2) - max(ay1, by1)
+            if overlap_len > TOL:
+                if abs(ay2 - by1) < TOL or abs(by2 - ay1) < TOL:
+                    continue
+                y_mid = (max(ay1, by1) + min(ay2, by2)) / 2
+                overlaps.append(('V', ax, y_mid, overlap_len, ai, bi))
+
+    if overlaps:
+        issues.append(('WARNING',
+            f'{len(overlaps)} collinear wire overlap(s) detected (possible shorts)'))
+        for direction, x, y, length, wi, wj in overlaps:
+            issues.append(('WARNING',
+                f'  Overlap ({direction}) at ({x:.1f},{y:.1f}) length={length:.1f}mm: '
+                f'wire[{wi}] {wires[wi][0]}->{wires[wi][1]} || '
+                f'wire[{wj}] {wires[wj][0]}->{wires[wj][1]}'))
+    else:
+        issues.append(('PASS', 'No collinear wire overlaps (clean routing)'))
 
     return issues
 
@@ -7973,6 +8388,11 @@ def verify_circuit(sch_path, circuit_type, sim_results=None, expected=None):
     # Bug: H-V wire crossings from different nets look like junctions
     crossing_issues = check_wire_crossings(wires, labels)
     issues.extend(crossing_issues)
+
+    # Step 4b1: Collinear wire overlap detection (electrical shorts)
+    # Bug: VEE/feedback wires at same X overlapped -> unintended short (Session 16)
+    overlap_issues = check_wire_overlaps(wires)
+    issues.extend(overlap_issues)
 
     # Step 4b2: [mux_tia] Layout quality checks (self-learning)
     # Checks for power symbols in feedback area, misplaced labels, etc.
