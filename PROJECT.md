@@ -1328,4 +1328,35 @@ KiCad is open source (GPL v3, C++ with wxWidgets). Forking it would be massive o
 - Modified: `simulate()` (strict exit code), `check_floating_wires()` (uses dynamic pins), `verify_circuit()` (wire overlap step)
 - Modified: `build_oscillator()` and `build_electrometer_362()` — 1x scale default, clearance kwargs, wire merge, title repositioning
 
-*Last updated: 2026-03-06 (Session 18)*
+## Session 19 — LTspice Audio Amplifier Conversion + Repo Cleanup
+
+### Goal
+Demonstrate CircuitForge's ability to convert external LTspice example circuits into KiCad schematics + ngspice simulations. Clean up repository and documentation.
+
+### Achievements
+1. **LTspice Audio Amplifier converted** — `audioamp.asc` from LTspice Educational examples
+   - 3-stage BJT amplifier: differential pair + VAS + quasi-complementary push-pull output
+   - 8 transistors (2N3904, 2N3906, 2N2219A), 14 resistors, 3 caps, +-10V supply
+   - Used LTspice to auto-generate netlist, then hand-translated to ngspice with descriptive node names
+   - **Simulation verified**: Gain = 10.3x (20.2 dB), matches theoretical 1+R7/R6 = 11
+   - Clean sinusoidal waveforms, no clipping with 0.7V input into +-10V supply
+   - First use of Q_PNP_BCE symbol in the pipeline
+
+2. **KiCad schematic** — `build_audioamp()` function, A3 layout with 4 labelled sections
+   - INPUT → DIFFERENTIAL PAIR → VAS → OUTPUT STAGE
+   - All 29 components placed and wired
+
+3. **CLI integration** — `python kicad_pipeline.py audioamp` runs the full pipeline
+
+4. **Repo cleanup**
+   - Moved 55 old test/debug files to `sim_work/archive/`
+   - Clean sim_work now has 14 production schematics, 23 result plots, PDFs in subdirs
+   - Updated .gitignore to whitelist all circuit outputs, exclude archive
+   - Updated README.md: development progress section, audioamp in circuit table and quick start
+
+### Code Changes (kicad_pipeline.py)
+- New functions: `build_audioamp()`, `write_audioamp_netlist()`
+- Modified: `main()` — added `audioamp` to circuit type dispatch
+- Updated: circuit type listing in module docstring
+
+*Last updated: 2026-03-06 (Session 19)*

@@ -11,6 +11,7 @@ Pipeline: Build -> Verify -> Correct -> Simulate -> Plot -> Export
     - Self-learning: every bug becomes a permanent rule in learned_rules.json
 
 Circuits available:
+    audioamp        - 3-stage audio amplifier: diff pair + VAS + push-pull (29 components)
     ce_amp          - Common-emitter BJT amplifier (15 components)
     inv_amp         - LM741 inverting amplifier, gain=-10 (12 components)
     sig_cond        - Dual op-amp signal conditioner + Sallen-Key LPF (22 components)
@@ -926,6 +927,472 @@ def build_common_emitter_amp():
         print(f"  SVG exported: {actual}")
     except Exception as e:
         print(f"  SVG export: {e}")
+
+    return sch_path
+
+
+# =============================================================
+# BUILD: Audio Amplifier (LTspice Educational Example)
+# =============================================================
+def build_audioamp():
+    """
+    Build a 3-stage BJT audio amplifier schematic from the LTspice
+    Educational example 'audioamp.asc'.
+
+    Topology:
+        Input -> R1 -> Diff Pair (Q1,Q2) -> VAS (Q3,Q4) -> Push-Pull Output (Q5-Q8) -> Speaker
+
+    Stages:
+        1. Long-tailed pair: Q1,Q2 (2N3904) with R3 (1K) tail to VEE
+           Q1 collector load R2 (200) to VCC, Q2 collector to VCC
+        2. Active load + VAS: Q3 (2N3906 PNP) drives Q4 (2N3904)
+           R4 (9K) + R5 (1K) interstage, C1 (10p) / C2 (100p) compensation
+        3. Quasi-complementary output: Q5 (NPN driver) + Q7 (2N2219A output) upper
+           Q6 (PNP driver) + Q8 (2N2219A output) lower, R12/R13 bias, C3 bootstrap
+        Feedback: R7 (50K) / R6 (5K) sets gain ~11
+        Load: R14 (8 ohm speaker)
+        Supply: +/-10V
+    """
+    print("Building audio amplifier schematic...")
+
+    sch = create_schematic("Audio Amplifier")
+    sch.set_paper_size("A3")
+    sch.set_title_block(
+        title="Audio Amplifier - LTspice Educational",
+        company="CircuitForge Pipeline",
+        rev="1.0",
+        comments={1: "3-stage BJT: diff pair + VAS + push-pull output",
+                  2: "8 transistors, 14 resistors, 3 caps, +-10V supply"}
+    )
+
+    G = 2.54  # grid unit (mm)
+
+    # ── Layout: 4 zones left-to-right on A3 landscape (420x297mm) ──
+    # A3 = ~165G wide x ~117G tall.  Centre circuit vertically.
+    # Zone 1: Input (x ~12G)
+    # Zone 2: Diff pair (x ~30G)
+    # Zone 3: VAS (x ~65G)
+    # Zone 4: Output stage (x ~100G)
+    # Vertical centre line ~55G;  VCC rail ~25G;  VEE rail ~90G
+
+    cy = 55*G           # vertical centre for diff pair / VAS transistors
+    vcc_rail_y = 22*G   # VCC horizontal bus
+    vee_rail_y = 90*G   # VEE horizontal bus
+
+    # ── Zone 1: Input source ──
+    vin_x, vin_y = 12*G, cy + 8*G
+    sch.components.add(lib_id="VSIN:VSIN", reference="V3",
+                       value="0.7V 1kHz", position=(vin_x, vin_y))
+
+    # R1 input coupling (horizontal)
+    r1_x, r1_y = 20*G, cy
+    sch.components.add(lib_id="R:R", reference="R1",
+                       value="5k", position=(r1_x, r1_y), rotation=90)
+
+    # ── Zone 2: Differential pair ──
+    q1_x, q1_y = 30*G, cy     # Q1 NPN
+    q2_x, q2_y = 42*G, cy     # Q2 NPN (wider gap for R6/R7)
+
+    sch.components.add(lib_id="Q_NPN_BCE:Q_NPN_BCE", reference="Q1",
+                       value="2N3904", position=(q1_x, q1_y))
+    sch.components.add(lib_id="Q_NPN_BCE:Q_NPN_BCE", reference="Q2",
+                       value="2N3904", position=(q2_x, q2_y))
+
+    # R2 (200) - Q1 collector load to VCC
+    r2_x = q1_x + 1*G
+    r2_y = cy - 14*G
+    sch.components.add(lib_id="R:R", reference="R2",
+                       value="200", position=(r2_x, r2_y))
+
+    # R3 (1K) - tail resistor to VEE
+    r3_x = 36*G
+    r3_y = cy + 14*G
+    sch.components.add(lib_id="R:R", reference="R3",
+                       value="1k", position=(r3_x, r3_y))
+
+    # R6 (5K) - Q2 base to GND bias
+    r6_x = q2_x - 2*G
+    r6_y = cy + 10*G
+    sch.components.add(lib_id="R:R", reference="R6",
+                       value="5k", position=(r6_x, r6_y))
+
+    # R7 (50K) - feedback from output to Q2 base (horizontal)
+    r7_x = q2_x + 10*G
+    r7_y = cy + 4*G
+    sch.components.add(lib_id="R:R", reference="R7",
+                       value="50k", position=(r7_x, r7_y), rotation=90)
+
+    # ── Zone 3: Active load + VAS ──
+    # R4 (9K) interstage (horizontal)
+    r4_x = 52*G
+    r4_y = cy - 10*G
+    sch.components.add(lib_id="R:R", reference="R4",
+                       value="9k", position=(r4_x, r4_y), rotation=90)
+
+    # C1 (10p) across R4 (compensation, horizontal)
+    c1_x = r4_x
+    c1_y = r4_y - 5*G
+    sch.components.add(lib_id="C:C", reference="C1",
+                       value="10p", position=(c1_x, c1_y), rotation=90)
+
+    # R5 (1K) continues to Q3 base (horizontal)
+    r5_x = 58*G
+    r5_y = r4_y
+    sch.components.add(lib_id="R:R", reference="R5",
+                       value="1k", position=(r5_x, r5_y), rotation=90)
+
+    # Q3 PNP active load
+    q3_x, q3_y = 65*G, cy - 16*G
+    sch.components.add(lib_id="Q_PNP_BCE:Q_PNP_BCE", reference="Q3",
+                       value="2N3906", position=(q3_x, q3_y))
+
+    # R8 (100) - Q3 emitter to VCC
+    r8_x = q3_x + 1*G
+    r8_y = q3_y - 10*G
+    sch.components.add(lib_id="R:R", reference="R8",
+                       value="100", position=(r8_x, r8_y))
+
+    # C2 (100p) Miller compensation (vertical, from Q3C to Q3B area)
+    c2_x = q3_x - 5*G
+    c2_y = q3_y + 5*G
+    sch.components.add(lib_id="C:C", reference="C2",
+                       value="100p", position=(c2_x, c2_y))
+
+    # Q4 VAS transistor
+    q4_x, q4_y = 75*G, cy
+    sch.components.add(lib_id="Q_NPN_BCE:Q_NPN_BCE", reference="Q4",
+                       value="2N3904", position=(q4_x, q4_y))
+
+    # R9 (2K) - VAS collector-to-base feedback
+    r9_x = q4_x + 1*G
+    r9_y = cy - 10*G
+    sch.components.add(lib_id="R:R", reference="R9",
+                       value="2k", position=(r9_x, r9_y))
+
+    # R10 (1K) - VAS base-to-emitter
+    r10_x = q4_x + 7*G
+    r10_y = cy
+    sch.components.add(lib_id="R:R", reference="R10",
+                       value="1k", position=(r10_x, r10_y))
+
+    # R11 (5K) - VAS tail to VEE
+    r11_x = q4_x + 1*G
+    r11_y = cy + 12*G
+    sch.components.add(lib_id="R:R", reference="R11",
+                       value="5k", position=(r11_x, r11_y))
+
+    # C3 (1mF) bootstrap cap (vertical)
+    c3_x = q4_x - 6*G
+    c3_y = cy + 6*G
+    sch.components.add(lib_id="C:C", reference="C3",
+                       value="1m", position=(c3_x, c3_y))
+
+    # ── Zone 4: Output stage ──
+    # Q5 NPN upper driver
+    q5_x, q5_y = 98*G, cy - 18*G
+    sch.components.add(lib_id="Q_NPN_BCE:Q_NPN_BCE", reference="Q5",
+                       value="2N3904", position=(q5_x, q5_y))
+
+    # Q6 PNP lower driver
+    q6_x, q6_y = 98*G, cy + 20*G
+    sch.components.add(lib_id="Q_PNP_BCE:Q_PNP_BCE", reference="Q6",
+                       value="2N3906", position=(q6_x, q6_y))
+
+    # Q7 NPN upper output
+    q7_x, q7_y = 110*G, cy - 22*G
+    sch.components.add(lib_id="Q_NPN_BCE:Q_NPN_BCE", reference="Q7",
+                       value="2N2219A", position=(q7_x, q7_y))
+
+    # Q8 NPN lower output (quasi-complementary)
+    q8_x, q8_y = 110*G, cy + 24*G
+    sch.components.add(lib_id="Q_NPN_BCE:Q_NPN_BCE", reference="Q8",
+                       value="2N2219A", position=(q8_x, q8_y))
+
+    # R12 (1K) - upper bias/ballast
+    r12_x = 104*G
+    r12_y = cy - 14*G
+    sch.components.add(lib_id="R:R", reference="R12",
+                       value="1k", position=(r12_x, r12_y))
+
+    # R13 (1K) - lower bias/ballast
+    r13_x = 104*G
+    r13_y = cy + 18*G
+    sch.components.add(lib_id="R:R", reference="R13",
+                       value="1k", position=(r13_x, r13_y))
+
+    # R14 (8) - speaker load
+    r14_x = 120*G
+    r14_y = cy
+    sch.components.add(lib_id="R:R", reference="R14",
+                       value="8", position=(r14_x, r14_y))
+
+    # V1 (+10V) and V2 (-10V) supplies
+    v1_x, v1_y = 130*G, cy - 20*G
+    sch.components.add(lib_id="VDC:VDC", reference="V1",
+                       value="10V", position=(v1_x, v1_y))
+
+    v2_x, v2_y = 130*G, cy + 22*G
+    sch.components.add(lib_id="VDC:VDC", reference="V2",
+                       value="-10V", position=(v2_x, v2_y))
+
+    # ── Wiring ──
+    # Get all pin positions
+    # Q_NPN_BCE: pin1=B(left), pin2=C(top-right), pin3=E(bottom-right)
+    # Q_PNP_BCE: pin1=B(left), pin2=C(bottom-right), pin3=E(top-right)
+
+    q1_b = get_pin_pos(sch, "Q1", "1")
+    q1_c = get_pin_pos(sch, "Q1", "2")
+    q1_e = get_pin_pos(sch, "Q1", "3")
+    q2_b = get_pin_pos(sch, "Q2", "1")
+    q2_c = get_pin_pos(sch, "Q2", "2")
+    q2_e = get_pin_pos(sch, "Q2", "3")
+    q3_b = get_pin_pos(sch, "Q3", "1")
+    q3_c = get_pin_pos(sch, "Q3", "2")
+    q3_e = get_pin_pos(sch, "Q3", "3")
+    q4_b = get_pin_pos(sch, "Q4", "1")
+    q4_c = get_pin_pos(sch, "Q4", "2")
+    q4_e = get_pin_pos(sch, "Q4", "3")
+    q5_b = get_pin_pos(sch, "Q5", "1")
+    q5_c = get_pin_pos(sch, "Q5", "2")
+    q5_e = get_pin_pos(sch, "Q5", "3")
+    q6_b = get_pin_pos(sch, "Q6", "1")
+    q6_c = get_pin_pos(sch, "Q6", "2")
+    q6_e = get_pin_pos(sch, "Q6", "3")
+    q7_b = get_pin_pos(sch, "Q7", "1")
+    q7_c = get_pin_pos(sch, "Q7", "2")
+    q7_e = get_pin_pos(sch, "Q7", "3")
+    q8_b = get_pin_pos(sch, "Q8", "1")
+    q8_c = get_pin_pos(sch, "Q8", "2")
+    q8_e = get_pin_pos(sch, "Q8", "3")
+
+    r1_1 = get_pin_pos(sch, "R1", "1")
+    r1_2 = get_pin_pos(sch, "R1", "2")
+    r2_1 = get_pin_pos(sch, "R2", "1")
+    r2_2 = get_pin_pos(sch, "R2", "2")
+    r3_1 = get_pin_pos(sch, "R3", "1")
+    r3_2 = get_pin_pos(sch, "R3", "2")
+    r4_1 = get_pin_pos(sch, "R4", "1")
+    r4_2 = get_pin_pos(sch, "R4", "2")
+    r5_1 = get_pin_pos(sch, "R5", "1")
+    r5_2 = get_pin_pos(sch, "R5", "2")
+    r6_1 = get_pin_pos(sch, "R6", "1")
+    r6_2 = get_pin_pos(sch, "R6", "2")
+    r7_1 = get_pin_pos(sch, "R7", "1")
+    r7_2 = get_pin_pos(sch, "R7", "2")
+    r8_1 = get_pin_pos(sch, "R8", "1")
+    r8_2 = get_pin_pos(sch, "R8", "2")
+    r9_1 = get_pin_pos(sch, "R9", "1")
+    r9_2 = get_pin_pos(sch, "R9", "2")
+    r10_1 = get_pin_pos(sch, "R10", "1")
+    r10_2 = get_pin_pos(sch, "R10", "2")
+    r11_1 = get_pin_pos(sch, "R11", "1")
+    r11_2 = get_pin_pos(sch, "R11", "2")
+    r12_1 = get_pin_pos(sch, "R12", "1")
+    r12_2 = get_pin_pos(sch, "R12", "2")
+    r13_1 = get_pin_pos(sch, "R13", "1")
+    r13_2 = get_pin_pos(sch, "R13", "2")
+    r14_1 = get_pin_pos(sch, "R14", "1")
+    r14_2 = get_pin_pos(sch, "R14", "2")
+    c1_1 = get_pin_pos(sch, "C1", "1")
+    c1_2 = get_pin_pos(sch, "C1", "2")
+    c2_1 = get_pin_pos(sch, "C2", "1")
+    c2_2 = get_pin_pos(sch, "C2", "2")
+    c3_1 = get_pin_pos(sch, "C3", "1")
+    c3_2 = get_pin_pos(sch, "C3", "2")
+
+    # -- Input: V3 -> R1 -> Q1 base --
+    vin_p1 = (vin_x, vin_y - 5.38)   # VSIN top (+)
+    vin_p2 = (vin_x, vin_y + 4.78)   # VSIN bottom (-)
+    wire_manhattan(sch, vin_p1[0], vin_p1[1], r1_2[0], r1_2[1])
+    wire_manhattan(sch, r1_1[0], r1_1[1], q1_b[0], q1_b[1])
+
+    # V3 bottom to GND
+    gnd_vin = vin_p2[1] + 3*G
+    sch.add_wire(start=vin_p2, end=(vin_x, gnd_vin))
+    sch.components.add(lib_id="GND:GND", reference="#PWR01", value="GND",
+                       position=(vin_x, gnd_vin))
+
+    # -- Diff pair: Q1C -> R2 -> VCC, Q2C -> VCC --
+    wire_manhattan(sch, q1_c[0], q1_c[1], r2_2[0], r2_2[1])
+
+    # R2 top to VCC rail
+    sch.add_wire(start=r2_1, end=(r2_1[0], vcc_rail_y))
+
+    # Q2 collector to VCC (via wire up to rail)
+    sch.add_wire(start=q2_c, end=(q2_c[0], vcc_rail_y))
+
+    # VCC rail horizontal connecting R2 top, Q2C, and extending right
+    sch.add_wire(start=(r2_1[0], vcc_rail_y), end=(q2_c[0], vcc_rail_y))
+
+    # Q1/Q2 emitters to tail node -> R3 -> VEE
+    tail_y = q1_e[1] + 2*G
+    wire_manhattan(sch, q1_e[0], q1_e[1], r3_x, tail_y)
+    wire_manhattan(sch, q2_e[0], q2_e[1], r3_x, tail_y)
+    sch.add_wire(start=(r3_x, tail_y), end=r3_1)
+
+    # R3 bottom to VEE
+    sch.add_wire(start=r3_2, end=(r3_2[0], vee_rail_y))
+
+    # -- Q2 base: R6 to GND, R7 from feedback --
+    wire_manhattan(sch, q2_b[0], q2_b[1], r6_1[0], r6_1[1])
+
+    # R6 bottom to GND
+    gnd_r6 = r6_2[1] + 3*G
+    sch.add_wire(start=r6_2, end=(r6_2[0], gnd_r6))
+    sch.components.add(lib_id="GND:GND", reference="#PWR02", value="GND",
+                       position=(r6_2[0], gnd_r6))
+
+    # R7 connects feedback (output A) to Q2 base junction
+    # R7 pin2 (left) to Q2 base junction
+    wire_manhattan(sch, r7_2[0], r7_2[1], q2_b[0], q2_b[1])
+
+    # -- Interstage: Q1C -> R4 -> R5 -> Q3 base --
+    # R4 left end connects to Q1 collector node (N002)
+    wire_manhattan(sch, q1_c[0], q1_c[1], r4_2[0], r4_2[1])
+
+    # C1 in parallel with R4 (compensation)
+    wire_manhattan(sch, c1_2[0], c1_2[1], r4_2[0], r4_2[1])
+    wire_manhattan(sch, c1_1[0], c1_1[1], r4_1[0], r4_1[1])
+
+    # R4 right -> R5 left (series connection at N003)
+    wire_manhattan(sch, r4_1[0], r4_1[1], r5_2[0], r5_2[1])
+
+    # R5 right -> Q3 base
+    wire_manhattan(sch, r5_1[0], r5_1[1], q3_b[0], q3_b[1])
+
+    # C2 from Q3 collector (N006) to Q3 base (N005) - Miller compensation
+    wire_manhattan(sch, c2_1[0], c2_1[1], q3_b[0], q3_b[1])
+
+    # -- Q3 PNP: emitter -> R8 -> VCC, collector = VAS node --
+    wire_manhattan(sch, q3_e[0], q3_e[1], r8_2[0], r8_2[1])
+    sch.add_wire(start=r8_1, end=(r8_1[0], vcc_rail_y))
+    # Extend VCC rail to R8
+    sch.add_wire(start=(q2_c[0], vcc_rail_y), end=(r8_1[0], vcc_rail_y))
+
+    # Q3 collector (VAS node N006) connects to Q4 collector, Q5 base, C2, C3
+    vas_node_y = q3_c[1]
+
+    # -- Q4 VAS: C=VAS, B=N008, E=N012 --
+    # Q4 collector to VAS node (horizontal wire from Q3C to Q4C)
+    wire_manhattan(sch, q3_c[0], q3_c[1], q4_c[0], q4_c[1])
+
+    # R9: VAS node (N006) -> Q4 base (N008) - collector-to-base feedback
+    wire_manhattan(sch, q4_c[0], q4_c[1], r9_1[0], r9_1[1])
+    wire_manhattan(sch, r9_2[0], r9_2[1], q4_b[0], q4_b[1])
+
+    # R10: Q4 base (N008) -> Q4 emitter (N012)
+    wire_manhattan(sch, q4_b[0], q4_b[1], r10_1[0], r10_1[1])
+    wire_manhattan(sch, r10_2[0], r10_2[1], q4_e[0], q4_e[1])
+
+    # R11: Q4 emitter (N012) -> VEE
+    wire_manhattan(sch, q4_e[0], q4_e[1], r11_1[0], r11_1[1])
+    sch.add_wire(start=r11_2, end=(r11_2[0], vee_rail_y))
+
+    # C3 bootstrap: VAS node (N006) to Q4 emitter (N012)
+    wire_manhattan(sch, c3_1[0], c3_1[1], q4_c[0], q4_c[1])
+    wire_manhattan(sch, c3_2[0], c3_2[1], q4_e[0], q4_e[1])
+
+    # C2 bottom to VAS node
+    wire_manhattan(sch, c2_2[0], c2_2[1], q3_c[0], q3_c[1])
+
+    # -- Output stage --
+    # Q5 base from VAS node
+    wire_manhattan(sch, q4_c[0], q4_c[1], q5_b[0], q5_b[1])
+
+    # Q5 collector to VCC
+    sch.add_wire(start=q5_c, end=(q5_c[0], vcc_rail_y))
+    sch.add_wire(start=(r8_1[0], vcc_rail_y), end=(q5_c[0], vcc_rail_y))
+
+    # Q5 emitter (N007) -> R12 top -> R12 bottom = output A
+    wire_manhattan(sch, q5_e[0], q5_e[1], r12_1[0], r12_1[1])
+
+    # Q7 base from Q5 emitter (N007)
+    wire_manhattan(sch, q5_e[0], q5_e[1], q7_b[0], q7_b[1])
+
+    # Q7 collector to VCC
+    sch.add_wire(start=q7_c, end=(q7_c[0], vcc_rail_y))
+    sch.add_wire(start=(q5_c[0], vcc_rail_y), end=(q7_c[0], vcc_rail_y))
+
+    # Q7 emitter = output A
+    output_y = cy
+    wire_manhattan(sch, q7_e[0], q7_e[1], r14_1[0], output_y)
+
+    # R12 bottom to output A
+    wire_manhattan(sch, r12_2[0], r12_2[1], r14_1[0], output_y)
+
+    # Q6 base from Q4 emitter (N012)
+    wire_manhattan(sch, q4_e[0], q4_e[1], q6_b[0], q6_b[1])
+
+    # Q6 emitter = output A
+    wire_manhattan(sch, q6_e[0], q6_e[1], r14_1[0], output_y)
+
+    # Q6 collector (N013) -> R13 top, Q8 base
+    wire_manhattan(sch, q6_c[0], q6_c[1], r13_1[0], r13_1[1])
+    wire_manhattan(sch, q6_c[0], q6_c[1], q8_b[0], q8_b[1])
+
+    # R13 bottom to VEE
+    sch.add_wire(start=r13_2, end=(r13_2[0], vee_rail_y))
+
+    # Q8 collector = output A
+    wire_manhattan(sch, q8_c[0], q8_c[1], r14_1[0], output_y)
+
+    # Q8 emitter to VEE
+    sch.add_wire(start=q8_e, end=(q8_e[0], vee_rail_y))
+
+    # R14 speaker load bottom to GND
+    gnd_r14 = r14_2[1] + 3*G
+    sch.add_wire(start=r14_2, end=(r14_2[0], gnd_r14))
+    sch.components.add(lib_id="GND:GND", reference="#PWR03", value="GND",
+                       position=(r14_2[0], gnd_r14))
+
+    # -- Feedback: output A -> R7 -> Q2 base --
+    # R7 pin1 (right) from output node
+    wire_manhattan(sch, r14_1[0], output_y, r7_1[0], r7_1[1])
+
+    # -- VCC/VEE supply sources --
+    # V1 (+10V): positive to VCC rail, negative to GND
+    v1_p1 = (v1_x, v1_y - 5.38)  # top (+)
+    v1_p2 = (v1_x, v1_y + 4.78)  # bottom (-)
+    sch.add_wire(start=v1_p1, end=(v1_x, vcc_rail_y))
+    sch.add_wire(start=(q7_c[0], vcc_rail_y), end=(v1_x, vcc_rail_y))
+    gnd_v1 = v1_p2[1] + 3*G
+    sch.add_wire(start=v1_p2, end=(v1_x, gnd_v1))
+    sch.components.add(lib_id="GND:GND", reference="#PWR04", value="GND",
+                       position=(v1_x, gnd_v1))
+
+    # V2 (-10V): positive to GND, negative to VEE rail
+    v2_p1 = (v2_x, v2_y - 5.38)
+    v2_p2 = (v2_x, v2_y + 4.78)
+    gnd_v2 = v2_p1[1] - 3*G
+    sch.add_wire(start=v2_p1, end=(v2_x, gnd_v2))
+    sch.components.add(lib_id="GND:GND", reference="#PWR05", value="GND",
+                       position=(v2_x, gnd_v2))
+    sch.add_wire(start=v2_p2, end=(v2_x, vee_rail_y))
+    # Extend VEE rail
+    sch.add_wire(start=(r3_2[0], vee_rail_y), end=(v2_x, vee_rail_y))
+
+    # -- VCC power flag at top --
+    sch.components.add(lib_id="VCC:VCC", reference="#PWR06", value="+10V",
+                       position=(v1_x, vcc_rail_y))
+
+    # -- Output label --
+    out_label_x = r14_1[0] + 4*G
+    sch.add_label("OUTPUT", position=(out_label_x, output_y))
+    sch.add_wire(start=(r14_1[0], output_y), end=(out_label_x, output_y))
+
+    # -- Section titles --
+    title_y = vcc_rail_y - 8*G
+    sch.add_text("INPUT", position=(vin_x, title_y), size=3.0)
+    sch.add_text("DIFFERENTIAL PAIR", position=(q1_x, title_y), size=3.0)
+    sch.add_text("VAS", position=(q3_x, title_y), size=3.0)
+    sch.add_text("OUTPUT STAGE", position=(q5_x, title_y), size=3.0)
+
+    # ── Save ──
+    sch_path = os.path.join(WORK_DIR, "audioamp.kicad_sch")
+    sch.save(sch_path)
+    fix_kicad_sch(sch_path)
+    merge_collinear_wires(sch_path)
+    print(f"  Schematic saved: {sch_path}")
 
     return sch_path
 
@@ -6408,6 +6875,108 @@ quit
     return netlist_path
 
 
+def write_audioamp_netlist():
+    """Write ngspice netlist for the audio amplifier (LTspice Educational).
+
+    3-stage BJT amplifier: diff pair + VAS + quasi-complementary push-pull output.
+    Netlist derived from LTspice-generated audioamp.net with descriptive node names.
+
+    Node mapping (from LTspice N### to descriptive):
+        N001=VCC  N002=Q1C  N003=FB_MID  N004=Q3E  N005=Q3B
+        N006=VAS  N007=Q5E  N008=Q4B  N009=Q1B  N010=Q2B
+        N011=TAIL  N012=Q4E  N013=Q6C  N014=VEE
+        A=OUT  B=FB  IN=IN
+    """
+    netlist = """* Audio Amplifier - LTspice Educational Example
+* 3-stage BJT: diff pair + VAS + push-pull output
+* Converted to ngspice by CircuitForge pipeline
+
+* === Power Supplies ===
+V1 VCC 0 10
+V2 VEE 0 -10
+
+* === Input Signal ===
+V3 IN 0 SINE(0 0.7 1k)
+* V4 is AC stimulus (0V DC = short for transient)
+V4 OUT FB DC 0
+
+* === Stage 1: Differential Pair ===
+R1 Q1B IN 5k
+Q1 Q1C Q1B TAIL 0 Q2N3904
+Q2 VCC Q2B TAIL 0 Q2N3904
+R2 VCC Q1C 200
+R3 TAIL VEE 1k
+
+* Q2 base: feedback + bias
+R6 Q2B 0 5k
+R7 FB Q2B 50k
+
+* === Stage 2: Active Load + VAS ===
+* Interstage coupling: Q1C -> R4 -> R5 -> Q3 base
+R4 FB_MID Q1C 9k
+C1 FB_MID Q1C 10p
+R5 Q3B FB_MID 1k
+
+* Q3 PNP active load
+Q3 VAS Q3B Q3E 0 Q2N3906
+R8 VCC Q3E 100
+C2 VAS Q3B 100p
+
+* Q4 voltage amplification stage
+Q4 VAS Q4B Q4E 0 Q2N3904
+R9 VAS Q4B 2k
+R10 Q4B Q4E 1k
+R11 Q4E VEE 5k
+
+* Bootstrap
+C3 VAS Q4E 1m
+
+* === Stage 3: Quasi-Complementary Output ===
+* Upper: Q5 driver -> Q7 output (both NPN)
+Q5 VCC VAS Q5E 0 Q2N3904
+Q7 VCC Q5E OUT 0 Q2N2219A
+R12 Q5E OUT 1k
+
+* Lower: Q6 PNP driver -> Q8 NPN output
+Q6 Q6C Q4E OUT 0 Q2N3906
+Q8 OUT Q6C VEE 0 Q2N2219A
+R13 Q6C VEE 1k
+
+* === Load ===
+R14 OUT 0 8
+
+* === BJT Models ===
+.model Q2N3904 NPN(IS=1E-14 VAF=100 Bf=300 IKF=0.4 XTB=1.5
++ BR=4 CJC=4E-12 CJE=8E-12 RB=20 RC=0.1 RE=0.1
++ TR=250E-9 TF=350E-12 ITF=1 VTF=2 XTF=3)
+
+.model Q2N3906 PNP(IS=1E-14 VAF=100 Bf=180 IKF=0.4 XTB=1.5
++ BR=4 CJC=4.5E-12 CJE=10E-12 RB=20 RC=0.1 RE=0.1
++ TR=250E-9 TF=350E-12 ITF=1 VTF=2 XTF=3)
+
+.model Q2N2219A NPN(IS=14.34E-15 VAF=74.03 Bf=255.9 IKF=0.2847
++ XTB=1.5 BR=6.092 CJC=7.306E-12 CJE=22.01E-12 RB=10
++ RC=0.1 RE=0.1 TR=46.91E-9 TF=411.1E-12 ITF=0.6 VTF=1.7 XTF=3)
+
+* === Simulation ===
+.tran 1u 10m
+.options maxstep=10u
+
+.control
+run
+wrdata audioamp_results.txt V(IN) V(OUT) V(VAS) V(Q4E)
+quit
+.endc
+
+.end
+"""
+    netlist_path = os.path.join(WORK_DIR, "audioamp.cir")
+    with open(netlist_path, 'w') as f:
+        f.write(netlist)
+    print(f"  Netlist saved: {netlist_path}")
+    return netlist_path
+
+
 # =============================================================
 # SIMULATE: Run ngspice
 # =============================================================
@@ -8682,7 +9251,7 @@ def main():
     # Circuit selection
     circuit = "ce_amp"
     opamp = "LM741"
-    if len(sys.argv) >= 2 and sys.argv[1] in ("inv_amp", "ce_amp", "sig_cond", "usb_ina", "electrometer", "electrometer_362", "relay_ladder", "input_filters", "analog_mux", "mux_tia", "mcu_section", "full_system", "full_path", "channel_switch", "femtoamp_test", "avdd_monitor", "rtd_temp", "combined_log", "oscillator"):
+    if len(sys.argv) >= 2 and sys.argv[1] in ("audioamp", "inv_amp", "ce_amp", "sig_cond", "usb_ina", "electrometer", "electrometer_362", "relay_ladder", "input_filters", "analog_mux", "mux_tia", "mcu_section", "full_system", "full_path", "channel_switch", "femtoamp_test", "avdd_monitor", "rtd_temp", "combined_log", "oscillator"):
         circuit = sys.argv[1]
     if len(sys.argv) >= 3 and sys.argv[2] in ("LM741", "AD797", "AD822", "AD843", "LMC6001", "LMC6001A", "OPA128", "ADA4530"):
         opamp = sys.argv[2]
@@ -9753,6 +10322,39 @@ def main():
         }
         verify_circuit(sch_path, 'inv_amp', sim_results, expected)
 
+    elif circuit == 'audioamp':
+        print("\n[2] Building audio amplifier schematic...")
+        sch_path = build_audioamp()
+
+        print("\n[3] Writing ngspice netlist...")
+        netlist_path = write_audioamp_netlist()
+
+        print("\n[4] Simulating...")
+        success = simulate(netlist_path)
+
+        sim_results = {}
+        if success:
+            print("\n[5] Plotting results...")
+            plot_results(
+                title="Audio Amplifier (LTspice Educational)",
+                results_file="audioamp_results.txt",
+                node_names=['V(IN)', 'V(OUT)', 'V(VAS)', 'V(Q4E)'],
+                plot_file="audioamp_results.png"
+            )
+            sim_results = measure_simulation(
+                "audioamp_results.txt",
+                ['V(IN)', 'V(OUT)', 'V(VAS)', 'V(Q4E)']
+            )
+        else:
+            print("\n[5] Simulation failed")
+
+        print("\n[6] Verifying circuit...")
+        expected = {
+            'gain': (11.0, 3.0, 'x'),       # gain ~11 (1+R7/R6)
+            'gain_dB': (20.0, 4.0, ' dB'),  # ~20 dB
+        }
+        verify_circuit(sch_path, 'audioamp', sim_results, expected)
+
     else:
         print("\n[2] Building CE amplifier schematic...")
         sch_path = build_common_emitter_amp()
@@ -9799,7 +10401,9 @@ def main():
             print(f"  {len(regions)} region PNGs copied to Desktop")
         else:
             # Adjust clip area per sheet size
-            if circuit == 'input_filters':
+            if circuit == 'audioamp':
+                clip = (10, 10, 400, 280)  # A3 landscape
+            elif circuit == 'input_filters':
                 clip = (10, 10, 400, 280)  # A3 landscape
             elif circuit == 'analog_mux':
                 clip = (20, 10, 230, 260)  # A4 tall (two muxes stacked)

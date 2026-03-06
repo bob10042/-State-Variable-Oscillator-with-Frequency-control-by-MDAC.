@@ -1,10 +1,12 @@
-# Ignore everything by default (this repo is oscillator-specific)
+# Ignore everything by default, whitelist project files
 *
 
 # ── Root files ──
 !.gitignore
 !README.md
+!PROJECT.md
 !kicad_pipeline.py
+!demo_loader.py
 
 # ── StateVarOsc design docs, models, tests ──
 !StateVarOsc/
@@ -15,9 +17,18 @@
 !firmware/oscillator/
 !firmware/oscillator/**
 
-# ── Simulation work files (oscillator only) ──
+# ── Simulation work: schematics, PDFs, result plots ──
 !sim_work/
-!sim_work/oscillator*
+!sim_work/*.kicad_sch
+!sim_work/*.pdf
+!sim_work/*.png
+!sim_work/*.cir
+!sim_work/*_results.txt
+!sim_work/*_pdf/
+!sim_work/*_pdf/*.pdf
+
+# Exclude archive (old test/debug files)
+sim_work/archive/
 
 # ── SimGUI (full app needed for oscillator project) ──
 !SimGUI/

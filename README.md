@@ -8,6 +8,21 @@ GUI and hand-writing SPICE netlists, CircuitForge lets you define a circuit in P
 and produces everything you need: a professional KiCad schematic, a SPICE netlist,
 simulation results, and publication-quality plots.
 
+## Development Progress
+
+CircuitForge is under active development, with the pipeline improving each session:
+
+- **Schematic quality**: Professional A3/A4 layouts at 1:1 scale (no post-scaling),
+  with wire overlap detection, collinear wire merging, and configurable component spacing.
+  Layout quality is benchmarked against industry-standard schematics (Triteq MM20 series).
+- **Verification system**: Automated pin connectivity checks, floating wire detection,
+  text overlap analysis, and dynamic pin parsing from KiCad symbol libraries.
+- **LTspice conversion**: Can convert LTspice example circuits (.asc files) into
+  KiCad schematics + ngspice simulations. The `demo_loader.py` tool handles the
+  LTspice-to-ngspice netlist translation automatically.
+- **20 circuit types** currently supported, from simple BJT amplifiers to a complete
+  16-channel electrometer system with MCU firmware.
+
 ## What CircuitForge Does
 
 CircuitForge takes a circuit description and drives it through a complete
@@ -58,7 +73,7 @@ build-simulate-verify pipeline:
 
 | Resource | Purpose |
 |----------|---------|
-| `kicad_pipeline.py` | Core engine (~8500 lines). Contains all circuit builders, netlist generators, simulators, plotters, and the self-learning correction loop. Run from the command line with a circuit type and parameters. |
+| `kicad_pipeline.py` | Core engine (~10000 lines). Contains all circuit builders, netlist generators, simulators, plotters, and the self-learning correction loop. Run from the command line with a circuit type and parameters. |
 | `kicad_libs/` | Custom KiCad symbol libraries (`.kicad_sym`) and SPICE model files (`.lib`, `.sub`). Includes vendor models for LMC6001, LM4562, DAC7800, AD636, CD4051B, and relay drivers. The LM741 symbol library provides the generic op-amp schematic shape used across all circuit types. |
 | `sim_work/` | Working directory where all generated files land: `.kicad_sch` schematics, `.cir` netlists, `.txt` raw results, `.png` plots, and intermediate files. |
 | `learned_rules.json` | Accumulated auto-correction rules. Each entry maps a problem pattern to its fix, so the pipeline improves over successive runs. |
@@ -109,7 +124,8 @@ Download from https://www.kicad.org/download/
 
 ```
 LTspice/
-  kicad_pipeline.py          # Main pipeline (~8500 lines, 19 circuit types)
+  kicad_pipeline.py          # Main pipeline (~10000 lines, 20 circuit types)
+  demo_loader.py             # LTspice .asc to ngspice converter
   PROJECT.md                 # Project tracker
   sim_work/                  # Simulation working directory (generated files)
   kicad_libs/                # Custom KiCad symbol libraries
@@ -144,6 +160,9 @@ LTspice/
 
 ### Run a simulation
 ```bash
+# Audio amplifier (LTspice educational example, 8 BJTs)
+python kicad_pipeline.py audioamp
+
 # Oscillator at D=121 (~1 kHz)
 python kicad_pipeline.py oscillator 121
 
@@ -185,6 +204,7 @@ When the ADuCM362 firmware is running:
 
 | Circuit | Description |
 |---------|-------------|
+| `audioamp` | 3-stage BJT audio amplifier (diff pair + VAS + push-pull, G=11) |
 | `ce_amp` | Common-emitter BJT amplifier |
 | `inv_amp` | LM741 inverting amplifier (G=-10) |
 | `sig_cond` | Dual op-amp signal conditioner + LPF |
