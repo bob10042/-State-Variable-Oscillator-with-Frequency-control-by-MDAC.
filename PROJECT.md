@@ -1360,3 +1360,85 @@ Demonstrate CircuitForge's ability to convert external LTspice example circuits 
 - Updated: circuit type listing in module docstring
 
 *Last updated: 2026-03-06 (Session 19)*
+
+
+## Session 20 — Schematic Verification, PNP Fix, Test Point Markers
+
+### Goal
+Fix audioamp schematic connection issues, add comprehensive pin connectivity verification, color-coded test point markers, and improve layout spacing.
+
+### Achievements
+1. **PNP transistor orientation fixed** — Q3 and Q6 now mirrored (emitter at top toward VCC)
+   - `fix_kicad_sch(sch_path, mirror_refs=["Q3", "Q6"])` applies mirror post-save
+   - Wiring uses pre-computed mirrored pin positions for correct geometry
+   - PNP arrow direction now visually correct in schematic
+
+2. **Pin offset fixes** — Replaced all hardcoded VDC/VSIN pin offsets with `get_pin_pos()`
+   - VDC pins at (-0.14, ±5.55/4.61), not (0, ±5.38/4.78) as previously hardcoded
+   - VSIN pins at (-0.61, ±5.55/4.61) — also had wrong hardcoded values
+   - GND symbols now correctly placed at actual pin X coordinates
+
+3. **Pin connectivity verification** — New `verify_pin_connections()` function
+   - Checks every component pin against wire endpoints AND wire segments
+   - Reports disconnected pins with component reference, pin name, and coordinates
+   - Also detects wire crossings without junctions (visual ambiguity)
+   - Audioamp: 58/58 pins verified connected, 4 wire crossings flagged
+
+4. **Test point markers** — Color-coded labels on schematic matching plot waveforms
+   - [1] V(IN) - cyan, [2] V(OUT) - red, [3] V(VAS) - yellow, [4] V(Q4E) - green
+   - Matches `plot_results()` color scheme: `#00d4ff, #ff6b6b, #ffd93d, #6bcb77`
+
+5. **Layout spacing improved** — Wider component gaps to avoid cramping
+   - C1 offset from R4: 5G → 8G, C2 from Q3: 5G → 8G, C3 from Q4: 6G → 8G
+   - R10 from Q4: 7G → 10G, Q7/Q8 from Q5/Q6: 110G → 115G
+   - R14 at 128G, V1/V2 at 140G — more breathing room in output stage
+
+### Code Changes (kicad_pipeline.py)
+- New function: `verify_pin_connections()` — pin-level connectivity verification
+- Modified: `build_audioamp()` — mirrored PNP, get_pin_pos for sources, test point labels
+- Modified: `verify_circuit()` — added `audioamp` required nets
+- Modified: audioamp CLI dispatch — added Step 7 pin connectivity check
+
+---
+
+## Session 21 — Zero Wire Crossings & Layout Quality Enforcement
+
+### Achievements
+1. **Zero wire crossings achieved** — Audioamp schematic now has 0 crossings (was 5-7)
+   - R7 feedback path: replaced long physical wires with KiCad net labels ("FB", "OUTPUT")
+   - Q6C→Q8B: chained through R13 (same N013 node) instead of direct wire
+   - R12→output: switched to VH routing to avoid crossing Q7E/Q8C verticals
+   - C3→VAS: connected to Q3C instead of Q4C (same net, avoids R9/Q4B vertical)
+   - C3→Q4E: VH routing keeps verticals at C3's x column, not Q4's
+   - Q4E→Q6B: routed from R11 pin1 (same net, below R10 blocking vertical)
+
+2. **Wire crossings now enforced as ERROR** — `verify_pin_connections()` reports
+   crossings as ERROR (was WARNING). Zero crossings is a hard requirement.
+
+3. **OUTPUT label overlap fixed** — Moved label 8G from R14 (was 4G), eliminating
+   the text/reference overlap warning.
+
+4. **Final verification: 42 passed, 0 warnings, 0 errors**
+   - All 58 pins connected, zero wire crossings
+   - Simulation: 10.3x gain (20.2 dB), clean amplification
+
+### Code Changes (kicad_pipeline.py)
+- Modified: `build_audioamp()` — 6 routing changes for zero crossings
+- Modified: `verify_pin_connections()` — crossings are now ERROR, not WARNING
+- Key principle: use net labels for feedback/long paths, chain through shared nodes,
+  choose VH vs HV routing based on blocking vertical/horizontal analysis
+
+### Next Session Plan
+1. **Individual circuit pages** — One-page-per-subcircuit PDFs for oscillator and TIA
+   - Separate clear schematics: diff pair, VAS, output stage, bias network, feedback
+   - Each on its own A4 page in a single multi-page PDF
+2. **Reverse-engineer layout algorithms** — Study LTspice and TINA-TI auto-placement
+   - Disassemble/analyze how LTspice lays out components automatically
+   - Study TINA-TI's circuit simulation and layout approach
+   - Extract principles for CircuitForge auto-routing
+3. **Interactive simulation viewer** — SimGUI feature for mouseover voltage/current
+   - Hover over any connection point → show V and I from simulation data
+   - Map schematic nodes to ngspice simulation results
+4. **Image-to-circuit conversion** — OCR/vision pipeline: photo → netlist → simulation
+
+*Last updated: 2026-03-06 (Session 21)*

@@ -2,7 +2,7 @@
 	(version 20250114)
 	(generator "eeschema")
 	(generator_version "9.0")
-	(uuid "c7b5231d-2a85-4a0c-966c-ef57e07754d4")
+	(uuid "38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7")
 	(paper "A3")
 	(title_block
 		(title "Audio Amplifier - LTspice Educational")
@@ -1439,16 +1439,16 @@
 	)
 	(symbol
 		(lib_id "VSIN:VSIN")
-		(at 30.48 160.02 0)
+		(at 30.48 152.4 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "8261dcc9-381e-4b29-aca4-0eef954d6b40")
+		(uuid "1c3c5d30-c7cf-4987-bad3-76982385d356")
 		(property "Reference" "V3"
-			(at 33.02 162.56 0.0000)
+			(at 33.02 154.94 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1457,7 +1457,7 @@
 			)
 		)
 		(property "Value" "0.7V 1kHz"
-			(at 33.02 160.02 0.0000)
+			(at 33.02 152.4 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1466,14 +1466,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "558679b6-a017-4f0f-b61a-866a420babde")
+			(uuid "5eaac231-22d5-4523-8817-b520323e53ef")
 		)
 		(pin "2"
-			(uuid "4186e5cc-031e-4661-8451-35424e2c4792")
+			(uuid "7a6f3471-afa6-4976-99aa-d41ac52a38ff")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "V3")
 					(unit 1)
 				)
@@ -1482,16 +1482,16 @@
 	)
 	(symbol
 		(lib_id "R:R")
-		(at 50.8 139.7 90)
+		(at 55.88 127 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "3aaa024a-2c5b-4ed6-bda9-37d2cb020b4f")
+		(uuid "f008e3e6-f9ae-48ec-bdc1-206c7f20183d")
 		(property "Reference" "R1"
-			(at 50.8 141.732 180)
+			(at 55.88 129.032 180)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1500,7 +1500,7 @@
 			)
 		)
 		(property "Value" "5k"
-			(at 50.8 139.7 180)
+			(at 55.88 127 180)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1509,14 +1509,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "2f3b2a32-ab9d-4e50-bebf-903a4856bf0c")
+			(uuid "032ee36f-e12a-40e8-905c-2e7595f5236e")
 		)
 		(pin "2"
-			(uuid "ee5ed259-ac80-4b57-ae69-3758e72b1dc1")
+			(uuid "1e74a995-9963-4314-9899-71bd56330f94")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "R1")
 					(unit 1)
 				)
@@ -1525,16 +1525,16 @@
 	)
 	(symbol
 		(lib_id "Q_NPN_BCE:Q_NPN_BCE")
-		(at 76.2 139.7 0)
+		(at 86.36 127 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "b4e90bb1-222c-4847-8bcf-4f4f52cacbf3")
+		(uuid "b529a1ab-afe1-4495-85be-5be17b2b4c7d")
 		(property "Reference" "Q1"
-			(at 81.28 140.97 0.0000)
+			(at 91.44 128.27 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1543,7 +1543,7 @@
 			)
 		)
 		(property "Value" "2N3904"
-			(at 81.28 138.43 0.0000)
+			(at 91.44 125.73 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1552,17 +1552,17 @@
 			)
 		)
 		(pin "1"
-			(uuid "81d4e484-97e2-4f7f-9f74-e4f4140807cc")
+			(uuid "9684837f-57d4-42ad-a521-74f75f5426b7")
 		)
 		(pin "2"
-			(uuid "9f51c08b-792e-4630-ac22-19fc9af28b60")
+			(uuid "3cf07ad0-776c-42f9-9e28-3125b2b6439d")
 		)
 		(pin "3"
-			(uuid "961cc757-b943-4443-8fa8-793307fe34e6")
+			(uuid "8e23e801-d572-4e5b-90ed-fcdd8ca2f1b3")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "Q1")
 					(unit 1)
 				)
@@ -1571,16 +1571,16 @@
 	)
 	(symbol
 		(lib_id "Q_NPN_BCE:Q_NPN_BCE")
-		(at 106.68 139.7 0)
+		(at 121.92 127 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "8cf69523-188e-43d4-82a6-a951e53f4d78")
+		(uuid "c8a002bb-9955-4de0-885a-2cb2ec026b58")
 		(property "Reference" "Q2"
-			(at 111.76 140.97 0.0000)
+			(at 127 128.27 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1589,7 +1589,7 @@
 			)
 		)
 		(property "Value" "2N3904"
-			(at 111.76 138.43 0.0000)
+			(at 127 125.73 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1598,17 +1598,17 @@
 			)
 		)
 		(pin "1"
-			(uuid "ad66eb93-d18d-4598-8e57-a0bca6732f8d")
+			(uuid "31e2df4c-0235-4838-9c1f-254577d6cfad")
 		)
 		(pin "2"
-			(uuid "aef0c424-e9bb-410c-a19c-35e804ddf351")
+			(uuid "271b091b-f802-4a87-9baf-640e6a65e874")
 		)
 		(pin "3"
-			(uuid "e34730d9-8bf4-4049-aec0-2f615a13b9b1")
+			(uuid "b7721e77-9023-4bb2-b1af-0a7175b2d2c9")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "Q2")
 					(unit 1)
 				)
@@ -1617,16 +1617,16 @@
 	)
 	(symbol
 		(lib_id "R:R")
-		(at 78.74 104.14 0)
+		(at 88.9 91.44 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "90c651bf-3e49-43e2-9bb9-8d6b8489b0f6")
+		(uuid "7ad52360-494d-4794-a0c9-25ce854ca9c0")
 		(property "Reference" "R2"
-			(at 80.772 104.14 90)
+			(at 90.932 91.44 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1635,7 +1635,7 @@
 			)
 		)
 		(property "Value" "200"
-			(at 78.74 104.14 90)
+			(at 88.9 91.44 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1644,14 +1644,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "ad224e5f-714a-4750-9c74-098251dcd12d")
+			(uuid "3ece42cf-2cc4-4f19-99ac-28efacdb1d1b")
 		)
 		(pin "2"
-			(uuid "ecea7f46-43d3-44e5-acb0-7bbdf08d2fc3")
+			(uuid "14d47c37-f7c4-47b0-881f-6da9c7f4bc1b")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "R2")
 					(unit 1)
 				)
@@ -1660,16 +1660,16 @@
 	)
 	(symbol
 		(lib_id "R:R")
-		(at 91.44 175.26 0)
+		(at 104.14 167.64 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "5b6c4020-8a87-4606-a346-dfad19e8546c")
+		(uuid "a18458b6-1d33-46c7-b85c-1141dfeb8880")
 		(property "Reference" "R3"
-			(at 93.472 175.26 90)
+			(at 106.172 167.64 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1678,7 +1678,7 @@
 			)
 		)
 		(property "Value" "1k"
-			(at 91.44 175.26 90)
+			(at 104.14 167.64 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1687,14 +1687,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "534687a7-d563-4977-914e-0ef9fd5f5319")
+			(uuid "833e62c6-98b4-4c9e-bb68-2a25ecff695c")
 		)
 		(pin "2"
-			(uuid "4e3a2a49-d305-4550-880d-ddf2ec8cbbf0")
+			(uuid "e83e4484-33ce-42b5-a2ff-9d96e623fae9")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "R3")
 					(unit 1)
 				)
@@ -1703,16 +1703,16 @@
 	)
 	(symbol
 		(lib_id "R:R")
-		(at 101.6 165.1 0)
+		(at 137.16 157.48 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "5c00702b-834f-41ac-8a4e-633115782c6e")
+		(uuid "548e143f-b2bc-474a-878b-d914ad52ff1b")
 		(property "Reference" "R6"
-			(at 103.632 165.1 90)
+			(at 139.192 157.48 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1721,7 +1721,7 @@
 			)
 		)
 		(property "Value" "5k"
-			(at 101.6 165.1 90)
+			(at 137.16 157.48 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1730,14 +1730,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "9ccbe583-98c7-4ca7-a3b3-e5b3b9157f9d")
+			(uuid "2d25afee-b858-4717-99e4-7ba9b9ab83a5")
 		)
 		(pin "2"
-			(uuid "35daf57b-86bb-4d7d-a121-a1580778e525")
+			(uuid "a24a9110-8d7b-487e-a1b0-610fa7798607")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "R6")
 					(unit 1)
 				)
@@ -1746,16 +1746,16 @@
 	)
 	(symbol
 		(lib_id "R:R")
-		(at 132.08 149.86 90)
+		(at 121.92 241.3 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "b9af5665-89a3-461b-a630-e81699cd316e")
+		(uuid "379e799a-6165-4bf2-89db-d28a4fc5eb9b")
 		(property "Reference" "R7"
-			(at 132.08 151.892 180)
+			(at 121.92 243.332 180)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1764,7 +1764,7 @@
 			)
 		)
 		(property "Value" "50k"
-			(at 132.08 149.86 180)
+			(at 121.92 241.3 180)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1773,14 +1773,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "c620923d-b734-4317-8e35-e789f8e69efb")
+			(uuid "a68c1a48-de5d-4413-ab56-d02f828c8690")
 		)
 		(pin "2"
-			(uuid "c45f39a6-990e-4d2f-859b-850346bed8a4")
+			(uuid "eeaadff3-e230-4eaf-b4e0-5a548df29169")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "R7")
 					(unit 1)
 				)
@@ -1789,16 +1789,16 @@
 	)
 	(symbol
 		(lib_id "R:R")
-		(at 132.08 114.3 90)
+		(at 142.24 96.52 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "6fbf24ed-3073-4ec7-bd88-2803adde2968")
+		(uuid "99a4a727-1eb2-46fa-9f9b-ba379fd3d619")
 		(property "Reference" "R4"
-			(at 132.08 116.332 180)
+			(at 142.24 98.552 180)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1807,7 +1807,7 @@
 			)
 		)
 		(property "Value" "9k"
-			(at 132.08 114.3 180)
+			(at 142.24 96.52 180)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1816,14 +1816,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "a6068497-4d0a-43a6-b10f-37a3fbd6cadb")
+			(uuid "acd6febb-c4c6-4b2c-9b41-5c3d4072d017")
 		)
 		(pin "2"
-			(uuid "9daa115f-eb11-4d14-a55b-d03bf100bdb4")
+			(uuid "a23cf9e1-17d5-46b3-a975-b4f3ecd2af6a")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "R4")
 					(unit 1)
 				)
@@ -1832,16 +1832,16 @@
 	)
 	(symbol
 		(lib_id "C:C")
-		(at 132.08 101.6 90)
+		(at 142.24 71.12 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "4deda766-7ab7-48ee-a82e-c260814c5fcd")
+		(uuid "99d72e44-91a4-47f7-adb5-e65fb7a55f09")
 		(property "Reference" "C1"
-			(at 129.54 102.235 90)
+			(at 139.7 71.755 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1850,7 +1850,7 @@
 			)
 		)
 		(property "Value" "10p"
-			(at 134.62 102.235 90)
+			(at 144.78 71.755 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1859,14 +1859,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "9f93f78b-cfd0-4182-9f50-7beac849feb0")
+			(uuid "43e49e00-0eeb-4d44-b25a-cf5cafbb13a7")
 		)
 		(pin "2"
-			(uuid "5af2b8bd-ab2a-4f82-b491-c0aa89457e23")
+			(uuid "888c0a21-61f4-4673-8c27-e3b9a059e41f")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "C1")
 					(unit 1)
 				)
@@ -1875,16 +1875,16 @@
 	)
 	(symbol
 		(lib_id "R:R")
-		(at 147.32 114.3 90)
+		(at 160.02 96.52 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "cee22675-f8e1-4d34-9066-1d52701ad648")
+		(uuid "589f4400-dbe7-4837-8752-804d2b7b0642")
 		(property "Reference" "R5"
-			(at 147.32 116.332 180)
+			(at 160.02 98.552 180)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1893,7 +1893,7 @@
 			)
 		)
 		(property "Value" "1k"
-			(at 147.32 114.3 180)
+			(at 160.02 96.52 180)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1902,14 +1902,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "a4ef001f-8a32-4b44-bf51-c7cb2130af56")
+			(uuid "9351ebd1-2604-4f2b-9d95-f1d73bb92598")
 		)
 		(pin "2"
-			(uuid "6c9c622f-1632-4295-84b5-68da33c8c786")
+			(uuid "c9231b53-db58-4ed9-a32b-0ce02ebd3183")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "R5")
 					(unit 1)
 				)
@@ -1918,16 +1918,17 @@
 	)
 	(symbol
 		(lib_id "Q_PNP_BCE:Q_PNP_BCE")
-		(at 165.1 99.06 0)
+		(at 177.8 81.28 0)
+		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "880f95d2-a9d1-4824-9c18-2da2cdd9204d")
+		(uuid "e9f0b1e9-b8b4-42e5-9b1b-3ed5be18ef62")
 		(property "Reference" "Q3"
-			(at 170.18 100.33 0.0000)
+			(at 182.88 82.55 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1936,7 +1937,7 @@
 			)
 		)
 		(property "Value" "2N3906"
-			(at 170.18 97.79 0.0000)
+			(at 182.88 80.01 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1945,17 +1946,17 @@
 			)
 		)
 		(pin "1"
-			(uuid "bda92edf-d679-458d-9223-4609ea1d7e08")
+			(uuid "faad2d2e-c056-422f-aa72-34b5247c441c")
 		)
 		(pin "2"
-			(uuid "311367d9-6db8-4eed-a488-7ee2f69ca0d5")
+			(uuid "536ed228-d250-4e8a-9025-27db19466d2a")
 		)
 		(pin "3"
-			(uuid "5b55c3a2-f552-4516-b05e-d686be343b93")
+			(uuid "0e57c3ab-32fa-4155-a931-822c42a0cfa8")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "Q3")
 					(unit 1)
 				)
@@ -1964,16 +1965,16 @@
 	)
 	(symbol
 		(lib_id "R:R")
-		(at 167.64 73.66 0)
+		(at 180.34 50.8 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "8db59aef-d4b0-49dc-8a15-ed4ce24b6ecc")
+		(uuid "11750a72-0bcd-4f59-93ea-da79ee72a776")
 		(property "Reference" "R8"
-			(at 169.672 73.66 90)
+			(at 182.372 50.8 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1982,7 +1983,7 @@
 			)
 		)
 		(property "Value" "100"
-			(at 167.64 73.66 90)
+			(at 180.34 50.8 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1991,14 +1992,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "d86f7256-fc79-4389-9687-f6df0dfb1ae9")
+			(uuid "4163c82b-c6b6-4ffc-80d2-c8c3a92b7981")
 		)
 		(pin "2"
-			(uuid "3131ac6a-a630-4dcc-9944-7f7ef0ff006c")
+			(uuid "02f4a539-4e69-49d9-aef5-e5486e12a461")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "R8")
 					(unit 1)
 				)
@@ -2007,24 +2008,15 @@
 	)
 	(symbol
 		(lib_id "C:C")
-		(at 152.4 111.76 0)
+		(at 152.4 106.68 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "7040d64d-5a56-4f45-b888-ba794979d52f")
+		(uuid "1e856916-483f-4992-95d5-e2ea60caf394")
 		(property "Reference" "C2"
-			(at 153.035 114.3 0.0000)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "100p"
 			(at 153.035 109.22 0.0000)
 			(effects
 				(font
@@ -2033,15 +2025,24 @@
 				(justify left)
 			)
 		)
+		(property "Value" "100p"
+			(at 153.035 104.14 0.0000)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
 		(pin "1"
-			(uuid "7af2be58-395a-43d8-b2eb-ddee8cd31f3d")
+			(uuid "7ee39138-c4c2-444e-8a03-253fb47d0fb8")
 		)
 		(pin "2"
-			(uuid "972bd73c-e1cb-4000-a160-0a88960f174a")
+			(uuid "70efcc03-c014-4cd3-b5d5-9f62c2d73d37")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "C2")
 					(unit 1)
 				)
@@ -2050,16 +2051,16 @@
 	)
 	(symbol
 		(lib_id "Q_NPN_BCE:Q_NPN_BCE")
-		(at 190.5 139.7 0)
+		(at 203.2 127 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "1edbc7c6-9e50-4595-805a-987de0ad7ca8")
+		(uuid "85cefb14-c819-4e60-82db-d53dd825c58f")
 		(property "Reference" "Q4"
-			(at 195.58 140.97 0.0000)
+			(at 208.28 128.27 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2068,7 +2069,7 @@
 			)
 		)
 		(property "Value" "2N3904"
-			(at 195.58 138.43 0.0000)
+			(at 208.28 125.73 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2077,17 +2078,17 @@
 			)
 		)
 		(pin "1"
-			(uuid "c9b74268-64ba-4001-a5f2-76eb93a90b09")
+			(uuid "89253f0c-a414-4b96-a162-494326bfca77")
 		)
 		(pin "2"
-			(uuid "62067b83-26bf-4b0c-8f4e-b1e16739261a")
+			(uuid "ee59bb7c-8544-4f55-bda4-775be626bac7")
 		)
 		(pin "3"
-			(uuid "ed89f61c-2181-4180-a1cd-931c02956e97")
+			(uuid "5be54759-632c-43b5-89c6-57805518f264")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "Q4")
 					(unit 1)
 				)
@@ -2096,16 +2097,16 @@
 	)
 	(symbol
 		(lib_id "R:R")
-		(at 193.04 114.3 0)
+		(at 205.74 96.52 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "be58746c-d12d-44c6-9f84-2ab7fa81d327")
+		(uuid "c5fb7c8c-4456-428e-8a9a-98f25f401ddf")
 		(property "Reference" "R9"
-			(at 195.072 114.3 90)
+			(at 207.772 96.52 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2114,7 +2115,7 @@
 			)
 		)
 		(property "Value" "2k"
-			(at 193.04 114.3 90)
+			(at 205.74 96.52 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2123,14 +2124,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "aff5ae2c-daba-4f27-a2ba-210e2df62c48")
+			(uuid "0a1b0f4f-3e6f-47cd-90c2-38d153f4fb52")
 		)
 		(pin "2"
-			(uuid "924159a1-fc87-4b32-b8dc-e96579955c5e")
+			(uuid "2f2bdcf7-cc2d-4559-894a-1b892bf6eeb2")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "R9")
 					(unit 1)
 				)
@@ -2139,16 +2140,16 @@
 	)
 	(symbol
 		(lib_id "R:R")
-		(at 208.28 139.7 0)
+		(at 223.52 137.16 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "8bd53c66-7863-4fc2-9932-e039cfe7c440")
+		(uuid "c53f2932-d8c1-4747-ac47-c360bb32634c")
 		(property "Reference" "R10"
-			(at 210.312 139.7 90)
+			(at 225.552 137.16 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2157,7 +2158,7 @@
 			)
 		)
 		(property "Value" "1k"
-			(at 208.28 139.7 90)
+			(at 223.52 137.16 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2166,14 +2167,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "e35c7ddb-37c2-4e31-9f2d-685e6fad85ef")
+			(uuid "eb3df7ef-0a08-414e-a337-6dbe8f60862a")
 		)
 		(pin "2"
-			(uuid "c461d54d-9e02-4cbf-a28e-3b55f5886978")
+			(uuid "26224d13-cde1-4ffc-8903-cc4e6efe6f98")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "R10")
 					(unit 1)
 				)
@@ -2182,16 +2183,16 @@
 	)
 	(symbol
 		(lib_id "R:R")
-		(at 193.04 170.18 0)
+		(at 205.74 167.64 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "9e382c17-661c-40c2-9c5d-15c37ebbf769")
+		(uuid "e398e0f8-3b2b-4d03-a88e-dd0dcee9d77a")
 		(property "Reference" "R11"
-			(at 195.072 170.18 90)
+			(at 207.772 167.64 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2200,7 +2201,7 @@
 			)
 		)
 		(property "Value" "5k"
-			(at 193.04 170.18 90)
+			(at 205.74 167.64 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2209,14 +2210,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "ddcc234c-1561-4ade-a1e6-f9fc56e3f2e3")
+			(uuid "b410ca3d-81ad-4a8d-af99-9f16f7d43bc1")
 		)
 		(pin "2"
-			(uuid "3afe1fd7-bce6-4b3c-b927-e0d87c7b20d6")
+			(uuid "5fb32773-f8b9-4a37-85b0-258f408249ae")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "R11")
 					(unit 1)
 				)
@@ -2225,16 +2226,16 @@
 	)
 	(symbol
 		(lib_id "C:C")
-		(at 175.26 154.94 0)
+		(at 182.88 152.4 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "852a7848-d0d0-4356-80db-0069928c6ed2")
+		(uuid "1233fce4-5ba2-486d-a722-2fb5d7df4e6e")
 		(property "Reference" "C3"
-			(at 175.895 157.48 0.0000)
+			(at 183.515 154.94 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2243,7 +2244,7 @@
 			)
 		)
 		(property "Value" "1m"
-			(at 175.895 152.4 0.0000)
+			(at 183.515 149.86 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2252,14 +2253,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "ec94b5b9-df89-4e87-ab77-174e96c16a31")
+			(uuid "9a396def-135c-49c9-9d0f-91138f172207")
 		)
 		(pin "2"
-			(uuid "b640cfee-ee62-4a23-8a8b-671b11c98b71")
+			(uuid "9a55acc1-08e6-4d1b-8df5-a808e1254610")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "C3")
 					(unit 1)
 				)
@@ -2268,16 +2269,16 @@
 	)
 	(symbol
 		(lib_id "Q_NPN_BCE:Q_NPN_BCE")
-		(at 248.92 93.98 0)
+		(at 254 76.2 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "6e911ea3-418f-40f2-a74d-029b9171d548")
+		(uuid "f3cec860-0392-4833-8e13-d8e53bb4c279")
 		(property "Reference" "Q5"
-			(at 254 95.25 0.0000)
+			(at 259.08 77.47 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2286,7 +2287,7 @@
 			)
 		)
 		(property "Value" "2N3904"
-			(at 254 92.71 0.0000)
+			(at 259.08 74.93 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2295,17 +2296,17 @@
 			)
 		)
 		(pin "1"
-			(uuid "1d1046a9-d652-4cf8-89ea-879b02fb20cf")
+			(uuid "8efb66ab-f328-406d-bd39-72b9db88c07b")
 		)
 		(pin "2"
-			(uuid "27ae02d9-6afd-459e-9ec5-94d71adbea1d")
+			(uuid "cdd75af6-1289-4c57-8323-436ef7ca1aba")
 		)
 		(pin "3"
-			(uuid "1fee3c79-08f3-4c1b-b14c-b733072252c3")
+			(uuid "d7013d8b-539c-4a1e-b0ae-30dee8aae15d")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "Q5")
 					(unit 1)
 				)
@@ -2313,17 +2314,107 @@
 		)
 	)
 	(symbol
-		(lib_id "Q_PNP_BCE:Q_PNP_BCE")
-		(at 248.92 190.5 0)
+		(lib_id "R:R")
+		(at 279.4 96.52 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "0b978598-c04e-484d-b2a9-a6e6c4d6e271")
+		(uuid "55b13598-2687-47dd-aa19-f1f7c85dfcdc")
+		(property "Reference" "R12"
+			(at 281.432 96.52 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "1k"
+			(at 279.4 96.52 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "1"
+			(uuid "1436349c-488f-4a2e-ac90-d6f012788ef5")
+		)
+		(pin "2"
+			(uuid "46a48820-8dc2-4662-a633-dfb89d3b865e")
+		)
+		(instances
+			(project "Audio Amplifier"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
+					(reference "R12")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Q_NPN_BCE:Q_NPN_BCE")
+		(at 304.8 66.04 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced no)
+		(uuid "0321e46d-17f4-4559-856b-18ce166aac63")
+		(property "Reference" "Q7"
+			(at 309.88 67.31 0.0000)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "2N2219A"
+			(at 309.88 64.77 0.0000)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "1"
+			(uuid "000cd2ce-26d5-43f2-942d-2cde4c5ea062")
+		)
+		(pin "2"
+			(uuid "3e73b2b9-c0c4-4f04-8777-b303849865b2")
+		)
+		(pin "3"
+			(uuid "7026aa6c-78c6-4e20-ab7d-bcc34b9ddccf")
+		)
+		(instances
+			(project "Audio Amplifier"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
+					(reference "Q7")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Q_PNP_BCE:Q_PNP_BCE")
+		(at 254 177.8 0)
+		(mirror x)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced no)
+		(uuid "9187465c-29bc-4642-8a0f-fced82713943")
 		(property "Reference" "Q6"
-			(at 254 191.77 0.0000)
+			(at 259.08 179.07 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2332,7 +2423,7 @@
 			)
 		)
 		(property "Value" "2N3906"
-			(at 254 189.23 0.0000)
+			(at 259.08 176.53 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2341,17 +2432,17 @@
 			)
 		)
 		(pin "1"
-			(uuid "296888af-8142-4c23-9d2f-57a6ccb662a8")
+			(uuid "423aaa5b-c674-421f-a451-9caca6d7f74a")
 		)
 		(pin "2"
-			(uuid "ce631ffe-f4b1-4308-836a-794ce7046e5c")
+			(uuid "91da07a2-045e-4530-b53c-191de249d6d8")
 		)
 		(pin "3"
-			(uuid "15798ffd-c134-43b5-9113-1941fcd1ac55")
+			(uuid "067c3a44-9b1d-4bd6-9a62-e212d9ee431e")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "Q6")
 					(unit 1)
 				)
@@ -2359,17 +2450,17 @@
 		)
 	)
 	(symbol
-		(lib_id "Q_NPN_BCE:Q_NPN_BCE")
-		(at 279.4 83.82 0)
+		(lib_id "R:R")
+		(at 279.4 167.64 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "2c6b6c24-ba95-4d55-bc06-d4bada868226")
-		(property "Reference" "Q7"
-			(at 284.48 85.09 0.0000)
+		(uuid "02a30857-bef3-49c5-a984-c945c8dfe2fc")
+		(property "Reference" "R13"
+			(at 281.432 167.64 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2377,8 +2468,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "2N2219A"
-			(at 284.48 82.55 0.0000)
+		(property "Value" "1k"
+			(at 279.4 167.64 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2387,18 +2478,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "7ffad757-cf32-4f5c-a74a-f107e816e886")
+			(uuid "06553c15-fea6-4625-93f1-63d3b5e4c793")
 		)
 		(pin "2"
-			(uuid "0ec30621-266d-4962-b0a8-8b73c37eb18e")
-		)
-		(pin "3"
-			(uuid "5668f948-deaa-4937-a258-4d88e5186ccf")
+			(uuid "c2bfd9a7-f571-434d-9a3e-1d77bc78fbee")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
-					(reference "Q7")
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
+					(reference "R13")
 					(unit 1)
 				)
 			)
@@ -2406,16 +2494,16 @@
 	)
 	(symbol
 		(lib_id "Q_NPN_BCE:Q_NPN_BCE")
-		(at 279.4 200.66 0)
+		(at 304.8 198.12 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "08b188ac-556a-45b2-ab26-47b2cf447a13")
+		(uuid "0b4ce280-a3f8-4d71-8693-bec426cbd511")
 		(property "Reference" "Q8"
-			(at 284.48 201.93 0.0000)
+			(at 309.88 199.39 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2424,7 +2512,7 @@
 			)
 		)
 		(property "Value" "2N2219A"
-			(at 284.48 199.39 0.0000)
+			(at 309.88 196.85 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2433,17 +2521,17 @@
 			)
 		)
 		(pin "1"
-			(uuid "f6d5cb9b-1b6e-49c7-a969-ff851e36f02b")
+			(uuid "bd5c2072-e8a5-409e-860e-6103c93a091b")
 		)
 		(pin "2"
-			(uuid "6474b310-7012-4a79-bac3-1b962436b4c9")
+			(uuid "7cca47da-217c-433d-a231-2d1f58893258")
 		)
 		(pin "3"
-			(uuid "7ef658b7-2ab8-4a65-98df-c770a33d6248")
+			(uuid "785c9b2b-3b68-4181-95fb-38cd03103391")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "Q8")
 					(unit 1)
 				)
@@ -2452,102 +2540,16 @@
 	)
 	(symbol
 		(lib_id "R:R")
-		(at 264.16 104.14 0)
+		(at 342.9 127 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "14c455d7-4b14-4595-a209-3616a0ebd076")
-		(property "Reference" "R12"
-			(at 266.192 104.14 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "1k"
-			(at 264.16 104.14 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "1"
-			(uuid "d256aa58-53ec-467e-ac65-248cd9848c20")
-		)
-		(pin "2"
-			(uuid "33667b84-9f44-407e-b85e-413b0a9e7690")
-		)
-		(instances
-			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
-					(reference "R12")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "R:R")
-		(at 264.16 185.42 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced no)
-		(uuid "8151a2cd-bd5f-4fde-ab9b-4efdbfe9c2bc")
-		(property "Reference" "R13"
-			(at 266.192 185.42 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "1k"
-			(at 264.16 185.42 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "1"
-			(uuid "a650c2b2-40a7-4b76-9079-d0312ecca6de")
-		)
-		(pin "2"
-			(uuid "b94c9dc1-3589-41ca-b045-efe28ef76cc9")
-		)
-		(instances
-			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
-					(reference "R13")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "R:R")
-		(at 304.8 139.7 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced no)
-		(uuid "768b0c6b-c54b-48ea-82e0-dd0bf2628bfe")
+		(uuid "2bad3dea-0827-4a0a-be6d-1f31291ef716")
 		(property "Reference" "R14"
-			(at 306.832 139.7 90)
+			(at 344.932 127 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2556,7 +2558,7 @@
 			)
 		)
 		(property "Value" "8"
-			(at 304.8 139.7 90)
+			(at 342.9 127 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2565,14 +2567,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "e6682f7b-71a3-47db-9841-14815f8fdb63")
+			(uuid "da85a610-4f95-4acb-a0a4-78fd71937e58")
 		)
 		(pin "2"
-			(uuid "0b6274fd-7ac6-46e0-a78e-5aed47984ba7")
+			(uuid "5d5aaace-7c39-4e76-98c1-78f97dbb3ff7")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "R14")
 					(unit 1)
 				)
@@ -2581,16 +2583,16 @@
 	)
 	(symbol
 		(lib_id "VDC:VDC")
-		(at 330.2 88.9 0)
+		(at 381 66.04 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "064c522d-f7d9-4fd7-a121-57db061eeed3")
+		(uuid "212c7403-98fa-4813-a811-c5803f714549")
 		(property "Reference" "V1"
-			(at 332.74 91.44 0.0000)
+			(at 383.54 68.58 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2599,7 +2601,7 @@
 			)
 		)
 		(property "Value" "10V"
-			(at 332.74 88.9 0.0000)
+			(at 383.54 66.04 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2608,14 +2610,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "cfa4e0ab-4141-4eb2-95f5-e9f0de85cb0f")
+			(uuid "33dcc36d-ab21-4d82-a474-7ba2e3ada3a6")
 		)
 		(pin "2"
-			(uuid "8037c544-c2fe-4b65-a5ec-addf7d50212b")
+			(uuid "6d2d417a-16d5-44bc-8eaf-92cc32c92e29")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "V1")
 					(unit 1)
 				)
@@ -2624,16 +2626,16 @@
 	)
 	(symbol
 		(lib_id "VDC:VDC")
-		(at 330.2 195.58 0)
+		(at 381 193.04 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "49dad85c-26c7-4e1c-b1ee-adce855dc5fb")
+		(uuid "c66eea41-6ee2-44e1-89ec-b0a60db674f7")
 		(property "Reference" "V2"
-			(at 332.74 198.12 0.0000)
+			(at 383.54 195.58 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2642,7 +2644,7 @@
 			)
 		)
 		(property "Value" "-10V"
-			(at 332.74 195.58 0.0000)
+			(at 383.54 193.04 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2651,14 +2653,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "36844a86-0cf9-44e8-9b3f-82acb0c5861b")
+			(uuid "e7478d2e-4c1f-4ffe-b9a3-0d97555865a3")
 		)
 		(pin "2"
-			(uuid "4266838f-cbce-4ee9-94f6-eca1df96145d")
+			(uuid "9e2e2f80-6a87-4816-9635-5f2511c3b92a")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "V2")
 					(unit 1)
 				)
@@ -2667,16 +2669,16 @@
 	)
 	(symbol
 		(lib_id "GND:GND")
-		(at 30.48 172.72 0)
+		(at 30.48 165.1 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "af9c7938-a258-4f47-bd91-c2086c0cadc4")
+		(uuid "1f161947-f6df-4784-86ea-5fcfc5bc6e00")
 		(property "Reference" "#PWR01"
-			(at 30.48 166.37 0.0000)
+			(at 30.48 158.75 0.0000)
 			(hide yes)
 			(effects
 				(font
@@ -2686,7 +2688,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 30.48 168.91 0.0000)
+			(at 30.48 161.29 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2695,11 +2697,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "586875d5-fd17-4f22-ac06-993aa8a7e6cb")
+			(uuid "78b6ba92-0b3c-4559-8c08-4a1b1787cd5c")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "#PWR01")
 					(unit 1)
 				)
@@ -2708,16 +2710,16 @@
 	)
 	(symbol
 		(lib_id "GND:GND")
-		(at 101.6 176.53 0)
+		(at 137.16 168.91 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "a01fe790-3558-43b4-b41b-8d31712a2ee8")
+		(uuid "2ca4bb29-bd66-4288-bab4-dae569f84336")
 		(property "Reference" "#PWR02"
-			(at 101.6 170.18 0.0000)
+			(at 137.16 162.56 0.0000)
 			(hide yes)
 			(effects
 				(font
@@ -2727,7 +2729,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 101.6 172.72 0.0000)
+			(at 137.16 165.1 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2736,11 +2738,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "bf7a73b7-f860-45bd-908e-3cfd022268b5")
+			(uuid "68406527-ad18-4fa7-b10e-587d6fa6f828")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "#PWR02")
 					(unit 1)
 				)
@@ -2749,16 +2751,16 @@
 	)
 	(symbol
 		(lib_id "GND:GND")
-		(at 304.8 151.13 0)
+		(at 342.9 138.43 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "078184c6-7580-43d5-b959-a5df912ebd07")
+		(uuid "c26df75a-74d6-4b00-8e99-7ea9517b2220")
 		(property "Reference" "#PWR03"
-			(at 304.8 144.78 0.0000)
+			(at 342.9 132.08 0.0000)
 			(hide yes)
 			(effects
 				(font
@@ -2768,7 +2770,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 304.8 147.32 0.0000)
+			(at 342.9 134.62 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2777,11 +2779,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "3257d747-be7d-4844-bc3f-2f3b8265790d")
+			(uuid "08959d6a-3117-4fb1-8c7c-b1769f9ddb0c")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "#PWR03")
 					(unit 1)
 				)
@@ -2790,16 +2792,16 @@
 	)
 	(symbol
 		(lib_id "GND:GND")
-		(at 330.2 101.6 0)
+		(at 381 78.74 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "8d9620e3-5cf5-41d5-b9b1-142a5a630bc9")
+		(uuid "3f7be4b3-39ca-4369-af37-c8b387e2988a")
 		(property "Reference" "#PWR04"
-			(at 330.2 95.25 0.0000)
+			(at 381 72.39 0.0000)
 			(hide yes)
 			(effects
 				(font
@@ -2809,7 +2811,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 330.2 97.79 0.0000)
+			(at 381 74.93 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2818,11 +2820,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "fd02728e-1007-4b14-8475-7a28814e577e")
+			(uuid "ef55ae7d-e403-446b-b191-dd5cf1c2c16c")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "#PWR04")
 					(unit 1)
 				)
@@ -2831,16 +2833,16 @@
 	)
 	(symbol
 		(lib_id "GND:GND")
-		(at 330.2 182.88 0)
+		(at 381 180.34 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "761375fc-1aa4-42b8-9bec-0a37a85e92a6")
+		(uuid "6fac04ca-1d06-4b41-bcb3-55de25ea8552")
 		(property "Reference" "#PWR05"
-			(at 330.2 176.53 0.0000)
+			(at 381 173.99 0.0000)
 			(hide yes)
 			(effects
 				(font
@@ -2850,7 +2852,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 330.2 179.07 0.0000)
+			(at 381 176.53 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2859,11 +2861,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "78d6a652-68e3-4ef9-88b7-c1f3c0f9d9a8")
+			(uuid "77e27794-68be-405a-b1e5-4896ec042b45")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "#PWR05")
 					(unit 1)
 				)
@@ -2872,16 +2874,16 @@
 	)
 	(symbol
 		(lib_id "VCC:VCC")
-		(at 330.2 55.88 0)
+		(at 381 38.1 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "59029fd9-2925-4ddd-b9be-f256f449b59f")
+		(uuid "657c9c26-caad-4c6d-8f29-16855220f23f")
 		(property "Reference" "#PWR06"
-			(at 330.2 52.07 0.0000)
+			(at 381 34.29 0.0000)
 			(hide yes)
 			(effects
 				(font
@@ -2891,7 +2893,7 @@
 			)
 		)
 		(property "Value" "+10V"
-			(at 330.2 59.436 0.0000)
+			(at 381 41.656 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2900,11 +2902,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "6b9c3474-beeb-4fbf-a372-8481e83a4972")
+			(uuid "2c6c31cd-7cc0-47e0-8221-fde0f4672437")
 		)
 		(instances
 			(project "Audio Amplifier"
-				(path "/c7b5231d-2a85-4a0c-966c-ef57e07754d4"
+				(path "/38d8af4c-6dce-4d33-aa77-3aaf0d3e3fe7"
 					(reference "#PWR06")
 					(unit 1)
 				)
@@ -2913,746 +2915,854 @@
 	)
 	(wire
 		(pts
-			(xy 30.48 154.64) (xy 46.99 154.64)
+			(xy 30.48 147.32) (xy 52.07 147.32)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "21b7e22e-782b-44b0-b286-385faea9b621")
+		(uuid "09ca33af-04bd-4e66-837b-911cdbf6ba2f")
 	)
 	(wire
 		(pts
-			(xy 46.99 154.64) (xy 46.99 139.7)
+			(xy 52.07 147.32) (xy 52.07 127)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "498de512-5790-474d-855c-2850d4533ee5")
+		(uuid "68f4cc92-0314-42d0-aee4-357d20a18aa1")
 	)
 	(wire
 		(pts
-			(xy 54.61 139.7) (xy 71.12 139.7)
+			(xy 59.69 127.0) (xy 81.28 127.0)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "ab13dfd1-b55f-4dd3-ba58-6ac6f43a2997")
+		(uuid "788b32d1-7850-4676-939f-57f98a8eccd5")
 	)
 	(wire
 		(pts
-			(xy 30.48 164.8) (xy 30.48 172.42)
+			(xy 30.48 157.48) (xy 30.48 165.1)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "43ef9c62-b75f-4876-bd52-3dadc92cbf39")
+		(uuid "b07f474c-acfe-495f-8345-ac8a41c19e31")
 	)
 	(wire
 		(pts
-			(xy 78.74 107.95) (xy 78.74 134.62)
+			(xy 88.9 95.25) (xy 88.9 121.92)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "e96b67af-2da7-4ec6-bc87-4aa1891b7fb7")
+		(uuid "105657d3-b339-4b4e-be39-2d3459c859f6")
 	)
 	(wire
 		(pts
-			(xy 78.74 55.88) (xy 78.74 100.33)
+			(xy 88.9 38.1) (xy 88.9 87.63)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "b33dc3cb-acb1-444c-b20d-4fa4eb59c0ac")
+		(uuid "15c3b8ed-98ac-443d-9d4e-4c34bcac02df")
 	)
 	(wire
 		(pts
-			(xy 109.22 134.62) (xy 109.22 55.88)
+			(xy 124.46 121.92) (xy 124.46 38.1)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "f975e323-c4d4-47ae-97b3-367b04623e67")
+		(uuid "9b4426e2-9c3d-4467-b59e-098b5086b371")
 	)
 	(wire
 		(pts
-			(xy 78.74 55.88) (xy 109.22 55.88)
+			(xy 88.9 38.1) (xy 124.46 38.1)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "afaf97ab-2b70-4e47-b5b0-470666c40f43")
+		(uuid "ee47bc68-0c6b-433a-a6f2-5008ce1b70a1")
 	)
 	(wire
 		(pts
-			(xy 78.74 144.78) (xy 91.44 144.78)
+			(xy 88.9 132.08) (xy 104.14 132.08)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "dcbd83e1-bf92-46f9-9697-456270b54890")
+		(uuid "c9b3dd36-41db-43f7-bd4a-7ab5fca08724")
 	)
 	(wire
 		(pts
-			(xy 91.44 144.78) (xy 91.44 149.86)
+			(xy 104.14 132.08) (xy 104.14 137.16)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "c3b83dcf-b372-4018-8e43-d6dc81202854")
+		(uuid "9a76fef0-9073-4079-8ae8-9f1c1e83d85b")
 	)
 	(wire
 		(pts
-			(xy 91.44 144.78) (xy 109.22 144.78)
+			(xy 104.14 132.08) (xy 124.46 132.08)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "f50280fb-7b47-42b6-8116-01210aa0c771")
-	)
-	
-	(wire
-		(pts
-			(xy 91.44 149.86) (xy 91.44 171.45)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b9f6b937-08ce-4ce5-a0d9-d1098b7230d4")
-	)
-	(wire
-		(pts
-			(xy 91.44 179.07) (xy 91.44 228.6)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3513f0b7-2510-4603-810b-518df4b09b46")
+		(uuid "da88d165-d6fc-44d8-b63f-07a0abfca003")
 	)
 	
 	(wire
 		(pts
-			(xy 101.6 168.91) (xy 101.6 176.53)
+			(xy 104.14 137.16) (xy 104.14 163.83)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "8c7d4a38-84e7-4580-a8a2-336310372338")
+		(uuid "2ef6255a-4a16-46e7-9a40-776ec4e0fdf7")
 	)
 	(wire
 		(pts
-			(xy 128.27 149.86) (xy 101.6 149.86)
+			(xy 104.14 171.45) (xy 104.14 254.0)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "9779fcc9-e032-4b82-b217-6ee42e765594")
+		(uuid "cdd72ff0-d368-4861-8abc-c177801d62da")
 	)
 	(wire
 		(pts
-			(xy 101.6 139.7) (xy 101.6 161.29)
+			(xy 116.84 127.0) (xy 137.16 127.0)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "4e3eacc4-410c-44ae-b307-a8d3414ba39e")
+		(uuid "5f01919e-971e-4193-bc58-097086a1c4e5")
 	)
 	(wire
 		(pts
-			(xy 78.74 134.62) (xy 128.27 134.62)
+			(xy 137.16 127.0) (xy 137.16 153.67)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "2d9b3e1e-42aa-431e-97e7-768ddffbfb39")
+		(uuid "16350c7d-3b10-4aec-8d8a-37e6d92bceab")
 	)
 	(wire
 		(pts
-			(xy 128.27 114.3) (xy 128.27 134.62)
+			(xy 137.16 161.29) (xy 137.16 168.91)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "56740f4d-b286-46e3-85ba-fe05484e957a")
+		(uuid "ddcfe231-70e5-4d5b-8c95-37b54139396c")
 	)
 	(wire
 		(pts
-			(xy 128.27 101.6) (xy 128.27 114.3)
+			(xy 109.22 127.0) (xy 116.84 127.0)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "cd4db6bd-2119-407f-a204-13c4da1989f2")
+		(uuid "3885de5e-0e3d-4cbb-bd9d-c44c69ef303f")
 	)
 	(wire
 		(pts
-			(xy 135.89 101.6) (xy 135.89 114.3)
+			(xy 110.49 241.3) (xy 118.11 241.3)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "353870f8-b456-460f-8d38-249c74627c8d")
+		(uuid "e9ab9a7b-adfa-4c80-b39a-304305b1fb95")
 	)
 	(wire
 		(pts
-			(xy 135.89 114.3) (xy 143.51 114.3)
+			(xy 88.9 121.92) (xy 138.43 121.92)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "1b4a6894-b3ad-4453-ac64-d5a064407938")
+		(uuid "1ff928ce-7a92-47c2-85ba-929c9eaad43b")
 	)
 	(wire
 		(pts
-			(xy 151.13 114.3) (xy 160.02 114.3)
+			(xy 138.43 96.52) (xy 138.43 121.92)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "8437bdfa-2911-422d-b60f-9836804b11d6")
+		(uuid "eac2e962-7586-461f-b249-05b666b9910b")
+	)
+	(wire
+		(pts
+			(xy 138.43 71.12) (xy 138.43 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "01fcb0d9-d39c-4d8a-8c8d-d1576698fe48")
+	)
+	(wire
+		(pts
+			(xy 146.05 71.12) (xy 146.05 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "52e07890-001c-47c1-a3d7-c3870b62d23f")
+	)
+	(wire
+		(pts
+			(xy 146.05 96.52) (xy 156.21 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ef6310f8-affb-4cc4-9b27-0b15dae2008c")
+	)
+	(wire
+		(pts
+			(xy 163.83 96.52) (xy 172.72 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "dd791ccd-1cca-42f5-82a6-251d9e4f0cbc")
+	)
+	(wire
+		(pts
+			(xy 172.72 81.28) (xy 172.72 102.87)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "5cb2b389-0692-457c-b3d6-4b7a7b427959")
+	)
+	(wire
+		(pts
+			(xy 152.4 102.87) (xy 172.72 102.87)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "806ec334-dcb9-431c-b8ba-be23454b9057")
 	)
 	
 	(wire
 		(pts
-			(xy 152.4 107.95) (xy 160.02 107.95)
+			(xy 180.34 54.61) (xy 180.34 76.2)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "3cd9c69c-4e07-484e-9250-7cea75713a67")
+		(uuid "c79b07e3-8cdb-4f15-a678-9ff90bcaa9b9")
 	)
 	(wire
 		(pts
-			(xy 160.02 99.06) (xy 160.02 114.3)
+			(xy 180.34 38.1) (xy 180.34 46.99)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "4b3de69d-caff-4f7a-92b3-5a981da3b477")
+		(uuid "3d498a08-cbe7-4e16-b221-53aba35315a5")
 	)
 	(wire
 		(pts
-			(xy 167.64 77.47) (xy 167.64 115.57)
+			(xy 124.46 38.1) (xy 180.34 38.1)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "28317929-fac4-4087-b79f-84c1042db929")
-	)
-	(wire
-		(pts
-			(xy 167.64 55.88) (xy 167.64 69.85)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d76bec8b-fcb2-4944-bbc1-cdad11830df0")
-	)
-	(wire
-		(pts
-			(xy 109.22 55.88) (xy 167.64 55.88)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a6680929-c005-4d20-afc9-9f13ec0a80ce")
-	)
-	(wire
-		(pts
-			(xy 167.64 93.98) (xy 193.04 93.98)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "327eef79-d80b-44cf-84fc-ea7301c63790")
-	)
-	(wire
-		(pts
-			(xy 193.04 93.98) (xy 193.04 134.62)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "a2add78e-fd24-43c4-859f-8287e302bf43")
+		(uuid "965b9dc8-85b2-4f8b-ab09-8904fb914f9b")
 	)
 	
 	(wire
 		(pts
-			(xy 193.04 118.11) (xy 185.42 118.11)
+			(xy 205.74 86.36) (xy 205.74 121.92)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "5ca3589f-fddc-480b-995f-c5b89322bea6")
-	)
-	(wire
-		(pts
-			(xy 185.42 118.11) (xy 185.42 139.7)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "da5dbdb2-d74f-4518-9ad9-2a87ca030377")
+		(uuid "69a44f9e-bea1-4bc2-b49e-499f3845f79b")
 	)
 	
 	(wire
 		(pts
-			(xy 208.28 139.7) (xy 208.28 135.89)
+			(xy 205.74 100.33) (xy 198.12 100.33)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "bacab9cf-c010-4ecb-88d9-7fa93ba5972d")
+		(uuid "e5cf11a6-f1ed-4a30-ae52-9265d7f85555")
 	)
 	(wire
 		(pts
-			(xy 208.28 143.51) (xy 193.04 143.51)
+			(xy 198.12 100.33) (xy 198.12 127)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "500dea90-2708-46bd-a26e-6dee89295702")
-	)
-
-	(wire
-		(pts
-			(xy 193.04 173.99) (xy 193.04 228.6)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "90349428-627c-49a8-b81c-c6440f3b6412")
+		(uuid "6fcc8964-8e3a-4659-9a88-c57d16ae4630")
 	)
 	(wire
 		(pts
-			(xy 175.26 151.13) (xy 193.04 151.13)
+			(xy 198.12 127.0) (xy 223.52 127.0)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "ea99646f-34af-4c01-ae67-f7f89ca92a5a")
+		(uuid "f8bf5673-20a3-44d6-87c7-81e0d2d5b993")
 	)
 	(wire
 		(pts
-			(xy 193.04 134.62) (xy 193.04 166.37)
+			(xy 223.52 127) (xy 223.52 133.35)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "a09388d3-7fc9-44ac-840e-c966de379a58")
+		(uuid "5916c198-7809-4fd0-a961-219ab3dfd8a5")
 	)
 	(wire
 		(pts
-			(xy 175.26 158.75) (xy 193.04 158.75)
+			(xy 223.52 140.97) (xy 205.74 140.97)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "beea0987-785a-45e0-8a38-9195d6be00c7")
+		(uuid "e21e9f49-8f77-494e-a0a6-d050adff96b3")
+	)
+	(wire
+		(pts
+			(xy 205.74 132.08) (xy 205.74 163.83)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "27c1f2f4-9d11-41c6-bb5a-e7617971061d")
 	)
 	
 	(wire
 		(pts
-			(xy 152.4 115.57) (xy 167.64 115.57)
+			(xy 205.74 171.45) (xy 205.74 254.0)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "dd1328f0-54bd-449a-a574-384b28d0896f")
+		(uuid "4e6fb936-da2c-4e5a-82a3-e16bfa8b3f8d")
+	)
+	(wire
+		(pts
+			(xy 182.88 86.36) (xy 182.88 156.21)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8c2c57eb-28b0-4cc6-a500-69da4bd35b97")
+	)
+	(wire
+		(pts
+			(xy 180.34 86.36) (xy 205.74 86.36)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "37313b5d-42ea-40d6-bd99-5191e05e8d77")
 	)
 	
 	(wire
 		(pts
-			(xy 193.04 134.62) (xy 243.84 134.62)
+			(xy 182.88 132.08) (xy 205.74 132.08)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "2e45f311-6654-46e8-aa98-b91dcf02f313")
+		(uuid "842b972f-2e66-43cf-9b22-3f2d9416157d")
 	)
 	(wire
 		(pts
-			(xy 243.84 93.98) (xy 243.84 134.62)
+			(xy 152.4 110.49) (xy 180.34 110.49)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "5b8ffaef-3393-4cf3-86c9-8be065ab6242")
+		(uuid "5d48fa14-8343-4c55-a7db-d8ed663d560c")
 	)
 	(wire
 		(pts
-			(xy 251.46 88.9) (xy 251.46 55.88)
+			(xy 180.34 86.36) (xy 180.34 110.49)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "64102a8f-c2a7-4a36-a8de-958313540681")
+		(uuid "b3065a35-c15c-467d-a037-8d9a39de3962")
 	)
 	(wire
 		(pts
-			(xy 167.64 55.88) (xy 251.46 55.88)
+			(xy 205.74 121.92) (xy 248.92 121.92)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "d3ab1012-161f-4121-8b66-79b87d6b74b4")
+		(uuid "f93fb84e-bf04-4a22-9989-9cdaff39b830")
 	)
 	(wire
 		(pts
-			(xy 251.46 99.06) (xy 274.32 99.06)
+			(xy 248.92 76.2) (xy 248.92 121.92)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "1aff3f6f-f59a-43cf-b23f-42403309c2fe")
+		(uuid "1ecc7ee8-3d34-4f62-a181-b37129e5d102")
 	)
 	(wire
 		(pts
-			(xy 264.16 99.06) (xy 264.16 100.33)
+			(xy 256.54 38.1) (xy 256.54 71.12)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "c6aaf413-e030-4096-945e-27f1cd28dcee")
+		(uuid "b9c0f02e-f3ac-4e6a-9811-8582a5ce5aa4")
+	)
+	(wire
+		(pts
+			(xy 180.34 38.1) (xy 256.54 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d4db0a29-3ee6-4d15-a55a-f1d6d1b9cf79")
+	)
+	(wire
+		(pts
+			(xy 256.54 81.28) (xy 299.72 81.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "837365d8-fd7e-49b1-b43d-03e99ff469b1")
+	)
+	(wire
+		(pts
+			(xy 279.4 81.28) (xy 279.4 92.71)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "adcaa8f1-2d41-47c3-bfc5-03923be86cbf")
 	)
 	
 	(wire
 		(pts
-			(xy 274.32 83.82) (xy 274.32 99.06)
+			(xy 299.72 66.04) (xy 299.72 81.28)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "8af32004-37a8-4140-bc6d-076da4d43193")
+		(uuid "31c2803a-0e09-4fc5-882e-fe0d38bcb50d")
 	)
 	(wire
 		(pts
-			(xy 281.94 55.88) (xy 281.94 78.74)
+			(xy 307.34 38.1) (xy 307.34 60.96)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "c02bde46-9eaa-49f8-9763-50baf2ae332c")
+		(uuid "703c3ae3-4b85-4f09-930a-1f9ce47af25f")
 	)
 	(wire
 		(pts
-			(xy 251.46 55.88) (xy 281.94 55.88)
+			(xy 256.54 38.1) (xy 307.34 38.1)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "cb49847b-ce31-4dfe-a64d-b3ac9c058e7b")
+		(uuid "541cd5b6-c9f6-4f41-939b-dd5701eebc97")
 	)
 	(wire
 		(pts
-			(xy 281.94 88.9) (xy 304.8 88.9)
+			(xy 307.34 71.12) (xy 307.34 123.19)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "f9b87626-77b7-46ff-9145-32bac9c47806")
-	)
-	(wire
-		(pts
-			(xy 304.8 88.9) (xy 304.8 139.7)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "be601067-0761-4f7c-8a2e-b2830e9c0db9")
-	)
-	(wire
-		(pts
-			(xy 264.16 107.95) (xy 304.8 107.95)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d453d061-efd5-4791-aa99-0d10754d86ef")
+		(uuid "79cdffcd-977b-4766-a02d-a36cdb2a30ed")
 	)
 	
 	(wire
 		(pts
-			(xy 193.04 144.78) (xy 243.84 144.78)
+			(xy 279.4 100.33) (xy 279.4 123.19)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "a8214b38-1805-49ee-a4ed-bf4f44fd17c4")
-	)
-	(wire
-		(pts
-			(xy 243.84 144.78) (xy 243.84 190.5)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "237c0e8d-087a-469e-b922-6926dd981515")
-	)
-	(wire
-		(pts
-			(xy 251.46 195.58) (xy 304.8 195.58)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7acdca6b-d21f-433e-b73a-7ccc09034fb0")
-	)
-	(wire
-		(pts
-			(xy 304.8 139.7) (xy 304.8 195.58)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "fe2ef578-19f3-4c90-a393-8ab8f1b1a36d")
-	)
-	(wire
-		(pts
-			(xy 251.46 185.42) (xy 274.32 185.42)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "53544add-9609-4a2f-a12b-49d33e988f89")
-	)
-	(wire
-		(pts
-			(xy 264.16 181.61) (xy 264.16 185.42)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2f0b14cc-22df-44ff-adb1-92994f482ce9")
+		(uuid "9955cd2c-8148-46e4-ae2e-6fae5b44c2bc")
 	)
 	
 	(wire
 		(pts
-			(xy 274.32 185.42) (xy 274.32 200.66)
+			(xy 205.74 163.83) (xy 248.92 163.83)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "9d1084b5-d6b2-4056-90bd-cd8eb8d81c1d")
+		(uuid "f444c901-0594-400a-9ee3-1545eea5b6c9")
 	)
 	(wire
 		(pts
-			(xy 264.16 189.23) (xy 264.16 228.6)
+			(xy 248.92 163.83) (xy 248.92 177.8)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "20529400-f7ef-46ae-a3a1-097a9c5e41d0")
+		(uuid "02806056-97a1-4c12-b87b-7b1d7aa7e4bb")
 	)
-
 	(wire
 		(pts
-			(xy 281.94 205.74) (xy 281.94 228.6)
+			(xy 256.54 123.19) (xy 256.54 182.88)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "3e2490ab-5e0b-4de3-8115-573ad6992f2f")
+		(uuid "53fdb820-8808-446e-8f71-e42db3d4a713")
+	)
+	(wire
+		(pts
+			(xy 256.54 123.19) (xy 342.9 123.19)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7da531a5-84ad-48b5-9110-365a78af57d4")
 	)
 	
 	(wire
 		(pts
-			(xy 135.89 139.7) (xy 304.8 139.7)
+			(xy 256.54 163.83) (xy 279.4 163.83)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "7ef62ae2-4e44-4c3e-b642-7fd4006892b4")
+		(uuid "da294f05-84ee-45ce-a594-1d9034983387")
 	)
 	(wire
 		(pts
-			(xy 135.89 139.7) (xy 135.89 149.86)
+			(xy 279.4 163.83) (xy 299.72 163.83)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "ccf2e0a3-c5cd-4e7e-a5fa-a21595549fa7")
+		(uuid "0672952d-3549-45b7-8836-82aa9388ae0c")
 	)
 	(wire
 		(pts
-			(xy 330.2 55.88) (xy 330.2 83.52)
+			(xy 299.72 163.83) (xy 299.72 198.12)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "88c82866-6ffd-4171-a85e-abee980c15ff")
+		(uuid "4e60930b-0100-4492-ad98-52de5c6da073")
 	)
 	(wire
 		(pts
-			(xy 281.94 55.88) (xy 330.2 55.88)
+			(xy 279.4 171.45) (xy 279.4 254.0)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "2dc9fe67-57e4-4bb6-8481-cf2db7ac0aae")
+		(uuid "64be1a4c-28bc-4365-9ff2-b8ee927c0087")
 	)
 	(wire
 		(pts
-			(xy 330.2 93.68) (xy 330.2 101.3)
+			(xy 307.34 123.19) (xy 307.34 193.04)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "79ee0616-b611-4598-87ce-c01119c2ddcb")
+		(uuid "796ad839-e0c8-407e-b4b7-ab520dc520bb")
+	)
+	
+	(wire
+		(pts
+			(xy 307.34 203.2) (xy 307.34 254.0)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c977ed8d-6545-44bf-9950-4b4ab42ca43b")
 	)
 	(wire
 		(pts
-			(xy 330.2 182.58) (xy 330.2 190.2)
+			(xy 342.9 130.81) (xy 342.9 138.43)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "0898542e-5731-4e77-aaf1-e153339043c4")
+		(uuid "d68f7da8-5a61-42f2-b311-f99b0b65184c")
 	)
 	(wire
 		(pts
-			(xy 330.2 200.36) (xy 330.2 228.6)
+			(xy 125.73 241.3) (xy 133.35 241.3)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "ff0047d8-29e7-4adf-b183-be9870c60598")
+		(uuid "b2063794-57e3-4db6-b898-5a7b5275aee2")
 	)
 	(wire
 		(pts
-			(xy 91.44 228.6) (xy 330.2 228.6)
+			(xy 381.0 38.1) (xy 381.0 60.96)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "719aed0f-76e5-48b7-aade-ced101c070ba")
+		(uuid "bcbcebcd-43de-4ac2-a32a-2549f4eb8070")
 	)
 	(wire
 		(pts
-			(xy 304.8 139.7) (xy 314.96 139.7)
+			(xy 307.34 38.1) (xy 381.0 38.1)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "d9ec2a47-02a7-4bcd-ad26-195a73e64659")
+		(uuid "6492dbf7-2549-45a9-8f0f-a1f30e85689b")
 	)
-	(label "OUTPUT"
-		(at 314.96 139.7 0)
+	(wire
+		(pts
+			(xy 381.0 71.12) (xy 381.0 78.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8b9abac9-03d6-4f81-9f59-c5d02edfc6f9")
+	)
+	(wire
+		(pts
+			(xy 381.0 180.34) (xy 381.0 187.96)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "794c8de0-1990-47a3-b8cf-2a0447e21e6b")
+	)
+	(wire
+		(pts
+			(xy 381.0 198.12) (xy 381.0 254.0)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9babf45c-2258-428c-99c6-17dcf382f477")
+	)
+	(wire
+		(pts
+			(xy 104.14 254) (xy 381 254)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "28b01a09-d581-4240-9e62-c5ac9f2ab25f")
+	)
+	(wire
+		(pts
+			(xy 342.9 123.19) (xy 363.22 123.19)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a6fa6021-aca0-463c-a1ab-dd6a73cb0e32")
+	)
+	(label "FB"
+		(at 109.22 127 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
-		(uuid "f47462e4-8069-4f31-b1c8-8f065d910dfb")
+		(uuid "7a22c03f-ee8f-415d-a566-fe58d40e63e9")
+	)
+	(label "FB"
+		(at 110.49 241.3 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "56b36dde-19a3-42a1-9121-517518eb2af8")
+	)
+	(label "OUTPUT"
+		(at 133.35 241.3 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d8e34542-afdb-460f-8b81-da8d2323c341")
+	)
+	(label "OUTPUT"
+		(at 363.22 123.19 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "32651450-d150-4e35-92ff-493d5fdae60b")
 	)
 	(text "INPUT"
 		(exclude_from_sim no)
-		(at 30.48 35.56 0.0000)
+		(at 30.48 17.78 0.0000)
 		(effects
 			(font
 				(size 3 3)
 			)
 		)
-		(uuid "6479deb0-9172-4e77-89da-cf548d69eb38")
+		(uuid "ffdcc2e4-52b0-4527-8e6f-f6d00c212561")
 	)
 	(text "DIFFERENTIAL PAIR"
 		(exclude_from_sim no)
-		(at 76.2 35.56 0.0000)
+		(at 86.36 17.78 0.0000)
 		(effects
 			(font
 				(size 3 3)
 			)
 		)
-		(uuid "5de6961b-a7eb-4f45-b6bd-19b9423937ad")
+		(uuid "5a28a1e7-4102-49f0-b334-cd132c642845")
 	)
 	(text "VAS"
 		(exclude_from_sim no)
-		(at 165.1 35.56 0.0000)
+		(at 177.8 17.78 0.0000)
 		(effects
 			(font
 				(size 3 3)
 			)
 		)
-		(uuid "56e53286-e974-4d12-bc9f-f0e9a5623b06")
+		(uuid "df532a03-eac0-45bf-bc9e-273f25131585")
 	)
 	(text "OUTPUT STAGE"
 		(exclude_from_sim no)
-		(at 248.92 35.56 0.0000)
+		(at 254 17.78 0.0000)
 		(effects
 			(font
 				(size 3 3)
 			)
 		)
-		(uuid "b3f28fa9-279b-4470-acf1-91d6be4e797e")
+		(uuid "3ba08034-2bdc-487f-8247-39e3b40f2be5")
+	)
+	(text "[1] V(IN) - cyan"
+		(exclude_from_sim no)
+		(at 81.28 137.16 0.0000)
+		(effects
+			(font
+				(size 1.8 1.8)
+			)
+		)
+		(uuid "aaa134e3-08ef-4421-9ce8-6d7624041f82")
+	)
+	(text "[2] V(OUT) - red"
+		(exclude_from_sim no)
+		(at 342.9 133.35 0.0000)
+		(effects
+			(font
+				(size 1.8 1.8)
+			)
+		)
+		(uuid "12adb86a-c268-4916-92ea-490dbc744cbd")
+	)
+	(text "[3] V(VAS) - yellow"
+		(exclude_from_sim no)
+		(at 205.74 132.08 0.0000)
+		(effects
+			(font
+				(size 1.8 1.8)
+			)
+		)
+		(uuid "b2c0063b-2336-4624-95bc-9d78ab480ade")
+	)
+	(text "[4] V(Q4E) - green"
+		(exclude_from_sim no)
+		(at 205.74 142.24 0.0000)
+		(effects
+			(font
+				(size 1.8 1.8)
+			)
+		)
+		(uuid "368ef919-d697-4889-a4a5-5111c046fb92")
 	)
 	(sheet_instances
 		(path "/"

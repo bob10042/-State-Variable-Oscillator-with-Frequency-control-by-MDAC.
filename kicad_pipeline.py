@@ -967,178 +967,173 @@ def build_audioamp():
 
     G = 2.54  # grid unit (mm)
 
-    # ── Layout: 4 zones left-to-right on A3 landscape (420x297mm) ──
-    # A3 = ~165G wide x ~117G tall.  Centre circuit vertically.
-    # Zone 1: Input (x ~12G)
-    # Zone 2: Diff pair (x ~30G)
-    # Zone 3: VAS (x ~65G)
-    # Zone 4: Output stage (x ~100G)
-    # Vertical centre line ~55G;  VCC rail ~25G;  VEE rail ~90G
+    # ── LAYOUT v2: Zero-crossing design on A3 landscape (420x297mm) ──
+    # A3 = ~165G wide x ~117G tall
+    # Design principle: each component NEAR its partners, wires short, NO crossings
+    # Signal flows left→right. VCC at top (y=15G), VEE at bottom (y=100G)
+    # Feedback wire R7 runs along bottom (y=95G) below all signal paths
 
-    cy = 55*G           # vertical centre for diff pair / VAS transistors
-    vcc_rail_y = 22*G   # VCC horizontal bus
-    vee_rail_y = 90*G   # VEE horizontal bus
+    cy = 50*G           # vertical signal centre
+    vcc_rail_y = 15*G   # VCC horizontal bus (top)
+    vee_rail_y = 100*G  # VEE horizontal bus (bottom)
 
-    # ── Zone 1: Input source ──
-    vin_x, vin_y = 12*G, cy + 8*G
+    # ── Zone 1: Input source (x=10-22G) ──
+    vin_x, vin_y = 12*G, cy + 10*G
     sch.components.add(lib_id="VSIN:VSIN", reference="V3",
                        value="0.7V 1kHz", position=(vin_x, vin_y))
 
-    # R1 input coupling (horizontal)
-    r1_x, r1_y = 20*G, cy
+    r1_x, r1_y = 22*G, cy
     sch.components.add(lib_id="R:R", reference="R1",
                        value="5k", position=(r1_x, r1_y), rotation=90)
 
-    # ── Zone 2: Differential pair ──
-    q1_x, q1_y = 30*G, cy     # Q1 NPN
-    q2_x, q2_y = 42*G, cy     # Q2 NPN (wider gap for R6/R7)
+    # ── Zone 2: Differential pair (x=30-50G) ──
+    q1_x, q1_y = 34*G, cy
+    q2_x, q2_y = 48*G, cy     # 14G gap for clean routing
 
     sch.components.add(lib_id="Q_NPN_BCE:Q_NPN_BCE", reference="Q1",
                        value="2N3904", position=(q1_x, q1_y))
     sch.components.add(lib_id="Q_NPN_BCE:Q_NPN_BCE", reference="Q2",
                        value="2N3904", position=(q2_x, q2_y))
 
-    # R2 (200) - Q1 collector load to VCC
+    # R2 (200) - Q1 collector load, directly above Q1
     r2_x = q1_x + 1*G
     r2_y = cy - 14*G
     sch.components.add(lib_id="R:R", reference="R2",
                        value="200", position=(r2_x, r2_y))
 
-    # R3 (1K) - tail resistor to VEE
-    r3_x = 36*G
-    r3_y = cy + 14*G
+    # R3 (1K) - tail resistor, between Q1 and Q2
+    r3_x = 41*G
+    r3_y = cy + 16*G
     sch.components.add(lib_id="R:R", reference="R3",
                        value="1k", position=(r3_x, r3_y))
 
-    # R6 (5K) - Q2 base to GND bias
-    r6_x = q2_x - 2*G
-    r6_y = cy + 10*G
+    # R6 (5K) - Q2 base bias, to the RIGHT of Q2 (avoids tail crossing)
+    r6_x = q2_x + 6*G
+    r6_y = cy + 12*G
     sch.components.add(lib_id="R:R", reference="R6",
                        value="5k", position=(r6_x, r6_y))
 
-    # R7 (50K) - feedback from output to Q2 base (horizontal)
-    r7_x = q2_x + 10*G
-    r7_y = cy + 4*G
+    # R7 (50K) - feedback, runs at BOTTOM of circuit (y=95G) to avoid crossings
+    r7_x = 48*G
+    r7_y = 95*G
     sch.components.add(lib_id="R:R", reference="R7",
                        value="50k", position=(r7_x, r7_y), rotation=90)
 
-    # ── Zone 3: Active load + VAS ──
-    # R4 (9K) interstage (horizontal)
-    r4_x = 52*G
-    r4_y = cy - 10*G
+    # ── Zone 3: Active load + VAS (x=58-90G) ──
+    # R4 (9K) interstage (horizontal, at Q1C height)
+    r4_x = 56*G
+    r4_y = cy - 12*G
     sch.components.add(lib_id="R:R", reference="R4",
                        value="9k", position=(r4_x, r4_y), rotation=90)
 
-    # C1 (10p) across R4 (compensation, horizontal)
+    # C1 (10p) parallel with R4 (above R4 with 10G gap)
     c1_x = r4_x
-    c1_y = r4_y - 5*G
+    c1_y = r4_y - 10*G
     sch.components.add(lib_id="C:C", reference="C1",
                        value="10p", position=(c1_x, c1_y), rotation=90)
 
-    # R5 (1K) continues to Q3 base (horizontal)
-    r5_x = 58*G
+    # R5 (1K) continues from R4 to Q3 base (horizontal)
+    r5_x = 63*G
     r5_y = r4_y
     sch.components.add(lib_id="R:R", reference="R5",
                        value="1k", position=(r5_x, r5_y), rotation=90)
 
-    # Q3 PNP active load
-    q3_x, q3_y = 65*G, cy - 16*G
+    # Q3 PNP active load (mirrored: E at top→VCC, C at bottom→VAS)
+    q3_x, q3_y = 70*G, cy - 18*G
     sch.components.add(lib_id="Q_PNP_BCE:Q_PNP_BCE", reference="Q3",
                        value="2N3906", position=(q3_x, q3_y))
 
-    # R8 (100) - Q3 emitter to VCC
+    # R8 (100) - Q3 emitter to VCC (short run directly above Q3)
     r8_x = q3_x + 1*G
-    r8_y = q3_y - 10*G
+    r8_y = q3_y - 12*G
     sch.components.add(lib_id="R:R", reference="R8",
                        value="100", position=(r8_x, r8_y))
 
-    # C2 (100p) Miller compensation (vertical, from Q3C to Q3B area)
-    c2_x = q3_x - 5*G
-    c2_y = q3_y + 5*G
+    # C2 (100p) Miller comp - LEFT of Q3, connects VAS to Q3B
+    c2_x = q3_x - 10*G
+    c2_y = cy - 8*G
     sch.components.add(lib_id="C:C", reference="C2",
                        value="100p", position=(c2_x, c2_y))
 
-    # Q4 VAS transistor
-    q4_x, q4_y = 75*G, cy
+    # Q4 VAS transistor (below Q3 collector, at signal centre)
+    q4_x, q4_y = 80*G, cy
     sch.components.add(lib_id="Q_NPN_BCE:Q_NPN_BCE", reference="Q4",
                        value="2N3904", position=(q4_x, q4_y))
 
-    # R9 (2K) - VAS collector-to-base feedback
+    # R9 (2K) - VAS (Q4C) to Q4B feedback, directly above Q4
     r9_x = q4_x + 1*G
-    r9_y = cy - 10*G
+    r9_y = cy - 12*G
     sch.components.add(lib_id="R:R", reference="R9",
                        value="2k", position=(r9_x, r9_y))
 
-    # R10 (1K) - VAS base-to-emitter
-    r10_x = q4_x + 7*G
-    r10_y = cy
+    # R10 (1K) - Q4B to Q4E, to RIGHT of Q4 (short horizontal run)
+    r10_x = q4_x + 8*G
+    r10_y = cy + 4*G
     sch.components.add(lib_id="R:R", reference="R10",
                        value="1k", position=(r10_x, r10_y))
 
-    # R11 (5K) - VAS tail to VEE
+    # R11 (5K) - Q4E to VEE, directly below Q4
     r11_x = q4_x + 1*G
-    r11_y = cy + 12*G
+    r11_y = cy + 16*G
     sch.components.add(lib_id="R:R", reference="R11",
                        value="5k", position=(r11_x, r11_y))
 
-    # C3 (1mF) bootstrap cap (vertical)
-    c3_x = q4_x - 6*G
-    c3_y = cy + 6*G
+    # C3 (1mF) bootstrap cap - LEFT of Q4, connects VAS to Q4E
+    c3_x = q4_x - 8*G
+    c3_y = cy + 10*G
     sch.components.add(lib_id="C:C", reference="C3",
                        value="1m", position=(c3_x, c3_y))
 
-    # ── Zone 4: Output stage ──
-    # Q5 NPN upper driver
-    q5_x, q5_y = 98*G, cy - 18*G
+    # ── Zone 4: Output stage (x=95-145G) ──
+    # Upper half: Q5 (driver) → R12 → Q7 (output)
+    q5_x, q5_y = 100*G, cy - 20*G
     sch.components.add(lib_id="Q_NPN_BCE:Q_NPN_BCE", reference="Q5",
                        value="2N3904", position=(q5_x, q5_y))
 
-    # Q6 PNP lower driver
-    q6_x, q6_y = 98*G, cy + 20*G
-    sch.components.add(lib_id="Q_PNP_BCE:Q_PNP_BCE", reference="Q6",
-                       value="2N3906", position=(q6_x, q6_y))
-
-    # Q7 NPN upper output
-    q7_x, q7_y = 110*G, cy - 22*G
-    sch.components.add(lib_id="Q_NPN_BCE:Q_NPN_BCE", reference="Q7",
-                       value="2N2219A", position=(q7_x, q7_y))
-
-    # Q8 NPN lower output (quasi-complementary)
-    q8_x, q8_y = 110*G, cy + 24*G
-    sch.components.add(lib_id="Q_NPN_BCE:Q_NPN_BCE", reference="Q8",
-                       value="2N2219A", position=(q8_x, q8_y))
-
-    # R12 (1K) - upper bias/ballast
-    r12_x = 104*G
-    r12_y = cy - 14*G
+    r12_x = 110*G
+    r12_y = cy - 12*G
     sch.components.add(lib_id="R:R", reference="R12",
                        value="1k", position=(r12_x, r12_y))
 
-    # R13 (1K) - lower bias/ballast
-    r13_x = 104*G
-    r13_y = cy + 18*G
+    q7_x, q7_y = 120*G, cy - 24*G
+    sch.components.add(lib_id="Q_NPN_BCE:Q_NPN_BCE", reference="Q7",
+                       value="2N2219A", position=(q7_x, q7_y))
+
+    # Lower half: Q6 (PNP driver) → R13 → Q8 (output)
+    q6_x, q6_y = 100*G, cy + 20*G
+    sch.components.add(lib_id="Q_PNP_BCE:Q_PNP_BCE", reference="Q6",
+                       value="2N3906", position=(q6_x, q6_y))
+
+    r13_x = 110*G
+    r13_y = cy + 16*G
     sch.components.add(lib_id="R:R", reference="R13",
                        value="1k", position=(r13_x, r13_y))
 
-    # R14 (8) - speaker load
-    r14_x = 120*G
+    q8_x, q8_y = 120*G, cy + 28*G
+    sch.components.add(lib_id="Q_NPN_BCE:Q_NPN_BCE", reference="Q8",
+                       value="2N2219A", position=(q8_x, q8_y))
+
+    # R14 (8 ohm speaker) at output, well spaced
+    r14_x = 135*G
     r14_y = cy
     sch.components.add(lib_id="R:R", reference="R14",
                        value="8", position=(r14_x, r14_y))
 
-    # V1 (+10V) and V2 (-10V) supplies
-    v1_x, v1_y = 130*G, cy - 20*G
+    # V1 (+10V) and V2 (-10V) supplies (far right)
+    v1_x, v1_y = 150*G, cy - 24*G
     sch.components.add(lib_id="VDC:VDC", reference="V1",
                        value="10V", position=(v1_x, v1_y))
 
-    v2_x, v2_y = 130*G, cy + 22*G
+    v2_x, v2_y = 150*G, cy + 26*G
     sch.components.add(lib_id="VDC:VDC", reference="V2",
                        value="-10V", position=(v2_x, v2_y))
 
     # ── Wiring ──
     # Get all pin positions
     # Q_NPN_BCE: pin1=B(left), pin2=C(top-right), pin3=E(bottom-right)
-    # Q_PNP_BCE: pin1=B(left), pin2=C(bottom-right), pin3=E(top-right)
+    # Q_PNP_BCE: same pin layout as NPN (C top, E bottom) — we apply mirror_x
+    #            post-save so E goes to top (toward VCC) and C goes to bottom.
+    #            Wiring uses PRE-COMPUTED mirrored positions for Q3 and Q6.
 
     q1_b = get_pin_pos(sch, "Q1", "1")
     q1_c = get_pin_pos(sch, "Q1", "2")
@@ -1146,18 +1141,31 @@ def build_audioamp():
     q2_b = get_pin_pos(sch, "Q2", "1")
     q2_c = get_pin_pos(sch, "Q2", "2")
     q2_e = get_pin_pos(sch, "Q2", "3")
-    q3_b = get_pin_pos(sch, "Q3", "1")
-    q3_c = get_pin_pos(sch, "Q3", "2")
-    q3_e = get_pin_pos(sch, "Q3", "3")
+
+    # Q3 PNP — mirror_x flips Y around component origin
+    # Un-mirrored: C at top, E at bottom → mirrored: E at top, C at bottom
+    _q3_b = get_pin_pos(sch, "Q3", "1")
+    _q3_c = get_pin_pos(sch, "Q3", "2")
+    _q3_e = get_pin_pos(sch, "Q3", "3")
+    q3_b = (_q3_b[0], 2*q3_y - _q3_b[1])   # B: Y flipped
+    q3_c = (_q3_c[0], 2*q3_y - _q3_c[1])   # C: moves to bottom
+    q3_e = (_q3_e[0], 2*q3_y - _q3_e[1])   # E: moves to top (toward VCC)
+
     q4_b = get_pin_pos(sch, "Q4", "1")
     q4_c = get_pin_pos(sch, "Q4", "2")
     q4_e = get_pin_pos(sch, "Q4", "3")
     q5_b = get_pin_pos(sch, "Q5", "1")
     q5_c = get_pin_pos(sch, "Q5", "2")
     q5_e = get_pin_pos(sch, "Q5", "3")
-    q6_b = get_pin_pos(sch, "Q6", "1")
-    q6_c = get_pin_pos(sch, "Q6", "2")
-    q6_e = get_pin_pos(sch, "Q6", "3")
+
+    # Q6 PNP — mirror_x: E at top (toward output), C at bottom (toward VEE)
+    _q6_b = get_pin_pos(sch, "Q6", "1")
+    _q6_c = get_pin_pos(sch, "Q6", "2")
+    _q6_e = get_pin_pos(sch, "Q6", "3")
+    q6_b = (_q6_b[0], 2*q6_y - _q6_b[1])
+    q6_c = (_q6_c[0], 2*q6_y - _q6_c[1])
+    q6_e = (_q6_e[0], 2*q6_y - _q6_e[1])
+
     q7_b = get_pin_pos(sch, "Q7", "1")
     q7_c = get_pin_pos(sch, "Q7", "2")
     q7_e = get_pin_pos(sch, "Q7", "3")
@@ -1201,16 +1209,18 @@ def build_audioamp():
     c3_2 = get_pin_pos(sch, "C3", "2")
 
     # -- Input: V3 -> R1 -> Q1 base --
-    vin_p1 = (vin_x, vin_y - 5.38)   # VSIN top (+)
-    vin_p2 = (vin_x, vin_y + 4.78)   # VSIN bottom (-)
+    vin_p1 = get_pin_pos(sch, "V3", "1")   # VSIN top (+)
+    vin_p2 = get_pin_pos(sch, "V3", "2")   # VSIN bottom (-)
+    # V3+ up to R1 input height, then across to R1 pin2
     wire_manhattan(sch, vin_p1[0], vin_p1[1], r1_2[0], r1_2[1])
+    # R1 pin1 across to Q1 base
     wire_manhattan(sch, r1_1[0], r1_1[1], q1_b[0], q1_b[1])
 
     # V3 bottom to GND
     gnd_vin = vin_p2[1] + 3*G
-    sch.add_wire(start=vin_p2, end=(vin_x, gnd_vin))
+    sch.add_wire(start=vin_p2, end=(vin_p2[0], gnd_vin))
     sch.components.add(lib_id="GND:GND", reference="#PWR01", value="GND",
-                       position=(vin_x, gnd_vin))
+                       position=(vin_p2[0], gnd_vin))
 
     # -- Diff pair: Q1C -> R2 -> VCC, Q2C -> VCC --
     wire_manhattan(sch, q1_c[0], q1_c[1], r2_2[0], r2_2[1])
@@ -1233,7 +1243,8 @@ def build_audioamp():
     # R3 bottom to VEE
     sch.add_wire(start=r3_2, end=(r3_2[0], vee_rail_y))
 
-    # -- Q2 base: R6 to GND, R7 from feedback --
+    # -- Q2 base bias: Q2B → R6 → GND (R6 to RIGHT of Q2, no tail crossing) --
+    # Q2B horizontal right to R6 x, then down to R6 pin1
     wire_manhattan(sch, q2_b[0], q2_b[1], r6_1[0], r6_1[1])
 
     # R6 bottom to GND
@@ -1242,9 +1253,15 @@ def build_audioamp():
     sch.components.add(lib_id="GND:GND", reference="#PWR02", value="GND",
                        position=(r6_2[0], gnd_r6))
 
-    # R7 connects feedback (output A) to Q2 base junction
-    # R7 pin2 (left) to Q2 base junction
-    wire_manhattan(sch, r7_2[0], r7_2[1], q2_b[0], q2_b[1])
+    # R7 feedback: use net labels (avoids long feedback wire crossings)
+    # FB label at Q2B junction — connects R7 pin2 via label, no physical wire
+    fb_q2b_x = q2_b[0] - 3*G
+    sch.add_wire(start=(fb_q2b_x, q2_b[1]), end=q2_b)
+    sch.add_label("FB", position=(fb_q2b_x, q2_b[1]))
+    # FB label at R7 pin2 (left end)
+    fb_r7_x = r7_2[0] - 3*G
+    sch.add_wire(start=r7_2, end=(fb_r7_x, r7_2[1]))
+    sch.add_label("FB", position=(fb_r7_x, r7_2[1]))
 
     # -- Interstage: Q1C -> R4 -> R5 -> Q3 base --
     # R4 left end connects to Q1 collector node (N002)
@@ -1289,8 +1306,10 @@ def build_audioamp():
     sch.add_wire(start=r11_2, end=(r11_2[0], vee_rail_y))
 
     # C3 bootstrap: VAS node (N006) to Q4 emitter (N012)
-    wire_manhattan(sch, c3_1[0], c3_1[1], q4_c[0], q4_c[1])
-    wire_manhattan(sch, c3_2[0], c3_2[1], q4_e[0], q4_e[1])
+    # C3 pin1 connects to Q3C (same VAS net, avoids R9/Q4B vertical crossing)
+    # C3 pin2 connects to Q4E via VH routing (vertical at C3's x, not Q4's x)
+    wire_manhattan_vh(sch, c3_1[0], c3_1[1], q3_c[0], q3_c[1])
+    wire_manhattan_vh(sch, c3_2[0], c3_2[1], q4_e[0], q4_e[1])
 
     # C2 bottom to VAS node
     wire_manhattan(sch, c2_2[0], c2_2[1], q3_c[0], q3_c[1])
@@ -1313,28 +1332,34 @@ def build_audioamp():
     sch.add_wire(start=q7_c, end=(q7_c[0], vcc_rail_y))
     sch.add_wire(start=(q5_c[0], vcc_rail_y), end=(q7_c[0], vcc_rail_y))
 
-    # Q7 emitter = output A
-    output_y = cy
-    wire_manhattan(sch, q7_e[0], q7_e[1], r14_1[0], output_y)
+    # Output node at R14 pin1 (exact pin, not center of component)
+    output_y = r14_1[1]
 
-    # R12 bottom to output A
-    wire_manhattan(sch, r12_2[0], r12_2[1], r14_1[0], output_y)
+    # Q7 emitter = output A (vertical-first avoids crossings)
+    wire_manhattan_vh(sch, q7_e[0], q7_e[1], r14_1[0], output_y)
 
-    # Q6 base from Q4 emitter (N012)
-    wire_manhattan(sch, q4_e[0], q4_e[1], q6_b[0], q6_b[1])
+    # R12 bottom to output A (VH routing avoids crossing Q7E/Q8C verticals)
+    wire_manhattan_vh(sch, r12_2[0], r12_2[1], r14_1[0], output_y)
 
-    # Q6 emitter = output A
-    wire_manhattan(sch, q6_e[0], q6_e[1], r14_1[0], output_y)
+    # Q6 base from Q4E net — route from R11 pin1 (same net N012, below R10 vertical)
+    wire_manhattan(sch, r11_1[0], r11_1[1], q6_b[0], q6_b[1])
 
-    # Q6 collector (N013) -> R13 top, Q8 base
-    wire_manhattan(sch, q6_c[0], q6_c[1], r13_1[0], r13_1[1])
-    wire_manhattan(sch, q6_c[0], q6_c[1], q8_b[0], q8_b[1])
+    # Q6 emitter = output A — VH routing: go UP first then horizontal
+    # This avoids crossing the R13->VEE vertical wire
+    wire_manhattan_vh(sch, q6_e[0], q6_e[1], r14_1[0], output_y)
+
+    # Q6 collector (N013) -> R13 pin1 (vertical drop, no horizontal crossing)
+    sch.add_wire(start=(q6_c[0], q6_c[1]), end=(q6_c[0], r13_1[1]))
+    sch.add_wire(start=(q6_c[0], r13_1[1]), end=(r13_1[0], r13_1[1]))
+
+    # Q8 base from R13 pin1 (same N013 node, chains through R13 to avoid crossing)
+    wire_manhattan(sch, r13_1[0], r13_1[1], q8_b[0], q8_b[1])
 
     # R13 bottom to VEE
     sch.add_wire(start=r13_2, end=(r13_2[0], vee_rail_y))
 
-    # Q8 collector = output A
-    wire_manhattan(sch, q8_c[0], q8_c[1], r14_1[0], output_y)
+    # Q8 collector = output A — VH routing: go UP first then horizontal
+    wire_manhattan_vh(sch, q8_c[0], q8_c[1], r14_1[0], output_y)
 
     # Q8 emitter to VEE
     sch.add_wire(start=q8_e, end=(q8_e[0], vee_rail_y))
@@ -1345,38 +1370,40 @@ def build_audioamp():
     sch.components.add(lib_id="GND:GND", reference="#PWR03", value="GND",
                        position=(r14_2[0], gnd_r14))
 
-    # -- Feedback: output A -> R7 -> Q2 base --
-    # R7 pin1 (right) from output node
-    wire_manhattan(sch, r14_1[0], output_y, r7_1[0], r7_1[1])
+    # -- Feedback: output A → R7 pin1 via OUTPUT label --
+    # R7 pin1 connects to output via label (no physical wire, avoids crossings)
+    out_r7_x = r7_1[0] + 3*G
+    sch.add_wire(start=r7_1, end=(out_r7_x, r7_1[1]))
+    sch.add_label("OUTPUT", position=(out_r7_x, r7_1[1]))
 
     # -- VCC/VEE supply sources --
     # V1 (+10V): positive to VCC rail, negative to GND
-    v1_p1 = (v1_x, v1_y - 5.38)  # top (+)
-    v1_p2 = (v1_x, v1_y + 4.78)  # bottom (-)
-    sch.add_wire(start=v1_p1, end=(v1_x, vcc_rail_y))
-    sch.add_wire(start=(q7_c[0], vcc_rail_y), end=(v1_x, vcc_rail_y))
+    v1_p1 = get_pin_pos(sch, "V1", "1")  # VDC top (+)
+    v1_p2 = get_pin_pos(sch, "V1", "2")  # VDC bottom (-)
+    sch.add_wire(start=v1_p1, end=(v1_p1[0], vcc_rail_y))
+    sch.add_wire(start=(q7_c[0], vcc_rail_y), end=(v1_p1[0], vcc_rail_y))
     gnd_v1 = v1_p2[1] + 3*G
-    sch.add_wire(start=v1_p2, end=(v1_x, gnd_v1))
+    sch.add_wire(start=v1_p2, end=(v1_p2[0], gnd_v1))
     sch.components.add(lib_id="GND:GND", reference="#PWR04", value="GND",
-                       position=(v1_x, gnd_v1))
+                       position=(v1_p2[0], gnd_v1))
 
     # V2 (-10V): positive to GND, negative to VEE rail
-    v2_p1 = (v2_x, v2_y - 5.38)
-    v2_p2 = (v2_x, v2_y + 4.78)
+    v2_p1 = get_pin_pos(sch, "V2", "1")  # VDC top (+)
+    v2_p2 = get_pin_pos(sch, "V2", "2")  # VDC bottom (-)
     gnd_v2 = v2_p1[1] - 3*G
-    sch.add_wire(start=v2_p1, end=(v2_x, gnd_v2))
+    sch.add_wire(start=v2_p1, end=(v2_p1[0], gnd_v2))
     sch.components.add(lib_id="GND:GND", reference="#PWR05", value="GND",
-                       position=(v2_x, gnd_v2))
-    sch.add_wire(start=v2_p2, end=(v2_x, vee_rail_y))
-    # Extend VEE rail
-    sch.add_wire(start=(r3_2[0], vee_rail_y), end=(v2_x, vee_rail_y))
+                       position=(v2_p1[0], gnd_v2))
+    sch.add_wire(start=v2_p2, end=(v2_p2[0], vee_rail_y))
+    # Extend VEE rail across bottom (connecting R3, R11, R13, Q8E, V2)
+    sch.add_wire(start=(r3_2[0], vee_rail_y), end=(v2_p2[0], vee_rail_y))
 
     # -- VCC power flag at top --
     sch.components.add(lib_id="VCC:VCC", reference="#PWR06", value="+10V",
                        position=(v1_x, vcc_rail_y))
 
-    # -- Output label --
-    out_label_x = r14_1[0] + 4*G
+    # -- Output label (offset 8G to avoid R14 reference overlap) --
+    out_label_x = r14_1[0] + 8*G
     sch.add_label("OUTPUT", position=(out_label_x, output_y))
     sch.add_wire(start=(r14_1[0], output_y), end=(out_label_x, output_y))
 
@@ -1388,9 +1415,23 @@ def build_audioamp():
     sch.add_text("OUTPUT STAGE", position=(q5_x, title_y), size=3.0)
 
     # ── Save ──
+    # ── Test point markers (match simulation plot waveforms) ──
+    # Plot traces: V(IN)=cyan, V(OUT)=red, V(VAS)=yellow, V(Q4E)=green
+    tp_markers = [
+        ("[1] V(IN) - cyan",  q1_b),          # Input at Q1 base
+        ("[2] V(OUT) - red",  (r14_1[0], output_y)),  # Output node
+        ("[3] V(VAS) - yellow", q4_c),         # VAS node
+        ("[4] V(Q4E) - green", q4_e),          # Q4 emitter
+    ]
+    for tp_name, tp_pos in tp_markers:
+        label_x = tp_pos[0]
+        label_y = tp_pos[1] + 4*G
+        sch.add_text(tp_name, position=(label_x, label_y), size=1.8)
+
+    # ── Save ──
     sch_path = os.path.join(WORK_DIR, "audioamp.kicad_sch")
     sch.save(sch_path)
-    fix_kicad_sch(sch_path)
+    fix_kicad_sch(sch_path, mirror_refs=["Q3", "Q6"])
     merge_collinear_wires(sch_path)
     print(f"  Schematic saved: {sch_path}")
 
@@ -7300,6 +7341,121 @@ def extract_nets_from_schematic(sch_path):
     return wires, labels, components
 
 
+def verify_pin_connections(sch_path, tolerance=0.6):
+    """Check that every component pin touches a wire endpoint or segment.
+
+    Parses the saved .kicad_sch file and computes pin positions from the
+    placed components using get_component_pins(). Then checks each pin
+    against wire endpoints AND along wire segments (a pin in the middle
+    of a wire counts as connected).
+
+    Returns:
+        list of (severity, message) tuples — 'PASS', 'ERROR', 'WARNING'
+    """
+    wires, labels, components = extract_nets_from_schematic(sch_path)
+    issues = []
+
+    # Collect all wire endpoints
+    wire_pts = set()
+    for (x1, y1), (x2, y2) in wires:
+        wire_pts.add((round(x1, 2), round(y1, 2)))
+        wire_pts.add((round(x2, 2), round(y2, 2)))
+
+    # Also collect label positions
+    for _, (lx, ly) in labels:
+        wire_pts.add((round(lx, 2), round(ly, 2)))
+
+    def point_on_wire(px, py):
+        """Check if point is at a wire endpoint or on a wire segment."""
+        # Check endpoints first (fast)
+        for wx, wy in wire_pts:
+            if abs(px - wx) < tolerance and abs(py - wy) < tolerance:
+                return True
+        # Check if point lies on any wire segment
+        for (x1, y1), (x2, y2) in wires:
+            if abs(x1 - x2) < 0.1:  # vertical wire
+                if abs(px - x1) < tolerance:
+                    if min(y1, y2) - tolerance <= py <= max(y1, y2) + tolerance:
+                        return True
+            if abs(y1 - y2) < 0.1:  # horizontal wire
+                if abs(py - y1) < tolerance:
+                    if min(x1, x2) - tolerance <= px <= max(x1, x2) + tolerance:
+                        return True
+        return False
+
+    total_pins = 0
+    disconnected = []
+
+    for comp in components:
+        ref = comp['reference']
+        # Skip power symbols and ground
+        if ref.startswith('#') or 'GND' in comp.get('lib_id', ''):
+            continue
+
+        pins = get_component_pins(comp)
+        if pins is None:
+            continue
+
+        for pin_num, (px, py, pin_type, pin_name) in pins.items():
+            if pin_type == 'no_connect':
+                continue
+            total_pins += 1
+
+            if not point_on_wire(px, py):
+                disconnected.append(f"{ref} pin {pin_num} ({pin_name}) "
+                                    f"at ({px:.1f}, {py:.1f})")
+
+    if disconnected:
+        for d in disconnected:
+            issues.append(('ERROR', f'DISCONNECTED: {d}'))
+        issues.append(('ERROR',
+            f'{len(disconnected)}/{total_pins} pins disconnected'))
+    else:
+        issues.append(('PASS',
+            f'All {total_pins} component pins connected to wires'))
+
+    # Check wire crossings (wires that cross without a junction)
+    crossings = 0
+    for i in range(len(wires)):
+        for j in range(i + 1, len(wires)):
+            (x1, y1), (x2, y2) = wires[i]
+            (x3, y3), (x4, y4) = wires[j]
+            # Check if one is horizontal and the other vertical
+            is_h1 = abs(y1 - y2) < 0.01 and abs(x1 - x2) > 0.01
+            is_v1 = abs(x1 - x2) < 0.01 and abs(y1 - y2) > 0.01
+            is_h2 = abs(y3 - y4) < 0.01 and abs(x3 - x4) > 0.01
+            is_v2 = abs(x3 - x4) < 0.01 and abs(y3 - y4) > 0.01
+
+            if (is_h1 and is_v2) or (is_v1 and is_h2):
+                if is_h1 and is_v2:
+                    hx_min, hx_max = min(x1, x2), max(x1, x2)
+                    vy_min, vy_max = min(y3, y4), max(y3, y4)
+                    cross_x, cross_y = x3, y1
+                else:
+                    hx_min, hx_max = min(x3, x4), max(x3, x4)
+                    vy_min, vy_max = min(y1, y2), max(y1, y2)
+                    cross_x, cross_y = x1, y3
+
+                if (hx_min < cross_x < hx_max and
+                    vy_min < cross_y < vy_max):
+                    # Verify no junction at crossing (shared endpoint)
+                    shared = False
+                    pts1 = {(round(x1,2),round(y1,2)), (round(x2,2),round(y2,2))}
+                    pts2 = {(round(x3,2),round(y3,2)), (round(x4,2),round(y4,2))}
+                    cross_pt = (round(cross_x,2), round(cross_y,2))
+                    if cross_pt in pts1 or cross_pt in pts2:
+                        shared = True
+                    if not shared:
+                        crossings += 1
+
+    if crossings > 0:
+        issues.append(('ERROR', f'{crossings} wire crossings (ZERO required)'))
+    else:
+        issues.append(('PASS', 'No ambiguous wire crossings'))
+
+    return issues
+
+
 # Legacy PIN_DB kept for backward compatibility with check_floating_wires()
 # New code should use get_component_pins() which reads from .kicad_sym files
 PIN_DB = {
@@ -8777,6 +8933,8 @@ def verify_circuit(sch_path, circuit_type, sim_results=None, expected=None):
         required_nets = {'GND', 'VCC', 'TIA_IN', 'AIN0', 'AIN1', 'INV', 'OUT'}
     elif circuit_type == 'ce_amp':
         required_nets.update({'VCC'})  # single supply: VCC + GND only
+    elif circuit_type == 'audioamp':
+        required_nets = {'GND', 'OUTPUT'}
     elif circuit_type == 'oscillator':
         # Oscillator uses +15V/-15V net labels (not VCC/VEE), 3.3V for MCU
         required_nets = {'GND', 'HP', 'BP', 'LP', 'VCTRL', 'AIN0'}
@@ -10354,6 +10512,14 @@ def main():
             'gain_dB': (20.0, 4.0, ' dB'),  # ~20 dB
         }
         verify_circuit(sch_path, 'audioamp', sim_results, expected)
+
+        # Pin connectivity verification
+        print("\n[7] Pin connectivity check...")
+        pin_issues = verify_pin_connections(sch_path)
+        for severity, msg in pin_issues:
+            icon = {'PASS': '[OK]', 'ERROR': '[!!]', 'WARNING': '[??]',
+                    'INFO': '[--]'}.get(severity, '[??]')
+            print(f"    {icon} {msg}")
 
     else:
         print("\n[2] Building CE amplifier schematic...")
