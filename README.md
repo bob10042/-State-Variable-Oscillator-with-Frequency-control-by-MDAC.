@@ -8,6 +8,45 @@ GUI and hand-writing SPICE netlists, CircuitForge lets you define a circuit in P
 and produces everything you need: a professional KiCad schematic, a SPICE netlist,
 simulation results, and publication-quality plots.
 
+## Setup (Getting Started After Cloning)
+
+**Step 1 — Clone and install Python dependencies:**
+```bash
+git clone <repo-url>
+cd LTspice
+pip install numpy matplotlib kicad-sch-api
+```
+
+**Step 2 — Install ngspice** (required for simulations):
+- Download from https://sourceforge.net/projects/ngspice/files/
+- The default Windows install path (`C:\Spice64\`) is auto-detected.
+- If you installed it somewhere else, set the env var before running:
+  ```cmd
+  set NGSPICE_PATH=D:\your\path\to\ngspice_con.exe
+  ```
+
+**Step 3 — Run a test simulation to verify everything works:**
+```bash
+python kicad_pipeline.py ce_amp
+```
+If it runs without "file not found" errors, you're good. Output goes to `sim_work/`.
+
+**Optional tools** (only needed for specific features):
+
+| Tool | What it's for | Env var if non-standard path |
+|------|--------------|----------------------------|
+| LTspice | ADA4530-1 electrometer sims only | `LTSPICE_PATH` |
+| KiCad 9.x | Viewing/exporting `.kicad_sch` schematics | `KICAD_CLI_PATH` |
+| .NET 8 SDK | Running SimGUI desktop app | n/a |
+| arm-none-eabi-gcc | Compiling ADuCM362 firmware | n/a |
+
+All internal paths (symbol libraries in `kicad_libs/`, SPICE models in `models/`,
+simulation output in `sim_work/`) are **relative to the repo root** — they work
+wherever you clone the repo with no editing needed.
+
+If LTspice sims need the ADI model library (ADI1.lib), it's auto-detected from
+common LTspice install locations, or set `LTSPICE_LIB_PATH` to the full path.
+
 ## Development Progress
 
 CircuitForge is under active development, with the pipeline improving each session:
@@ -77,7 +116,7 @@ build-simulate-verify pipeline:
 | `kicad_libs/` | Custom KiCad symbol libraries (`.kicad_sym`) and SPICE model files (`.lib`, `.sub`). Includes vendor models for LMC6001, LM4562, DAC7800, AD636, CD4051B, and relay drivers. The LM741 symbol library provides the generic op-amp schematic shape used across all circuit types. |
 | `sim_work/` | Working directory where all generated files land: `.kicad_sch` schematics, `.cir` netlists, `.txt` raw results, `.png` plots, and intermediate files. |
 | `learned_rules.json` | Accumulated auto-correction rules. Each entry maps a problem pattern to its fix, so the pipeline improves over successive runs. |
-| `ngspice` (`C:\Spice64\`) | Open-source SPICE simulator. CircuitForge invokes `ngspice_con.exe` in batch mode, passing the generated `.cir` netlist and collecting `wrdata` output. |
+| `ngspice` | Open-source SPICE simulator (auto-detected, or set `NGSPICE_PATH`). CircuitForge invokes `ngspice_con.exe` in batch mode, passing the generated `.cir` netlist and collecting `wrdata` output. |
 | `LTspice` | Used as a secondary simulator for circuits requiring proprietary models (e.g. the ADA4530-1 femtoamp op-amp) not available in ngspice. |
 | `SimGUI/` | .NET 8 WinForms GUI built with ScottPlot 5. Calls `kicad_pipeline.py` as a subprocess, parses results, and provides interactive charts. Configured via `IProjectConfig` implementations for each project type. |
 | `firmware/` | C source for the ADuCM362 target MCU. Compiled with `arm-none-eabi-gcc`. Includes drivers for SPI (DAC7800), UART, ADC, GPIO (mux/relay control), and flash-based calibration storage. |
@@ -98,53 +137,15 @@ build-simulate-verify pipeline:
 - AD636 RMS-to-DC converter for amplitude monitoring
 - ADuCM362 self-calibration firmware
 
-## Setup (Getting Started After Cloning)
+## Troubleshooting
 
-All internal paths (symbol libraries, models, sim output) are **relative to the
-repo root** -- no editing needed. External tools (ngspice, LTspice, KiCad) are
-auto-detected from common install locations. If CircuitForge can't find a tool,
-set the corresponding environment variable:
-
-| Env Variable | Points to | Example |
-|---|---|---|
-| `NGSPICE_PATH` | ngspice console executable | `C:\Spice64\bin\ngspice_con.exe` |
-| `LTSPICE_PATH` | LTspice executable | `C:\Program Files\ADI\LTspice\LTspice.exe` |
-| `KICAD_CLI_PATH` | kicad-cli executable | `C:\Program Files\KiCad\9.0\bin\kicad-cli.exe` |
-| `LTSPICE_LIB_PATH` | LTspice ADI1.lib model file | `%LOCALAPPDATA%\LTspice\lib\sub\ADI1.lib` |
-
-On Windows you can set these in System > Environment Variables, or per-session:
-```cmd
-set NGSPICE_PATH=D:\tools\Spice64\bin\ngspice_con.exe
-python kicad_pipeline.py ce_amp
-```
-
-## Prerequisites
-
-### Python (3.10+)
-```
-pip install numpy matplotlib kicad-sch-api
-```
-
-### ngspice
-Download from https://sourceforge.net/projects/ngspice/files/
-- Default install (`C:\Spice64\`) is auto-detected
-- Non-standard location? Set `NGSPICE_PATH` env var
-
-### LTspice (optional, for ADA4530-1 sims)
-Download from https://www.analog.com/en/resources/design-tools-and-calculators/ltspice-simulator.html
-- Default install is auto-detected
-- Non-standard location? Set `LTSPICE_PATH` env var
-
-### .NET 8 SDK (for SimGUI)
-Download from https://dotnet.microsoft.com/download/dotnet/8.0
-
-### KiCad 9.x (optional, for viewing schematics)
-Download from https://www.kicad.org/download/
-- Non-standard location? Set `KICAD_CLI_PATH` env var
-
-### ARM Toolchain (optional, for firmware)
-- `arm-none-eabi-gcc` for ADuCM362 firmware compilation
-- ADuCM360/362 CMSIS device pack headers
+| Error | Fix |
+|-------|-----|
+| `FileNotFoundError: ngspice` | Install ngspice, or set `NGSPICE_PATH` env var |
+| `FileNotFoundError: ADI1.lib` | Install LTspice, or set `LTSPICE_LIB_PATH` env var |
+| `FileNotFoundError: kicad-cli` | Install KiCad, or set `KICAD_CLI_PATH` env var |
+| `ModuleNotFoundError: kicad_sch_api` | Run `pip install kicad-sch-api` |
+| `ModuleNotFoundError: numpy` | Run `pip install numpy matplotlib` |
 
 ## Directory Structure
 
@@ -154,7 +155,8 @@ LTspice/
   demo_loader.py             # LTspice .asc to ngspice converter
   PROJECT.md                 # Project tracker
   sim_work/                  # Simulation working directory (generated files)
-  kicad_libs/                # Custom KiCad symbol libraries
+  kicad_libs/                # Custom KiCad symbol libraries (.kicad_sym)
+  models/                    # SPICE vendor models (.lib) - MicroCap library + ADA4530-1
   StateVarOsc/
     DESIGN.md                # Oscillator design document
     CALCULATIONS.md          # Frequency/amplitude calculations
