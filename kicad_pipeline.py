@@ -604,6 +604,11 @@ def scale_schematic(path, factor=3.0):
 
 def export_svg(sch_path, svg_path=None):
     """Export schematic to SVG via kicad-cli."""
+    if not KICAD_CLI:
+        raise FileNotFoundError(
+            "kicad-cli not found. Install KiCad 9.x or set KICAD_CLI_PATH env var.\n"
+            "  Download: https://www.kicad.org/download/"
+        )
     if svg_path is None:
         svg_path = sch_path.replace('.kicad_sch', '.svg')
     # kicad-cli puts output in a subdirectory named after -o
@@ -7081,6 +7086,10 @@ def simulate(netlist_path):
     simulation look successful. Now we snapshot existing files before running
     and only count NEW files as evidence of success.
     """
+    if not NGSPICE:
+        print("ERROR: ngspice not found. Install it or set NGSPICE_PATH env var.")
+        print("  Download: https://sourceforge.net/projects/ngspice/files/")
+        return False
     print("Running ngspice...")
     work_dir = os.path.dirname(netlist_path)
 
@@ -7151,6 +7160,10 @@ def simulate_ltspice(netlist_path, node_names=None):
         dict with 'time' and node name keys, values are numpy arrays.
         Empty dict on failure.
     """
+    if not LTSPICE:
+        print("ERROR: LTspice not found. Install it or set LTSPICE_PATH env var.")
+        print("  Download: https://www.analog.com/en/resources/design-tools-and-calculators/ltspice-simulator.html")
+        return {}
     print("Running LTspice...")
     work_dir = os.path.dirname(netlist_path)
 
@@ -9312,6 +9325,11 @@ def measure_simulation(results_file, node_names):
 # =============================================================
 def export_pdf(sch_path, pdf_dir=None):
     """Export schematic to PDF via kicad-cli."""
+    if not KICAD_CLI:
+        raise FileNotFoundError(
+            "kicad-cli not found. Install KiCad 9.x or set KICAD_CLI_PATH env var.\n"
+            "  Download: https://www.kicad.org/download/"
+        )
     if pdf_dir is None:
         base = os.path.splitext(os.path.basename(sch_path))[0]
         pdf_dir = os.path.join(os.path.dirname(sch_path), f"{base}_pdf")
