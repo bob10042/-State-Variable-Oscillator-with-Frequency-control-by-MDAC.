@@ -1,0 +1,65 @@
+* ADA4530-1 Femtoampere Electrometer Amplifier
+* Extracted from LTspice ADI1.lib
+* Pins: 1=In+ 2=In- 3=V+ 4=V- 5=OUT 6=GDR(guard)
+.subckt ADA4530-1 1 2 3 4 5 6
+B1 0 N004 I=10u*dnlim(uplim(V(1),V(3)-1.4,.1), V(4)-.2, .1)+1n*V(1)
+B2 N004 0 I=10u*dnlim(uplim(V(2),V(3)-1.39,.1), V(4)-.21, .1)+1n*V(2)
+C10 N004 0 1f Rpar=100K noiseless
+D9 N008 0 DLIM
+C13 3 4 10p
+A1 0 2 0 0 0 0 0 0 OTA g=0 in=.07f
+G1 0 N016 5 Mid 100m
+C8 N008 N016 38p
+C6 2 4 4p Rser=100k noiseless
+A4 N004 0 0 0 0 0 N007 0 OTA g=1m linear enk=330 en=13.8n*(1+freq/5Meg) Rout=1k Cout=15p Vlow=-1e308 Vhigh=1e308
+C7 3 2 4p Rser=100k noiseless
+A7 0 N006 0 0 0 0 N008 0 OTA g=500u linear Cout=10f Vhigh=1e308 Vlow=-1e308
+D3 3 4 DBURN
+G5 0 Mid 3 0 .5m
+G6 0 Mid 4 0 .5m
+R4 Mid 0 1K noiseless
+M1 5 N014 4 4 NI temp=27 M=10
+C2 3 5 1p Rpar=1G Rser=10k noiseless
+M2 5 N009 3 3 PI temp=27 M=10
+A2 3 N009 4 4 4 4 N014 4 OTA g=1u linear ref=1.4 vlow=0 vhigh=3.4
+C3 3 N009 1f Rpar=1Meg Rser=500k noiseless
+A3 0 N010 3 3 3 3 N009 3 OTA g=20u linear ref=-37.7515m vlow=-3.5 vhigh=2.5
+C11 N014 4 1p Rpar=1Meg Rser=10Meg noiseless
+D4 5 4 DoutMin
+D5 3 5 DoutMin
+S1 N008 0 4 3 SNLG
+C4 3 1 4p Rser=100k noiseless
+C5 1 4 4p Rser=100k noiseless
+C12 N008 0 2p
+C19 N009 5 1.5p Rser=75k noiseless
+M3 3 N011 6 6 NG temp=27
+M4 4 N011 6 6 PG temp=27
+C17 3 6 500f
+C21 6 4 500f
+C22 N011 Mid 28.937f Rpar=2Meg noiseless
+G3 Mid N011 1 Mid 1
+S2 N011 Mid N011 3 Suplim
+A5 1 0 0 0 0 0 0 0 OTA g=0 in=.07f
+D6 2 6 DIN
+D7 6 1 DIN
+C23 2 6 200f
+C25 6 1 200f
+C14 N016 0 3n Rser=20 Rpar=10 noiseless
+C9 5 4 1p Rpar=1G Rser=10k noiseless
+A6 0 N005 0 0 0 0 N006 0 OTA g=1m linear Rout=1k Cout=15p vlow=-105.5m vhigh=105.5m
+C15 N005 0 15p Rpar=1k noiseless
+A9 0 N008 0 0 0 0 N010 0 OTA g=20m iout=1m Rout=1k Cout=40p vlow=-1e308 vhigh=1e308
+G2 0 N005 N007 0 1m
+C1 5 N014 1.5p Rser=1Meg noiseless
+.model DBURN D(Ron=100 Roff=1G vfwd=600m epsilon=500m ilimit=703.57u noiseless)
+.model DoutMin D(Ron=100 Roff=100 ilimit=20u noiseless)
+.model SNLG SW(level=2 Ron=2Meg Roff=50Meg vt=-3 vh=-1.5 noiseless)
+.param CL=10p
+.model PI VDMOS(kp=280u vto=-500m mtriode=2.3  ksubthres=100m pchan noiseless)
+.model NI VDMOS(kp=700u vto=500m mtriode=1.6  ksubthres=100m noiseless)
+.model DLIM D(Ron=1k Roff=2G Vfwd=1.8 Vrev=1.8 epsilon=100m revepsilon=100m noiseless)
+.model PG VDMOS(kp=1.72m vto=300m mtriode=2 ksubthres=100m pchan noiseless)
+.model NG VDMOS(kp=1.72m vto=-300m ksubthres=100m noiseless)
+.model Suplim SW(Ron=1 Roff=2Meg vt=-1.39 vh=-100m noiseless)
+.model DIN D(Ron=1k Roff=30T vfwd=600m epsilon=300m vrev=600m revepsilon=300m noiseless)
+.ends ADA4530-1

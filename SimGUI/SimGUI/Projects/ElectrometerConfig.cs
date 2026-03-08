@@ -12,7 +12,7 @@ namespace SimGUI.Projects;
 /// </summary>
 public class ElectrometerConfig : IProjectConfig
 {
-    private static readonly string WorkDir = @"C:\Users\Robert\Documents\LTspice";
+    private static readonly string WorkDir = SimGUI.Services.SimulationRunner.RepoRoot;
 
     // 16 distinct colours for channel traces
     private static readonly ScottPlot.Color[] ChColors = new ScottPlot.Color[]

@@ -11,7 +11,7 @@ public partial class MainForm : Form
     private IProjectConfig _project;
     private readonly List<object> _allResults = new();
 
-    private static readonly string SimWorkDir = @"C:\Users\Robert\Documents\LTspice\sim_work";
+    private static readonly string SimWorkDir = Path.Combine(SimGUI.Services.SimulationRunner.RepoRoot, "sim_work");
 
     public MainForm()
     {

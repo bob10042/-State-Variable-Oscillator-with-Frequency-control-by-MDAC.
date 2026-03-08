@@ -9,7 +9,7 @@ public static class TestParser
     {
         Console.WriteLine("=== Multi-Range Parser Test ===\n");
 
-        string workDir = @"C:\Users\Robert\Documents\LTspice\sim_work";
+        string workDir = Path.Combine(SimGUI.Services.SimulationRunner.RepoRoot, "sim_work");
         int totalPass = 0, totalWarn = 0, totalFail = 0;
 
         for (int range = 0; range <= 8; range++)

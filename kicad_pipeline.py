@@ -63,7 +63,10 @@ VERSION = "0.1.0"
 
 # Paths - derived from repo root (directory containing this script)
 REPO_DIR = os.path.dirname(os.path.abspath(__file__))
-KICAD_LIBS = os.path.join(REPO_DIR, "kicad_libs")
+# Symbol libraries: prefer kicad_libs/ (full KiCad install), fallback to symbols/ (bundled minimal set)
+_kicad_libs_full = os.path.join(REPO_DIR, "kicad_libs")
+_kicad_libs_min = os.path.join(REPO_DIR, "symbols")
+KICAD_LIBS = _kicad_libs_full if os.path.isdir(_kicad_libs_full) else _kicad_libs_min
 WORK_DIR = os.path.join(REPO_DIR, "sim_work")
 MODELS_DIR = os.path.join(REPO_DIR, "models", "MicroCap-LIBRARY-for-ngspice")
 
@@ -138,19 +141,22 @@ _SKIP_SYMBOLS = {'GND', 'VCC', 'VEE', 'GNDPWR', 'VBUS', '+3V3', '+5V',
 
 
 def _build_symbol_file_index():
-    """Scan kicad_libs/ and build {symbol_name: file_path} index."""
+    """Scan symbol library directories and build {symbol_name: file_path} index."""
     global _SYMBOL_FILE_INDEX
     if _SYMBOL_FILE_INDEX is not None:
         return _SYMBOL_FILE_INDEX
     index = {}
-    if os.path.isdir(KICAD_LIBS):
-        for entry in os.listdir(KICAD_LIBS):
-            if entry.endswith('.kicad_symdir'):
-                symdir = os.path.join(KICAD_LIBS, entry)
-                for sym_file in os.listdir(symdir):
-                    if sym_file.endswith('.kicad_sym'):
-                        name = sym_file[:-len('.kicad_sym')]
-                        index[name] = os.path.join(symdir, sym_file)
+    # Scan both kicad_libs/ (full) and symbols/ (bundled minimal set)
+    for lib_dir in [_kicad_libs_full, _kicad_libs_min]:
+        if os.path.isdir(lib_dir):
+            for entry in os.listdir(lib_dir):
+                if entry.endswith('.kicad_symdir'):
+                    symdir = os.path.join(lib_dir, entry)
+                    for sym_file in os.listdir(symdir):
+                        if sym_file.endswith('.kicad_sym'):
+                            name = sym_file[:-len('.kicad_sym')]
+                            if name not in index:  # first found wins
+                                index[name] = os.path.join(symdir, sym_file)
     _SYMBOL_FILE_INDEX = index
     return index
 
@@ -630,9 +636,14 @@ def export_svg(sch_path, svg_path=None):
 # LIBRARY INIT
 # =============================================================
 def init_libraries():
-    """Load KiCad symbol libraries."""
+    """Load KiCad symbol libraries from kicad_libs/ and/or symbols/."""
     cache = get_symbol_cache()
-    cache.discover_libraries([KICAD_LIBS])
+    # Discover from both dirs (handles case where only one exists)
+    lib_dirs = [d for d in [_kicad_libs_full, _kicad_libs_min] if os.path.isdir(d)]
+    if lib_dirs:
+        cache.discover_libraries(lib_dirs)
+    else:
+        print("  WARNING: No symbol libraries found. Install KiCad or check repo integrity.")
     return cache
 
 

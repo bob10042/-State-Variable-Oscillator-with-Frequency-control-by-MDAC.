@@ -17,7 +17,7 @@ public class OscillatorConfig : IProjectConfig
 
     private static readonly int[] SweepDacCodes = { 3, 12, 60, 121, 605, 1211, 2421, 3632 };
 
-    private static readonly string WorkDir = @"C:\Users\Robert\Documents\LTspice";
+    private static readonly string WorkDir = SimGUI.Services.SimulationRunner.RepoRoot;
 
     // Calibration state
     private readonly List<OscillatorPointData> _calPoints = new();

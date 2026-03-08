@@ -36,8 +36,46 @@ public class SimulationRunner
 
     public SimulationRunner()
     {
-        _workingDir = @"C:\Users\Robert\Documents\LTspice";
+        // Derive repo root: SimGUI.exe is in SimGUI/SimGUI/bin/…, repo root is 4 levels up
+        // Fallback: walk up from current directory looking for kicad_pipeline.py
+        _workingDir = FindRepoRoot();
         _pythonScript = Path.Combine(_workingDir, "kicad_pipeline.py");
+    }
+
+    private static string? _cachedRepoRoot;
+
+    /// <summary>Repo root path (resolved once at startup, cached).</summary>
+    public static string RepoRoot => _cachedRepoRoot ??= FindRepoRoot();
+
+    private static string FindRepoRoot()
+    {
+        // Try relative to the executable location (works from bin/Debug/net8.0/)
+        string? exeDir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+        if (exeDir != null)
+        {
+            // Walk up looking for kicad_pipeline.py
+            string dir = exeDir;
+            for (int i = 0; i < 8; i++)
+            {
+                if (File.Exists(Path.Combine(dir, "kicad_pipeline.py")))
+                    return dir;
+                string? parent = Path.GetDirectoryName(dir);
+                if (parent == null || parent == dir) break;
+                dir = parent;
+            }
+        }
+        // Try current working directory and walk up
+        string cwd = Directory.GetCurrentDirectory();
+        for (int i = 0; i < 8; i++)
+        {
+            if (File.Exists(Path.Combine(cwd, "kicad_pipeline.py")))
+                return cwd;
+            string? parent = Path.GetDirectoryName(cwd);
+            if (parent == null || parent == cwd) break;
+            cwd = parent;
+        }
+        // Last resort: current directory
+        return Directory.GetCurrentDirectory();
     }
 
     /// <summary>

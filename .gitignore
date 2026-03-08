@@ -40,6 +40,17 @@ SimGUI/**/obj/
 SimGUI/**/.vs/
 *.csproj.user
 
+# ── KiCad symbol libraries (minimal bundled set for pipeline) ──
+!symbols/
+!symbols/**
+
+# ── SPICE models ──
+!models/
+!models/ADA4530-1.lib
+!models/MicroCap-LIBRARY.7z
+# To enable all circuit sims, extract MicroCap-LIBRARY.7z into models/MicroCap-LIBRARY-for-ngspice/
+# The oscillator and ce_amp circuits work without it (models are inline or in StateVarOsc/models/)
+
 # ── General excludes ──
 *.pyc
 __pycache__/
