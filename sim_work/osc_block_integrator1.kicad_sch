@@ -2,10 +2,15 @@
 	(version 20250114)
 	(generator "eeschema")
 	(generator_version "9.0")
-	(uuid "5a34846a-3a73-4a4a-af9b-cc667487aea5")
+	(uuid "9a37c2ac-4e1b-41c6-911d-1272ad46f667")
 	(paper "A4")
 	(title_block
-		(title "TIA with Mux Interface - ADA4530-1")
+		(title "State Variable Oscillator - Integrator 1 (HP to BP)")
+		(rev "1.0")
+		(company "CircuitForge")
+		(comment 1 "f = D/(4096*2pi*10k*470p), 25Hz-30kHz")
+		(comment 2 "Zener AGC: BV=1.1V, BP amplitude ~1V RMS")
+		(comment 3 "Block 2 of 6")
 	)
 	(lib_symbols
 		(symbol "LM741:LM741"
@@ -546,31 +551,26 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "VCC:VCC"
-			(power)
-			(pin_numbers
-				(hide yes)
-			)
+		(symbol "D:D"
 			(pin_names
-				(offset 0)
+				(offset 1.016)
 				(hide yes)
 			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
-			(property "Reference" "#PWR"
-				(at 0 -3.81 0)
+			(property "Reference" "D"
+				(at 0 2.54 0)
 				(show_name no)
 				(do_not_autoplace no)
-				(hide yes)
 				(effects
 					(font
 						(size 1.27 1.27)
 					)
 				)
 			)
-			(property "Value" "VCC"
-				(at 0 3.556 0)
+			(property "Value" "D"
+				(at 0 -2.54 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
@@ -590,7 +590,7 @@
 					)
 				)
 			)
-			(property "Datasheet" ""
+			(property "Datasheet" "https://ngspice.sourceforge.io/docs/ngspice-html-manual/manual.xhtml#cha_DIODEs"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -601,7 +601,7 @@
 					)
 				)
 			)
-			(property "Description" "Power symbol creates a global label with name \"VCC\""
+			(property "Description" "Diode for simulation or PCB"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -612,7 +612,7 @@
 					)
 				)
 			)
-			(property "ki_keywords" "global power"
+			(property "Sim.Device" "D"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -623,13 +623,57 @@
 					)
 				)
 			)
-			(symbol "VCC_0_1"
+			(property "Sim.Pins" "1=K 2=A"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Sim.Params" "rs=50m cjo=10p"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "simulation"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "TO-???* *_Diode_* *SingleDiode* D_*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "D_0_1"
 				(polyline
 					(pts
-						(xy -0.762 1.27) (xy 0 2.54)
+						(xy -1.27 1.27) (xy -1.27 -1.27)
 					)
 					(stroke
-						(width 0)
+						(width 0.254)
 						(type default)
 					)
 					(fill
@@ -638,10 +682,10 @@
 				)
 				(polyline
 					(pts
-						(xy 0 2.54) (xy 0.762 1.27)
+						(xy 1.27 1.27) (xy 1.27 -1.27) (xy -1.27 0) (xy 1.27 1.27)
 					)
 					(stroke
-						(width 0)
+						(width 0.254)
 						(type default)
 					)
 					(fill
@@ -650,7 +694,7 @@
 				)
 				(polyline
 					(pts
-						(xy 0 0) (xy 0 2.54)
+						(xy 1.27 0) (xy -1.27 0)
 					)
 					(stroke
 						(width 0)
@@ -661,11 +705,11 @@
 					)
 				)
 			)
-			(symbol "VCC_1_1"
-				(pin power_in line
-					(at 0 0 90)
-					(length 0)
-					(name ""
+			(symbol "D_1_1"
+				(pin passive line
+					(at -3.81 0 0)
+					(length 2.54)
+					(name "K"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -673,6 +717,24 @@
 						)
 					)
 					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 3.81 0 180)
+					(length 2.54)
+					(name "A"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -796,10 +858,135 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "VEE:VEE"
+			(power)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -3.81 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "VEE"
+				(at 0 3.556 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Power symbol creates a global label with name \"VEE\""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "VEE_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 2.54)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 0.762 1.27) (xy -0.762 1.27) (xy 0 2.54) (xy 0.762 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type outline)
+					)
+				)
+			)
+			(symbol "VEE_1_1"
+				(pin power_in line
+					(at 0 0 90)
+					(length 0)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 	)
 	(symbol
 		(lib_id "LM741:LM741")
-		(at 116.84 111.76 0)
+		(at 139.7 152.4 0)
 		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
@@ -807,9 +994,9 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "3d01bc6d-740b-494b-8c81-8d09970f08d5")
-		(property "Reference" "U1"
-			(at 116.84 118.11 0.0000)
+		(uuid "d716c334-f7ad-4fae-bade-9ec0f5ead861")
+		(property "Reference" "U2"
+			(at 139.7 158.75 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -817,8 +1004,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "ADA4530-1"
-			(at 116.84 115.57 0.0000)
+		(property "Value" "LM4562"
+			(at 139.7 156.21 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -827,33 +1014,33 @@
 			)
 		)
 		(pin "1"
-			(uuid "7c7080b5-f2c1-43d0-9b11-0ec37b6547ef")
+			(uuid "86833d03-f176-4693-b4af-6684622a04c1")
 		)
 		(pin "2"
-			(uuid "414e9b8d-fa74-4e59-b689-4bbcacab64d7")
+			(uuid "e75fd00c-125a-4f2f-a02c-4c766610e143")
 		)
 		(pin "3"
-			(uuid "88b8949f-8961-4865-986a-ef3632141a0a")
+			(uuid "e44ca2a9-9d75-44d0-befb-27d8e73b114a")
 		)
 		(pin "4"
-			(uuid "4b479497-9c84-40c3-8a72-82be4942e7f2")
+			(uuid "71bc764e-8bac-4c24-8e52-0c7160fb95e1")
 		)
 		(pin "5"
-			(uuid "bbb01b45-1329-405d-b432-ed15fc6b2a8f")
+			(uuid "d18832f9-f229-4985-a4d0-f48297b0ea91")
 		)
 		(pin "6"
-			(uuid "30d026d4-f6f2-4755-953d-7d80e7b83dff")
+			(uuid "9518ff88-3468-4807-b452-87e10ebaa1a9")
 		)
 		(pin "7"
-			(uuid "f87ec401-4765-4b7e-a893-f74a5bda59b8")
+			(uuid "fdcd5293-3551-41ee-a974-c31e5adc883c")
 		)
 		(pin "8"
-			(uuid "9c0c12ca-4788-4211-a838-0ba4851c58ba")
+			(uuid "5df7fd00-d56a-4fcc-a7df-c15deb4a9aaf")
 		)
 		(instances
-			(project "TIA with Mux Interface - ADA4530-1"
-				(path "/5a34846a-3a73-4a4a-af9b-cc667487aea5"
-					(reference "U1")
+			(project "Oscillator - Integrator 1"
+				(path "/9a37c2ac-4e1b-41c6-911d-1272ad46f667"
+					(reference "U2")
 					(unit 1)
 				)
 			)
@@ -861,145 +1048,16 @@
 	)
 	(symbol
 		(lib_id "R:R")
-		(at 116.84 96.52 90)
+		(at 96.52 149.86 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "438741aa-688d-4a6d-9f0f-866146c3e3a7")
-		(property "Reference" "R1"
-			(at 116.84 98.552 180)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "1G"
-			(at 116.84 96.52 180)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "1"
-			(uuid "4b5027de-84d9-40e1-9426-f6c25cdd4652")
-		)
-		(pin "2"
-			(uuid "9c4df86a-d47d-457d-8694-3f675d3cb3cc")
-		)
-		(instances
-			(project "TIA with Mux Interface - ADA4530-1"
-				(path "/5a34846a-3a73-4a4a-af9b-cc667487aea5"
-					(reference "R1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "C:C")
-		(at 116.84 88.9 90)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced no)
-		(uuid "9b4a1ede-d88a-43e5-b838-4edccaed5e16")
-		(property "Reference" "C1"
-			(at 114.3 89.535 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "10pF"
-			(at 119.38 89.535 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "1"
-			(uuid "691805f6-b210-4636-9a10-e19f3df2a4e0")
-		)
-		(pin "2"
-			(uuid "ac0b8972-6e9f-4a9d-a1a8-bbb54f1a7008")
-		)
-		(instances
-			(project "TIA with Mux Interface - ADA4530-1"
-				(path "/5a34846a-3a73-4a4a-af9b-cc667487aea5"
-					(reference "C1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "R:R")
-		(at 68.58 101.6 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced no)
-		(uuid "bc1b7635-7425-45c7-83ae-d17ef4396919")
-		(property "Reference" "R3"
-			(at 70.612 101.6 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "100k"
-			(at 68.58 101.6 90)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "1"
-			(uuid "dda65059-1d58-4a9f-a599-3edababb4665")
-		)
-		(pin "2"
-			(uuid "ac089b8f-8fda-4388-9b8a-d83936cd784f")
-		)
-		(instances
-			(project "TIA with Mux Interface - ADA4530-1"
-				(path "/5a34846a-3a73-4a4a-af9b-cc667487aea5"
-					(reference "R3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "R:R")
-		(at 68.58 127 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced no)
-		(uuid "333fc02c-26e0-41c4-8436-d5b424251bd2")
+		(uuid "166d2cef-b5d2-49ea-bd68-cda480ecdff1")
 		(property "Reference" "R4"
-			(at 70.612 127 90)
+			(at 96.52 151.892 180)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1007,8 +1065,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100k"
-			(at 68.58 127 90)
+		(property "Value" "10k"
+			(at 96.52 149.86 180)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1017,14 +1075,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "067de406-939e-4f0d-8220-61223348e44b")
+			(uuid "abfde40c-5720-4f6f-9862-ec86ec97ffca")
 		)
 		(pin "2"
-			(uuid "dd3f0528-65fb-4497-b454-822e11dc9b2f")
+			(uuid "32f1e8c6-1146-4b3d-a99a-095d837143be")
 		)
 		(instances
-			(project "TIA with Mux Interface - ADA4530-1"
-				(path "/5a34846a-3a73-4a4a-af9b-cc667487aea5"
+			(project "Oscillator - Integrator 1"
+				(path "/9a37c2ac-4e1b-41c6-911d-1272ad46f667"
 					(reference "R4")
 					(unit 1)
 				)
@@ -1033,16 +1091,16 @@
 	)
 	(symbol
 		(lib_id "C:C")
-		(at 81.28 127 0)
+		(at 139.7 129.54 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "cca8e6db-e019-4f9e-a220-871c75b35152")
-		(property "Reference" "C2"
-			(at 81.915 129.54 0.0000)
+		(uuid "297645e7-21da-42cd-94a8-ac0c2f61c5e4")
+		(property "Reference" "C1"
+			(at 137.16 130.175 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1050,8 +1108,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100nF"
-			(at 81.915 124.46 0.0000)
+		(property "Value" "470p"
+			(at 142.24 130.175 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1060,33 +1118,32 @@
 			)
 		)
 		(pin "1"
-			(uuid "13ecf0b7-0a81-43ab-ab6e-82a3dde73b87")
+			(uuid "8d4677c1-8ff9-4430-91ee-a7886f9c38d0")
 		)
 		(pin "2"
-			(uuid "1921f488-9fa9-4886-a4a7-3c760f26af37")
+			(uuid "49c94b74-6c86-46f2-8719-48c8890596ee")
 		)
 		(instances
-			(project "TIA with Mux Interface - ADA4530-1"
-				(path "/5a34846a-3a73-4a4a-af9b-cc667487aea5"
-					(reference "C2")
+			(project "Oscillator - Integrator 1"
+				(path "/9a37c2ac-4e1b-41c6-911d-1272ad46f667"
+					(reference "C1")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "VCC:VCC")
-		(at 114.3 127 0)
+		(lib_id "R:R")
+		(at 139.7 114.3 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "1ef4bd0a-3a8c-484b-be0a-b4f598b78102")
-		(property "Reference" "#PWR01"
-			(at 114.3 123.19 0.0000)
-			(hide yes)
+		(uuid "2c1e7a17-5d68-4071-81c2-346526246d94")
+		(property "Reference" "R5"
+			(at 139.7 116.332 180)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1094,8 +1151,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "+3.3V"
-			(at 114.3 130.556 0.0000)
+		(property "Value" "100M"
+			(at 139.7 114.3 180)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1104,12 +1161,101 @@
 			)
 		)
 		(pin "1"
-			(uuid "221fef04-3269-452f-8063-0340d18d877e")
+			(uuid "7f4baf51-8bbe-4359-868c-aa1922b204a8")
+		)
+		(pin "2"
+			(uuid "5de93e26-daa6-4ab8-8321-7f970ea8e417")
 		)
 		(instances
-			(project "TIA with Mux Interface - ADA4530-1"
-				(path "/5a34846a-3a73-4a4a-af9b-cc667487aea5"
-					(reference "#PWR01")
+			(project "Oscillator - Integrator 1"
+				(path "/9a37c2ac-4e1b-41c6-911d-1272ad46f667"
+					(reference "R5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "D:D")
+		(at 127 99.06 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced no)
+		(uuid "acacc333-4ba5-4d22-934a-ea4a0b541b0d")
+		(property "Reference" "D1"
+			(at 127 101.6 0.0000)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "DZ09 BV=1.1"
+			(at 127 96.52 0.0000)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "1"
+			(uuid "c8ff788c-84f4-42fc-92dd-85de86e213f4")
+		)
+		(pin "2"
+			(uuid "4c945c49-5e83-42e9-90e8-f76613a18cce")
+		)
+		(instances
+			(project "Oscillator - Integrator 1"
+				(path "/9a37c2ac-4e1b-41c6-911d-1272ad46f667"
+					(reference "D1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "D:D")
+		(at 152.4 99.06 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced no)
+		(uuid "0d1425b7-50fe-41f6-b1c8-c4d078c5f933")
+		(property "Reference" "D2"
+			(at 152.4 96.52 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "DZ09 BV=1.1"
+			(at 152.4 101.6 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "1"
+			(uuid "6472c1ee-2d7f-428c-8072-98b789d9cf0e")
+		)
+		(pin "2"
+			(uuid "0cc4166b-6071-47ab-9513-d01306a2b11c")
+		)
+		(instances
+			(project "Oscillator - Integrator 1"
+				(path "/9a37c2ac-4e1b-41c6-911d-1272ad46f667"
+					(reference "D2")
 					(unit 1)
 				)
 			)
@@ -1117,16 +1263,16 @@
 	)
 	(symbol
 		(lib_id "GND:GND")
-		(at 144.78 124.46 0)
+		(at 132.08 175.26 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "fef42490-835b-4c41-9f0d-9749d3ebe5fb")
-		(property "Reference" "#PWR02"
-			(at 144.78 118.11 0.0000)
+		(uuid "e0323d51-0a00-4618-b379-fce21f925651")
+		(property "Reference" "#PWR001"
+			(at 132.08 168.91 0.0000)
 			(hide yes)
 			(effects
 				(font
@@ -1136,7 +1282,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 144.78 120.65 0.0000)
+			(at 132.08 171.45 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1145,29 +1291,29 @@
 			)
 		)
 		(pin "1"
-			(uuid "cd06acaa-9237-49c6-8a56-95139e2f188d")
+			(uuid "866bcd30-1ce9-4ef9-8d01-ef8d6aeebd15")
 		)
 		(instances
-			(project "TIA with Mux Interface - ADA4530-1"
-				(path "/5a34846a-3a73-4a4a-af9b-cc667487aea5"
-					(reference "#PWR02")
+			(project "Oscillator - Integrator 1"
+				(path "/9a37c2ac-4e1b-41c6-911d-1272ad46f667"
+					(reference "#PWR001")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "VCC:VCC")
-		(at 68.58 90.17 0)
+		(lib_id "VEE:VEE")
+		(at 137.16 134.62 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "44a0a844-2b14-4108-8746-0aa3ba191221")
-		(property "Reference" "#PWR03"
-			(at 68.58 86.36 0.0000)
+		(uuid "1aac04f3-912f-4654-8156-305e7eba1e10")
+		(property "Reference" "#PWR002"
+			(at 137.16 130.81 0.0000)
 			(hide yes)
 			(effects
 				(font
@@ -1176,8 +1322,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "+3.3V"
-			(at 68.58 93.726 0.0000)
+		(property "Value" "-15V"
+			(at 137.16 138.176 0.0000)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1186,408 +1332,387 @@
 			)
 		)
 		(pin "1"
-			(uuid "18a93c86-191f-47d9-bbca-c1ad0b086daf")
+			(uuid "f629a35e-3349-41f8-a0a6-9ffe152aa1b0")
 		)
 		(instances
-			(project "TIA with Mux Interface - ADA4530-1"
-				(path "/5a34846a-3a73-4a4a-af9b-cc667487aea5"
-					(reference "#PWR03")
+			(project "Oscillator - Integrator 1"
+				(path "/9a37c2ac-4e1b-41c6-911d-1272ad46f667"
+					(reference "#PWR002")
 					(unit 1)
 				)
 			)
 		)
 	)
-	(symbol
-		(lib_id "GND:GND")
-		(at 68.58 138.43 0)
-		(unit 1)
+	(wire
+		(pts
+			(xy 35.56 149.86) (xy 50.8 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9766f1a5-d889-4348-bb5d-f46197abfc55")
+	)
+	(wire
+		(pts
+			(xy 50.8 149.86) (xy 92.71 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d3e3016c-4c81-4c5f-9f1a-f3bf23c01e7f")
+	)
+	(wire
+		(pts
+			(xy 55.88 170.18) (xy 55.88 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b96fadcb-246f-4570-a227-3147a6d5fc60")
+	)
+	(wire
+		(pts
+			(xy 100.33 149.86) (xy 135.89 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8696e897-d05d-4804-a865-8933c2b10173")
+	)
+	
+	(wire
+		(pts
+			(xy 135.89 129.54) (xy 135.89 149.86)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "484a1dab-23c1-4fb5-a188-b2f80f8d62ad")
+	)
+	(wire
+		(pts
+			(xy 135.89 129.54) (xy 135.89 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "668427c3-9855-4cd3-8cef-472188a1f133")
+	)
+	(wire
+		(pts
+			(xy 143.51 129.54) (xy 147.32 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "62e13663-8e93-4766-adc8-763e89645541")
+	)
+	(wire
+		(pts
+			(xy 147.32 129.54) (xy 147.32 152.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0b2bc0c8-e56d-40f9-9c33-57358b0aade0")
+	)
+	(wire
+		(pts
+			(xy 135.89 114.3) (xy 135.89 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b134620a-4594-400d-84b7-67b7d7328d7b")
+	)
+	(wire
+		(pts
+			(xy 135.89 114.3) (xy 135.89 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d070ade7-e06f-4ecd-87ce-b66c1f4ffe4f")
+	)
+	(wire
+		(pts
+			(xy 143.51 114.3) (xy 147.32 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e468fb8d-526e-4186-9031-aafee326424f")
+	)
+	(wire
+		(pts
+			(xy 147.32 114.3) (xy 147.32 129.54)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "32600a2a-a011-4a7a-8a41-de4c2fa0741b")
+	)
+	
+	(wire
+		(pts
+			(xy 123.19 99.06) (xy 156.21 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2c3e7b6c-3885-4720-8b51-fb35526a7483")
+	)
+	(wire
+		(pts
+			(xy 135.89 99.06) (xy 135.89 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cbb43e5b-e512-471e-8ae5-ea3ad96643cc")
+	)
+	
+	(wire
+		(pts
+			(xy 147.32 99.06) (xy 147.32 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "02d7d79f-0fc0-4d5c-b3f2-5132804afdef")
+	)
+	(wire
+		(pts
+			(xy 132.08 154.94) (xy 132.08 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "634896ed-2446-4715-b84a-a0b1d5de423b")
+	)
+	(wire
+		(pts
+			(xy 137.16 160.02) (xy 137.16 180.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a0c02a48-14a1-4254-aa3d-c3a0a7e6e96c")
+	)
+	(wire
+		(pts
+			(xy 137.16 134.62) (xy 137.16 144.78)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "06b4ff31-ede5-477c-86d6-56d2bbb88a9c")
+	)
+	(wire
+		(pts
+			(xy 147.32 152.4) (xy 172.72 152.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2023a966-0f91-4157-8aa6-4ef9488a03d7")
+	)
+	(junction
+		(at 135.89 149.86)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "ee6ff01d-8fe6-468b-9df5-dc77167fc935")
+	)
+	(junction
+		(at 135.89 129.54)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "8bfd77dd-9b8c-48f2-b129-46d90df92f12")
+	)
+	(junction
+		(at 147.32 129.54)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "3e0d3401-0555-497f-9b0f-35e96eafb331")
+	)
+	(junction
+		(at 135.89 114.3)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "b2a6a37c-93e1-4656-a60b-76f730cbda04")
+	)
+	(junction
+		(at 147.32 114.3)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "4a16748e-6b56-4d1c-8889-8cd4447a731e")
+	)
+	(junction
+		(at 147.32 152.4)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "9cf8179a-9e76-4ece-a48d-7d2c4119971b")
+	)
+	(label "HP"
+		(at 35.56 149.86 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "175812f4-1761-40df-8538-25bc594424d4")
+	)
+	(label "VCTRL"
+		(at 55.88 170.18 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "57ad548c-f35a-493a-8b2c-a68058afa1f8")
+	)
+	(label "+15V"
+		(at 137.16 180.34 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2f90f089-9ed9-4c01-bda0-10583a433d36")
+	)
+	(label "BP"
+		(at 172.72 152.4 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "19969436-1474-413c-9ea0-228196374fbf")
+	)
+	(text "INTEGRATOR 1: HP -> BP (U2 + XDAC1)"
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced no)
-		(uuid "782aef54-9e2a-4f70-bece-4ab8d042cc11")
-		(property "Reference" "#PWR04"
-			(at 68.58 132.08 0.0000)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
+		(at 20.32 15.24 0.0000)
+		(effects
+			(font
+				(size 4 4)
+				(bold yes)
 			)
 		)
-		(property "Value" "GND"
-			(at 68.58 134.62 0.0000)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "1"
-			(uuid "f4bbd9df-4bb2-4e80-9ecb-2efeb4bcd032")
-		)
-		(instances
-			(project "TIA with Mux Interface - ADA4530-1"
-				(path "/5a34846a-3a73-4a4a-af9b-cc667487aea5"
-					(reference "#PWR04")
-					(unit 1)
-				)
-			)
-		)
+		(uuid "16230c09-41dc-4c90-8094-a1a60d28dbb4")
 	)
-	(symbol
-		(lib_id "GND:GND")
-		(at 81.28 138.43 0)
-		(unit 1)
+	(text "f = D / (4096 * 2pi * R4 * C1) = D / (4096 * 2pi * 10k * 470p)"
 		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced no)
-		(uuid "189bb427-ddce-47df-9dd0-149545a44d3b")
-		(property "Reference" "#PWR05"
-			(at 81.28 132.08 0.0000)
-			(hide yes)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "GND"
-			(at 81.28 134.62 0.0000)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(pin "1"
-			(uuid "a241bb99-c9e8-41dc-b744-50a4f464ffbe")
-		)
-		(instances
-			(project "TIA with Mux Interface - ADA4530-1"
-				(path "/5a34846a-3a73-4a4a-af9b-cc667487aea5"
-					(reference "#PWR05")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(wire
-		(pts
-			(xy 96.52 109.22) (xy 109.22 109.22)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b1724107-82cf-41e0-8f8d-1904ea148673")
-	)
-	(wire
-		(pts
-			(xy 76.2 81.28) (xy 96.52 81.28)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "49307650-7a65-4914-b989-c9bfe8dccf41")
-	)
-	(wire
-		(pts
-			(xy 96.52 81.28) (xy 96.52 109.22)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f7f11da3-4a59-4ba3-a404-83ad284e39b6")
-	)
-	(wire
-		(pts
-			(xy 96.52 109.22) (xy 96.52 96.52)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b95f10c4-b829-49d9-8dec-b49e4267fcbc")
-	)
-	(wire
-		(pts
-			(xy 96.52 96.52) (xy 113.03 96.52)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0941c2ee-9035-476b-b44c-f8c96d4361f5")
-	)
-	(wire
-		(pts
-			(xy 120.65 96.52) (xy 124.46 96.52)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "aabbc0d2-e7f9-43d2-a6d3-3de26c1ef6e5")
-	)
-	(wire
-		(pts
-			(xy 124.46 96.52) (xy 124.46 111.76)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "740b4490-8696-4588-9b93-4325905340eb")
-	)
-	(wire
-		(pts
-			(xy 96.52 96.52) (xy 96.52 88.9)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "de2c5651-1a4c-49fc-8b52-f663a0854c3e")
-	)
-	(wire
-		(pts
-			(xy 96.52 88.9) (xy 113.03 88.9)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "d1a3043f-e395-48f8-850d-a602b048624d")
-	)
-	(wire
-		(pts
-			(xy 120.65 88.9) (xy 124.46 88.9)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2054eee0-d1b0-4a78-8296-bd4ce3f249a8")
-	)
-	(wire
-		(pts
-			(xy 124.46 88.9) (xy 124.46 96.52)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0c33dd09-7ce7-417d-b1eb-5cd2321aec12")
-	)
-	(wire
-		(pts
-			(xy 96.52 91.44) (xy 96.52 96.52)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "590071f6-dbe5-4e1b-bf26-c268fb61b029")
-	)
-	(wire
-		(pts
-			(xy 124.46 104.14) (xy 129.54 104.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bb7f9c0f-5c74-4574-ac36-7cba99be1df0")
-	)
-	(wire
-		(pts
-			(xy 68.58 105.41) (xy 68.58 123.19)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b3844002-2cdd-4b06-823b-9bd3a5a6b3fd")
-	)
-	(wire
-		(pts
-			(xy 68.58 105.41) (xy 68.58 114.3)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "77001058-4311-4991-abec-56b2d0521ade")
-	)
-	(wire
-		(pts
-			(xy 68.58 114.3) (xy 68.58 123.19)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1f709354-d653-4a2c-8cf9-afd307c083fb")
-	)
-	(wire
-		(pts
-			(xy 68.58 114.3) (xy 109.22 114.3)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "cb94da3b-2c7b-47b4-94b1-ccfcc6143bdc")
-	)
-	(wire
-		(pts
-			(xy 81.28 123.19) (xy 81.28 114.3)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "89b66ee3-7183-4003-b9cd-38ee76d1713e")
-	)
-	(wire
-		(pts
-			(xy 81.28 114.3) (xy 68.58 114.3)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "385ec428-2d51-4e74-985a-517f335b90b6")
-	)
-	(wire
-		(pts
-			(xy 124.46 111.76) (xy 139.7 111.76)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "cb409d5e-4eb0-48c8-ae95-8b1ce53a7e97")
-	)
-	(wire
-		(pts
-			(xy 114.3 119.38) (xy 114.3 127)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "129bb345-605b-48c8-8f59-e9b72fbb78ae")
-	)
-	(wire
-		(pts
-			(xy 114.3 104.14) (xy 144.78 104.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "e40e27ae-dd9e-4f23-a63f-cd3bfaec30e7")
-	)
-	(wire
-		(pts
-			(xy 144.78 104.14) (xy 144.78 124.46)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "380cab71-20f3-4a25-bb0b-cdd2e12502c3")
-	)
-	(wire
-		(pts
-			(xy 68.58 97.79) (xy 68.58 90.17)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "73d09c3d-906e-4f63-984e-b364e5a4560e")
-	)
-	(wire
-		(pts
-			(xy 68.58 130.81) (xy 68.58 138.43)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "cff37a2a-b6b0-40dc-95ae-3ab7d0137000")
-	)
-	(wire
-		(pts
-			(xy 81.28 130.81) (xy 81.28 138.43)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c92fd26c-2f5d-400a-ad62-801154f862a4")
-	)
-	(label "TIA_IN"
-		(at 76.2 81.28 0)
+		(at 20.32 30.48 0.0000)
 		(effects
 			(font
-				(size 1.27 1.27)
+				(size 2.5 2.5)
 			)
-			(justify left bottom)
 		)
-		(uuid "467fca47-e56b-4729-9552-63bbfc3a22bc")
+		(uuid "6ddb7b98-0238-4b79-b9eb-d0c37be1baf0")
 	)
-	(label "INV"
-		(at 96.52 91.44 0)
+	(text "Frequency range: 25 Hz (D=3) to 30 kHz (D=3640)"
+		(exclude_from_sim no)
+		(at 20.32 43.18 0.0000)
 		(effects
 			(font
-				(size 1.27 1.27)
+				(size 2 2)
 			)
-			(justify left bottom)
 		)
-		(uuid "80d11980-f3fa-417f-9506-0f80b1876b4f")
+		(uuid "c0c7e97f-c42e-41de-8c46-1a989881f562")
 	)
-	(label "OUT"
-		(at 129.54 104.14 0)
+	(text "XDAC1\nDAC7800"
+		(exclude_from_sim no)
+		(at 55.88 139.7 0.0000)
 		(effects
 			(font
-				(size 1.27 1.27)
+				(size 2.5 2.5)
 			)
-			(justify left bottom)
 		)
-		(uuid "e7e0ff70-314d-4b7e-8269-ceca86db75f0")
+		(uuid "189e9ddb-b42e-4497-b99f-3ab4e8fb631b")
 	)
-	(label "AIN0"
-		(at 139.7 111.76 0)
+	(text "Zener AGC\nBV=1.1V\n(back-to-back)"
+		(exclude_from_sim no)
+		(at 134.62 111.76 0.0000)
 		(effects
 			(font
-				(size 1.27 1.27)
+				(size 2 2)
 			)
-			(justify left bottom)
 		)
-		(uuid "9a408968-472e-474e-821f-a045af16c294")
+		(uuid "ed592f22-982a-41f6-9af2-96f03f1da9cb")
 	)
-	(label "AIN1"
-		(at 93.98 114.3 0)
+	(text "D=121: f~997Hz    D=3: f~25Hz    D=3640: f~30kHz"
+		(exclude_from_sim no)
+		(at 20.32 208.28 0.0000)
 		(effects
 			(font
-				(size 1.27 1.27)
+				(size 2 2)
 			)
-			(justify left bottom)
 		)
-		(uuid "acd80bb0-7ee6-404f-8e11-4ec5ceadd422")
+		(uuid "d957758f-f016-4b0c-92f7-1ba631ffba13")
+	)
+	(text "Interfaces:"
+		(exclude_from_sim no)
+		(at 20.32 223.52 0.0000)
+		(effects
+			(font
+				(size 2.5 2.5)
+				(bold yes)
+			)
+		)
+		(uuid "287e87a7-b90f-4d24-9ffa-d9fcfb58a1fb")
+	)
+	(text "HP input: from Summing Amplifier (U1) output"
+		(exclude_from_sim no)
+		(at 20.32 236.22 0.0000)
+		(effects
+			(font
+				(size 2 2)
+			)
+		)
+		(uuid "0be61780-8d24-4496-8efd-e95bb2d3812e")
+	)
+	(text "BP output: to Integrator 2 (U3), RMS Detector (U4), Summing Amp (U1)"
+		(exclude_from_sim no)
+		(at 20.32 248.92 0.0000)
+		(effects
+			(font
+				(size 2 2)
+			)
+		)
+		(uuid "4ffd95d4-8fb6-493a-a837-83eeacf03220")
+	)
+	(text "VCTRL: from MCU (U5) SPI0 via DAC7800"
+		(exclude_from_sim no)
+		(at 20.32 261.62 0.0000)
+		(effects
+			(font
+				(size 2 2)
+			)
+		)
+		(uuid "a217d9e1-b52a-43da-9aec-aaf30043a826")
 	)
 	(sheet_instances
 		(path "/"

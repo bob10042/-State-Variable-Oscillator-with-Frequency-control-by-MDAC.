@@ -1,0 +1,862 @@
+(kicad_sch
+	(version 20250114)
+	(generator "eeschema")
+	(generator_version "9.0")
+	(uuid "6abdfe07-2f4a-4a79-89a5-9ae6e7ff0a79")
+	(paper "A4")
+	(title_block
+		(title "State Variable Oscillator - AD636 RMS Detector")
+		(rev "1.0")
+		(company "CircuitForge")
+		(comment 1 "1/5 attenuator + AD636 true RMS-to-DC")
+		(comment 2 "Vout = BP * R11/(R10+R11) = BP/5")
+		(comment 3 "Block 3 of 6")
+	)
+	(lib_symbols
+		(symbol "R:R"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "R"
+				(at 2.032 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "R"
+				(at 0 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at -1.778 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Resistor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "R res resistor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "R_*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "R_0_1"
+				(rectangle
+					(start -1.016 -2.54)
+					(end 1.016 2.54)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "R_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 1.27)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 1.27)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "GND:GND"
+			(power)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "#PWR"
+				(at 0 -6.35 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "GND"
+				(at 0 -3.81 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "global power"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "GND_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 -1.27) (xy 1.27 -1.27) (xy 0 -2.54) (xy -1.27 -1.27) (xy 0 -1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "GND_1_1"
+				(pin power_in line
+					(at 0 0 270)
+					(length 0)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "C:C"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0.254)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(property "Reference" "C"
+				(at 0.635 2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Value" "C"
+				(at 0.635 -2.54 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left)
+				)
+			)
+			(property "Footprint" ""
+				(at 0.9652 -3.81 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Unpolarized capacitor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "cap capacitor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_fp_filters" "C_*"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "C_0_1"
+				(polyline
+					(pts
+						(xy -2.032 0.762) (xy 2.032 0.762)
+					)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -2.032 -0.762) (xy 2.032 -0.762)
+					)
+					(stroke
+						(width 0.508)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(symbol "C_1_1"
+				(pin passive line
+					(at 0 3.81 270)
+					(length 2.794)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 2.794)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+	)
+	(symbol
+		(lib_id "R:R")
+		(at 60.96 121.92 90)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced no)
+		(uuid "8a0080a3-1eb6-42e1-b3e0-4dab9cc65e2d")
+		(property "Reference" "R10"
+			(at 60.96 123.952 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "40k"
+			(at 60.96 121.92 180)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "1"
+			(uuid "ac1b39e5-6cb3-495f-9159-3d1cb40eeb50")
+		)
+		(pin "2"
+			(uuid "e0541d28-5bca-40a8-82a5-5c367a4bc7cb")
+		)
+		(instances
+			(project "Oscillator - RMS Detector"
+				(path "/6abdfe07-2f4a-4a79-89a5-9ae6e7ff0a79"
+					(reference "R10")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "R:R")
+		(at 85.09 147.32 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced no)
+		(uuid "5ccd6299-f45e-4dbd-9df0-416115a02dde")
+		(property "Reference" "R11"
+			(at 87.122 147.32 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10k"
+			(at 85.09 147.32 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "1"
+			(uuid "ea258c37-f7bf-4255-88bc-6315d196657e")
+		)
+		(pin "2"
+			(uuid "16da52b4-1bda-48d5-8340-b52d4d01a58c")
+		)
+		(instances
+			(project "Oscillator - RMS Detector"
+				(path "/6abdfe07-2f4a-4a79-89a5-9ae6e7ff0a79"
+					(reference "R11")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "GND:GND")
+		(at 85.09 166.37 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced no)
+		(uuid "19df51ba-3fd0-47b1-a43c-9e394e1f3668")
+		(property "Reference" "#PWR001"
+			(at 85.09 160.02 0.0000)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "GND"
+			(at 85.09 162.56 0.0000)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "1"
+			(uuid "898e06ae-f416-414d-89ea-adb4604c3bb6")
+		)
+		(instances
+			(project "Oscillator - RMS Detector"
+				(path "/6abdfe07-2f4a-4a79-89a5-9ae6e7ff0a79"
+					(reference "#PWR001")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "C:C")
+		(at 156.21 147.32 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced no)
+		(uuid "8479108e-ee83-426d-aaaa-13709a4f4962")
+		(property "Reference" "C3"
+			(at 156.845 149.86 0.0000)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "10u"
+			(at 156.845 144.78 0.0000)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "1"
+			(uuid "bbe0f647-6f7a-4cc8-af33-d9a4f23c2479")
+		)
+		(pin "2"
+			(uuid "4332b4ac-4e58-46bd-bcfe-1e9a1810ccc8")
+		)
+		(instances
+			(project "Oscillator - RMS Detector"
+				(path "/6abdfe07-2f4a-4a79-89a5-9ae6e7ff0a79"
+					(reference "C3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "GND:GND")
+		(at 156.21 166.37 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced no)
+		(uuid "64bfe5d9-9a0d-4dfe-9815-005e750be9c6")
+		(property "Reference" "#PWR002"
+			(at 156.21 160.02 0.0000)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "GND"
+			(at 156.21 162.56 0.0000)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(pin "1"
+			(uuid "51ac43ab-968f-4aca-a943-f09b86a95539")
+		)
+		(instances
+			(project "Oscillator - RMS Detector"
+				(path "/6abdfe07-2f4a-4a79-89a5-9ae6e7ff0a79"
+					(reference "#PWR002")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(wire
+		(pts
+			(xy 36.83 121.92) (xy 57.15 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a4afda51-f888-4a68-ba4d-f0f927f640df")
+	)
+	(wire
+		(pts
+			(xy 64.77 121.92) (xy 85.09 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "91675f7c-de63-4231-83e2-5bb38f380917")
+	)
+	(wire
+		(pts
+			(xy 85.09 121.92) (xy 85.09 143.51)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "31efc693-f72f-49a3-8e4a-f3e3430dcf2b")
+	)
+	(wire
+		(pts
+			(xy 85.09 151.13) (xy 85.09 166.37)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "042081a7-9bfe-4a5f-98ab-f24868f925ef")
+	)
+	(wire
+		(pts
+			(xy 85.09 121.92) (xy 130.81 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c423b703-73fe-404d-b059-1e49cd289668")
+	)
+	(wire
+		(pts
+			(xy 151.13 121.92) (xy 156.21 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "0074c215-c88f-455f-8eb7-2e80bfff131c")
+	)
+	(wire
+		(pts
+			(xy 156.21 121.92) (xy 156.21 143.51)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "e7e9c6ce-b27a-4363-a2bc-2f70927a7f58")
+	)
+	(wire
+		(pts
+			(xy 156.21 151.13) (xy 156.21 166.37)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c46b4bea-7cf1-4330-8a2c-8c5be76e351b")
+	)
+	(wire
+		(pts
+			(xy 156.21 121.92) (xy 191.77 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d2a55b97-d3a4-461a-b200-ae412b570f5b")
+	)
+	(junction
+		(at 85.09 121.92)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f76d76b0-585d-4a09-b319-fcd87180b19e")
+	)
+	(junction
+		(at 156.21 121.92)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6e95e08d-2af6-4ce8-affb-3a94577bea0c")
+	)
+	(label "BP"
+		(at 36.83 121.92 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "f8e4a57e-770f-470a-a0b9-01c184014049")
+	)
+	(label "AIN0"
+		(at 191.77 121.92 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "922777c2-996d-4373-b838-52d786e79018")
+	)
+	(text "AD636 RMS DETECTOR (U4)"
+		(exclude_from_sim no)
+		(at 20.32 15.24 0.0000)
+		(effects
+			(font
+				(size 4 4)
+				(bold yes)
+			)
+		)
+		(uuid "7175661e-1ce6-4bff-9995-0dd0737540ac")
+	)
+	(text "Vout_RMS = BP * R11/(R10+R11) = BP * 10k/(40k+10k) = BP/5"
+		(exclude_from_sim no)
+		(at 20.32 30.48 0.0000)
+		(effects
+			(font
+				(size 2.5 2.5)
+			)
+		)
+		(uuid "5aa2d036-298c-437e-a310-e6669a7b272a")
+	)
+	(text "AD636 true RMS-to-DC converter, CAV=10uF averaging capacitor"
+		(exclude_from_sim no)
+		(at 20.32 43.18 0.0000)
+		(effects
+			(font
+				(size 2 2)
+			)
+		)
+		(uuid "0258e99e-d092-4f76-b618-5c90454ea177")
+	)
+	(text "1/5 attenuator\nVin/5 to AD636"
+		(exclude_from_sim no)
+		(at 100.33 121.92 0.0000)
+		(effects
+			(font
+				(size 2 2)
+			)
+		)
+		(uuid "5294dd22-c484-419a-a097-bc30d9dd810b")
+	)
+	(text "U4\nAD636\nRMS-to-DC"
+		(exclude_from_sim no)
+		(at 135.89 101.6 0.0000)
+		(effects
+			(font
+				(size 2.5 2.5)
+			)
+		)
+		(uuid "4367ab59-ce5b-428c-8156-d11e64e817c8")
+	)
+	(text "CAV"
+		(exclude_from_sim no)
+		(at 168.91 147.32 0.0000)
+		(effects
+			(font
+				(size 2 2)
+			)
+		)
+		(uuid "97f2825b-e9e0-4df6-916e-e777b0c13cc8")
+	)
+	(text "Interfaces:"
+		(exclude_from_sim no)
+		(at 20.32 203.2 0.0000)
+		(effects
+			(font
+				(size 2.5 2.5)
+				(bold yes)
+			)
+		)
+		(uuid "53d7286d-859b-4105-bb9f-ba687780507e")
+	)
+	(text "BP input: from Integrator 1 (U2) output"
+		(exclude_from_sim no)
+		(at 20.32 215.9 0.0000)
+		(effects
+			(font
+				(size 2 2)
+			)
+		)
+		(uuid "5c48f0de-c2f7-433e-b94a-e8e77724cbd6")
+	)
+	(text "AIN0 output: to MCU (U5) ADC input"
+		(exclude_from_sim no)
+		(at 20.32 228.6 0.0000)
+		(effects
+			(font
+				(size 2 2)
+			)
+		)
+		(uuid "de928d9b-2d2b-41ce-a562-615db054c77b")
+	)
+	(text "AD636 RMS averaging time constant ~ R_internal * C3 ~ 100ms"
+		(exclude_from_sim no)
+		(at 20.32 241.3 0.0000)
+		(effects
+			(font
+				(size 2 2)
+			)
+		)
+		(uuid "502aa170-0e69-4f81-848c-a4482c3b0e44")
+	)
+	(sheet_instances
+		(path "/"
+			(page "1")
+		)
+	)
+	(embedded_fonts no)
+)

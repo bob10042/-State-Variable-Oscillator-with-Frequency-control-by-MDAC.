@@ -5419,6 +5419,949 @@ quit
     return out_path
 
 
+# =============================================================
+# PDF MERGE UTILITY
+# =============================================================
+
+def merge_pdfs(pdf_paths, output_path):
+    """Merge multiple single-page PDFs into one multi-page PDF using PyMuPDF."""
+    try:
+        import fitz
+    except ImportError:
+        print("  Need: pip install pymupdf")
+        return None
+    merged = fitz.open()
+    for p in pdf_paths:
+        if os.path.exists(p):
+            doc = fitz.open(p)
+            merged.insert_pdf(doc)
+            doc.close()
+    merged.save(output_path)
+    merged.close()
+    print(f"  Merged PDF: {output_path} ({len(pdf_paths)} pages)")
+    return output_path
+
+
+# =============================================================
+# OSCILLATOR BLOCK SCHEMATICS (Individual A4 PDFs per block)
+# =============================================================
+
+def build_osc_block_summing_amp():
+    """Oscillator Block 1/6: Summing Amplifier (U1 LM4562).
+
+    HP = -(R1/R3)*LP - (R2/R3)*BP
+    LP gain = -10k/10k = -1.0, BP gain = -22k/10k = -2.2
+    Interfaces: LP (from Int2), BP (from Int1), HP (to Int1 via DAC7800)
+    """
+    print("  Building block: Summing Amplifier...")
+    sch = create_schematic("Oscillator - Summing Amplifier")
+    sch.set_paper_size("A4")
+    sch.set_title_block(
+        title="State Variable Oscillator - Summing Amplifier",
+        company="CircuitForge",
+        rev="1.0",
+        comments={1: "HP = -(R1/R3)*LP - (R2/R3)*BP",
+                  2: "LP gain = -1.0, BP gain = -2.2",
+                  3: "Block 1 of 6"}
+    )
+    G = 2.54
+    pwr_idx = 1
+
+    # ── Block title annotations ──
+    sch.add_text("SUMMING AMPLIFIER (U1)", position=(8 * G, 6 * G), size=4.0, bold=True)
+    sch.add_text("HP = -(R1/R3) * LP - (R2/R3) * BP",
+                 position=(8 * G, 12 * G), size=2.5)
+    sch.add_text("LP gain = -10k/10k = -1.0     BP gain = -22k/10k = -2.2",
+                 position=(8 * G, 17 * G), size=2.0)
+
+    # ── U1 LM4562 op-amp ──
+    u1_x, u1_y = 48 * G, 48 * G
+    sch.components.add(lib_id="LM741:LM741", reference="U1",
+        value="LM4562", position=(u1_x, u1_y))
+
+    u1_inv = (u1_x - 7.62, u1_y - 2.54)
+    u1_ni  = (u1_x - 7.62, u1_y + 2.54)
+    u1_out = (u1_x + 7.62, u1_y)
+    u1_vp  = (u1_x - 2.54, u1_y + 7.62)
+    u1_vm  = (u1_x - 2.54, u1_y - 7.62)
+
+    # Summing node junction
+    sum_x = u1_inv[0] - 8 * G
+    sum_y = u1_inv[1]
+
+    # R1 (10k) - LP input to summing node
+    rlp_x = sum_x - 16 * G
+    rlp_y = sum_y - 12 * G
+    sch.components.add(lib_id="R:R", reference="R1", value="10k",
+        position=(rlp_x, rlp_y), rotation=90)
+    rlp_left = (rlp_x - 3.81, rlp_y)
+    rlp_right = (rlp_x + 3.81, rlp_y)
+    wire_manhattan(sch, rlp_right[0], rlp_right[1], sum_x, sum_y)
+    sch.add_label("LP", position=(rlp_left[0] - 8 * G, rlp_y))
+    sch.add_wire(start=(rlp_left[0] - 8 * G, rlp_y), end=rlp_left)
+
+    # R2 (22k) - BP input to summing node
+    rbp_x = sum_x - 16 * G
+    rbp_y = sum_y
+    sch.components.add(lib_id="R:R", reference="R2", value="22k",
+        position=(rbp_x, rbp_y), rotation=90)
+    rbp_left = (rbp_x - 3.81, rbp_y)
+    rbp_right = (rbp_x + 3.81, rbp_y)
+    sch.add_wire(start=rbp_right, end=(sum_x, sum_y))
+    sch.add_label("BP", position=(rbp_left[0] - 8 * G, rbp_y))
+    sch.add_wire(start=(rbp_left[0] - 8 * G, rbp_y), end=rbp_left)
+
+    # R3 (10k) - feedback from output to summing node
+    rf_y = sum_y - 8 * G
+    rf_cx = (sum_x + u1_out[0]) / 2
+    sch.components.add(lib_id="R:R", reference="R3", value="10k",
+        position=(rf_cx, rf_y), rotation=90)
+    rf_left = (rf_cx - 3.81, rf_y)
+    rf_right = (rf_cx + 3.81, rf_y)
+    sch.add_wire(start=(sum_x, sum_y), end=(sum_x, rf_y))
+    sch.add_wire(start=(sum_x, rf_y), end=rf_left)
+    sch.add_wire(start=rf_right, end=(u1_out[0], rf_y))
+    sch.add_wire(start=(u1_out[0], rf_y), end=u1_out)
+    sch.junctions.add(position=(sum_x, sum_y))
+
+    # Summing node to inv input
+    sch.add_wire(start=(sum_x, sum_y), end=u1_inv)
+
+    # Non-inverting input to GND
+    gnd1_y = u1_ni[1] + 8 * G
+    sch.add_wire(start=u1_ni, end=(u1_ni[0], gnd1_y))
+    sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
+        value="GND", position=(u1_ni[0], gnd1_y))
+    pwr_idx += 1
+
+    # +15V power
+    vcc_y = u1_vp[1] + 8 * G
+    sch.add_wire(start=u1_vp, end=(u1_vp[0], vcc_y))
+    sch.add_label("+15V", position=(u1_vp[0], vcc_y))
+
+    # -15V power (shortened to stay below feedback wire)
+    vee_y = u1_vm[1] - 4 * G
+    sch.add_wire(start=(u1_vm[0], vee_y), end=u1_vm)
+    sch.components.add(lib_id="VEE:VEE", reference=f"#PWR0{pwr_idx:02d}",
+        value="-15V", position=(u1_vm[0], vee_y))
+    pwr_idx += 1
+
+    # HP output label
+    hp_lbl_x = u1_out[0] + 10 * G
+    sch.add_label("HP", position=(hp_lbl_x, u1_out[1]))
+    sch.add_wire(start=u1_out, end=(hp_lbl_x, u1_out[1]))
+    sch.junctions.add(position=u1_out)
+
+    # ── Interface annotations ──
+    sch.add_text("Interfaces:", position=(8 * G, 80 * G), size=2.5, bold=True)
+    sch.add_text("LP input: from Integrator 2 (U3) output",
+                 position=(8 * G, 85 * G), size=2.0)
+    sch.add_text("BP input: from Integrator 1 (U2) output",
+                 position=(8 * G, 90 * G), size=2.0)
+    sch.add_text("HP output: to Integrator 1 (U2) via DAC7800 XDAC1",
+                 position=(8 * G, 95 * G), size=2.0)
+
+    # ── Save ──
+    sch_path = os.path.join(WORK_DIR, "osc_block_summing_amp.kicad_sch")
+    sch.save(sch_path)
+    fix_kicad_sch(sch_path, mirror_refs=["U1"])
+    merge_collinear_wires(sch_path)
+    print(f"    Saved: {sch_path}")
+    return sch_path
+
+
+def build_osc_block_integrator1():
+    """Oscillator Block 2/6: Integrator 1 - HP->BP (U2 LM4562, XDAC1 DAC7800).
+
+    f = D / (4096 * 2*pi * 10k * 470p), range 25 Hz - 30 kHz
+    Cint1 = 470pF (integration), R_damp1 = 100M (DC stability)
+    Zener AGC: D1/D2 back-to-back BV=1.1V, clamps BP to ~1V RMS
+    """
+    print("  Building block: Integrator 1 (HP->BP)...")
+    sch = create_schematic("Oscillator - Integrator 1")
+    sch.set_paper_size("A4")
+    sch.set_title_block(
+        title="State Variable Oscillator - Integrator 1 (HP to BP)",
+        company="CircuitForge",
+        rev="1.0",
+        comments={1: "f = D/(4096*2pi*10k*470p), 25Hz-30kHz",
+                  2: "Zener AGC: BV=1.1V, BP amplitude ~1V RMS",
+                  3: "Block 2 of 6"}
+    )
+    G = 2.54
+    pwr_idx = 1
+
+    # Wider spacing for standalone A4 page
+    fb_vert = 8     # cap above inv input (G)
+    damp_vert = 14  # damping R above (G)
+    zener_vert = 20 # zeners above (G)
+
+    # ── Block title ──
+    sch.add_text("INTEGRATOR 1: HP -> BP (U2 + XDAC1)",
+                 position=(8 * G, 6 * G), size=4.0, bold=True)
+    sch.add_text("f = D / (4096 * 2pi * R4 * C1) = D / (4096 * 2pi * 10k * 470p)",
+                 position=(8 * G, 12 * G), size=2.5)
+    sch.add_text("Frequency range: 25 Hz (D=3) to 30 kHz (D=3640)",
+                 position=(8 * G, 17 * G), size=2.0)
+
+    # ── U2 LM4562 ──
+    u2_x, u2_y = 55 * G, 60 * G
+    sch.components.add(lib_id="LM741:LM741", reference="U2",
+        value="LM4562", position=(u2_x, u2_y))
+    u2_inv = (u2_x - 7.62, u2_y - 2.54)
+    u2_ni  = (u2_x - 7.62, u2_y + 2.54)
+    u2_out = (u2_x + 7.62, u2_y)
+    u2_vp  = (u2_x - 2.54, u2_y + 7.62)
+    u2_vm  = (u2_x - 2.54, u2_y - 7.62)
+
+    # ── DAC7800 block (XDAC1) ──
+    dac1_x = u2_inv[0] - 28 * G
+    dac1_y = u2_inv[1]
+    sch.add_label("HP", position=(dac1_x - 10 * G, dac1_y))
+    sch.add_wire(start=(dac1_x - 10 * G, dac1_y), end=(dac1_x - 4 * G, dac1_y))
+    sch.add_text("XDAC1\nDAC7800", position=(dac1_x - 2 * G, dac1_y - 4 * G), size=2.5)
+
+    # R4 (10k) between MDAC and inv input
+    rint1_x = u2_inv[0] - 14 * G
+    rint1_y = u2_inv[1]
+    sch.components.add(lib_id="R:R", reference="R4", value="10k",
+        position=(rint1_x, rint1_y), rotation=90)
+    rint1_left = (rint1_x - 3.81, rint1_y)
+    rint1_right = (rint1_x + 3.81, rint1_y)
+    sch.add_wire(start=(dac1_x - 4 * G, dac1_y), end=rint1_left)
+
+    # VCTRL label (with wire stub so label is connected)
+    ctrl_y1 = dac1_y + 8 * G
+    sch.add_label("VCTRL", position=(dac1_x - 2 * G, ctrl_y1))
+    sch.add_wire(start=(dac1_x - 2 * G, ctrl_y1), end=(dac1_x - 2 * G, ctrl_y1 - 2 * G))
+
+    # R4 to inv input
+    sch.add_wire(start=rint1_right, end=u2_inv)
+
+    # ── C1 (470p) - integrator cap ──
+    cint1_y = u2_inv[1] - fb_vert * G
+    cint1_cx = (u2_inv[0] + u2_out[0]) / 2
+    sch.components.add(lib_id="C:C", reference="C1", value="470p",
+        position=(cint1_cx, cint1_y), rotation=90)
+    c1_left = (cint1_cx - 3.81, cint1_y)
+    c1_right = (cint1_cx + 3.81, cint1_y)
+
+    # Feedback wiring
+    inv1_junc = (cint1_cx - 3.81, u2_inv[1])
+    sch.add_wire(start=rint1_right, end=inv1_junc)
+    sch.add_wire(start=inv1_junc, end=(inv1_junc[0], cint1_y))
+    sch.add_wire(start=(inv1_junc[0], cint1_y), end=c1_left)
+    sch.add_wire(start=c1_right, end=(u2_out[0], cint1_y))
+    sch.add_wire(start=(u2_out[0], cint1_y), end=u2_out)
+    sch.junctions.add(position=inv1_junc)
+
+    # ── R5 (100M) - damping resistor ──
+    rdamp1_y = u2_inv[1] - damp_vert * G
+    sch.components.add(lib_id="R:R", reference="R5", value="100M",
+        position=(cint1_cx, rdamp1_y), rotation=90)
+    rd1_left = (cint1_cx - 3.81, rdamp1_y)
+    rd1_right = (cint1_cx + 3.81, rdamp1_y)
+    sch.add_wire(start=(inv1_junc[0], cint1_y), end=(inv1_junc[0], rdamp1_y))
+    sch.add_wire(start=(inv1_junc[0], rdamp1_y), end=rd1_left)
+    sch.add_wire(start=rd1_right, end=(u2_out[0], rdamp1_y))
+    sch.add_wire(start=(u2_out[0], rdamp1_y), end=(u2_out[0], cint1_y))
+    sch.junctions.add(position=(inv1_junc[0], cint1_y))
+    sch.junctions.add(position=(u2_out[0], cint1_y))
+
+    # ── Zener AGC: D1/D2 back-to-back ──
+    zener1_y = u2_inv[1] - zener_vert * G
+    sch.components.add(lib_id="D:D", reference="D1", value="DZ09 BV=1.1",
+        position=(cint1_cx - 5 * G, zener1_y), rotation=0)
+    sch.components.add(lib_id="D:D", reference="D2", value="DZ09 BV=1.1",
+        position=(cint1_cx + 5 * G, zener1_y), rotation=180)
+    dz1_left = (cint1_cx - 5 * G - 3.81, zener1_y)
+    dz1_right = (cint1_cx - 5 * G + 3.81, zener1_y)
+    dz2_left = (cint1_cx + 5 * G - 3.81, zener1_y)
+    dz2_right = (cint1_cx + 5 * G + 3.81, zener1_y)
+    sch.add_wire(start=dz1_right, end=dz2_left)
+    sch.add_wire(start=dz1_left, end=(inv1_junc[0], zener1_y))
+    sch.add_wire(start=(inv1_junc[0], zener1_y), end=(inv1_junc[0], rdamp1_y))
+    sch.add_wire(start=dz2_right, end=(u2_out[0], zener1_y))
+    sch.add_wire(start=(u2_out[0], zener1_y), end=(u2_out[0], rdamp1_y))
+    sch.junctions.add(position=(inv1_junc[0], rdamp1_y))
+    sch.junctions.add(position=(u2_out[0], rdamp1_y))
+    sch.add_text("Zener AGC\nBV=1.1V\n(back-to-back)",
+                 position=(cint1_cx - 2 * G, zener1_y + 5 * G), size=2.0)
+
+    # NI to GND
+    gnd2_y = u2_ni[1] + 8 * G
+    sch.add_wire(start=u2_ni, end=(u2_ni[0], gnd2_y))
+    sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
+        value="GND", position=(u2_ni[0], gnd2_y))
+    pwr_idx += 1
+
+    # +15V
+    vcc_y = u2_vp[1] + 8 * G
+    sch.add_wire(start=u2_vp, end=(u2_vp[0], vcc_y))
+    sch.add_label("+15V", position=(u2_vp[0], vcc_y))
+
+    # -15V (shortened to stay below feedback stack)
+    vee_y = u2_vm[1] - 4 * G
+    sch.add_wire(start=(u2_vm[0], vee_y), end=u2_vm)
+    sch.components.add(lib_id="VEE:VEE", reference=f"#PWR0{pwr_idx:02d}",
+        value="-15V", position=(u2_vm[0], vee_y))
+    pwr_idx += 1
+
+    # BP output
+    bp_lbl_x = u2_out[0] + 10 * G
+    sch.add_label("BP", position=(bp_lbl_x, u2_out[1]))
+    sch.add_wire(start=u2_out, end=(bp_lbl_x, u2_out[1]))
+    sch.junctions.add(position=u2_out)
+
+    # ── Annotations ──
+    sch.add_text("D=121: f~997Hz    D=3: f~25Hz    D=3640: f~30kHz",
+                 position=(8 * G, 82 * G), size=2.0)
+
+    sch.add_text("Interfaces:", position=(8 * G, 88 * G), size=2.5, bold=True)
+    sch.add_text("HP input: from Summing Amplifier (U1) output",
+                 position=(8 * G, 93 * G), size=2.0)
+    sch.add_text("BP output: to Integrator 2 (U3), RMS Detector (U4), Summing Amp (U1)",
+                 position=(8 * G, 98 * G), size=2.0)
+    sch.add_text("VCTRL: from MCU (U5) SPI0 via DAC7800",
+                 position=(8 * G, 103 * G), size=2.0)
+
+    # ── Save ──
+    sch_path = os.path.join(WORK_DIR, "osc_block_integrator1.kicad_sch")
+    sch.save(sch_path)
+    fix_kicad_sch(sch_path, mirror_refs=["U2"])
+    merge_collinear_wires(sch_path)
+    print(f"    Saved: {sch_path}")
+    return sch_path
+
+
+def build_osc_block_rms_detector():
+    """Oscillator Block 3/6: AD636 RMS Detector.
+
+    1/5 attenuator (R10=40k, R11=10k), AD636 true RMS-to-DC, CAV=10uF
+    Vout = BP * 10k/(40k+10k) = BP/5, converted to DC by AD636
+    """
+    print("  Building block: AD636 RMS Detector...")
+    sch = create_schematic("Oscillator - RMS Detector")
+    sch.set_paper_size("A4")
+    sch.set_title_block(
+        title="State Variable Oscillator - AD636 RMS Detector",
+        company="CircuitForge",
+        rev="1.0",
+        comments={1: "1/5 attenuator + AD636 true RMS-to-DC",
+                  2: "Vout = BP * R11/(R10+R11) = BP/5",
+                  3: "Block 3 of 6"}
+    )
+    G = 2.54
+    pwr_idx = 1
+
+    # ── Block title ──
+    sch.add_text("AD636 RMS DETECTOR (U4)", position=(8 * G, 6 * G), size=4.0, bold=True)
+    sch.add_text("Vout_RMS = BP * R11/(R10+R11) = BP * 10k/(40k+10k) = BP/5",
+                 position=(8 * G, 12 * G), size=2.5)
+    sch.add_text("AD636 true RMS-to-DC converter, CAV=10uF averaging capacitor",
+                 position=(8 * G, 17 * G), size=2.0)
+
+    # ── Attenuator ──
+    att_x = 24 * G
+    att_y = 48 * G
+
+    # R10 (40k) - series resistor
+    sch.components.add(lib_id="R:R", reference="R10", value="40k",
+        position=(att_x, att_y), rotation=90)
+    ratt1_left = (att_x - 3.81, att_y)
+    ratt1_right = (att_x + 3.81, att_y)
+    sch.add_label("BP", position=(ratt1_left[0] - 8 * G, att_y))
+    sch.add_wire(start=(ratt1_left[0] - 8 * G, att_y), end=ratt1_left)
+
+    # R11 (10k) - shunt to GND
+    att2_x = ratt1_right[0] + 8 * G
+    att2_y = att_y + 10 * G
+    sch.components.add(lib_id="R:R", reference="R11", value="10k",
+        position=(att2_x, att2_y))
+    ratt2_top = (att2_x, att2_y - 3.81)
+    ratt2_bot = (att2_x, att2_y + 3.81)
+    sch.add_wire(start=ratt1_right, end=(att2_x, att_y))
+    sch.add_wire(start=(att2_x, att_y), end=ratt2_top)
+    sch.junctions.add(position=(att2_x, att_y))
+    gnd_att_y = ratt2_bot[1] + 6 * G
+    sch.add_wire(start=ratt2_bot, end=(att2_x, gnd_att_y))
+    sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
+        value="GND", position=(att2_x, gnd_att_y))
+    pwr_idx += 1
+    sch.add_text("1/5 attenuator\nVin/5 to AD636",
+                 position=(att2_x + 6 * G, att_y), size=2.0)
+
+    # ── AD636 block ──
+    ad636_x = att2_x + 28 * G
+    ad636_y = att_y
+    sch.add_wire(start=(att2_x, att_y), end=(ad636_x - 10 * G, att_y))
+    sch.add_text("U4\nAD636\nRMS-to-DC",
+                 position=(ad636_x - 8 * G, att_y - 8 * G), size=2.5)
+
+    # C3 (10u) - CAV averaging cap
+    cav_x = ad636_x
+    cav_y = att_y + 10 * G
+    sch.components.add(lib_id="C:C", reference="C3", value="10u",
+        position=(cav_x, cav_y))
+    cav_top = (cav_x, cav_y - 3.81)
+    cav_bot = (cav_x, cav_y + 3.81)
+    sch.add_wire(start=(ad636_x - 2 * G, att_y), end=(cav_x, att_y))
+    sch.add_wire(start=(cav_x, att_y), end=cav_top)
+    sch.add_text("CAV", position=(cav_x + 5 * G, cav_y), size=2.0)
+    gnd_cav_y = cav_bot[1] + 6 * G
+    sch.add_wire(start=cav_bot, end=(cav_x, gnd_cav_y))
+    sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
+        value="GND", position=(cav_x, gnd_cav_y))
+    pwr_idx += 1
+
+    # AIN0 output
+    ain0_x = ad636_x + 14 * G
+    sch.add_label("AIN0", position=(ain0_x, att_y))
+    sch.add_wire(start=(cav_x, att_y), end=(ain0_x, att_y))
+    sch.junctions.add(position=(cav_x, att_y))
+
+    # ── Interface annotations ──
+    sch.add_text("Interfaces:", position=(8 * G, 80 * G), size=2.5, bold=True)
+    sch.add_text("BP input: from Integrator 1 (U2) output",
+                 position=(8 * G, 85 * G), size=2.0)
+    sch.add_text("AIN0 output: to MCU (U5) ADC input",
+                 position=(8 * G, 90 * G), size=2.0)
+    sch.add_text("AD636 RMS averaging time constant ~ R_internal * C3 ~ 100ms",
+                 position=(8 * G, 95 * G), size=2.0)
+
+    # ── Save ──
+    sch_path = os.path.join(WORK_DIR, "osc_block_rms_detector.kicad_sch")
+    sch.save(sch_path)
+    fix_kicad_sch(sch_path)
+    merge_collinear_wires(sch_path)
+    print(f"    Saved: {sch_path}")
+    return sch_path
+
+
+def build_osc_block_integrator2():
+    """Oscillator Block 4/6: Integrator 2 - BP->LP (U3 LM4562, XDAC2 DAC7800).
+
+    Mirrors Integrator 1. Same frequency formula.
+    Includes R8=100k output load resistor.
+    Zener AGC: D3/D4 back-to-back BV=1.1V
+    """
+    print("  Building block: Integrator 2 (BP->LP)...")
+    sch = create_schematic("Oscillator - Integrator 2")
+    sch.set_paper_size("A4")
+    sch.set_title_block(
+        title="State Variable Oscillator - Integrator 2 (BP to LP)",
+        company="CircuitForge",
+        rev="1.0",
+        comments={1: "f = D/(4096*2pi*10k*470p), mirrors Integrator 1",
+                  2: "Zener AGC: BV=1.1V, R8=100k output load",
+                  3: "Block 4 of 6"}
+    )
+    G = 2.54
+    pwr_idx = 1
+    fb_vert = 8
+    damp_vert = 14
+    zener_vert = 20
+
+    # ── Block title ──
+    sch.add_text("INTEGRATOR 2: BP -> LP (U3 + XDAC2)",
+                 position=(8 * G, 6 * G), size=4.0, bold=True)
+    sch.add_text("f = D / (4096 * 2pi * R6 * C2) = D / (4096 * 2pi * 10k * 470p)",
+                 position=(8 * G, 12 * G), size=2.5)
+    sch.add_text("Mirrors Integrator 1, R8=100k output load",
+                 position=(8 * G, 17 * G), size=2.0)
+
+    # ── U3 LM4562 ──
+    u3_x, u3_y = 55 * G, 60 * G
+    sch.components.add(lib_id="LM741:LM741", reference="U3",
+        value="LM4562", position=(u3_x, u3_y))
+    u3_inv = (u3_x - 7.62, u3_y - 2.54)
+    u3_ni  = (u3_x - 7.62, u3_y + 2.54)
+    u3_out = (u3_x + 7.62, u3_y)
+    u3_vp  = (u3_x - 2.54, u3_y + 7.62)
+    u3_vm  = (u3_x - 2.54, u3_y - 7.62)
+
+    # ── DAC7800 #2 ──
+    dac2_x = u3_inv[0] - 28 * G
+    dac2_y = u3_inv[1]
+    sch.add_label("BP", position=(dac2_x - 10 * G, dac2_y))
+    sch.add_wire(start=(dac2_x - 10 * G, dac2_y), end=(dac2_x - 4 * G, dac2_y))
+    sch.add_text("XDAC2\nDAC7800", position=(dac2_x - 2 * G, dac2_y - 4 * G), size=2.5)
+
+    # R6 (10k)
+    rint2_x = u3_inv[0] - 14 * G
+    rint2_y = u3_inv[1]
+    sch.components.add(lib_id="R:R", reference="R6", value="10k",
+        position=(rint2_x, rint2_y), rotation=90)
+    rint2_left = (rint2_x - 3.81, rint2_y)
+    rint2_right = (rint2_x + 3.81, rint2_y)
+    sch.add_wire(start=(dac2_x - 4 * G, dac2_y), end=rint2_left)
+    ctrl_y2 = dac2_y + 8 * G
+    sch.add_label("VCTRL", position=(dac2_x - 2 * G, ctrl_y2))
+    sch.add_wire(start=(dac2_x - 2 * G, ctrl_y2), end=(dac2_x - 2 * G, ctrl_y2 - 2 * G))
+
+    sch.add_wire(start=rint2_right, end=u3_inv)
+
+    # ── C2 (470p) ──
+    cint2_y = u3_inv[1] - fb_vert * G
+    cint2_cx = (u3_inv[0] + u3_out[0]) / 2
+    sch.components.add(lib_id="C:C", reference="C2", value="470p",
+        position=(cint2_cx, cint2_y), rotation=90)
+    c2_left = (cint2_cx - 3.81, cint2_y)
+    c2_right = (cint2_cx + 3.81, cint2_y)
+
+    inv2_junc = (cint2_cx - 3.81, u3_inv[1])
+    sch.add_wire(start=rint2_right, end=inv2_junc)
+    sch.add_wire(start=inv2_junc, end=(inv2_junc[0], cint2_y))
+    sch.add_wire(start=(inv2_junc[0], cint2_y), end=c2_left)
+    sch.add_wire(start=c2_right, end=(u3_out[0], cint2_y))
+    sch.add_wire(start=(u3_out[0], cint2_y), end=u3_out)
+    sch.junctions.add(position=inv2_junc)
+
+    # ── R7 (100M) damping ──
+    rdamp2_y = u3_inv[1] - damp_vert * G
+    sch.components.add(lib_id="R:R", reference="R7", value="100M",
+        position=(cint2_cx, rdamp2_y), rotation=90)
+    rd2_left = (cint2_cx - 3.81, rdamp2_y)
+    rd2_right = (cint2_cx + 3.81, rdamp2_y)
+    sch.add_wire(start=(inv2_junc[0], cint2_y), end=(inv2_junc[0], rdamp2_y))
+    sch.add_wire(start=(inv2_junc[0], rdamp2_y), end=rd2_left)
+    sch.add_wire(start=rd2_right, end=(u3_out[0], rdamp2_y))
+    sch.add_wire(start=(u3_out[0], rdamp2_y), end=(u3_out[0], cint2_y))
+    sch.junctions.add(position=(inv2_junc[0], cint2_y))
+    sch.junctions.add(position=(u3_out[0], cint2_y))
+
+    # ── Zener AGC D3/D4 ──
+    zener2_y = u3_inv[1] - zener_vert * G
+    sch.components.add(lib_id="D:D", reference="D3", value="DZ09 BV=1.1",
+        position=(cint2_cx - 5 * G, zener2_y), rotation=0)
+    sch.components.add(lib_id="D:D", reference="D4", value="DZ09 BV=1.1",
+        position=(cint2_cx + 5 * G, zener2_y), rotation=180)
+    dz3_left = (cint2_cx - 5 * G - 3.81, zener2_y)
+    dz3_right = (cint2_cx - 5 * G + 3.81, zener2_y)
+    dz4_left = (cint2_cx + 5 * G - 3.81, zener2_y)
+    dz4_right = (cint2_cx + 5 * G + 3.81, zener2_y)
+    sch.add_wire(start=dz3_right, end=dz4_left)
+    sch.add_wire(start=dz3_left, end=(inv2_junc[0], zener2_y))
+    sch.add_wire(start=(inv2_junc[0], zener2_y), end=(inv2_junc[0], rdamp2_y))
+    sch.add_wire(start=dz4_right, end=(u3_out[0], zener2_y))
+    sch.add_wire(start=(u3_out[0], zener2_y), end=(u3_out[0], rdamp2_y))
+    sch.junctions.add(position=(inv2_junc[0], rdamp2_y))
+    sch.junctions.add(position=(u3_out[0], rdamp2_y))
+    sch.add_text("Zener AGC\nBV=1.1V\n(back-to-back)",
+                 position=(cint2_cx - 2 * G, zener2_y + 5 * G), size=2.0)
+
+    # NI to GND
+    gnd3_y = u3_ni[1] + 8 * G
+    sch.add_wire(start=u3_ni, end=(u3_ni[0], gnd3_y))
+    sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
+        value="GND", position=(u3_ni[0], gnd3_y))
+    pwr_idx += 1
+
+    # +15V
+    vcc_y = u3_vp[1] + 8 * G
+    sch.add_wire(start=u3_vp, end=(u3_vp[0], vcc_y))
+    sch.add_label("+15V", position=(u3_vp[0], vcc_y))
+
+    # -15V
+    vee_y = u3_vm[1] - 4 * G
+    sch.add_wire(start=(u3_vm[0], vee_y), end=u3_vm)
+    sch.components.add(lib_id="VEE:VEE", reference=f"#PWR0{pwr_idx:02d}",
+        value="-15V", position=(u3_vm[0], vee_y))
+    pwr_idx += 1
+
+    # LP output
+    lp_lbl_x = u3_out[0] + 10 * G
+    sch.add_label("LP", position=(lp_lbl_x, u3_out[1]))
+    sch.add_wire(start=u3_out, end=(lp_lbl_x, u3_out[1]))
+    sch.junctions.add(position=u3_out)
+
+    # R8 (100k) output load
+    rl_x = u3_out[0] + 18 * G
+    rl_y = u3_out[1] + 12 * G
+    sch.components.add(lib_id="R:R", reference="R8", value="100k",
+        position=(rl_x, rl_y))
+    rl_top = (rl_x, rl_y - 3.81)
+    rl_bot = (rl_x, rl_y + 3.81)
+    sch.add_label("BP", position=(rl_x + 8 * G, rl_top[1]))
+    sch.add_wire(start=rl_top, end=(rl_x + 8 * G, rl_top[1]))
+    gnd_rl_y = rl_bot[1] + 6 * G
+    sch.add_wire(start=rl_bot, end=(rl_x, gnd_rl_y))
+    sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
+        value="GND", position=(rl_x, gnd_rl_y))
+    pwr_idx += 1
+
+    # ── Interface annotations ──
+    sch.add_text("Interfaces:", position=(8 * G, 88 * G), size=2.5, bold=True)
+    sch.add_text("BP input: from Integrator 1 (U2) output",
+                 position=(8 * G, 93 * G), size=2.0)
+    sch.add_text("LP output: to Summing Amplifier (U1) LP input",
+                 position=(8 * G, 98 * G), size=2.0)
+    sch.add_text("VCTRL: from MCU (U5) SPI0 via DAC7800",
+                 position=(8 * G, 103 * G), size=2.0)
+
+    # ── Save ──
+    sch_path = os.path.join(WORK_DIR, "osc_block_integrator2.kicad_sch")
+    sch.save(sch_path)
+    fix_kicad_sch(sch_path, mirror_refs=["U3"])
+    merge_collinear_wires(sch_path)
+    print(f"    Saved: {sch_path}")
+    return sch_path
+
+
+def build_osc_block_power_supply():
+    """Oscillator Block 5/6: Startup Kick + Power Supply.
+
+    R9=100k startup kick to HP net, bulk decoupling:
+    C6=10u (+15V), C7=10u (-15V), C8=100n (3.3V MCU LDO)
+    """
+    print("  Building block: Power Supply + Startup Kick...")
+    sch = create_schematic("Oscillator - Power Supply")
+    sch.set_paper_size("A4")
+    sch.set_title_block(
+        title="State Variable Oscillator - Power Supply + Startup",
+        company="CircuitForge",
+        rev="1.0",
+        comments={1: "Bulk decoupling + startup kick",
+                  2: "+15V/-15V analog, 3.3V MCU (LDO from +15V)",
+                  3: "Block 5 of 6"}
+    )
+    G = 2.54
+    pwr_idx = 1
+
+    # ── Block title ──
+    sch.add_text("STARTUP KICK + POWER SUPPLY",
+                 position=(8 * G, 6 * G), size=4.0, bold=True)
+    sch.add_text("Startup: R9 injects 0.1V pulse into HP net to initiate oscillation",
+                 position=(8 * G, 12 * G), size=2.5)
+    sch.add_text("Power: +15V/-15V analog supply, 3.3V MCU via LDO from +15V",
+                 position=(8 * G, 17 * G), size=2.0)
+
+    # ── Startup kick section ──
+    kick_x = 20 * G
+    kick_y = 38 * G
+    sch.components.add(lib_id="R:R", reference="R9", value="100k",
+        position=(kick_x, kick_y), rotation=90)
+    rk_left = (kick_x - 3.81, kick_y)
+    rk_right = (kick_x + 3.81, kick_y)
+    sch.add_label("HP", position=(rk_right[0] + 8 * G, kick_y))
+    sch.add_wire(start=rk_right, end=(rk_right[0] + 8 * G, kick_y))
+    sch.add_text("Startup Kick\nPULSE(0, 0.1V, 0.1ms, 1ns, 1ns, 10us)",
+                 position=(kick_x - 12 * G, kick_y - 8 * G), size=2.0)
+    gnd_kick_y = kick_y + 10 * G
+    sch.add_wire(start=rk_left, end=(rk_left[0], gnd_kick_y))
+    sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
+        value="GND", position=(rk_left[0], gnd_kick_y))
+    pwr_idx += 1
+
+    # ── Power supply section ──
+    pwr_x = 20 * G
+    pwr_y = 62 * G
+
+    # +15V bulk decoupling
+    sch.add_label("+15V", position=(pwr_x, pwr_y - 10 * G))
+    sch.components.add(lib_id="C:C", reference="C6", value="10u",
+        position=(pwr_x, pwr_y))
+    c6_top = (pwr_x, pwr_y - 3.81)
+    c6_bot = (pwr_x, pwr_y + 3.81)
+    sch.add_wire(start=(pwr_x, pwr_y - 10 * G), end=c6_top)
+    gnd_c6_y = c6_bot[1] + 6 * G
+    sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
+        value="GND", position=(pwr_x, gnd_c6_y))
+    sch.add_wire(start=c6_bot, end=(pwr_x, gnd_c6_y))
+    pwr_idx += 1
+    sch.add_text("+15V\nbulk decoupling", position=(pwr_x + 5 * G, pwr_y - 4 * G), size=2.0)
+
+    # -15V bulk decoupling
+    neg_x = pwr_x + 26 * G
+    sch.components.add(lib_id="VEE:VEE", reference=f"#PWR0{pwr_idx:02d}",
+        value="-15V", position=(neg_x, pwr_y - 10 * G))
+    pwr_idx += 1
+    sch.components.add(lib_id="C:C", reference="C7", value="10u",
+        position=(neg_x, pwr_y))
+    c7_top = (neg_x, pwr_y - 3.81)
+    c7_bot = (neg_x, pwr_y + 3.81)
+    sch.add_wire(start=(neg_x, pwr_y - 10 * G), end=c7_top)
+    gnd_c7_y = c7_bot[1] + 6 * G
+    sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
+        value="GND", position=(neg_x, gnd_c7_y))
+    sch.add_wire(start=c7_bot, end=(neg_x, gnd_c7_y))
+    pwr_idx += 1
+    sch.add_text("-15V\nbulk decoupling", position=(neg_x + 5 * G, pwr_y - 4 * G), size=2.0)
+
+    # 3.3V MCU supply
+    reg_x = pwr_x + 52 * G
+    sch.add_label("3.3V", position=(reg_x, pwr_y - 10 * G))
+    sch.components.add(lib_id="C:C", reference="C8", value="100n",
+        position=(reg_x, pwr_y))
+    c8_top = (reg_x, pwr_y - 3.81)
+    c8_bot = (reg_x, pwr_y + 3.81)
+    sch.add_wire(start=(reg_x, pwr_y - 10 * G), end=c8_top)
+    gnd_c8_y = c8_bot[1] + 6 * G
+    sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
+        value="GND", position=(reg_x, gnd_c8_y))
+    sch.add_wire(start=c8_bot, end=(reg_x, gnd_c8_y))
+    pwr_idx += 1
+    sch.add_text("3.3V MCU supply\n(LDO from +15V)", position=(reg_x + 5 * G, pwr_y - 4 * G), size=2.0)
+
+    # ── Interface annotations ──
+    sch.add_text("Interfaces:", position=(8 * G, 82 * G), size=2.5, bold=True)
+    sch.add_text("HP output: startup pulse injected via R9 (one-shot at power-on)",
+                 position=(8 * G, 87 * G), size=2.0)
+    sch.add_text("+15V/-15V: powers U1/U2/U3 LM4562 op-amps",
+                 position=(8 * G, 92 * G), size=2.0)
+    sch.add_text("3.3V: powers U5 ADuCM362 MCU",
+                 position=(8 * G, 97 * G), size=2.0)
+
+    # ── Save ──
+    sch_path = os.path.join(WORK_DIR, "osc_block_power_supply.kicad_sch")
+    sch.save(sch_path)
+    fix_kicad_sch(sch_path)
+    merge_collinear_wires(sch_path)
+    print(f"    Saved: {sch_path}")
+    return sch_path
+
+
+def build_osc_block_mcu():
+    """Oscillator Block 6/6: ADuCM362 MCU.
+
+    SPI0 -> DAC7800 frequency control (VCTRL)
+    AIN0 <- AD636 RMS output
+    Timer1/P0.5 <- BP zero-crossing for frequency measurement
+    UART TX/RX for host communication (115200 8N1)
+    """
+    print("  Building block: ADuCM362 MCU...")
+    sch = create_schematic("Oscillator - ADuCM362 MCU")
+    sch.set_paper_size("A4")
+    sch.set_title_block(
+        title="State Variable Oscillator - ADuCM362 MCU",
+        company="CircuitForge",
+        rev="1.0",
+        comments={1: "SPI0->DAC7800 freq ctrl, ADC AIN0<-AD636",
+                  2: "Timer1 zero-crossing, UART 115200 8N1",
+                  3: "Block 6 of 6"}
+    )
+    G = 2.54
+    pwr_idx = 1
+
+    # ── Block title ──
+    sch.add_text("ADuCM362 MCU (U5)", position=(8 * G, 6 * G), size=4.0, bold=True)
+    sch.add_text("ARM Cortex-M3, 24-bit Sigma-Delta ADC, SPI, UART",
+                 position=(8 * G, 12 * G), size=2.5)
+    sch.add_text("SPI0 controls dual DAC7800 MDACs, Timer1 measures BP frequency",
+                 position=(8 * G, 17 * G), size=2.0)
+
+    # ── MCU block ──
+    mcu_x = 40 * G
+    mcu_y = 42 * G
+    pin_spacing = 10 * G
+
+    # Dashed box
+    mcu_box_l = mcu_x - 12 * G
+    mcu_box_r = mcu_x + 12 * G
+    mcu_box_t = mcu_y - 12 * G
+    mcu_box_b = mcu_y + 4 * pin_spacing + 4 * G
+    sch.add_rectangle(
+        start=(mcu_box_l, mcu_box_t),
+        end=(mcu_box_r, mcu_box_b),
+        stroke_width=0.3, stroke_type='dash'
+    )
+    sch.add_text("U5\nADuCM362\nARM Cortex-M3",
+                 position=(mcu_x - 10 * G, mcu_y - 10 * G), size=2.5, bold=True)
+
+    # Left side pins (inputs)
+    left_x = mcu_x - 20 * G
+    labels_left = ["AIN0", "P0.5_ZC", "UART_RX"]
+    for i, name in enumerate(labels_left):
+        pin_y = mcu_y + i * pin_spacing
+        sch.add_wire(start=(left_x, pin_y), end=(mcu_x - 8 * G, pin_y))
+        sch.add_text(name, position=(left_x - 4 * G, pin_y), size=1.8)
+
+    # AIN0 net label
+    sch.add_label("AIN0", position=(left_x - 8 * G, mcu_y))
+    sch.add_wire(start=(left_x - 8 * G, mcu_y), end=(left_x, mcu_y))
+
+    # BP_ZC net label
+    sch.add_label("BP_ZC", position=(left_x - 8 * G, mcu_y + pin_spacing))
+    sch.add_wire(start=(left_x - 8 * G, mcu_y + pin_spacing),
+                 end=(left_x, mcu_y + pin_spacing))
+
+    # UART_RX net label
+    sch.add_label("UART_RX", position=(left_x - 8 * G, mcu_y + 2 * pin_spacing))
+    sch.add_wire(start=(left_x - 8 * G, mcu_y + 2 * pin_spacing),
+                 end=(left_x, mcu_y + 2 * pin_spacing))
+
+    # Right side pins (outputs)
+    right_x = mcu_x + 20 * G
+    labels_right = ["SPI0_CLK", "SPI0_MOSI", "DAC_CS", "UART_TX"]
+    for i, name in enumerate(labels_right):
+        pin_y = mcu_y + i * pin_spacing
+        sch.add_wire(start=(mcu_x + 8 * G, pin_y), end=(right_x, pin_y))
+        sch.add_label(name, position=(right_x, pin_y))
+
+    # SPI annotation
+    sch.add_text("SPI0 -> DAC7800\ncontrols VCTRL\n(frequency set)",
+                 position=(right_x + 2 * G, mcu_y + 3 * pin_spacing + 5 * G), size=1.8)
+
+    # MCU power (3.3V)
+    mcu_vcc_y = mcu_y - 14 * G
+    sch.add_label("3.3V", position=(mcu_x, mcu_vcc_y))
+    sch.add_wire(start=(mcu_x, mcu_vcc_y), end=(mcu_x, mcu_y - 8 * G))
+
+    # MCU GND
+    mcu_gnd_y = mcu_y + 4 * pin_spacing + 6 * G
+    sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
+        value="GND", position=(mcu_x, mcu_gnd_y))
+    pwr_idx += 1
+    sch.add_wire(start=(mcu_x, mcu_y + 3 * pin_spacing + 4 * G),
+                 end=(mcu_x, mcu_gnd_y))
+
+    # Decoupling caps
+    dcap_x = mcu_x + 12 * G
+    dcap_y = mcu_y - 8 * G
+    sch.components.add(lib_id="C:C", reference="C4", value="100n",
+        position=(dcap_x, dcap_y))
+    c4_top = (dcap_x, dcap_y - 3.81)
+    c4_bot = (dcap_x, dcap_y + 3.81)
+    sch.add_wire(start=(mcu_x, mcu_y - 8 * G), end=c4_top)
+    gnd_dc_y = c4_bot[1] + 4 * G
+    sch.add_wire(start=c4_bot, end=(dcap_x, gnd_dc_y))
+    sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
+        value="GND", position=(dcap_x, gnd_dc_y))
+    pwr_idx += 1
+
+    sch.components.add(lib_id="C:C", reference="C5", value="10u",
+        position=(dcap_x + 10 * G, dcap_y))
+    c5_top = (dcap_x + 10 * G, dcap_y - 3.81)
+    c5_bot = (dcap_x + 10 * G, dcap_y + 3.81)
+    sch.add_wire(start=c4_top, end=c5_top)
+    gnd_dc2_y = c5_bot[1] + 4 * G
+    sch.add_wire(start=c5_bot, end=(dcap_x + 10 * G, gnd_dc2_y))
+    sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
+        value="GND", position=(dcap_x + 10 * G, gnd_dc2_y))
+    pwr_idx += 1
+
+    # Annotations
+    sch.add_text("UART (115200 8N1) to host PC",
+                 position=(mcu_x - 10 * G, mcu_y + 4 * pin_spacing + 10 * G), size=2.0)
+    sch.add_text("Timer1 capture: zero-crossing frequency measurement",
+                 position=(left_x - 8 * G, mcu_y + pin_spacing + 5 * G), size=1.8)
+
+    # ── Interface annotations ──
+    sch.add_text("Interfaces:", position=(8 * G, 88 * G), size=2.5, bold=True)
+    sch.add_text("AIN0: from AD636 RMS detector (U4) DC output",
+                 position=(8 * G, 93 * G), size=2.0)
+    sch.add_text("BP_ZC: from Integrator 1 (U2) BP zero-crossing",
+                 position=(8 * G, 98 * G), size=2.0)
+    sch.add_text("SPI0: to DAC7800 XDAC1/XDAC2 for frequency control",
+                 position=(8 * G, 103 * G), size=2.0)
+    sch.add_text("UART: to host PC for commands (F<hz>, D<code>, CAL, M, S)",
+                 position=(8 * G, 108 * G), size=2.0)
+
+    # ── Save ──
+    sch_path = os.path.join(WORK_DIR, "osc_block_mcu.kicad_sch")
+    sch.save(sch_path)
+    fix_kicad_sch(sch_path)
+    merge_collinear_wires(sch_path)
+    print(f"    Saved: {sch_path}")
+    return sch_path
+
+
+def build_osc_blocks():
+    """Build all 6 oscillator block schematics, export PDFs, merge into one."""
+    print("\nBuilding oscillator block schematics (6 blocks)...")
+
+    blocks = [
+        ("Summing Amplifier", build_osc_block_summing_amp),
+        ("Integrator 1",      build_osc_block_integrator1),
+        ("RMS Detector",      build_osc_block_rms_detector),
+        ("Integrator 2",      build_osc_block_integrator2),
+        ("Power Supply",      build_osc_block_power_supply),
+        ("MCU",               build_osc_block_mcu),
+    ]
+
+    sch_paths = []
+    pdf_paths = []
+    all_ok = True
+
+    for name, builder in blocks:
+        sch_path = builder()
+        sch_paths.append(sch_path)
+
+        # Verify
+        print(f"    Verifying {name}...")
+        verify_circuit(sch_path, 'oscillator', {}, {})
+
+        # Export PDF + PNG
+        try:
+            pdf_path = export_pdf(sch_path)
+            pdf_paths.append(pdf_path)
+            png_name = f"osc_block_{name.lower().replace(' ', '_')}.png"
+            render_pdf_to_png(pdf_path,
+                os.path.join(WORK_DIR, png_name),
+                zoom=4, clip_mm=(10, 10, 200, 285))
+        except Exception as e:
+            print(f"    Export error for {name}: {e}")
+            all_ok = False
+
+    # Merge all block PDFs into one document
+    if pdf_paths:
+        merged_path = os.path.join(WORK_DIR, "oscillator_blocks.pdf")
+        merge_pdfs(pdf_paths, merged_path)
+
+    print(f"\n  Oscillator blocks complete: {len(sch_paths)} schematics")
+    if all_ok and pdf_paths:
+        print(f"  Merged PDF: {os.path.join(WORK_DIR, 'oscillator_blocks.pdf')}")
+    return sch_paths
+
+
+def build_tia_blocks():
+    """Build all TIA/electrometer block schematics, export PDFs, merge into one."""
+    print("\nBuilding TIA/electrometer block schematics (6 blocks)...")
+
+    blocks = [
+        ("Input Filters",     build_input_filters,    'input_filters'),
+        ("Analog Mux",        build_analog_mux,       'analog_mux'),
+        ("Mux TIA",           build_mux_tia,          'mux_tia'),
+        ("Relay Ladder",      build_relay_ladder,      'relay_ladder'),
+        ("MCU Section",       build_mcu_section,       'mcu_section'),
+        ("Electrometer 362",  build_electrometer_362,  'electrometer_362'),
+    ]
+
+    sch_paths = []
+    pdf_paths = []
+    all_ok = True
+
+    for name, builder, ctype in blocks:
+        print(f"  Building block: {name}...")
+        sch_path = builder()
+        sch_paths.append(sch_path)
+
+        # Verify
+        print(f"    Verifying {name}...")
+        verify_circuit(sch_path, ctype, {}, {})
+
+        # Export PDF + PNG
+        try:
+            pdf_path = export_pdf(sch_path)
+            pdf_paths.append(pdf_path)
+            png_name = f"tia_block_{name.lower().replace(' ', '_')}.png"
+            render_pdf_to_png(pdf_path,
+                os.path.join(WORK_DIR, png_name), zoom=4)
+        except Exception as e:
+            print(f"    Export error for {name}: {e}")
+            all_ok = False
+
+    # Merge all block PDFs into one document
+    if pdf_paths:
+        merged_path = os.path.join(WORK_DIR, "electrometer_blocks.pdf")
+        merge_pdfs(pdf_paths, merged_path)
+
+    print(f"\n  TIA blocks complete: {len(sch_paths)} schematics")
+    if all_ok and pdf_paths:
+        print(f"  Merged PDF: {os.path.join(WORK_DIR, 'electrometer_blocks.pdf')}")
+    return sch_paths
+
+
 def build_oscillator(**kwargs):
     """Build State Variable Oscillator KiCad schematic.
 
@@ -9476,7 +10419,7 @@ def main():
     # Circuit selection
     circuit = "ce_amp"
     opamp = "LM741"
-    if len(sys.argv) >= 2 and sys.argv[1] in ("audioamp", "inv_amp", "ce_amp", "sig_cond", "usb_ina", "electrometer", "electrometer_362", "relay_ladder", "input_filters", "analog_mux", "mux_tia", "mcu_section", "full_system", "full_path", "channel_switch", "femtoamp_test", "avdd_monitor", "rtd_temp", "combined_log", "oscillator"):
+    if len(sys.argv) >= 2 and sys.argv[1] in ("audioamp", "inv_amp", "ce_amp", "sig_cond", "usb_ina", "electrometer", "electrometer_362", "relay_ladder", "input_filters", "analog_mux", "mux_tia", "mcu_section", "full_system", "full_path", "channel_switch", "femtoamp_test", "avdd_monitor", "rtd_temp", "combined_log", "oscillator", "osc_blocks", "tia_blocks"):
         circuit = sys.argv[1]
     if len(sys.argv) >= 3 and sys.argv[2] in ("LM741", "AD797", "AD822", "AD843", "LMC6001", "LMC6001A", "OPA128", "ADA4530"):
         opamp = sys.argv[2]
@@ -10469,6 +11412,16 @@ def main():
         else:
             print("\n[4] Simulation failed")
 
+        print("\nDone!")
+        return
+
+    elif circuit == "osc_blocks":
+        build_osc_blocks()
+        print("\nDone!")
+        return
+
+    elif circuit == "tia_blocks":
+        build_tia_blocks()
         print("\nDone!")
         return
 
