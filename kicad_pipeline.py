@@ -61,15 +61,64 @@ from kicad_sch_api import create_schematic, get_symbol_cache
 PROGRAM_NAME = "CircuitForge"
 VERSION = "0.1.0"
 
-# Paths
-KICAD_LIBS = os.path.expanduser("~/Documents/LTspice/kicad_libs")
-WORK_DIR = os.path.expanduser("~/Documents/LTspice/sim_work")
-NGSPICE = r"C:\Spice64\bin\ngspice_con.exe"
-LTSPICE = r"C:\Program Files\ADI\LTspice\LTspice.exe"
-MODELS_DIR = os.path.expanduser("~/Documents/LTspice/models/MicroCap-LIBRARY-for-ngspice")
-KICAD_CLI = r"C:\Users\Robert\AppData\Local\Programs\KiCad\9.0\bin\kicad-cli.exe"
+# Paths - derived from repo root (directory containing this script)
+REPO_DIR = os.path.dirname(os.path.abspath(__file__))
+KICAD_LIBS = os.path.join(REPO_DIR, "kicad_libs")
+WORK_DIR = os.path.join(REPO_DIR, "sim_work")
+MODELS_DIR = os.path.join(REPO_DIR, "models", "MicroCap-LIBRARY-for-ngspice")
+
+def _find_executable(env_var, name, search_paths):
+    """Find an executable: check env var first, then search common paths."""
+    from_env = os.environ.get(env_var)
+    if from_env and os.path.isfile(from_env):
+        return from_env
+    for p in search_paths:
+        if os.path.isfile(p):
+            return p
+    return None
+
+NGSPICE = _find_executable("NGSPICE_PATH", "ngspice", [
+    r"C:\Spice64\bin\ngspice_con.exe",
+    os.path.expanduser(r"~\Spice64\bin\ngspice_con.exe"),
+    r"C:\Program Files\Spice64\bin\ngspice_con.exe",
+    "/usr/bin/ngspice", "/usr/local/bin/ngspice",
+])
+
+LTSPICE = _find_executable("LTSPICE_PATH", "LTspice", [
+    r"C:\Program Files\ADI\LTspice\LTspice.exe",
+    os.path.expanduser(r"~\AppData\Local\Programs\ADI\LTspice\LTspice.exe"),
+    r"C:\Program Files (x86)\LTC\LTspiceXVII\XVIIx64.exe",
+])
+
+KICAD_CLI = _find_executable("KICAD_CLI_PATH", "kicad-cli", [
+    os.path.expanduser(r"~\AppData\Local\Programs\KiCad\9.0\bin\kicad-cli.exe"),
+    r"C:\Program Files\KiCad\9.0\bin\kicad-cli.exe",
+    r"C:\Program Files\KiCad\8.0\bin\kicad-cli.exe",
+    "/usr/bin/kicad-cli", "/usr/local/bin/kicad-cli",
+    "/Applications/KiCad/KiCad.app/Contents/MacOS/kicad-cli",
+])
+
+# LTspice model library path (for ADA4530-1 etc.)
+LTSPICE_LIB_DIR = _find_executable("LTSPICE_LIB_PATH", "ADI1.lib", [
+    os.path.expanduser(r"~\AppData\Local\LTspice\lib\sub\ADI1.lib"),
+    r"C:\Users\Public\Documents\LTspiceXVII\lib\sub\ADI1.lib",
+    os.path.expanduser(r"~\Documents\LTspiceXVII\lib\sub\ADI1.lib"),
+])
+# Extract just the directory for .lib references
+if LTSPICE_LIB_DIR:
+    LTSPICE_LIB_DIR = os.path.dirname(LTSPICE_LIB_DIR)
 
 os.makedirs(WORK_DIR, exist_ok=True)
+
+def _get_ltspice_lib_path():
+    """Return the LTspice .lib path for netlist includes, with backslash escaping."""
+    if LTSPICE_LIB_DIR:
+        p = os.path.join(LTSPICE_LIB_DIR, "ADI1.lib")
+        return p.replace("\\", "\\\\")
+    raise FileNotFoundError(
+        "Cannot find LTspice ADI model library (ADI1.lib).\n"
+        "Set LTSPICE_LIB_PATH env var to the full path of ADI1.lib."
+    )
 
 
 # =============================================================
@@ -6012,7 +6061,7 @@ def write_oscillator_netlist(dac_code=121):
     rise_start = max(5, int(expected_freq * meas_from * 0.5))
     rise_end = rise_start + 1
 
-    models_dir = os.path.expanduser("~/Documents/LTspice/StateVarOsc/models").replace('\\', '/')
+    models_dir = os.path.join(REPO_DIR, "StateVarOsc", "models").replace('\\', '/')
     results_file = os.path.join(WORK_DIR, f'oscillator_d{dac_code}_results.txt').replace('\\', '/')
 
     netlist = f"""* State Variable Oscillator - DAC code {dac_code} (expected {expected_freq:.1f} Hz)
@@ -7214,7 +7263,7 @@ Rgdr GDR 0 100Meg
 I1 0 INV PULSE(0 {i_test} 0.01 1u 1u {pulse_width} {sim_time})
 
 .tran {sim_time}
-.lib C:\\Users\\Robert\\AppData\\Local\\LTspice\\lib\\sub\\ADI1.lib
+.lib {_get_ltspice_lib_path()}
 .backanno
 .end
 """

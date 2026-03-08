@@ -98,6 +98,26 @@ build-simulate-verify pipeline:
 - AD636 RMS-to-DC converter for amplitude monitoring
 - ADuCM362 self-calibration firmware
 
+## Setup (Getting Started After Cloning)
+
+All internal paths (symbol libraries, models, sim output) are **relative to the
+repo root** -- no editing needed. External tools (ngspice, LTspice, KiCad) are
+auto-detected from common install locations. If CircuitForge can't find a tool,
+set the corresponding environment variable:
+
+| Env Variable | Points to | Example |
+|---|---|---|
+| `NGSPICE_PATH` | ngspice console executable | `C:\Spice64\bin\ngspice_con.exe` |
+| `LTSPICE_PATH` | LTspice executable | `C:\Program Files\ADI\LTspice\LTspice.exe` |
+| `KICAD_CLI_PATH` | kicad-cli executable | `C:\Program Files\KiCad\9.0\bin\kicad-cli.exe` |
+| `LTSPICE_LIB_PATH` | LTspice ADI1.lib model file | `%LOCALAPPDATA%\LTspice\lib\sub\ADI1.lib` |
+
+On Windows you can set these in System > Environment Variables, or per-session:
+```cmd
+set NGSPICE_PATH=D:\tools\Spice64\bin\ngspice_con.exe
+python kicad_pipeline.py ce_amp
+```
+
 ## Prerequisites
 
 ### Python (3.10+)
@@ -107,14 +127,20 @@ pip install numpy matplotlib kicad-sch-api
 
 ### ngspice
 Download from https://sourceforge.net/projects/ngspice/files/
-- Install to `C:\Spice64\` (default)
-- The pipeline uses `C:\Spice64\bin\ngspice_con.exe`
+- Default install (`C:\Spice64\`) is auto-detected
+- Non-standard location? Set `NGSPICE_PATH` env var
+
+### LTspice (optional, for ADA4530-1 sims)
+Download from https://www.analog.com/en/resources/design-tools-and-calculators/ltspice-simulator.html
+- Default install is auto-detected
+- Non-standard location? Set `LTSPICE_PATH` env var
 
 ### .NET 8 SDK (for SimGUI)
 Download from https://dotnet.microsoft.com/download/dotnet/8.0
 
 ### KiCad 9.x (optional, for viewing schematics)
 Download from https://www.kicad.org/download/
+- Non-standard location? Set `KICAD_CLI_PATH` env var
 
 ### ARM Toolchain (optional, for firmware)
 - `arm-none-eabi-gcc` for ADuCM362 firmware compilation
