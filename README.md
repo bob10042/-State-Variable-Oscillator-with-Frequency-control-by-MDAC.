@@ -10,44 +10,62 @@ simulation results, and publication-quality plots.
 
 ## Setup (Getting Started After Cloning)
 
-**Step 1 — Clone and install Python dependencies:**
+**Step 1 — Clone the repo and install Python packages:**
 ```bash
-git clone <repo-url>
-cd LTspice
+git clone https://github.com/bob10042/-State-Variable-Oscillator-with-Frequency-control-by-MDAC..git
+cd -State-Variable-Oscillator-with-Frequency-control-by-MDAC.-
 pip install numpy matplotlib kicad-sch-api PyMuPDF Pillow
 ```
-(`PyMuPDF` and `Pillow` are optional — only needed for PDF-to-PNG schematic rendering.
-The pipeline will skip PNG export and tell you if they're missing.)
+> `PyMuPDF` and `Pillow` are optional — only needed for PDF-to-PNG schematic rendering.
+> The pipeline will skip PNG export and tell you if they're missing.
 
 **Step 2 — Install ngspice** (required for simulations):
-- Download from https://sourceforge.net/projects/ngspice/files/
-- The default Windows install path (`C:\Spice64\`) is auto-detected.
-- If you installed it somewhere else, set the env var before running:
-  ```cmd
-  set NGSPICE_PATH=D:\your\path\to\ngspice_con.exe
-  ```
+1. Download from https://sourceforge.net/projects/ngspice/files/
+2. Run the installer — the default path `C:\Spice64\` is auto-detected.
+3. If you installed somewhere else, set the env var:
+   ```cmd
+   set NGSPICE_PATH=D:\your\path\to\ngspice_con.exe
+   ```
 
-**Step 3 — Run a test simulation to verify everything works:**
+**Step 3 — Run a test to verify everything works:**
 ```bash
 python kicad_pipeline.py ce_amp
 ```
-If it runs without "file not found" errors, you're good. Output goes to `sim_work/`.
+You should see `Done!` at the end. Output goes to `sim_work/`.
+
+**Step 4 (optional) — Extract SPICE model library:**
+
+The repo includes a compressed model library for advanced circuits (electrometer,
+channel switching, etc.). To enable those simulations:
+1. Extract `models/MicroCap-LIBRARY.7z` into `models/MicroCap-LIBRARY-for-ngspice/`
+2. You can use 7-Zip (free) to extract: right-click the `.7z` → "Extract Here"
+
+The basic circuits (`ce_amp`, `oscillator`, `inv_amp`, `audioamp`) work without this.
+
+**Step 5 (optional) — Run SimGUI:**
+
+Requires .NET 8 SDK (download from https://dotnet.microsoft.com/download).
+```bash
+cd SimGUI/SimGUI
+dotnet run
+```
+Select Oscillator or Electrometer from the project dropdown, then click "Run Point".
 
 **Optional tools** (only needed for specific features):
 
-| Tool | What it's for | Env var if non-standard path |
-|------|--------------|----------------------------|
-| LTspice | ADA4530-1 electrometer sims only | `LTSPICE_PATH` |
-| KiCad 9.x | Viewing/exporting `.kicad_sch` schematics | `KICAD_CLI_PATH` |
-| .NET 8 SDK | Running SimGUI desktop app | n/a |
-| arm-none-eabi-gcc | Compiling ADuCM362 firmware | n/a |
+| Tool | What it's for | Install |
+|------|--------------|---------|
+| ngspice | All circuit simulations | https://sourceforge.net/projects/ngspice/files/ |
+| KiCad 9.x | Viewing `.kicad_sch` schematics | https://www.kicad.org/download/ |
+| .NET 8 SDK | Running SimGUI desktop app | https://dotnet.microsoft.com/download |
+| LTspice | ADA4530-1 electrometer sims only | https://www.analog.com/ltspice |
+| 7-Zip | Extracting model library | https://www.7-zip.org/ |
 
-All internal paths (symbol libraries in `kicad_libs/`, SPICE models in `models/`,
-simulation output in `sim_work/`) are **relative to the repo root** — they work
-wherever you clone the repo with no editing needed.
+**All paths are portable** — symbol libraries (`symbols/`), SPICE models (`models/`,
+`StateVarOsc/models/`), and simulation output (`sim_work/`) are relative to the repo
+root. Clone the repo anywhere and it works with no path editing.
 
-If LTspice sims need the ADI model library (ADI1.lib), it's auto-detected from
-common LTspice install locations, or set `LTSPICE_LIB_PATH` to the full path.
+If you already cloned and need to update: `git pull`
 
 ## Development Progress
 
@@ -143,12 +161,16 @@ build-simulate-verify pipeline:
 
 | Error | Fix |
 |-------|-----|
+| `Library not found: LM741` or `Q_NPN_BCE` | Run `git pull` — the `symbols/` directory was added recently |
+| `No KiCad symbol libraries found` | Cosmetic warning from kicad-sch-api at startup — safe to ignore if build succeeds |
+| `directory name is invalid` (SimGUI) | Run `git pull` — SimGUI paths are now auto-detected |
 | `FileNotFoundError: ngspice` | Install ngspice, or set `NGSPICE_PATH` env var |
 | `FileNotFoundError: ADI1.lib` | Install LTspice, or set `LTSPICE_LIB_PATH` env var |
-| `FileNotFoundError: kicad-cli` | Install KiCad, or set `KICAD_CLI_PATH` env var |
+| `FileNotFoundError: kicad-cli` | Install KiCad, or set `KICAD_CLI_PATH` env var (optional — only for PDF/SVG export) |
 | `ModuleNotFoundError: kicad_sch_api` | Run `pip install kicad-sch-api` |
 | `ModuleNotFoundError: numpy` | Run `pip install numpy matplotlib` |
 | `Need: pip install pymupdf pillow` | Run `pip install PyMuPDF Pillow` (optional, for PNG rendering) |
+| Model errors for electrometer/channel_switch | Extract `models/MicroCap-LIBRARY.7z` — see Step 4 above |
 
 ## Directory Structure
 
@@ -158,8 +180,9 @@ LTspice/
   demo_loader.py             # LTspice .asc to ngspice converter
   PROJECT.md                 # Project tracker
   sim_work/                  # Simulation working directory (generated files)
-  kicad_libs/                # Custom KiCad symbol libraries (.kicad_sym)
-  models/                    # SPICE vendor models (.lib) - MicroCap library + ADA4530-1
+  symbols/                   # Bundled KiCad symbols (15 symbols used by pipeline)
+  kicad_libs/                # Full KiCad symbol library (optional, not in git)
+  models/                    # SPICE models: ADA4530-1.lib + MicroCap archive (.7z)
   StateVarOsc/
     DESIGN.md                # Oscillator design document
     CALCULATIONS.md          # Frequency/amplitude calculations
