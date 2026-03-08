@@ -14,8 +14,10 @@ simulation results, and publication-quality plots.
 ```bash
 git clone <repo-url>
 cd LTspice
-pip install numpy matplotlib kicad-sch-api
+pip install numpy matplotlib kicad-sch-api PyMuPDF Pillow
 ```
+(`PyMuPDF` and `Pillow` are optional — only needed for PDF-to-PNG schematic rendering.
+The pipeline will skip PNG export and tell you if they're missing.)
 
 **Step 2 — Install ngspice** (required for simulations):
 - Download from https://sourceforge.net/projects/ngspice/files/
@@ -146,6 +148,7 @@ build-simulate-verify pipeline:
 | `FileNotFoundError: kicad-cli` | Install KiCad, or set `KICAD_CLI_PATH` env var |
 | `ModuleNotFoundError: kicad_sch_api` | Run `pip install kicad-sch-api` |
 | `ModuleNotFoundError: numpy` | Run `pip install numpy matplotlib` |
+| `Need: pip install pymupdf pillow` | Run `pip install PyMuPDF Pillow` (optional, for PNG rendering) |
 
 ## Directory Structure
 
