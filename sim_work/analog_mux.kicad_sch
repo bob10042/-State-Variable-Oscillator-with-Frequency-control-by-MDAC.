@@ -2,7 +2,7 @@
 	(version 20250114)
 	(generator "eeschema")
 	(generator_version "9.0")
-	(uuid "61d22642-77f1-437a-a40a-3840d0f0dcf6")
+	(uuid "e774d81d-b8ba-4c6f-8c59-d74e5a5ca840")
 	(paper "A4")
 	(title_block
 		(title "Analog Multiplexer - 2x MAX338 (CD4051B)")
@@ -1217,7 +1217,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "7a1d9e7b-ac55-4c3c-9e9f-5f1ca8f8f24e")
+		(uuid "d1dacecc-e83a-420f-adeb-ef9bfd828bf4")
 		(property "Reference" "U1"
 			(at 91.44 87.63 0.0000)
 			(effects
@@ -1237,56 +1237,56 @@
 			)
 		)
 		(pin "1"
-			(uuid "cf943726-ec20-4bcd-8d49-fb913a28f906")
+			(uuid "61d33dba-7be7-4dec-ac09-4e96ebed6e98")
 		)
 		(pin "2"
-			(uuid "c2110b1e-0f51-4bba-9c77-f3fe4ae31144")
+			(uuid "b565a20d-5817-449b-952b-7cb56bc55629")
 		)
 		(pin "3"
-			(uuid "94fb9c4e-8f35-4046-8d36-90d66d0f9aa8")
+			(uuid "1631fcca-c4c6-4962-963e-568f41d4e3b9")
 		)
 		(pin "4"
-			(uuid "78807ff6-b24b-4985-8048-1d98a59f36bf")
+			(uuid "255404e8-45d5-4628-81e6-d48262f92ad3")
 		)
 		(pin "5"
-			(uuid "ad4d4c2f-127c-4bf9-b4bb-f33e5eca388d")
+			(uuid "d6cd64c5-fcaf-423a-b8be-dca9e007f922")
 		)
 		(pin "6"
-			(uuid "5943e30e-84b9-4174-96be-c60ca7a94b47")
+			(uuid "07fb5b11-7189-45cb-98c2-07c7966eca11")
 		)
 		(pin "7"
-			(uuid "4b88fbfb-1fc2-49d1-81c7-943f17c2a70c")
+			(uuid "f7b3b273-8d8f-4b27-a341-eb3021ce7548")
 		)
 		(pin "8"
-			(uuid "d6dfebc3-cf5b-484b-a35f-3a89fd1623ad")
+			(uuid "c04d5817-3104-4666-854e-6ad0ea7d6c73")
 		)
 		(pin "9"
-			(uuid "8a57bef0-cbaa-45a8-9ccc-d9f09b2de7fe")
+			(uuid "9397a55a-0ce3-4f43-90ab-a8b63c33fe88")
 		)
 		(pin "10"
-			(uuid "af8a4585-6c85-4752-b344-bc4dbb6f2504")
+			(uuid "26367791-0a70-4219-8ee5-5670356b4666")
 		)
 		(pin "11"
-			(uuid "bbe5b91f-a015-4274-a5d7-be748202d58c")
+			(uuid "9172d5b7-1f00-4dfd-96b9-8b5561123fe0")
 		)
 		(pin "12"
-			(uuid "f3e58517-7e5a-4664-b4d6-473ef65ac8d8")
+			(uuid "19025831-5d4a-402a-8017-c52805ef09ef")
 		)
 		(pin "13"
-			(uuid "fa6db30d-7420-42e8-8c06-9fad60857eba")
+			(uuid "d6284c7e-7c25-47bc-b6c5-33a317e5bbbb")
 		)
 		(pin "14"
-			(uuid "9ecdc68d-83c4-4468-9aa4-392bb4b1469b")
+			(uuid "7a125b58-b1de-4871-acb5-44a77e46ac94")
 		)
 		(pin "15"
-			(uuid "6b68f8c2-26f6-4244-adec-b3417c8a624b")
+			(uuid "f785271e-b83b-4ab3-9286-dc913d324b85")
 		)
 		(pin "16"
-			(uuid "58181eaf-8fee-48e5-aeac-32401857c5e0")
+			(uuid "4a6c49af-2e37-47e5-84d1-e17d00940765")
 		)
 		(instances
 			(project "Analog Multiplexer - 2x MAX338 (CD4051B)"
-				(path "/61d22642-77f1-437a-a40a-3840d0f0dcf6"
+				(path "/e774d81d-b8ba-4c6f-8c59-d74e5a5ca840"
 					(reference "U1")
 					(unit 1)
 				)
@@ -1302,7 +1302,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "0afb580a-947f-4012-9f41-13586fa841d5")
+		(uuid "1df13515-0dc1-48b3-b5a2-512538dc7158")
 		(property "Reference" "#PWR001"
 			(at 104.14 44.45 0.0000)
 			(hide yes)
@@ -1323,11 +1323,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "02f0817d-a3fa-4731-b52d-5dbf05081736")
+			(uuid "a9fe8626-af5a-4e5e-8fad-13fb69bf53e6")
 		)
 		(instances
 			(project "Analog Multiplexer - 2x MAX338 (CD4051B)"
-				(path "/61d22642-77f1-437a-a40a-3840d0f0dcf6"
+				(path "/e774d81d-b8ba-4c6f-8c59-d74e5a5ca840"
 					(reference "#PWR001")
 					(unit 1)
 				)
@@ -1343,7 +1343,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "87785772-a3d6-4102-9a5c-5d1de7f11dbb")
+		(uuid "ec87af98-dbd1-42ab-b4d3-aeb4197e6eea")
 		(property "Reference" "#PWR002"
 			(at 101.6 87.63 0.0000)
 			(hide yes)
@@ -1364,11 +1364,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "a817400e-bf09-4d1f-94cb-c562f23573d1")
+			(uuid "5ab6de2d-002e-4644-ba72-16a598f3793d")
 		)
 		(instances
 			(project "Analog Multiplexer - 2x MAX338 (CD4051B)"
-				(path "/61d22642-77f1-437a-a40a-3840d0f0dcf6"
+				(path "/e774d81d-b8ba-4c6f-8c59-d74e5a5ca840"
 					(reference "#PWR002")
 					(unit 1)
 				)
@@ -1384,7 +1384,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "ef2a3880-332d-449a-b9dc-f67fe4c22331")
+		(uuid "eb6e40e5-3171-4542-b549-0d149513bb5b")
 		(property "Reference" "#PWR003"
 			(at 99.06 87.63 0.0000)
 			(hide yes)
@@ -1405,11 +1405,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "cb8ff420-ad94-4bef-9ff2-2070a52ad02c")
+			(uuid "ed02f0b1-c118-45d6-8eb3-6ca52e45d53f")
 		)
 		(instances
 			(project "Analog Multiplexer - 2x MAX338 (CD4051B)"
-				(path "/61d22642-77f1-437a-a40a-3840d0f0dcf6"
+				(path "/e774d81d-b8ba-4c6f-8c59-d74e5a5ca840"
 					(reference "#PWR003")
 					(unit 1)
 				)
@@ -1425,7 +1425,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "69f09476-40f4-45e4-93d9-c448404119dd")
+		(uuid "a92d07b1-9ee0-448b-96ac-f294d53f2265")
 		(property "Reference" "C17"
 			(at 122.555 59.69 0.0000)
 			(effects
@@ -1445,14 +1445,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "8012a0eb-5a0a-46a4-8ab2-9642b1d81620")
+			(uuid "93147be1-f7f5-4170-b51c-a72a949ab9b8")
 		)
 		(pin "2"
-			(uuid "dad51e64-8c08-49ba-bcff-6ccbf58059f0")
+			(uuid "abeda61f-cb25-4606-a341-c4042ffea75f")
 		)
 		(instances
 			(project "Analog Multiplexer - 2x MAX338 (CD4051B)"
-				(path "/61d22642-77f1-437a-a40a-3840d0f0dcf6"
+				(path "/e774d81d-b8ba-4c6f-8c59-d74e5a5ca840"
 					(reference "C17")
 					(unit 1)
 				)
@@ -1468,7 +1468,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "a4454ea8-ecce-48ee-90ac-5014d3513d5e")
+		(uuid "67b17f55-c50a-42c3-87da-32a3ac9117ab")
 		(property "Reference" "#PWR004"
 			(at 121.92 54.61 0.0000)
 			(hide yes)
@@ -1489,11 +1489,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "6441cd13-f840-4ac1-bb42-1b4bdf8415a4")
+			(uuid "2f01e37d-8db3-4a6a-8631-b070956d2030")
 		)
 		(instances
 			(project "Analog Multiplexer - 2x MAX338 (CD4051B)"
-				(path "/61d22642-77f1-437a-a40a-3840d0f0dcf6"
+				(path "/e774d81d-b8ba-4c6f-8c59-d74e5a5ca840"
 					(reference "#PWR004")
 					(unit 1)
 				)
@@ -1509,7 +1509,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "e1c4e52b-f6e0-46e5-a445-b02f8174a1d3")
+		(uuid "52b004ed-a74a-45ba-a5b5-2dc3af3b4b8c")
 		(property "Reference" "U2"
 			(at 91.44 189.23 0.0000)
 			(effects
@@ -1529,56 +1529,56 @@
 			)
 		)
 		(pin "1"
-			(uuid "e0b323cd-152d-4710-8acc-3b73cb0ab782")
+			(uuid "5250a09f-392c-4a04-888f-11451492b141")
 		)
 		(pin "2"
-			(uuid "5bc20f1b-8d97-472e-b802-3c416af6caf3")
+			(uuid "4f064cd3-dc6c-4bea-ae47-74bd14ef5c07")
 		)
 		(pin "3"
-			(uuid "76b0e92d-e39e-44f5-8357-274a4b9470af")
+			(uuid "a79e4f1e-e810-4191-91e6-629132f8a823")
 		)
 		(pin "4"
-			(uuid "fbf2f452-a980-4dc7-8126-cb950c790c82")
+			(uuid "2cf6ef02-eb6d-41ab-a09d-8157e509b94f")
 		)
 		(pin "5"
-			(uuid "6d043836-5465-4e73-8c20-07ab803436f6")
+			(uuid "5cb47698-5f61-4c4a-91f0-3f3faca0dad3")
 		)
 		(pin "6"
-			(uuid "197cc47b-f7d9-4f75-bdbd-edb297b0bcbb")
+			(uuid "f4b1de53-e785-4f40-9ed9-e71c8ffbf210")
 		)
 		(pin "7"
-			(uuid "f267b881-2801-4f3a-87d5-d9f2967eba74")
+			(uuid "64deb67d-797e-44a8-90d3-06fe8d151633")
 		)
 		(pin "8"
-			(uuid "0b6b16ee-aa35-4900-b87a-7bb5a8503666")
+			(uuid "f1c523f4-3155-4f93-a531-2fe7dbf358d1")
 		)
 		(pin "9"
-			(uuid "2a2baf6e-5ae9-49c8-892a-fb84925e30c9")
+			(uuid "56ef8af1-5829-4b3a-a1b0-d64bc22ce138")
 		)
 		(pin "10"
-			(uuid "57ead9c0-a8f8-4465-88b3-228c0097f4f3")
+			(uuid "ce5abc38-1040-446a-8501-2479287ac2b2")
 		)
 		(pin "11"
-			(uuid "5030fa4a-ef01-408a-b163-92e27e96f24b")
+			(uuid "8c8b494f-055e-428e-8cc0-bf648d7799aa")
 		)
 		(pin "12"
-			(uuid "f8b66808-38fe-4c09-81f8-bc1c99e460ec")
+			(uuid "9ec13ddb-1c84-438e-8c2f-247edea0cae6")
 		)
 		(pin "13"
-			(uuid "fa050de1-4315-4beb-bf11-7f4589754433")
+			(uuid "1ffb339f-94db-4e96-9de9-281a7258611d")
 		)
 		(pin "14"
-			(uuid "3b303a43-e3da-4d9e-b758-8c4bb67ff2d6")
+			(uuid "e45ef302-0e2e-4ef3-93df-de7fc674514e")
 		)
 		(pin "15"
-			(uuid "faa504ad-1f4b-4e5e-9d52-edcdd87c3fd9")
+			(uuid "b3f575d9-db3b-4573-a4d3-4472fd9d1233")
 		)
 		(pin "16"
-			(uuid "651d9d4a-215a-4df6-9f02-a20dab17e830")
+			(uuid "72936f57-5103-436e-85b1-764bfb790d24")
 		)
 		(instances
 			(project "Analog Multiplexer - 2x MAX338 (CD4051B)"
-				(path "/61d22642-77f1-437a-a40a-3840d0f0dcf6"
+				(path "/e774d81d-b8ba-4c6f-8c59-d74e5a5ca840"
 					(reference "U2")
 					(unit 1)
 				)
@@ -1594,7 +1594,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "5cbd54ba-d4ae-4bfd-978c-d04340bc63e8")
+		(uuid "6a940c15-cf80-44b6-ae95-38499d475bbe")
 		(property "Reference" "#PWR005"
 			(at 104.14 146.05 0.0000)
 			(hide yes)
@@ -1615,11 +1615,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "ad60dc91-ee80-4b38-9205-71be7fbecb1e")
+			(uuid "78402df9-fac2-4194-8b84-b85715f9e686")
 		)
 		(instances
 			(project "Analog Multiplexer - 2x MAX338 (CD4051B)"
-				(path "/61d22642-77f1-437a-a40a-3840d0f0dcf6"
+				(path "/e774d81d-b8ba-4c6f-8c59-d74e5a5ca840"
 					(reference "#PWR005")
 					(unit 1)
 				)
@@ -1635,7 +1635,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "b302ebee-c111-4e4b-a6ee-dd46696b8080")
+		(uuid "861ca0d5-ddae-43f9-bd47-6ccb638105fb")
 		(property "Reference" "#PWR006"
 			(at 101.6 189.23 0.0000)
 			(hide yes)
@@ -1656,11 +1656,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "01b1ef3d-82a1-46ec-9dd0-46f9dc8cfc5d")
+			(uuid "67841c5c-ba98-45b6-82c9-fe1ca1252aa2")
 		)
 		(instances
 			(project "Analog Multiplexer - 2x MAX338 (CD4051B)"
-				(path "/61d22642-77f1-437a-a40a-3840d0f0dcf6"
+				(path "/e774d81d-b8ba-4c6f-8c59-d74e5a5ca840"
 					(reference "#PWR006")
 					(unit 1)
 				)
@@ -1676,7 +1676,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "5b44b1ea-ff29-4196-b537-56b8b2041492")
+		(uuid "c151ba83-082a-42e5-8fb4-54fb5441b890")
 		(property "Reference" "#PWR007"
 			(at 99.06 189.23 0.0000)
 			(hide yes)
@@ -1697,11 +1697,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "49f5877f-f9fa-475c-b012-07af50c52d12")
+			(uuid "df049133-5f0b-4e52-b09c-a2912936ef1f")
 		)
 		(instances
 			(project "Analog Multiplexer - 2x MAX338 (CD4051B)"
-				(path "/61d22642-77f1-437a-a40a-3840d0f0dcf6"
+				(path "/e774d81d-b8ba-4c6f-8c59-d74e5a5ca840"
 					(reference "#PWR007")
 					(unit 1)
 				)
@@ -1717,7 +1717,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "9dd38a20-9a95-4ce7-b821-848cb584eff9")
+		(uuid "da61ad60-4046-4825-856d-72a811b02aba")
 		(property "Reference" "C18"
 			(at 122.555 161.29 0.0000)
 			(effects
@@ -1737,14 +1737,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "897081e9-2ceb-4762-a3d0-96a9e31a7200")
+			(uuid "49e84492-f81c-4856-b5e5-7c5d72b4dac8")
 		)
 		(pin "2"
-			(uuid "1537f752-88dd-4a6e-8baf-f3a9bc113e49")
+			(uuid "913716a1-756e-4392-8140-f22d683dfefa")
 		)
 		(instances
 			(project "Analog Multiplexer - 2x MAX338 (CD4051B)"
-				(path "/61d22642-77f1-437a-a40a-3840d0f0dcf6"
+				(path "/e774d81d-b8ba-4c6f-8c59-d74e5a5ca840"
 					(reference "C18")
 					(unit 1)
 				)
@@ -1760,7 +1760,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "3a20d520-4d1f-4642-9a59-a3f7446e86c7")
+		(uuid "d84b0f12-1dce-4f76-a767-36879fa4be69")
 		(property "Reference" "#PWR008"
 			(at 121.92 156.21 0.0000)
 			(hide yes)
@@ -1781,11 +1781,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "37fa6c1b-0df6-4187-85fa-dcfe58d2e5fd")
+			(uuid "9cda566e-fefa-402c-b41a-61477a116563")
 		)
 		(instances
 			(project "Analog Multiplexer - 2x MAX338 (CD4051B)"
-				(path "/61d22642-77f1-437a-a40a-3840d0f0dcf6"
+				(path "/e774d81d-b8ba-4c6f-8c59-d74e5a5ca840"
 					(reference "#PWR008")
 					(unit 1)
 				)
@@ -1800,7 +1800,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "42fdb87c-e9d7-4936-ae9c-a60fecab46a1")
+		(uuid "4bfa17f7-4d13-4b7b-a62b-55142553352b")
 	)
 	(wire
 		(pts
@@ -1810,7 +1810,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "2c2260d2-6256-46f5-8af6-f17fa6664d96")
+		(uuid "779a6b42-d2ab-4b5d-b297-6d6dbce01f29")
 	)
 	(wire
 		(pts
@@ -1820,7 +1820,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "a2955edf-8816-42f0-8afe-b1868c42785b")
+		(uuid "a3fcfabb-cc37-4d39-a228-e6e40995a8ea")
 	)
 	(wire
 		(pts
@@ -1830,7 +1830,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "14dc8e68-2b09-4ae7-9275-5e4f2f1efc69")
+		(uuid "06eb1fa4-fac8-48d1-81fb-83a7c22e11a8")
 	)
 	(wire
 		(pts
@@ -1840,7 +1840,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "bbc4e726-5154-4613-bea5-869206a05953")
+		(uuid "aea49777-6fc6-408f-99a7-9dea7deb90d2")
 	)
 	(wire
 		(pts
@@ -1850,7 +1850,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "9320d07f-a570-4d74-b702-be51fc5e2f1a")
+		(uuid "9a1ecb2b-91cd-4d20-a811-776078b049a0")
 	)
 	(wire
 		(pts
@@ -1860,7 +1860,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "c1936e0b-fb99-4b71-89e8-c992ca9c4920")
+		(uuid "d9134e67-a866-44e3-ab36-4835dc3f150c")
 	)
 	(wire
 		(pts
@@ -1870,7 +1870,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "89759568-3643-42ae-b9cc-ce5533a86eb5")
+		(uuid "30981d96-3a6f-4d6a-a92a-9312d6fe8f3c")
 	)
 	(wire
 		(pts
@@ -1880,7 +1880,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "615b1b87-adc1-4ad3-bfdc-ece1bf011450")
+		(uuid "6612c7af-7f88-4743-83da-9e8a9f4daf04")
 	)
 	(wire
 		(pts
@@ -1890,7 +1890,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "e7b3ffc4-f3bd-44e8-910b-a4e94d825a34")
+		(uuid "224f4baf-6ab9-499f-b44e-569002e910fb")
 	)
 	(wire
 		(pts
@@ -1900,7 +1900,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "c8343b28-fece-4c6b-804a-0d984b2c5d2f")
+		(uuid "c6b1ef81-a783-4b02-b107-8679fbe74c9e")
 	)
 	(wire
 		(pts
@@ -1910,7 +1910,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "32478207-4659-49c4-81ab-b8b7c8f6b96f")
+		(uuid "88166d9f-0c2a-48ec-b5cf-baac287089ce")
 	)
 	(wire
 		(pts
@@ -1920,7 +1920,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "653b93db-e4a8-4ea9-9195-a161d41cae26")
+		(uuid "0f1db51d-ae65-4dd8-9ee4-7b8a69b9b70e")
 	)
 	(wire
 		(pts
@@ -1930,7 +1930,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "6ae58f7b-d567-449b-8d60-0740f2e239af")
+		(uuid "d1b52020-4193-444c-a93d-54f4c8b14393")
 	)
 	(wire
 		(pts
@@ -1940,7 +1940,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "572ed89c-60da-400c-8f81-8bbce7759da8")
+		(uuid "043c4c9f-2774-4ccc-98b6-a689055cc0b5")
 	)
 	(wire
 		(pts
@@ -1950,7 +1950,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "00803ffc-d8c7-40a4-a645-781ca72d0d32")
+		(uuid "82b14de4-9b0f-4f2b-9c5b-33be127519ee")
 	)
 	(wire
 		(pts
@@ -1960,7 +1960,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "d94e7ac2-8d62-49e6-abb1-e51eba4fb6d0")
+		(uuid "1c429edb-9207-423b-9756-03bc5dba3dfd")
 	)
 	(wire
 		(pts
@@ -1970,7 +1970,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "fca5dfb2-4ddd-4bc0-97ee-0c26759b4cb3")
+		(uuid "9ff1f0b7-8c09-4ee1-8030-a3cc9b39d677")
 	)
 	(wire
 		(pts
@@ -1980,7 +1980,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "f286613a-07a3-4a90-be48-07dab6faf126")
+		(uuid "5a1d3f7c-83ec-4510-bfac-cc3275840e2b")
 	)
 	(wire
 		(pts
@@ -1990,7 +1990,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "09856b19-bbd6-4bdc-8757-b2d2c774f16f")
+		(uuid "7f72f125-e4c4-42d7-96e0-34a71bc326ec")
 	)
 	(wire
 		(pts
@@ -2000,7 +2000,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "ad1b9645-705f-4f5d-873c-c858c2c06a19")
+		(uuid "8c448c74-5e23-45a8-810a-37d0358a59a1")
 	)
 	(wire
 		(pts
@@ -2010,7 +2010,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "f057801d-e905-448e-bc46-96a5a5a5b23c")
+		(uuid "ae739772-c42b-418b-b5b0-954df43c2054")
 	)
 	(wire
 		(pts
@@ -2020,7 +2020,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "d9d628f2-63a6-44f7-987b-b04cbaf253f9")
+		(uuid "40fbb439-a112-43af-86e6-31c29768e11a")
 	)
 	(wire
 		(pts
@@ -2030,7 +2030,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "ac555fce-81b7-43c4-a25e-6611010c48bf")
+		(uuid "b91b2c26-7302-4b96-89c7-feab9f1460d5")
 	)
 	(wire
 		(pts
@@ -2040,7 +2040,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "52b315c9-2c71-4085-9835-d52f0ad1d2bd")
+		(uuid "79916a3b-3d6d-499d-a1a9-5f582656d304")
 	)
 	(wire
 		(pts
@@ -2050,7 +2050,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "47dbaad6-44f7-421b-849d-234f2f0b2ab4")
+		(uuid "31a5cf2e-b6ca-459d-8a54-0f3ff8a82f18")
 	)
 	(wire
 		(pts
@@ -2060,7 +2060,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "c443858a-bcf3-4c06-b3e0-9608f36ec0c2")
+		(uuid "65026592-f2ea-4d2f-bf05-3750ab09a210")
 	)
 	(wire
 		(pts
@@ -2070,7 +2070,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "dbfa3815-f051-4840-a676-2358342e4615")
+		(uuid "e34c8b69-a189-4c80-bfc9-ea0d6fe5edfa")
 	)
 	(wire
 		(pts
@@ -2080,7 +2080,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "6a3cb3cf-a282-4659-b9f0-98caa884f617")
+		(uuid "a00211b0-3f2f-41c8-84f1-c086dbb38f70")
 	)
 	(wire
 		(pts
@@ -2090,7 +2090,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "a607a1e0-9d6d-4897-827b-96d35ada2dc4")
+		(uuid "65e2424e-ed6b-48ee-81ad-8728777fb6bf")
 	)
 	(wire
 		(pts
@@ -2100,7 +2100,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "fcf11373-0ae4-4d07-afda-6fb2e041a558")
+		(uuid "20f19908-6098-4b3b-8055-641f1bddd678")
 	)
 	(wire
 		(pts
@@ -2110,7 +2110,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "39206b5a-46ba-4cd5-b7f3-259df9a1c2a5")
+		(uuid "4c57f689-4c0c-4924-8f86-8e1def192846")
 	)
 	(wire
 		(pts
@@ -2120,7 +2120,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "ffe0156a-5fea-4fff-ac63-28521085cf07")
+		(uuid "f4332c91-ec09-4459-9e19-c3dd82669521")
 	)
 	(wire
 		(pts
@@ -2130,7 +2130,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "a7c8c7c3-dbb1-49b4-93d4-41d11c73a84c")
+		(uuid "07f5e33b-8cab-48a7-bc43-5c573e338f11")
 	)
 	(label "MUX_A1"
 		(at 119.38 66.04 0)
@@ -2140,7 +2140,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "f1adc24e-5352-487e-99cf-343e50373cbf")
+		(uuid "f6d6fb19-5135-4f32-b6fa-b20054a4e353")
 	)
 	(label "MUX_A2"
 		(at 119.38 68.58 0)
@@ -2150,7 +2150,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "43460e06-7bd7-4b4e-933d-8e1a8a2981c5")
+		(uuid "a600d9c9-b0c7-4de2-b4b8-c941d37517fb")
 	)
 	(label "MUX_A3"
 		(at 119.38 71.12 0)
@@ -2160,7 +2160,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "5f35b81a-b1b8-4f67-841c-5d2726d8a12f")
+		(uuid "b797ea83-7921-4bb9-bf0c-2f02e533f14c")
 	)
 	(label "MUX_A4"
 		(at 119.38 73.66 0)
@@ -2170,7 +2170,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "7f881979-d012-41e5-9bf9-f5fd023c4bff")
+		(uuid "c81c46d8-8f5a-4005-b16f-8a8031a6740e")
 	)
 	(label "MUX_A5"
 		(at 119.38 76.2 0)
@@ -2180,7 +2180,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "0f0618f1-ea31-40e3-a600-cbe84bfc64b5")
+		(uuid "92d2844e-459a-4625-9d7c-190fb6ddfd50")
 	)
 	(label "MUX_A6"
 		(at 119.38 78.74 0)
@@ -2190,7 +2190,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "1a05bfe9-cea4-4f8c-b989-a598d582b712")
+		(uuid "7eb5874b-a882-4c07-9f4a-a18b808246b9")
 	)
 	(label "MUX_A7"
 		(at 119.38 81.28 0)
@@ -2200,7 +2200,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "83a42d85-1a0d-454b-a33c-db8cb5c46e4d")
+		(uuid "a60dae8b-3d7f-48f9-8b38-1bf45c8ba157")
 	)
 	(label "MUX_A8"
 		(at 119.38 83.82 0)
@@ -2210,7 +2210,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "2867a46f-60ee-4157-a24b-3ec774aa1fe9")
+		(uuid "4ff33bc9-6a60-4d63-ab58-d7f2c12576ae")
 	)
 	(label "TIA_IN"
 		(at 83.82 68.58 0)
@@ -2220,7 +2220,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "428b7763-56ec-4f63-bb56-032d07de3907")
+		(uuid "41be0944-7230-4ea4-a659-fa0e97faecc7")
 	)
 	(label "ADDR_A0"
 		(at 83.82 58.42 0)
@@ -2230,7 +2230,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "a43d543a-45d7-45b7-850e-102279c6d545")
+		(uuid "664c4027-7ce1-45af-8663-d5d451eb4b5e")
 	)
 	(label "ADDR_A1"
 		(at 83.82 60.96 0)
@@ -2240,7 +2240,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "1018aca4-a024-412a-bb68-5ae26c6cefbd")
+		(uuid "e591607e-79c3-4372-8d34-d78ee527709b")
 	)
 	(label "ADDR_A2"
 		(at 83.82 63.5 0)
@@ -2250,7 +2250,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "80770e2c-262f-412c-895b-f6797ab09d31")
+		(uuid "7df7b121-e7d7-42d4-869e-9ccc41a3b697")
 	)
 	(label "EN_A"
 		(at 83.82 71.12 0)
@@ -2260,7 +2260,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "77ec2219-3dfb-43a5-982b-5f35aa446cc0")
+		(uuid "69a6d417-c7d6-457c-ba8d-36d76a0a3379")
 	)
 	(label "MUX_B1"
 		(at 119.38 167.64 0)
@@ -2270,7 +2270,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "09ae7170-86f6-4e8c-a78d-ac2e7b773e0b")
+		(uuid "32a6fabe-7420-470d-8c6f-072b86eef250")
 	)
 	(label "MUX_B2"
 		(at 119.38 170.18 0)
@@ -2280,7 +2280,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "0ab18317-a270-4d78-a74e-4f47a7a7f2b2")
+		(uuid "7f2c86e0-4c4e-4dcb-aa36-c756173e4cd9")
 	)
 	(label "MUX_B3"
 		(at 119.38 172.72 0)
@@ -2290,7 +2290,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "69f5f932-0195-4261-b504-f06b90934b56")
+		(uuid "98a74a5a-0a8e-42ee-b9d0-4d034b96407f")
 	)
 	(label "MUX_B4"
 		(at 119.38 175.26 0)
@@ -2300,7 +2300,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "dd7c159f-b395-4dbc-af7d-95696b5aad56")
+		(uuid "bca59469-d205-473b-a4f4-f9edfd7726b7")
 	)
 	(label "MUX_B5"
 		(at 119.38 177.8 0)
@@ -2310,7 +2310,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "6fdbf0b1-30a0-4915-9684-95a17bc4f633")
+		(uuid "f57fb17b-086e-46bb-92d8-4d0aca48c79c")
 	)
 	(label "MUX_B6"
 		(at 119.38 180.34 0)
@@ -2320,7 +2320,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "200c0d35-7d3e-42ce-8f37-ed34cd082de4")
+		(uuid "94539e0f-45b0-48a3-8c63-fdae72159ed6")
 	)
 	(label "MUX_B7"
 		(at 119.38 182.88 0)
@@ -2330,7 +2330,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "d081eed5-3a00-48e2-972d-f55461197838")
+		(uuid "d278d1fa-ad35-4447-841c-916e7d42ee74")
 	)
 	(label "MUX_B8"
 		(at 119.38 185.42 0)
@@ -2340,7 +2340,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "c6fc2326-8ebb-4ffb-acda-3006c25bcd15")
+		(uuid "b4573b2e-1bee-45dd-be2b-a60fd4000638")
 	)
 	(label "TIA_IN"
 		(at 83.82 170.18 0)
@@ -2350,7 +2350,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "52398c26-0b6e-4422-9386-6dd1e8ae7bd4")
+		(uuid "b5f08b5f-9860-46d5-880d-8991c764a8c8")
 	)
 	(label "ADDR_A0"
 		(at 83.82 160.02 0)
@@ -2360,7 +2360,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "06a4b73f-9e17-4f43-90e1-56db50fc7013")
+		(uuid "72d43ecb-9b55-4765-a2b1-25aef4263858")
 	)
 	(label "ADDR_A1"
 		(at 83.82 162.56 0)
@@ -2370,7 +2370,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "60dbb176-21cf-47a2-b363-14f118b51c57")
+		(uuid "dcff1594-e1fe-4c5c-8f4c-538c1d3a5cec")
 	)
 	(label "ADDR_A2"
 		(at 83.82 165.1 0)
@@ -2380,7 +2380,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "bf73f9f0-a512-4faf-a8df-3e19f15f2d28")
+		(uuid "7d0c751c-48b8-43a9-9fd0-c73d3732dc9d")
 	)
 	(label "EN_B"
 		(at 83.82 172.72 0)
@@ -2390,7 +2390,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "ce83bbee-d939-4758-a181-80f565eaa7a3")
+		(uuid "2a9d2b22-6a5c-489c-9c92-afba76d2f881")
 	)
 	(text "ANALOG MULTIPLEXER (2x MAX338)"
 		(exclude_from_sim no)
@@ -2402,7 +2402,7 @@
 			)
 			(justify left)
 		)
-		(uuid "1a2d9622-7cd1-4639-aa05-6b8b20166f6d")
+		(uuid "1cf36af3-795b-4a6e-ad2d-faf61e9cdcf1")
 	)
 	(text "16:1 channel select via ADDR[A0:A2] + EN_A/EN_B"
 		(exclude_from_sim no)
@@ -2413,7 +2413,7 @@
 			)
 			(justify left)
 		)
-		(uuid "3c7a1f65-88e5-4c2d-8b6f-ecc6bbb37539")
+		(uuid "a3725850-1fd0-4824-8024-1dfa9b076677")
 	)
 	(text "FUNCTION: Routes one of 16 input channels to TIA_IN. MUX A handles"
 		(exclude_from_sim no)
@@ -2424,7 +2424,7 @@
 			)
 			(justify left)
 		)
-		(uuid "16ea7055-efdc-46b8-b831-cd93c28d1153")
+		(uuid "ad7ca489-e5be-42f9-9825-92d818a17210")
 	)
 	(text "channels 1-8, MUX B handles 9-16. Only one mux active at a time"
 		(exclude_from_sim no)
@@ -2435,7 +2435,7 @@
 			)
 			(justify left)
 		)
-		(uuid "66119264-9e0a-496b-96a7-919e1cddbdc7")
+		(uuid "cf4cc87e-59d6-4f58-8177-5ebbac13c739")
 	)
 	(text "(inactive mux is high-Z). MCU controls address and enable lines."
 		(exclude_from_sim no)
@@ -2446,7 +2446,7 @@
 			)
 			(justify left)
 		)
-		(uuid "9ccae0ca-8ffb-4a4d-99db-6d3583f523aa")
+		(uuid "6ae126b0-57bf-494e-9f0c-b042e52684ce")
 	)
 	(sheet_instances
 		(path "/"

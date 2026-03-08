@@ -3147,9 +3147,9 @@ def build_input_filters():
 
             # ---- x positions for this channel ----
             diode_x   = col_x + 6 * G
-            r_cx      = col_x + 14 * G
-            c_cx      = col_x + 20 * G
-            label_out = col_x + 24 * G
+            r_cx      = col_x + 9 * G       # tight to diode (3.81mm gap)
+            c_cx      = col_x + 14 * G
+            label_out = col_x + 18 * G
 
             # ---- INPUT LABEL ----
             sch.add_label(f"CH_IN_{ch_num}", position=(col_x, row_y))
