@@ -14,7 +14,7 @@ simulation results, and publication-quality plots.
 ```bash
 git clone https://github.com/bob10042/-State-Variable-Oscillator-with-Frequency-control-by-MDAC..git
 cd -State-Variable-Oscillator-with-Frequency-control-by-MDAC.-
-pip install numpy matplotlib kicad-sch-api PyMuPDF Pillow
+pip install -r requirements.txt
 ```
 > `PyMuPDF` and `Pillow` are optional — only needed for PDF-to-PNG schematic rendering.
 > The pipeline will skip PNG export and tell you if they're missing.
@@ -178,9 +178,12 @@ build-simulate-verify pipeline:
 LTspice/
   kicad_pipeline.py          # Main pipeline (~10000 lines, 20 circuit types)
   demo_loader.py             # LTspice .asc to ngspice converter
+  requirements.txt           # Python dependencies (pip install -r requirements.txt)
   PROJECT.md                 # Project tracker
+  docs/
+    oscillator_guide.md      # State variable oscillator technical guide
   sim_work/                  # Simulation working directory (generated files)
-  symbols/                   # Bundled KiCad symbols (15 symbols used by pipeline)
+  symbols/                   # Bundled KiCad symbols (16 symbols used by pipeline)
   kicad_libs/                # Full KiCad symbol library (optional, not in git)
   models/                    # SPICE models: ADA4530-1.lib + MicroCap archive (.7z)
   StateVarOsc/

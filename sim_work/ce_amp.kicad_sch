@@ -2,7 +2,7 @@
 	(version 20250114)
 	(generator "eeschema")
 	(generator_version "9.0")
-	(uuid "0b89815a-29dd-4f8c-b70d-0d7b1605fb6c")
+	(uuid "4146546a-66db-464d-bfa1-233a2d126ec9")
 	(paper "A4")
 	(title_block
 		(title "Common Emitter BJT Amplifier")
@@ -997,7 +997,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "dfedc795-b1e1-4e6e-81e3-02cf58d03172")
+		(uuid "b6baa362-d8dd-4102-a591-f7def68086b5")
 		(property "Reference" "Q1"
 			(at 144.78 102.87 0.0000)
 			(effects
@@ -1017,17 +1017,17 @@
 			)
 		)
 		(pin "1"
-			(uuid "e59db86c-ce2f-431f-9b51-08f7f915cc87")
+			(uuid "80b9f5cb-c8d2-4d97-8b10-d991bfcfc673")
 		)
 		(pin "2"
-			(uuid "00e8ec48-448b-471f-8fff-8e3099681141")
+			(uuid "5cb278ca-2121-48c2-b889-e8627b04609a")
 		)
 		(pin "3"
-			(uuid "ccbe1a4f-0d7c-421c-9b96-9b36b66ba3ab")
+			(uuid "e754f664-0316-46a4-be29-2599010475ae")
 		)
 		(instances
 			(project "Common Emitter Amplifier"
-				(path "/0b89815a-29dd-4f8c-b70d-0d7b1605fb6c"
+				(path "/4146546a-66db-464d-bfa1-233a2d126ec9"
 					(reference "Q1")
 					(unit 1)
 				)
@@ -1043,7 +1043,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "0e223018-f1fd-4e73-99bc-343ddb637649")
+		(uuid "112f7ffc-750f-41a1-bdd1-af6b8e3c3137")
 		(property "Reference" "R3"
 			(at 144.272 76.2 90)
 			(effects
@@ -1063,14 +1063,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "580805d4-399d-47f7-bea2-319b46eb8774")
+			(uuid "7cc0eae9-2c43-4613-8692-82d37d40b680")
 		)
 		(pin "2"
-			(uuid "86aaede2-3bfd-4e00-a87e-ccbbf90f2b37")
+			(uuid "3b212e27-d971-4c3d-9ace-6a931bf934ba")
 		)
 		(instances
 			(project "Common Emitter Amplifier"
-				(path "/0b89815a-29dd-4f8c-b70d-0d7b1605fb6c"
+				(path "/4146546a-66db-464d-bfa1-233a2d126ec9"
 					(reference "R3")
 					(unit 1)
 				)
@@ -1086,7 +1086,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "dce20fbb-c061-4b9c-94cb-be4ec68c8ae4")
+		(uuid "e6b4d797-be0a-4a3b-a0ff-14e2395973f0")
 		(property "Reference" "R4"
 			(at 144.272 127 90)
 			(effects
@@ -1106,14 +1106,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "24a24e3f-d776-464c-8fb6-bb2bbc45f411")
+			(uuid "17acd753-2ca4-4da2-afdb-1abdfdee4d88")
 		)
 		(pin "2"
-			(uuid "eb7242b1-1c48-4587-8509-334d96d2a1b1")
+			(uuid "e0adeef1-9eee-434d-8cd3-59a8ad665fc1")
 		)
 		(instances
 			(project "Common Emitter Amplifier"
-				(path "/0b89815a-29dd-4f8c-b70d-0d7b1605fb6c"
+				(path "/4146546a-66db-464d-bfa1-233a2d126ec9"
 					(reference "R4")
 					(unit 1)
 				)
@@ -1129,7 +1129,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "86e35184-40f7-4395-8be8-901de706b78f")
+		(uuid "6f24af3d-f554-46d9-b980-49124c996479")
 		(property "Reference" "R1"
 			(at 121.412 86.36 90)
 			(effects
@@ -1149,14 +1149,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "6e64d285-3733-4605-9d0b-4aeb7ed83e52")
+			(uuid "e50ba1d9-d826-40fe-8f7d-bfaf5022aca8")
 		)
 		(pin "2"
-			(uuid "3969d6ee-7e13-47ce-95aa-318f7c989842")
+			(uuid "a65ee7b3-8acf-4fb0-bcc5-f3bb37a4dd6e")
 		)
 		(instances
 			(project "Common Emitter Amplifier"
-				(path "/0b89815a-29dd-4f8c-b70d-0d7b1605fb6c"
+				(path "/4146546a-66db-464d-bfa1-233a2d126ec9"
 					(reference "R1")
 					(unit 1)
 				)
@@ -1172,7 +1172,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "62c87b03-ba56-4b92-a2bc-effe524802e5")
+		(uuid "cf0983d0-5d2b-4ca0-9645-e92f87a7e899")
 		(property "Reference" "R2"
 			(at 121.412 116.84 90)
 			(effects
@@ -1192,14 +1192,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "0dbe99f7-ba1a-4f2f-a539-280b9deba810")
+			(uuid "2c3a7b0b-6774-4c9f-a389-32f584419f2d")
 		)
 		(pin "2"
-			(uuid "673c3fe4-92e2-4268-842a-3b37443e9e07")
+			(uuid "4d4be57c-f3c4-4f42-b1ef-98c786acf7dd")
 		)
 		(instances
 			(project "Common Emitter Amplifier"
-				(path "/0b89815a-29dd-4f8c-b70d-0d7b1605fb6c"
+				(path "/4146546a-66db-464d-bfa1-233a2d126ec9"
 					(reference "R2")
 					(unit 1)
 				)
@@ -1215,7 +1215,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "b5e07266-31ff-49e7-8cb5-0c91f0953190")
+		(uuid "0d9a33cd-045e-4c71-b425-fecdf046c987")
 		(property "Reference" "C1"
 			(at 96.52 102.235 90)
 			(effects
@@ -1235,14 +1235,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "13f39b3f-f0fa-4099-bbab-0208d51505f6")
+			(uuid "3d060f1d-f104-4665-8599-6c6107355b26")
 		)
 		(pin "2"
-			(uuid "1d19c06f-8e33-41fc-92b2-d416d6332de4")
+			(uuid "36c9b7d3-a507-421e-a568-11de14a94384")
 		)
 		(instances
 			(project "Common Emitter Amplifier"
-				(path "/0b89815a-29dd-4f8c-b70d-0d7b1605fb6c"
+				(path "/4146546a-66db-464d-bfa1-233a2d126ec9"
 					(reference "C1")
 					(unit 1)
 				)
@@ -1258,7 +1258,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "2e812562-79eb-42da-b611-1e2f8f483007")
+		(uuid "37208ce3-5021-4e51-9a99-4de719ef3b59")
 		(property "Reference" "C2"
 			(at 160.02 76.835 90)
 			(effects
@@ -1278,14 +1278,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "5cb7ca25-5a83-4407-8d47-25f349b7aa7f")
+			(uuid "e62c6c62-9345-437d-b7de-9937b1addceb")
 		)
 		(pin "2"
-			(uuid "14ed9728-b778-4041-b59d-431bf6de87f7")
+			(uuid "5235d276-8eaa-48fc-b186-f922d9bf4689")
 		)
 		(instances
 			(project "Common Emitter Amplifier"
-				(path "/0b89815a-29dd-4f8c-b70d-0d7b1605fb6c"
+				(path "/4146546a-66db-464d-bfa1-233a2d126ec9"
 					(reference "C2")
 					(unit 1)
 				)
@@ -1301,7 +1301,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "60e15104-faf5-41c9-8313-ca5ee86058a4")
+		(uuid "2fc8daca-e583-4cc7-869c-af6ce7dfc936")
 		(property "Reference" "C3"
 			(at 158.115 129.54 0.0000)
 			(effects
@@ -1321,14 +1321,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "d55f3a8e-01ba-4a6b-acbf-6baa1e51cbce")
+			(uuid "6d358029-be28-4a93-af5f-6e2bc3773afa")
 		)
 		(pin "2"
-			(uuid "574a8bc0-4187-48ad-b4e4-dd6302b05fb6")
+			(uuid "8ba5358f-246e-47f1-ac82-6423f07ba610")
 		)
 		(instances
 			(project "Common Emitter Amplifier"
-				(path "/0b89815a-29dd-4f8c-b70d-0d7b1605fb6c"
+				(path "/4146546a-66db-464d-bfa1-233a2d126ec9"
 					(reference "C3")
 					(unit 1)
 				)
@@ -1344,7 +1344,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "13cb2e35-3fab-445b-a308-cf0d51a336a4")
+		(uuid "9716daa7-faf5-4688-bd71-f37b332ba116")
 		(property "Reference" "#PWR01"
 			(at 142.24 60.96 0.0000)
 			(hide yes)
@@ -1365,11 +1365,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "e3d29a53-79c6-4a14-a15b-dfadd1e3af69")
+			(uuid "a95324af-9b7b-4ebf-aaec-2b0cf171d976")
 		)
 		(instances
 			(project "Common Emitter Amplifier"
-				(path "/0b89815a-29dd-4f8c-b70d-0d7b1605fb6c"
+				(path "/4146546a-66db-464d-bfa1-233a2d126ec9"
 					(reference "#PWR01")
 					(unit 1)
 				)
@@ -1385,7 +1385,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "e270ea75-babe-4207-94f7-695c536cf937")
+		(uuid "fd27a686-5395-46c9-a284-506cd797a17a")
 		(property "Reference" "#PWR02"
 			(at 119.38 71.12 0.0000)
 			(hide yes)
@@ -1406,11 +1406,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "291f3efb-1416-453c-a413-6ed86cad94a8")
+			(uuid "78ea0d37-d615-48cb-ba3d-42b02a79e83b")
 		)
 		(instances
 			(project "Common Emitter Amplifier"
-				(path "/0b89815a-29dd-4f8c-b70d-0d7b1605fb6c"
+				(path "/4146546a-66db-464d-bfa1-233a2d126ec9"
 					(reference "#PWR02")
 					(unit 1)
 				)
@@ -1426,7 +1426,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "7738b5c7-2487-4de0-af05-8ecc04ed6c47")
+		(uuid "74af40ca-67dc-41a4-8bef-08b6c4234b6a")
 		(property "Reference" "#PWR03"
 			(at 142.24 132.08 0.0000)
 			(hide yes)
@@ -1447,11 +1447,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "2327ee16-4ab6-4cba-966e-b883d8a1a833")
+			(uuid "681f02ff-7002-452c-a25f-002f1f6a9d83")
 		)
 		(instances
 			(project "Common Emitter Amplifier"
-				(path "/0b89815a-29dd-4f8c-b70d-0d7b1605fb6c"
+				(path "/4146546a-66db-464d-bfa1-233a2d126ec9"
 					(reference "#PWR03")
 					(unit 1)
 				)
@@ -1467,7 +1467,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "39674185-81bf-469d-80a4-d616ffe56593")
+		(uuid "d591ad92-9522-4906-88e3-ee6e7a6f9252")
 		(property "Reference" "#PWR04"
 			(at 119.38 121.92 0.0000)
 			(hide yes)
@@ -1488,11 +1488,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "c2563570-8944-4b7c-b5b7-62a5951d17eb")
+			(uuid "8769bb61-76ab-43b1-83b1-a13b516530f5")
 		)
 		(instances
 			(project "Common Emitter Amplifier"
-				(path "/0b89815a-29dd-4f8c-b70d-0d7b1605fb6c"
+				(path "/4146546a-66db-464d-bfa1-233a2d126ec9"
 					(reference "#PWR04")
 					(unit 1)
 				)
@@ -1508,7 +1508,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "6ff45351-1264-414f-a6b1-0956ba4beb21")
+		(uuid "56d977ac-e287-4ef3-945b-7ab77c93fe8f")
 		(property "Reference" "#PWR05"
 			(at 157.48 132.08 0.0000)
 			(hide yes)
@@ -1529,11 +1529,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "49019c73-eec1-4795-b3f2-a77dad5e76dc")
+			(uuid "ac73222a-2787-42d4-86dd-a2734c216379")
 		)
 		(instances
 			(project "Common Emitter Amplifier"
-				(path "/0b89815a-29dd-4f8c-b70d-0d7b1605fb6c"
+				(path "/4146546a-66db-464d-bfa1-233a2d126ec9"
 					(reference "#PWR05")
 					(unit 1)
 				)
@@ -1549,7 +1549,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "6dabaa50-0cf5-4c1a-9124-dadc33e54732")
+		(uuid "57fe4ba4-c872-464d-9648-72d38a740a30")
 		(property "Reference" "V1"
 			(at 82.55 109.22 0.0000)
 			(effects
@@ -1569,14 +1569,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "879889d6-8c2d-4d3f-8a04-330cadf3025f")
+			(uuid "937ad3a1-df35-4597-8455-a3665f3d5312")
 		)
 		(pin "2"
-			(uuid "1cf6caf1-14f7-451d-902f-c670000bfa03")
+			(uuid "d79f5fcc-e94e-4b2d-96d2-57b4c2f6b7ec")
 		)
 		(instances
 			(project "Common Emitter Amplifier"
-				(path "/0b89815a-29dd-4f8c-b70d-0d7b1605fb6c"
+				(path "/4146546a-66db-464d-bfa1-233a2d126ec9"
 					(reference "V1")
 					(unit 1)
 				)
@@ -1592,7 +1592,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "8cfc3978-961d-429e-9fd3-d91906011445")
+		(uuid "58409174-2a4a-44df-9e48-ba73273c67e5")
 		(property "Reference" "#PWR06"
 			(at 80.01 113.03 0.0000)
 			(hide yes)
@@ -1613,11 +1613,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "f00e7714-946c-461a-8198-c41c76886d94")
+			(uuid "469f34d3-98c9-4a82-bdbd-bd40dfbae30e")
 		)
 		(instances
 			(project "Common Emitter Amplifier"
-				(path "/0b89815a-29dd-4f8c-b70d-0d7b1605fb6c"
+				(path "/4146546a-66db-464d-bfa1-233a2d126ec9"
 					(reference "#PWR06")
 					(unit 1)
 				)
@@ -1632,7 +1632,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "6add90a8-f2f9-4cad-9ee6-be802382b6d9")
+		(uuid "d4fe52ae-52c6-4042-b452-f9cf1aa2dd56")
 	)
 	(wire
 		(pts
@@ -1642,7 +1642,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "a9de944a-d02b-46db-a12e-0a616331efa5")
+		(uuid "ba244d50-3d89-4a7d-8968-6c101d25816e")
 	)
 	(wire
 		(pts
@@ -1652,7 +1652,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "3e349e51-e93d-47de-b109-19e492eaaa56")
+		(uuid "cdb204e6-4370-4765-beb8-9ed3407a4fb7")
 	)
 	(wire
 		(pts
@@ -1662,7 +1662,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "b2003aff-e7a2-41bc-a4bf-dfb02ab9fe81")
+		(uuid "38829729-7519-417b-ab9e-d0ec491a54f8")
 	)
 	(wire
 		(pts
@@ -1672,7 +1672,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "5ee1cc30-5bdf-47ac-852c-ec0100484632")
+		(uuid "cfe8468a-4e14-4b22-a5c5-b25314a33a1b")
 	)
 	(wire
 		(pts
@@ -1682,7 +1682,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "c3514639-2893-4249-b7a2-6e81c245005c")
+		(uuid "68a07f1c-b0bf-432a-8b27-9927e94b70e1")
 	)
 	(wire
 		(pts
@@ -1692,7 +1692,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "51a5bcce-7ea4-4580-a369-dfdb25497539")
+		(uuid "fef4ba0b-a3bb-418c-9c7d-b99bbc4f9e12")
 	)
 	(wire
 		(pts
@@ -1702,7 +1702,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "0ca2c99c-816a-4339-8270-201cd1ee941a")
+		(uuid "d961ab08-1931-4df3-bcd4-8976a61e4b84")
 	)
 	(wire
 		(pts
@@ -1712,7 +1712,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "cdb98aeb-8291-4545-b272-6137a5b873c9")
+		(uuid "fd5a1fb3-fc8b-4545-ba1a-28f883ead77a")
 	)
 	(wire
 		(pts
@@ -1722,7 +1722,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "88502460-dd99-4c62-a914-427c5b655198")
+		(uuid "140798f3-f227-4dfe-b73a-860ab124a4f7")
 	)
 	(wire
 		(pts
@@ -1732,7 +1732,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "aec9d010-def7-481b-8f81-8340fd68e081")
+		(uuid "50d7de45-bec2-4f86-bd27-542e6c8eeb57")
 	)
 	(wire
 		(pts
@@ -1742,7 +1742,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "f6f4ae6b-5d7a-477f-ba85-2fae8c566b66")
+		(uuid "0289a7bc-8a72-42bd-975a-bb2caf7b5073")
 	)
 	(wire
 		(pts
@@ -1752,7 +1752,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "e8918495-3c56-46ff-ba45-9150aaf88312")
+		(uuid "aceafcf9-8eba-48ab-9dd3-81d28f5dfe31")
 	)
 	(wire
 		(pts
@@ -1762,7 +1762,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "28c2b7d6-0347-438a-b97f-216abebd39cc")
+		(uuid "8d21592c-8283-4006-a011-bc82c6a16869")
 	)
 	(wire
 		(pts
@@ -1772,7 +1772,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "e374b900-588c-45a2-b66c-da28402788a7")
+		(uuid "7d86178e-cd10-41e5-9807-1eb2bbe32661")
 	)
 	(wire
 		(pts
@@ -1782,7 +1782,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "5dc68ec1-1c50-4dda-a26c-7dd2b492fc09")
+		(uuid "f6a26b8b-8071-45b3-adcd-d36599649345")
 	)
 	(wire
 		(pts
@@ -1792,7 +1792,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "a40bfa9d-409f-4c5c-887a-c2e9e8afc059")
+		(uuid "89020eaa-5a9a-4ea9-b124-766076289fa6")
 	)
 	(wire
 		(pts
@@ -1802,7 +1802,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "0d2b9ed5-3c60-46fa-8d34-fe0662915b56")
+		(uuid "38b5704a-6742-4ee1-aeb2-12ccdf6ccff5")
 	)
 	(wire
 		(pts
@@ -1812,7 +1812,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "dd2bfb70-7cef-4120-9317-b8e7abb6f5cf")
+		(uuid "d3dc5995-c66e-457f-8133-f1b01dc3eeee")
 	)
 	(label "OUT"
 		(at 176.53 76.2 0)
@@ -1822,7 +1822,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "af545c8e-6bd0-4ae7-997f-2ec935c20ac2")
+		(uuid "430665fd-51fd-440c-885c-6f5048b3e799")
 	)
 	(sheet_instances
 		(path "/"

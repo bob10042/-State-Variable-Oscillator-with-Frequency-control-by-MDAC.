@@ -2,7 +2,7 @@
 	(version 20250114)
 	(generator "eeschema")
 	(generator_version "9.0")
-	(uuid "5a34846a-3a73-4a4a-af9b-cc667487aea5")
+	(uuid "053c9402-6d6b-4cfa-a10d-6d29029a580d")
 	(paper "A4")
 	(title_block
 		(title "TIA with Mux Interface - ADA4530-1")
@@ -807,7 +807,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "3d01bc6d-740b-494b-8c81-8d09970f08d5")
+		(uuid "0370da22-709c-4d0d-bc91-bd45a53756df")
 		(property "Reference" "U1"
 			(at 116.84 118.11 0.0000)
 			(effects
@@ -827,32 +827,32 @@
 			)
 		)
 		(pin "1"
-			(uuid "7c7080b5-f2c1-43d0-9b11-0ec37b6547ef")
+			(uuid "6ee11739-cef6-4958-9c78-ac9691142214")
 		)
 		(pin "2"
-			(uuid "414e9b8d-fa74-4e59-b689-4bbcacab64d7")
+			(uuid "194ee42c-826e-4d2c-98a6-8ae7b7250b8a")
 		)
 		(pin "3"
-			(uuid "88b8949f-8961-4865-986a-ef3632141a0a")
+			(uuid "2dfd707d-4423-4a09-acef-10bd8a81b571")
 		)
 		(pin "4"
-			(uuid "4b479497-9c84-40c3-8a72-82be4942e7f2")
+			(uuid "23303ab6-2815-475a-9fc2-250ec0cf5d2c")
 		)
 		(pin "5"
-			(uuid "bbb01b45-1329-405d-b432-ed15fc6b2a8f")
+			(uuid "3ccc1f37-138b-49a1-81ff-e5abc9ee09f1")
 		)
 		(pin "6"
-			(uuid "30d026d4-f6f2-4755-953d-7d80e7b83dff")
+			(uuid "fac2fc76-da02-460f-8fe4-d5b375b21e8f")
 		)
 		(pin "7"
-			(uuid "f87ec401-4765-4b7e-a893-f74a5bda59b8")
+			(uuid "999915f7-7208-4d2e-91e5-a5ad21240baf")
 		)
 		(pin "8"
-			(uuid "9c0c12ca-4788-4211-a838-0ba4851c58ba")
+			(uuid "8b21a2b5-8847-4d28-8a8d-ff74253062d6")
 		)
 		(instances
 			(project "TIA with Mux Interface - ADA4530-1"
-				(path "/5a34846a-3a73-4a4a-af9b-cc667487aea5"
+				(path "/053c9402-6d6b-4cfa-a10d-6d29029a580d"
 					(reference "U1")
 					(unit 1)
 				)
@@ -868,7 +868,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "438741aa-688d-4a6d-9f0f-866146c3e3a7")
+		(uuid "caf9f2e2-6b87-475a-adc3-0039eeaf546a")
 		(property "Reference" "R1"
 			(at 116.84 98.552 180)
 			(effects
@@ -888,14 +888,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "4b5027de-84d9-40e1-9426-f6c25cdd4652")
+			(uuid "278af773-f4fe-488c-88d0-d5405742eadb")
 		)
 		(pin "2"
-			(uuid "9c4df86a-d47d-457d-8694-3f675d3cb3cc")
+			(uuid "2915c7e7-f2bb-496f-b7c1-dbd712a67a75")
 		)
 		(instances
 			(project "TIA with Mux Interface - ADA4530-1"
-				(path "/5a34846a-3a73-4a4a-af9b-cc667487aea5"
+				(path "/053c9402-6d6b-4cfa-a10d-6d29029a580d"
 					(reference "R1")
 					(unit 1)
 				)
@@ -911,7 +911,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "9b4a1ede-d88a-43e5-b838-4edccaed5e16")
+		(uuid "d08c22f1-cf76-46ee-af4b-a2e32817c8dc")
 		(property "Reference" "C1"
 			(at 114.3 89.535 90)
 			(effects
@@ -931,14 +931,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "691805f6-b210-4636-9a10-e19f3df2a4e0")
+			(uuid "b7cfbbf9-9544-49c9-b07f-b68ee4b0579d")
 		)
 		(pin "2"
-			(uuid "ac0b8972-6e9f-4a9d-a1a8-bbb54f1a7008")
+			(uuid "37605691-fefb-4d35-a748-687e1969a59f")
 		)
 		(instances
 			(project "TIA with Mux Interface - ADA4530-1"
-				(path "/5a34846a-3a73-4a4a-af9b-cc667487aea5"
+				(path "/053c9402-6d6b-4cfa-a10d-6d29029a580d"
 					(reference "C1")
 					(unit 1)
 				)
@@ -954,7 +954,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "bc1b7635-7425-45c7-83ae-d17ef4396919")
+		(uuid "5e98d0f4-1698-4c01-b4d4-7ec1a8465b88")
 		(property "Reference" "R3"
 			(at 70.612 101.6 90)
 			(effects
@@ -974,14 +974,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "dda65059-1d58-4a9f-a599-3edababb4665")
+			(uuid "8d546a5f-27dd-4dfb-918d-8efcdeb12ae5")
 		)
 		(pin "2"
-			(uuid "ac089b8f-8fda-4388-9b8a-d83936cd784f")
+			(uuid "c3409cf5-5122-4e3e-a27e-b9802534a89a")
 		)
 		(instances
 			(project "TIA with Mux Interface - ADA4530-1"
-				(path "/5a34846a-3a73-4a4a-af9b-cc667487aea5"
+				(path "/053c9402-6d6b-4cfa-a10d-6d29029a580d"
 					(reference "R3")
 					(unit 1)
 				)
@@ -997,7 +997,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "333fc02c-26e0-41c4-8436-d5b424251bd2")
+		(uuid "bdbe5e16-139f-46e1-8586-ac56ff91e0e4")
 		(property "Reference" "R4"
 			(at 70.612 127 90)
 			(effects
@@ -1017,14 +1017,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "067de406-939e-4f0d-8220-61223348e44b")
+			(uuid "d8e81b9e-92d2-4e2d-9df3-8a77c53fdeb4")
 		)
 		(pin "2"
-			(uuid "dd3f0528-65fb-4497-b454-822e11dc9b2f")
+			(uuid "7fce391f-bfae-4f06-be0f-7cd8eea18a1f")
 		)
 		(instances
 			(project "TIA with Mux Interface - ADA4530-1"
-				(path "/5a34846a-3a73-4a4a-af9b-cc667487aea5"
+				(path "/053c9402-6d6b-4cfa-a10d-6d29029a580d"
 					(reference "R4")
 					(unit 1)
 				)
@@ -1040,7 +1040,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "cca8e6db-e019-4f9e-a220-871c75b35152")
+		(uuid "50f68a09-0188-489e-b32f-03453751b54d")
 		(property "Reference" "C2"
 			(at 81.915 129.54 0.0000)
 			(effects
@@ -1060,14 +1060,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "13ecf0b7-0a81-43ab-ab6e-82a3dde73b87")
+			(uuid "1a20b6bf-ce1e-47bb-89bc-6c58b5f73f19")
 		)
 		(pin "2"
-			(uuid "1921f488-9fa9-4886-a4a7-3c760f26af37")
+			(uuid "b3692d52-6916-4a7e-856a-05abc49e7a65")
 		)
 		(instances
 			(project "TIA with Mux Interface - ADA4530-1"
-				(path "/5a34846a-3a73-4a4a-af9b-cc667487aea5"
+				(path "/053c9402-6d6b-4cfa-a10d-6d29029a580d"
 					(reference "C2")
 					(unit 1)
 				)
@@ -1083,7 +1083,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "1ef4bd0a-3a8c-484b-be0a-b4f598b78102")
+		(uuid "4791700b-328c-4c38-9824-b628102ff64a")
 		(property "Reference" "#PWR01"
 			(at 114.3 123.19 0.0000)
 			(hide yes)
@@ -1104,11 +1104,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "221fef04-3269-452f-8063-0340d18d877e")
+			(uuid "da168a64-b1c4-49b7-b239-38fa0dd0cd1d")
 		)
 		(instances
 			(project "TIA with Mux Interface - ADA4530-1"
-				(path "/5a34846a-3a73-4a4a-af9b-cc667487aea5"
+				(path "/053c9402-6d6b-4cfa-a10d-6d29029a580d"
 					(reference "#PWR01")
 					(unit 1)
 				)
@@ -1124,7 +1124,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "fef42490-835b-4c41-9f0d-9749d3ebe5fb")
+		(uuid "fb3839d5-10de-48b4-b23c-75104e227c0f")
 		(property "Reference" "#PWR02"
 			(at 144.78 118.11 0.0000)
 			(hide yes)
@@ -1145,11 +1145,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "cd06acaa-9237-49c6-8a56-95139e2f188d")
+			(uuid "b1240706-c9ad-43d0-9e09-961e413c17e1")
 		)
 		(instances
 			(project "TIA with Mux Interface - ADA4530-1"
-				(path "/5a34846a-3a73-4a4a-af9b-cc667487aea5"
+				(path "/053c9402-6d6b-4cfa-a10d-6d29029a580d"
 					(reference "#PWR02")
 					(unit 1)
 				)
@@ -1165,7 +1165,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "44a0a844-2b14-4108-8746-0aa3ba191221")
+		(uuid "45a5095b-4dce-4e7e-951a-27021205e79e")
 		(property "Reference" "#PWR03"
 			(at 68.58 86.36 0.0000)
 			(hide yes)
@@ -1186,11 +1186,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "18a93c86-191f-47d9-bbca-c1ad0b086daf")
+			(uuid "32b1df86-5b65-4971-aaa3-18bc6b112355")
 		)
 		(instances
 			(project "TIA with Mux Interface - ADA4530-1"
-				(path "/5a34846a-3a73-4a4a-af9b-cc667487aea5"
+				(path "/053c9402-6d6b-4cfa-a10d-6d29029a580d"
 					(reference "#PWR03")
 					(unit 1)
 				)
@@ -1206,7 +1206,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "782aef54-9e2a-4f70-bece-4ab8d042cc11")
+		(uuid "78f32258-aa8d-4f2e-b8c7-8b9438bcd9a4")
 		(property "Reference" "#PWR04"
 			(at 68.58 132.08 0.0000)
 			(hide yes)
@@ -1227,11 +1227,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "f4bbd9df-4bb2-4e80-9ecb-2efeb4bcd032")
+			(uuid "8d2759e5-f338-4501-8b58-658af7ac2579")
 		)
 		(instances
 			(project "TIA with Mux Interface - ADA4530-1"
-				(path "/5a34846a-3a73-4a4a-af9b-cc667487aea5"
+				(path "/053c9402-6d6b-4cfa-a10d-6d29029a580d"
 					(reference "#PWR04")
 					(unit 1)
 				)
@@ -1247,7 +1247,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "189bb427-ddce-47df-9dd0-149545a44d3b")
+		(uuid "5bb5c614-fdfe-4add-8b3a-f376275e3122")
 		(property "Reference" "#PWR05"
 			(at 81.28 132.08 0.0000)
 			(hide yes)
@@ -1268,11 +1268,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "a241bb99-c9e8-41dc-b744-50a4f464ffbe")
+			(uuid "a830c876-46bd-4434-8c9d-0f4befe97b81")
 		)
 		(instances
 			(project "TIA with Mux Interface - ADA4530-1"
-				(path "/5a34846a-3a73-4a4a-af9b-cc667487aea5"
+				(path "/053c9402-6d6b-4cfa-a10d-6d29029a580d"
 					(reference "#PWR05")
 					(unit 1)
 				)
@@ -1287,7 +1287,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "b1724107-82cf-41e0-8f8d-1904ea148673")
+		(uuid "ba5d381c-2420-4905-81e8-39c94d68cc04")
 	)
 	(wire
 		(pts
@@ -1297,7 +1297,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "49307650-7a65-4914-b989-c9bfe8dccf41")
+		(uuid "cdba410e-6817-4d49-9669-02587b31ef61")
 	)
 	(wire
 		(pts
@@ -1307,18 +1307,9 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "f7f11da3-4a59-4ba3-a404-83ad284e39b6")
+		(uuid "ef7675f6-a29e-4336-941e-1f437efc4231")
 	)
-	(wire
-		(pts
-			(xy 96.52 109.22) (xy 96.52 96.52)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "b95f10c4-b829-49d9-8dec-b49e4267fcbc")
-	)
+	
 	(wire
 		(pts
 			(xy 96.52 96.52) (xy 113.03 96.52)
@@ -1327,7 +1318,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "0941c2ee-9035-476b-b44c-f8c96d4361f5")
+		(uuid "9157630a-bacf-4468-90e4-56905807d7a6")
 	)
 	(wire
 		(pts
@@ -1337,7 +1328,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "aabbc0d2-e7f9-43d2-a6d3-3de26c1ef6e5")
+		(uuid "bdabc254-d233-4090-b436-c1d28ea1510c")
 	)
 	(wire
 		(pts
@@ -1347,18 +1338,9 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "740b4490-8696-4588-9b93-4325905340eb")
+		(uuid "74a6976c-9cbc-4941-aafd-f111b80a110d")
 	)
-	(wire
-		(pts
-			(xy 96.52 96.52) (xy 96.52 88.9)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "de2c5651-1a4c-49fc-8b52-f663a0854c3e")
-	)
+	
 	(wire
 		(pts
 			(xy 96.52 88.9) (xy 113.03 88.9)
@@ -1367,7 +1349,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "d1a3043f-e395-48f8-850d-a602b048624d")
+		(uuid "b2c1f73a-7000-44c3-b650-15dbd49f80cb")
 	)
 	(wire
 		(pts
@@ -1377,7 +1359,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "2054eee0-d1b0-4a78-8296-bd4ce3f249a8")
+		(uuid "dc7a960c-f633-4f2b-ab9c-8637d4fed4f8")
 	)
 	(wire
 		(pts
@@ -1387,28 +1369,9 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "0c33dd09-7ce7-417d-b1eb-5cd2321aec12")
+		(uuid "7e72fe65-4937-47d8-aa63-4f8b9a76af36")
 	)
-	(wire
-		(pts
-			(xy 96.52 91.44) (xy 96.52 96.52)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "590071f6-dbe5-4e1b-bf26-c268fb61b029")
-	)
-	(wire
-		(pts
-			(xy 124.46 104.14) (xy 129.54 104.14)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "bb7f9c0f-5c74-4574-ac36-7cba99be1df0")
-	)
+
 	(wire
 		(pts
 			(xy 68.58 105.41) (xy 68.58 123.19)
@@ -1417,27 +1380,18 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "b3844002-2cdd-4b06-823b-9bd3a5a6b3fd")
+		(uuid "a24d1cbe-83ef-4e6a-8502-4d4f569d1773")
 	)
+
 	(wire
 		(pts
-			(xy 68.58 105.41) (xy 68.58 114.3)
+			(xy 81.28 114.3) (xy 81.28 123.19)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "77001058-4311-4991-abec-56b2d0521ade")
-	)
-	(wire
-		(pts
-			(xy 68.58 114.3) (xy 68.58 123.19)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1f709354-d653-4a2c-8cf9-afd307c083fb")
+		(uuid "25243a09-e3e8-48b8-94fe-3c4b45516f63")
 	)
 	(wire
 		(pts
@@ -1447,27 +1401,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "cb94da3b-2c7b-47b4-94b1-ccfcc6143bdc")
-	)
-	(wire
-		(pts
-			(xy 81.28 123.19) (xy 81.28 114.3)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "89b66ee3-7183-4003-b9cd-38ee76d1713e")
-	)
-	(wire
-		(pts
-			(xy 81.28 114.3) (xy 68.58 114.3)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "385ec428-2d51-4e74-985a-517f335b90b6")
+		(uuid "32085eec-f864-4e33-8f6a-ccaa0778bca0")
 	)
 	(wire
 		(pts
@@ -1477,7 +1411,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "cb409d5e-4eb0-48c8-ae95-8b1ce53a7e97")
+		(uuid "2ae2e5eb-b9f6-460d-8528-bd52d81491c9")
 	)
 	(wire
 		(pts
@@ -1487,7 +1421,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "129bb345-605b-48c8-8f59-e9b72fbb78ae")
+		(uuid "4ef3ff75-dea6-4b87-bf68-5b41012984ae")
 	)
 	(wire
 		(pts
@@ -1497,7 +1431,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "e40e27ae-dd9e-4f23-a63f-cd3bfaec30e7")
+		(uuid "d03d061c-af41-4a33-8466-23c9c4243c5c")
 	)
 	(wire
 		(pts
@@ -1507,17 +1441,17 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "380cab71-20f3-4a25-bb0b-cdd2e12502c3")
+		(uuid "ca435984-33ba-4745-8562-a0f88daff302")
 	)
 	(wire
 		(pts
-			(xy 68.58 97.79) (xy 68.58 90.17)
+			(xy 68.58 90.17) (xy 68.58 97.79)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "73d09c3d-906e-4f63-984e-b364e5a4560e")
+		(uuid "3cbdab20-d349-4296-8506-e506507b3bac")
 	)
 	(wire
 		(pts
@@ -1527,7 +1461,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "cff37a2a-b6b0-40dc-95ae-3ab7d0137000")
+		(uuid "b7308cdc-4a28-4058-86ee-3dfa64d96783")
 	)
 	(wire
 		(pts
@@ -1537,7 +1471,31 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "c92fd26c-2f5d-400a-ad62-801154f862a4")
+		(uuid "49520720-d806-4bb6-a0d7-9abcc82c11a7")
+	)
+	(junction
+		(at 96.52 109.22)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "33258dc1-04df-42fd-879c-7903fb2d8a26")
+	)
+	(junction
+		(at 96.52 96.52)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "ed8a12f9-79d7-4526-a5af-48c97f473988")
+	)
+	(junction
+		(at 124.46 96.52)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "fa93187b-a2ed-4a01-9414-f46c3d73baec")
+	)
+	(junction
+		(at 68.58 114.3)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "6f59096d-48bb-458a-8b5e-c818e1996f21")
 	)
 	(label "TIA_IN"
 		(at 76.2 81.28 0)
@@ -1547,7 +1505,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "467fca47-e56b-4729-9552-63bbfc3a22bc")
+		(uuid "2c73590c-d427-4e1d-80b4-39aa7692f80e")
 	)
 	(label "INV"
 		(at 96.52 91.44 0)
@@ -1557,7 +1515,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "80d11980-f3fa-417f-9506-0f80b1876b4f")
+		(uuid "43a893fd-c697-4c56-96d5-5a5f8d6a0aa9")
 	)
 	(label "OUT"
 		(at 129.54 104.14 0)
@@ -1567,7 +1525,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "e7e0ff70-314d-4b7e-8269-ceca86db75f0")
+		(uuid "62666235-9bf5-49b9-bf01-682158e65faf")
 	)
 	(label "AIN0"
 		(at 139.7 111.76 0)
@@ -1577,7 +1535,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "9a408968-472e-474e-821f-a045af16c294")
+		(uuid "dae610ad-f1b4-4db0-a50b-78108fa4d6fb")
 	)
 	(label "AIN1"
 		(at 93.98 114.3 0)
@@ -1587,7 +1545,63 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "acd80bb0-7ee6-404f-8e11-4ec5ceadd422")
+		(uuid "93c1d340-5189-41b8-95d9-c4d5af87dbb6")
+	)
+	(text "TRANSIMPEDANCE AMPLIFIER (ADA4530-1)"
+		(exclude_from_sim no)
+		(at 20.32 15.24 0.0000)
+		(effects
+			(font
+				(size 4 4)
+				(bold yes)
+			)
+			(justify left)
+		)
+		(uuid "a0359541-afa7-40a6-b509-ee7fc609b960")
+	)
+	(text "Vout = Iin x Rf,  Rf selected by relay ladder (10M to 10G)"
+		(exclude_from_sim no)
+		(at 20.32 30.48 0.0000)
+		(effects
+			(font
+				(size 2.5 2.5)
+			)
+			(justify left)
+		)
+		(uuid "7476b554-ec42-4de6-a73a-a597a300ddcd")
+	)
+	(text "FUNCTION: Converts picoamp-level input current to voltage. ADA4530-1"
+		(exclude_from_sim no)
+		(at 20.32 43.18 0.0000)
+		(effects
+			(font
+				(size 1.8 1.8)
+			)
+			(justify left)
+		)
+		(uuid "2d06c23a-35ba-426c-ba31-d44150c856a1")
+	)
+	(text "sub-femtoamp bias current enables measurement down to ~50 fA."
+		(exclude_from_sim no)
+		(at 20.32 53.34 0.0000)
+		(effects
+			(font
+				(size 1.8 1.8)
+			)
+			(justify left)
+		)
+		(uuid "52805ec8-6d89-4efb-81ec-c69b106f3e65")
+	)
+	(text "VREF (1.65V) biases non-inv input for single-supply 3.3V operation."
+		(exclude_from_sim no)
+		(at 20.32 63.5 0.0000)
+		(effects
+			(font
+				(size 1.8 1.8)
+			)
+			(justify left)
+		)
+		(uuid "d555633f-e67a-4a7d-8bee-c8ee75182e7c")
 	)
 	(sheet_instances
 		(path "/"

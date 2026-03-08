@@ -1,0 +1,5 @@
+numpy
+matplotlib
+kicad-sch-api
+PyMuPDF
+Pillow

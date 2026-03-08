@@ -2,7 +2,7 @@
 	(version 20250114)
 	(generator "eeschema")
 	(generator_version "9.0")
-	(uuid "a0206bc0-a5a9-4875-8faa-8d6db68fdfb7")
+	(uuid "aabb7327-2838-47f3-b749-17ca89503540")
 	(paper "A4")
 	(title_block
 		(title "State Variable Oscillator - Power Supply + Startup")
@@ -552,7 +552,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "1ba90b4d-3d51-4959-9441-7ffb029ca97c")
+		(uuid "309ab630-ffa1-4241-9c8d-fbfacb177353")
 		(property "Reference" "R9"
 			(at 50.8 98.552 180)
 			(effects
@@ -572,14 +572,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "57faee75-b7cf-4441-a2c6-eeef3f387fa8")
+			(uuid "c8e1aec7-37c8-4c18-9961-14ef454783dd")
 		)
 		(pin "2"
-			(uuid "c6c8ba26-2eb6-448c-9e6d-02077044c8af")
+			(uuid "bdfdecf2-b914-46e3-a7f1-9ab20d12abeb")
 		)
 		(instances
 			(project "Oscillator - Power Supply"
-				(path "/a0206bc0-a5a9-4875-8faa-8d6db68fdfb7"
+				(path "/aabb7327-2838-47f3-b749-17ca89503540"
 					(reference "R9")
 					(unit 1)
 				)
@@ -595,7 +595,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "ce8ffa05-5819-47a8-aa13-acf5f74eb350")
+		(uuid "dc759da0-bf24-4952-9a92-0b4fbcac7558")
 		(property "Reference" "#PWR001"
 			(at 46.99 115.57 0.0000)
 			(hide yes)
@@ -616,11 +616,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "7e982239-bc80-4c72-861f-44b1e19b331b")
+			(uuid "0b2b63c1-1e0c-454c-93f5-6f33260c5b97")
 		)
 		(instances
 			(project "Oscillator - Power Supply"
-				(path "/a0206bc0-a5a9-4875-8faa-8d6db68fdfb7"
+				(path "/aabb7327-2838-47f3-b749-17ca89503540"
 					(reference "#PWR001")
 					(unit 1)
 				)
@@ -636,7 +636,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "86035897-6818-4934-856c-9093620a1449")
+		(uuid "79d5c23c-a4fb-48bd-8f84-7a25d13e1b2b")
 		(property "Reference" "C6"
 			(at 51.435 160.02 0.0000)
 			(effects
@@ -656,14 +656,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "c7e43673-c57f-4167-9da5-95601266363a")
+			(uuid "f2a84eab-3f8a-4357-a4d8-9f750868fa7b")
 		)
 		(pin "2"
-			(uuid "6f49bea4-45f4-40c0-8e95-dc2c8353cc02")
+			(uuid "a7874e05-4894-41d4-890e-c75c0b8524e6")
 		)
 		(instances
 			(project "Oscillator - Power Supply"
-				(path "/a0206bc0-a5a9-4875-8faa-8d6db68fdfb7"
+				(path "/aabb7327-2838-47f3-b749-17ca89503540"
 					(reference "C6")
 					(unit 1)
 				)
@@ -679,7 +679,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "04e5cd61-a05e-4600-88af-a4dce5760044")
+		(uuid "8274b075-e42a-4b24-9254-1e24ae26f3ca")
 		(property "Reference" "#PWR002"
 			(at 50.8 170.18 0.0000)
 			(hide yes)
@@ -700,11 +700,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "3db75b2f-c47d-4223-9465-14b22842b06a")
+			(uuid "c2ac655b-33fe-43e2-b683-687f67903db9")
 		)
 		(instances
 			(project "Oscillator - Power Supply"
-				(path "/a0206bc0-a5a9-4875-8faa-8d6db68fdfb7"
+				(path "/aabb7327-2838-47f3-b749-17ca89503540"
 					(reference "#PWR002")
 					(unit 1)
 				)
@@ -720,7 +720,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "4615b0fc-6b24-4bde-b831-6a7b8dbfb0fa")
+		(uuid "85d2ba3d-fe30-412a-9033-2104d0849ebe")
 		(property "Reference" "#PWR003"
 			(at 116.84 128.27 0.0000)
 			(hide yes)
@@ -741,11 +741,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "1800e2d6-4de4-4995-87d1-eac26e8a266c")
+			(uuid "bcb565ed-d9b0-478d-91fe-82889698a462")
 		)
 		(instances
 			(project "Oscillator - Power Supply"
-				(path "/a0206bc0-a5a9-4875-8faa-8d6db68fdfb7"
+				(path "/aabb7327-2838-47f3-b749-17ca89503540"
 					(reference "#PWR003")
 					(unit 1)
 				)
@@ -761,7 +761,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "92e54579-8a84-481b-b659-24882444f198")
+		(uuid "a193c240-a9a3-4bfa-ae3c-cbf8f2943df9")
 		(property "Reference" "C7"
 			(at 117.475 160.02 0.0000)
 			(effects
@@ -781,14 +781,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "605dc26e-82d3-47a7-9cb8-dae8c77a748d")
+			(uuid "05c46e0c-c06a-44a5-9dcf-7f8075afed6b")
 		)
 		(pin "2"
-			(uuid "53044738-4b2e-454a-973e-c56111bc4ed2")
+			(uuid "8308e467-5d1b-41fc-90c2-6cc97f48c537")
 		)
 		(instances
 			(project "Oscillator - Power Supply"
-				(path "/a0206bc0-a5a9-4875-8faa-8d6db68fdfb7"
+				(path "/aabb7327-2838-47f3-b749-17ca89503540"
 					(reference "C7")
 					(unit 1)
 				)
@@ -804,7 +804,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "559ca50c-1410-426e-8fa7-8143091ef9c4")
+		(uuid "1d3a4053-8239-46ea-9569-d436e937696d")
 		(property "Reference" "#PWR004"
 			(at 116.84 170.18 0.0000)
 			(hide yes)
@@ -825,11 +825,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "d3539ecb-73e5-4cc4-b875-57cbd33b4c35")
+			(uuid "cda7e95e-8bac-4a74-b161-e50486cc8403")
 		)
 		(instances
 			(project "Oscillator - Power Supply"
-				(path "/a0206bc0-a5a9-4875-8faa-8d6db68fdfb7"
+				(path "/aabb7327-2838-47f3-b749-17ca89503540"
 					(reference "#PWR004")
 					(unit 1)
 				)
@@ -845,7 +845,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "2341b373-4ffb-4ee1-81bd-bf7cddfa8ff0")
+		(uuid "1fd42249-9993-4fe1-9233-ff89c39a1e1f")
 		(property "Reference" "C8"
 			(at 183.515 160.02 0.0000)
 			(effects
@@ -865,14 +865,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "a961f2e4-d894-41e0-abad-66f94ca14820")
+			(uuid "039fc137-998a-43db-ae77-d1076c5b8064")
 		)
 		(pin "2"
-			(uuid "ba9f08bf-0cf8-41bc-8233-1368ff06b81e")
+			(uuid "522dc643-704b-47c9-8117-d491272eccdf")
 		)
 		(instances
 			(project "Oscillator - Power Supply"
-				(path "/a0206bc0-a5a9-4875-8faa-8d6db68fdfb7"
+				(path "/aabb7327-2838-47f3-b749-17ca89503540"
 					(reference "C8")
 					(unit 1)
 				)
@@ -888,7 +888,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "c2eac6b7-331d-4aa7-8818-b1270814a795")
+		(uuid "7416c8f5-8bf9-4897-86cd-666b25b17404")
 		(property "Reference" "#PWR005"
 			(at 182.88 170.18 0.0000)
 			(hide yes)
@@ -909,11 +909,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "9bcf9c2c-c3e1-4c23-b450-aa581c06a9fa")
+			(uuid "a0cef9b3-3ae1-4580-b5f3-8063864d8635")
 		)
 		(instances
 			(project "Oscillator - Power Supply"
-				(path "/a0206bc0-a5a9-4875-8faa-8d6db68fdfb7"
+				(path "/aabb7327-2838-47f3-b749-17ca89503540"
 					(reference "#PWR005")
 					(unit 1)
 				)
@@ -928,7 +928,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "66767bcb-096a-422a-bd9f-66a3119c1d59")
+		(uuid "a0dad39a-3795-4616-a62d-f5c60de56f30")
 	)
 	(wire
 		(pts
@@ -938,7 +938,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "8e7901a3-fb0b-4288-bc44-4088b20d1f9d")
+		(uuid "32d7f7f8-ba4e-4f9c-8c1f-d568dea1329e")
 	)
 	(wire
 		(pts
@@ -948,7 +948,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "55bf7213-d8e1-4492-9515-c50c2051d0e9")
+		(uuid "18708e47-8657-44b3-bfbb-5cca89a3e4c8")
 	)
 	(wire
 		(pts
@@ -958,7 +958,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "667dd45e-e8cc-424b-8bc8-7330a71fbd87")
+		(uuid "a7767785-3488-450b-8d6d-2cbd133c5311")
 	)
 	(wire
 		(pts
@@ -968,7 +968,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "82d890b5-7296-4c8c-82b5-ff30838cf4ad")
+		(uuid "3590e0d4-120b-4f90-94b6-ccc2f56417c2")
 	)
 	(wire
 		(pts
@@ -978,7 +978,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "eea08713-82ed-463e-8396-626efee17a79")
+		(uuid "9fc11e77-2742-49d4-801d-5bda1942c496")
 	)
 	(wire
 		(pts
@@ -988,7 +988,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "988febd9-2000-46a9-9889-f8ce82787125")
+		(uuid "9a60c98d-1b11-4260-8158-9fba8d799f57")
 	)
 	(wire
 		(pts
@@ -998,7 +998,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "018469fe-ed89-48e6-b617-ae5f7492a9e2")
+		(uuid "ff27cef9-972d-4111-8adc-7bb6b0ba3e3f")
 	)
 	(label "HP"
 		(at 74.93 96.52 0)
@@ -1008,7 +1008,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "3adfb815-3959-498d-8d92-0910d4b8cf5b")
+		(uuid "eb98a1bb-9104-4f97-9f46-6a1ecf672151")
 	)
 	(label "+15V"
 		(at 50.8 132.08 0)
@@ -1018,7 +1018,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "37b28c70-2e2b-473f-b724-082f75fd987d")
+		(uuid "003b0870-d4dc-40d5-b2d3-07d2ab001d18")
 	)
 	(label "3.3V"
 		(at 182.88 132.08 0)
@@ -1028,7 +1028,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "9bdb425f-bd42-42a0-91f2-6d56629086a6")
+		(uuid "13a4a26d-1b11-4850-97e1-3026bb7fbb03")
 	)
 	(text "STARTUP KICK + POWER SUPPLY"
 		(exclude_from_sim no)
@@ -1038,8 +1038,9 @@
 				(size 4 4)
 				(bold yes)
 			)
+			(justify left)
 		)
-		(uuid "8a48a2a2-12ae-4a76-beb6-e3f83a88a536")
+		(uuid "9e385467-c213-4a26-8a80-486a9ed228ca")
 	)
 	(text "Startup: R9 injects 0.1V pulse into HP net to initiate oscillation"
 		(exclude_from_sim no)
@@ -1048,8 +1049,9 @@
 			(font
 				(size 2.5 2.5)
 			)
+			(justify left)
 		)
-		(uuid "79bfe268-80ba-4297-a4bc-2292f0d72e3f")
+		(uuid "6f8c47a0-abeb-463d-8acb-0bf8a7cdcb40")
 	)
 	(text "Power: +15V/-15V analog supply, 3.3V MCU via LDO from +15V"
 		(exclude_from_sim no)
@@ -1058,8 +1060,31 @@
 			(font
 				(size 2 2)
 			)
+			(justify left)
 		)
-		(uuid "d550727f-6d4f-4759-b6b1-b2348dc1eba5")
+		(uuid "ebaa73a6-a565-4074-89c2-1d47eae3280a")
+	)
+	(text "FUNCTION: R9 injects a brief pulse into HP at power-on to break"
+		(exclude_from_sim no)
+		(at 20.32 58.42 0.0000)
+		(effects
+			(font
+				(size 1.8 1.8)
+			)
+			(justify left)
+		)
+		(uuid "d567c4a8-543d-41a6-86a3-22c1c1e33b29")
+	)
+	(text "equilibrium and start oscillation. Bulk caps filter supply noise."
+		(exclude_from_sim no)
+		(at 20.32 68.58 0.0000)
+		(effects
+			(font
+				(size 1.8 1.8)
+			)
+			(justify left)
+		)
+		(uuid "62030514-0814-46c8-b57d-1bd4cca6e767")
 	)
 	(text "Startup Kick\nPULSE(0, 0.1V, 0.1ms, 1ns, 1ns, 10us)"
 		(exclude_from_sim no)
@@ -1068,8 +1093,9 @@
 			(font
 				(size 2 2)
 			)
+			(justify left)
 		)
-		(uuid "23422d80-71f1-4d38-8f30-bcc9256a16c1")
+		(uuid "161de4f9-6ebe-41db-8839-56c98d66f2ca")
 	)
 	(text "+15V\nbulk decoupling"
 		(exclude_from_sim no)
@@ -1078,8 +1104,9 @@
 			(font
 				(size 2 2)
 			)
+			(justify left)
 		)
-		(uuid "72a61f37-841c-42f2-b4a6-5a8a189e6d1f")
+		(uuid "4dab4f3e-5b99-4195-aa29-b562b6c4268c")
 	)
 	(text "-15V\nbulk decoupling"
 		(exclude_from_sim no)
@@ -1088,8 +1115,9 @@
 			(font
 				(size 2 2)
 			)
+			(justify left)
 		)
-		(uuid "279eadc3-ceaa-43aa-a370-36023850e4a1")
+		(uuid "1c2cba37-a46a-40f3-a7ac-b79dc60276dc")
 	)
 	(text "3.3V MCU supply\n(LDO from +15V)"
 		(exclude_from_sim no)
@@ -1098,49 +1126,54 @@
 			(font
 				(size 2 2)
 			)
+			(justify left)
 		)
-		(uuid "c56e4b03-81e1-4068-b7ca-1bb1a5e99ac1")
+		(uuid "ac9949a8-7629-4675-8e9f-38999e6eddfc")
 	)
 	(text "Interfaces:"
 		(exclude_from_sim no)
-		(at 20.32 208.28 0.0000)
+		(at 20.32 157.48 0.0000)
 		(effects
 			(font
 				(size 2.5 2.5)
 				(bold yes)
 			)
+			(justify left)
 		)
-		(uuid "f2506dcc-4001-4a2b-bd17-bf805cce485b")
+		(uuid "e03ae264-282d-49e5-b629-e31b75e12c64")
 	)
 	(text "HP output: startup pulse injected via R9 (one-shot at power-on)"
 		(exclude_from_sim no)
-		(at 20.32 220.98 0.0000)
+		(at 20.32 167.64 0.0000)
 		(effects
 			(font
 				(size 2 2)
 			)
+			(justify left)
 		)
-		(uuid "4004872a-7aa7-4126-9c36-006fd2acd089")
+		(uuid "e66f7a73-a20e-4dba-a78d-298bfa3e446e")
 	)
 	(text "+15V/-15V: powers U1/U2/U3 LM4562 op-amps"
 		(exclude_from_sim no)
-		(at 20.32 233.68 0.0000)
+		(at 20.32 177.8 0.0000)
 		(effects
 			(font
 				(size 2 2)
 			)
+			(justify left)
 		)
-		(uuid "21f070b2-3c2a-42af-9de7-6f98acf9c11f")
+		(uuid "978fe0db-c72d-429a-8547-321c39974717")
 	)
 	(text "3.3V: powers U5 ADuCM362 MCU"
 		(exclude_from_sim no)
-		(at 20.32 246.38 0.0000)
+		(at 20.32 187.96 0.0000)
 		(effects
 			(font
 				(size 2 2)
 			)
+			(justify left)
 		)
-		(uuid "91e81ede-b6cc-4c92-a444-19e80cf31672")
+		(uuid "30893123-3512-46d3-8c8a-e37e1720369d")
 	)
 	(sheet_instances
 		(path "/"

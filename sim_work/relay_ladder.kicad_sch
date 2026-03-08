@@ -2,7 +2,7 @@
 	(version 20250114)
 	(generator "eeschema")
 	(generator_version "9.0")
-	(uuid "fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9")
+	(uuid "435656b3-59c3-4f82-97a8-6813afec584c")
 	(paper "A4")
 	(title_block
 		(title "Relay Range-Switching Ladder - Electrometer Platform")
@@ -720,6 +720,9 @@
 			(embedded_fonts no)
 		)
 		(symbol "D:D"
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
 				(offset 1.016)
 				(hide yes)
@@ -758,7 +761,7 @@
 					)
 				)
 			)
-			(property "Datasheet" "https://ngspice.sourceforge.io/docs/ngspice-html-manual/manual.xhtml#cha_DIODEs"
+			(property "Datasheet" ""
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -769,7 +772,7 @@
 					)
 				)
 			)
-			(property "Description" "Diode for simulation or PCB"
+			(property "Description" "Diode"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -802,18 +805,7 @@
 					)
 				)
 			)
-			(property "Sim.Params" "rs=50m cjo=10p"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "simulation"
+			(property "ki_keywords" "diode"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -1173,7 +1165,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "d5a20f00-32e0-4fc2-a067-c424dcffc8e6")
+		(uuid "a30d4a98-11d5-4de6-bf43-f03d53be88b6")
 		(property "Reference" "SW1"
 			(at 55.88 53.34 0.0000)
 			(effects
@@ -1193,14 +1185,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "28eb3ee9-0b29-49f7-a0b8-1afbd7b6abf6")
+			(uuid "55836e18-65eb-4975-85cd-d0f085955f3f")
 		)
 		(pin "2"
-			(uuid "6b119901-6d6c-4576-a0ef-c7f2ccacf9b2")
+			(uuid "d461c9cd-1985-47b7-ba3e-5678a2e7404a")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "SW1")
 					(unit 1)
 				)
@@ -1216,7 +1208,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "912015c7-6413-4f26-a6fe-c5c64d81b565")
+		(uuid "5417a238-b27e-4eb5-aca8-e7e0b20ba28d")
 		(property "Reference" "R1"
 			(at 91.44 52.832 180)
 			(effects
@@ -1236,14 +1228,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "d182d26d-bc16-4f6d-9ef9-923104c24461")
+			(uuid "5c115441-8a4c-4540-a12d-bd210f226abe")
 		)
 		(pin "2"
-			(uuid "bc5b15bb-4b5a-435b-b63c-485352c1293e")
+			(uuid "1fae1b8c-3100-4b0a-b75d-a06c2ac5ff61")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "R1")
 					(unit 1)
 				)
@@ -1259,7 +1251,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "6d13ff7f-b51d-4219-98ae-0d6936c964da")
+		(uuid "c72bde48-5fac-4656-920b-295eb789910f")
 		(property "Reference" "SW2"
 			(at 55.88 68.58 0.0000)
 			(effects
@@ -1279,14 +1271,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "36377ca8-3ffb-487e-b9a2-a603e1d304af")
+			(uuid "536cf636-eea8-4174-bae6-322f2699488a")
 		)
 		(pin "2"
-			(uuid "c7ffbfdf-598d-4b0f-9efa-f66447df05d0")
+			(uuid "893b934f-3889-4a70-b080-e30316e7f0a4")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "SW2")
 					(unit 1)
 				)
@@ -1302,7 +1294,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "00992b64-25eb-42ab-a938-195d1cbae7b8")
+		(uuid "de39b85d-77b5-4526-8470-05374af929f6")
 		(property "Reference" "R2"
 			(at 91.44 68.072 180)
 			(effects
@@ -1322,14 +1314,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "fc885251-9191-4f46-ad5e-5d110df8da14")
+			(uuid "0bffe7e3-a6c6-4231-974e-f7fbf791c370")
 		)
 		(pin "2"
-			(uuid "39d68c3f-19d0-4826-9359-414d52fea32f")
+			(uuid "f230d53c-3988-43d8-af47-05ad8e4a143d")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "R2")
 					(unit 1)
 				)
@@ -1345,7 +1337,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "8949521e-68cb-44cb-8dab-959c22c91be9")
+		(uuid "b090f87c-42f9-4f91-ab1a-a67eb1e32ffc")
 		(property "Reference" "SW3"
 			(at 55.88 83.82 0.0000)
 			(effects
@@ -1365,14 +1357,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "7436cf55-6cb2-4b1a-aee8-2b840d579e51")
+			(uuid "d1bf7951-0181-4704-97c5-ad2d98738c52")
 		)
 		(pin "2"
-			(uuid "6d5c37a6-e151-4e27-a5c9-62dddf045c72")
+			(uuid "8cfb99c6-dfbb-4ff8-89e9-693e236065ca")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "SW3")
 					(unit 1)
 				)
@@ -1388,7 +1380,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "2b98921a-7118-4df7-be93-e1af803d921e")
+		(uuid "b82a0e7f-475d-473e-9b5d-2c0c3f276b17")
 		(property "Reference" "R3"
 			(at 91.44 83.312 180)
 			(effects
@@ -1408,14 +1400,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "197b2af4-b193-47fd-aec3-df7901dfcc15")
+			(uuid "fa568dcb-7824-473a-8667-4459097733e8")
 		)
 		(pin "2"
-			(uuid "a0530a54-698f-472c-af76-e3cfdb3f6dfa")
+			(uuid "dd327032-af7a-4130-8d61-94c8879786b0")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "R3")
 					(unit 1)
 				)
@@ -1431,7 +1423,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "c2d2fadc-b0b5-4c46-89e1-71ca822725a9")
+		(uuid "5582e7ad-4de9-4d82-9e0e-b6500b43ac57")
 		(property "Reference" "C3"
 			(at 88.9 89.535 90)
 			(effects
@@ -1451,14 +1443,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "54e1afb6-b752-43be-af33-ece8fcac5275")
+			(uuid "9719b886-13ba-4fa1-8f8e-89d729e273c0")
 		)
 		(pin "2"
-			(uuid "d77f05fc-abe9-4708-b16a-383402a70123")
+			(uuid "1de225f3-259e-4cfc-8c4a-e7e4c57587fe")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "C3")
 					(unit 1)
 				)
@@ -1474,7 +1466,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "2cb2ed0c-4cce-4652-a72a-64d9697ebb45")
+		(uuid "0a7186c2-fafb-4922-bdcb-908b23023fe5")
 		(property "Reference" "SW4"
 			(at 55.88 99.06 0.0000)
 			(effects
@@ -1494,14 +1486,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "50bcd94a-c593-421f-9094-ae0a245f5620")
+			(uuid "c3fef89e-893c-4e0d-90cf-ac6635c53749")
 		)
 		(pin "2"
-			(uuid "c3ff139c-57d1-44b2-8b22-f5f95cf987cf")
+			(uuid "1813d9d6-3449-4490-89a7-2a83c825bc8a")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "SW4")
 					(unit 1)
 				)
@@ -1517,7 +1509,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "cd0dd0d5-d0cf-403a-bb82-2c08a37bedd2")
+		(uuid "8d3e04c8-0392-4874-a0ee-eb5201c8119c")
 		(property "Reference" "R4"
 			(at 91.44 98.552 180)
 			(effects
@@ -1537,14 +1529,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "2898c266-ffea-43bc-9106-aa760297f3d5")
+			(uuid "bef7b9f7-68c1-4387-b028-f344218a2b0c")
 		)
 		(pin "2"
-			(uuid "f694967e-3e1b-4c87-b180-80f6a8c6de40")
+			(uuid "615e1123-9836-42b8-b7e8-7e849a72f3b2")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "R4")
 					(unit 1)
 				)
@@ -1560,7 +1552,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "01629329-9167-4603-8f42-100b145e12b8")
+		(uuid "7b2eb9c2-a647-4f56-b882-15dcf81cb6eb")
 		(property "Reference" "C4"
 			(at 88.9 104.775 90)
 			(effects
@@ -1580,14 +1572,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "e3a8e3f9-0a97-49f6-b5f2-cfd07d2014e0")
+			(uuid "26498a6f-d6bc-4d69-bef3-188fd2a6b9ea")
 		)
 		(pin "2"
-			(uuid "af3ad458-b896-4e20-af68-412d7fd1b95a")
+			(uuid "e71d4825-c8ec-47b5-b2b8-087003a4a99c")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "C4")
 					(unit 1)
 				)
@@ -1603,7 +1595,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "ac87af92-4acd-4e2d-96cf-9d6e92a6400c")
+		(uuid "e89419da-7d77-4af2-bec1-91231075ae53")
 		(property "Reference" "Q1"
 			(at 45.72 158.75 0.0000)
 			(effects
@@ -1623,17 +1615,17 @@
 			)
 		)
 		(pin "1"
-			(uuid "830aae03-4b9a-4ff9-a460-48f76179ff81")
+			(uuid "b201284b-9cc8-4be5-a764-2bb0516baeb7")
 		)
 		(pin "2"
-			(uuid "00c55892-c89c-4d1d-a7d3-01f3aef4bfb4")
+			(uuid "9e82b22c-c30e-4f9c-bb97-27dd6fa30199")
 		)
 		(pin "3"
-			(uuid "304fd5db-b692-499a-9806-19bef14f1202")
+			(uuid "070159ea-64cf-4c19-9ac5-8d8b394f1b05")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "Q1")
 					(unit 1)
 				)
@@ -1649,7 +1641,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "468d7758-28a0-4313-8965-a441e0852768")
+		(uuid "4a82c0f1-b296-41d7-8f06-bf8664d495a8")
 		(property "Reference" "R9"
 			(at 45.212 127 90)
 			(effects
@@ -1669,14 +1661,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "a716e211-53c3-4790-b05b-3f546bb53fb1")
+			(uuid "575a217a-9db1-46eb-8eab-befe720170b4")
 		)
 		(pin "2"
-			(uuid "5599aa37-fbbc-4fac-8eac-02800c973120")
+			(uuid "10a16b5e-7b0b-40f6-b1e7-87a9679cfca9")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "R9")
 					(unit 1)
 				)
@@ -1685,16 +1677,16 @@
 	)
 	(symbol
 		(lib_id "D:D")
-		(at 58.42 127 270)
+		(at 58.42 127 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "52a863dc-b9dc-4347-894c-a1df60154a7b")
+		(uuid "92e45aa3-66d8-4005-a4df-5876e97046bd")
 		(property "Reference" "D1"
-			(at 60.96 127 270)
+			(at 55.88 127 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1703,7 +1695,7 @@
 			)
 		)
 		(property "Value" "1N4148"
-			(at 55.88 127 270)
+			(at 60.96 127 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1712,14 +1704,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "a5492d7c-05c1-4cc2-b481-2b27bfe272d2")
+			(uuid "a838821a-9793-40d7-9a84-ef3365fef862")
 		)
 		(pin "2"
-			(uuid "0fc6e7f4-f3a7-4797-8ae0-8ea6f6f384bb")
+			(uuid "aacf4862-ada3-4032-9dc6-f42db8cb3560")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "D1")
 					(unit 1)
 				)
@@ -1735,7 +1727,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "ace8595d-1bda-44c7-ba46-cd7787aa39a2")
+		(uuid "f4d82ce0-0b8a-4bf0-8018-ef74d7821e99")
 		(property "Reference" "#PWR01"
 			(at 43.18 111.76 0.0000)
 			(hide yes)
@@ -1756,11 +1748,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "295d162d-fe84-408c-8ca0-a3910d22460b")
+			(uuid "ad6939c8-3794-49be-9fcb-d8c5489418cd")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "#PWR01")
 					(unit 1)
 				)
@@ -1776,7 +1768,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "42eaba17-e6f0-4672-88ef-f30837ea7319")
+		(uuid "8ced677b-a6de-4d07-bcbb-e442d229efd6")
 		(property "Reference" "#PWR02"
 			(at 43.18 163.83 0.0000)
 			(hide yes)
@@ -1797,11 +1789,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "0dbbb805-744a-42dd-94f6-aecf4abbbdc2")
+			(uuid "10225e22-7268-449b-b854-9129c49ec4ac")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "#PWR02")
 					(unit 1)
 				)
@@ -1817,7 +1809,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "3d1c1a23-2e1d-424a-b9db-b694b19ae013")
+		(uuid "9e341190-d0cc-46b4-871f-4580e6f50e0c")
 		(property "Reference" "R5"
 			(at 10.16 159.512 180)
 			(effects
@@ -1837,14 +1829,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "73aecde1-c452-44fa-964b-1384cb76df49")
+			(uuid "2e8e5c2f-8174-4849-a250-4ad74a828e70")
 		)
 		(pin "2"
-			(uuid "a9fada0f-c40d-4c5b-abe6-ab32a17da8c1")
+			(uuid "28d7b342-7456-4010-9b20-afd60111fcc3")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "R5")
 					(unit 1)
 				)
@@ -1860,7 +1852,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "be19dd51-54e4-4d74-ac60-064b7f456d93")
+		(uuid "4aa339ab-c5ad-43b0-b824-a0f9427b4f9c")
 		(property "Reference" "Q2"
 			(at 81.28 158.75 0.0000)
 			(effects
@@ -1880,17 +1872,17 @@
 			)
 		)
 		(pin "1"
-			(uuid "2af5f229-1098-4f53-ae63-291f23ac951f")
+			(uuid "68388fdf-1cf7-4f1f-b2a9-2f8c763dcff8")
 		)
 		(pin "2"
-			(uuid "703cfedf-21bf-47c8-b847-6f2e3a834351")
+			(uuid "4bb2e112-bcca-47c5-922f-c08123b7287e")
 		)
 		(pin "3"
-			(uuid "d471810a-9661-4d16-9672-defac4c64af1")
+			(uuid "f1b5359b-75c2-4ed6-aa39-94c3db039d74")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "Q2")
 					(unit 1)
 				)
@@ -1906,7 +1898,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "546c4a7d-9f09-48e0-80f8-92ac81c5255c")
+		(uuid "d7b3b7a5-94cc-42a6-bae5-6ec1ed57e7bd")
 		(property "Reference" "R10"
 			(at 80.772 127 90)
 			(effects
@@ -1926,14 +1918,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "906f150a-a51a-409c-9b14-85ee305eafdb")
+			(uuid "6edecb2d-f8bb-4562-b74e-6e482f691345")
 		)
 		(pin "2"
-			(uuid "0a251cb4-741c-41a8-a33d-e289b4dd4cba")
+			(uuid "037b8a0f-b317-4bc9-80f0-d5bf54f1183e")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "R10")
 					(unit 1)
 				)
@@ -1942,16 +1934,16 @@
 	)
 	(symbol
 		(lib_id "D:D")
-		(at 93.98 127 270)
+		(at 93.98 127 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "c1bff9b9-f20f-4f76-abe4-87284d3ab78b")
+		(uuid "fb653577-7976-4b3c-a8a1-d2e6025bd000")
 		(property "Reference" "D2"
-			(at 96.52 127 270)
+			(at 91.44 127 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1960,7 +1952,7 @@
 			)
 		)
 		(property "Value" "1N4148"
-			(at 91.44 127 270)
+			(at 96.52 127 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1969,14 +1961,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "645146eb-8a5e-4610-be8b-9875c33b22cb")
+			(uuid "166cb0a6-9020-4394-9967-62621542f7d3")
 		)
 		(pin "2"
-			(uuid "2f8d0e97-0c74-493b-a0d6-05d8501e4f7d")
+			(uuid "584f1792-4e2e-422f-9d18-649998c3fe8f")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "D2")
 					(unit 1)
 				)
@@ -1992,7 +1984,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "ee164e47-de14-438a-9240-d851c1045253")
+		(uuid "0b29cb37-8db1-4d6d-82b0-57f2b56062ce")
 		(property "Reference" "#PWR03"
 			(at 78.74 111.76 0.0000)
 			(hide yes)
@@ -2013,11 +2005,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "940ba0cb-32ba-465d-89af-d4971745aeaf")
+			(uuid "63617bfe-2b8b-4900-bb83-3763ca89bf23")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "#PWR03")
 					(unit 1)
 				)
@@ -2033,7 +2025,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "88df2608-edf5-468a-bc31-6de26817ca8f")
+		(uuid "8915d591-ab28-4300-9073-dfe163cbd6e7")
 		(property "Reference" "#PWR04"
 			(at 78.74 163.83 0.0000)
 			(hide yes)
@@ -2054,11 +2046,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "e85559b5-ac9e-4beb-b02e-ffb8d8e8c8cc")
+			(uuid "ca488e5c-6222-40a5-a3cd-93f7236f591a")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "#PWR04")
 					(unit 1)
 				)
@@ -2074,7 +2066,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "67211782-9972-4030-a9e1-72fdc5b50c76")
+		(uuid "c3502b7a-0432-4b0e-acc9-253e64719ea0")
 		(property "Reference" "R6"
 			(at 45.72 159.512 180)
 			(effects
@@ -2094,14 +2086,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "0d3b671c-a53a-4284-bab1-de64ef6ec550")
+			(uuid "c025fee3-258a-41ad-9645-6db41dc934fd")
 		)
 		(pin "2"
-			(uuid "1d65d78f-f69d-4b1e-928e-b289c99a05fc")
+			(uuid "876c6f4f-d6fa-4b77-9654-493cc3a57cbb")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "R6")
 					(unit 1)
 				)
@@ -2117,7 +2109,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "1d6f297c-dd17-4b6d-bcd3-37bd055ee101")
+		(uuid "c980dc28-9fed-4259-92ac-e385e4246d2b")
 		(property "Reference" "Q3"
 			(at 116.84 158.75 0.0000)
 			(effects
@@ -2137,17 +2129,17 @@
 			)
 		)
 		(pin "1"
-			(uuid "b79ce851-f444-491e-ac5e-03c4449a180f")
+			(uuid "be58ef2c-5428-47e4-b237-cd49059e75ba")
 		)
 		(pin "2"
-			(uuid "28fc020b-9757-44d1-8a75-9326d6435aa0")
+			(uuid "72de2748-2a93-4248-9a17-44de159ac67a")
 		)
 		(pin "3"
-			(uuid "f8e26855-ca74-41a6-9039-eb5c956fa4d7")
+			(uuid "82220c31-0e66-4e60-82bc-f2f8e36d8feb")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "Q3")
 					(unit 1)
 				)
@@ -2163,7 +2155,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "135a7a1a-0e03-47ce-8c3d-0de2739a2572")
+		(uuid "50c99175-00b5-4b60-9083-4c87c6fbc449")
 		(property "Reference" "R11"
 			(at 116.332 127 90)
 			(effects
@@ -2183,14 +2175,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "d250c6b2-f776-41b3-8589-5ec67c9744d9")
+			(uuid "f365885d-e4f0-42cd-96cf-96442e639e7c")
 		)
 		(pin "2"
-			(uuid "f6cf816d-02f6-4daa-a0ee-8cb0fd87d60a")
+			(uuid "720e2895-4255-4d34-ab75-e2ab77c5f207")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "R11")
 					(unit 1)
 				)
@@ -2199,16 +2191,16 @@
 	)
 	(symbol
 		(lib_id "D:D")
-		(at 129.54 127 270)
+		(at 129.54 127 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "04c50f67-ca9a-4de5-976b-f4e28ee1afcf")
+		(uuid "d87e5793-4577-45ba-a74f-f7a4d8973400")
 		(property "Reference" "D3"
-			(at 132.08 127 270)
+			(at 127 127 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2217,7 +2209,7 @@
 			)
 		)
 		(property "Value" "1N4148"
-			(at 127 127 270)
+			(at 132.08 127 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2226,14 +2218,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "e7c15239-60fa-4ccd-baac-3eb4950a7f2e")
+			(uuid "0e7157a5-a96b-4d99-82f9-44a6dd2f5d31")
 		)
 		(pin "2"
-			(uuid "ee5a675a-2c74-4611-86d2-dac23a949cf3")
+			(uuid "5b019447-1033-4f1f-843d-16d7e2304576")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "D3")
 					(unit 1)
 				)
@@ -2249,7 +2241,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "4ed65da5-db13-48b4-90bb-640d811363be")
+		(uuid "63d52e9e-2e35-46df-96ea-e42db727e74e")
 		(property "Reference" "#PWR05"
 			(at 114.3 111.76 0.0000)
 			(hide yes)
@@ -2270,11 +2262,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "d5890d59-f6dd-4cf9-b1c7-c2d5a6e53ecf")
+			(uuid "8e07c1c0-30ca-4a36-ae6c-29980631732a")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "#PWR05")
 					(unit 1)
 				)
@@ -2290,7 +2282,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "409b26b2-054f-4506-b3c2-81272d83797d")
+		(uuid "dc287a30-5be4-4aa8-8fd8-573b9be4d817")
 		(property "Reference" "#PWR06"
 			(at 114.3 163.83 0.0000)
 			(hide yes)
@@ -2311,11 +2303,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "d213c674-2b56-459c-8e95-89b9e0636c1b")
+			(uuid "f2a7953f-4d0a-4e09-b297-cba32b5f2d8f")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "#PWR06")
 					(unit 1)
 				)
@@ -2331,7 +2323,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "43b4dd3b-80ce-4d84-be00-e7578c4f5099")
+		(uuid "76138414-3d1f-4ffc-919f-e5dfc37a4186")
 		(property "Reference" "R7"
 			(at 81.28 159.512 180)
 			(effects
@@ -2351,14 +2343,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "201bd2ab-761c-49e8-a137-ba96a5cda15a")
+			(uuid "fabfbc64-b06b-42f0-9eaa-a30659e2d706")
 		)
 		(pin "2"
-			(uuid "b963291c-a54e-4978-b437-367b06cede3a")
+			(uuid "46167bb0-49b7-4e09-8072-d961fd12ec7a")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "R7")
 					(unit 1)
 				)
@@ -2374,7 +2366,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "171d3701-f5ed-4974-819d-5276a288d0e2")
+		(uuid "1b56f95d-9273-403b-8dd3-2e89a9d16079")
 		(property "Reference" "Q4"
 			(at 152.4 158.75 0.0000)
 			(effects
@@ -2394,17 +2386,17 @@
 			)
 		)
 		(pin "1"
-			(uuid "206c56b5-f41c-4145-80fb-a51bb8532453")
+			(uuid "62dd00e2-8f92-4664-8fa9-0142afd88575")
 		)
 		(pin "2"
-			(uuid "441901d1-dc50-4d14-bc10-612e01d7b461")
+			(uuid "5541312f-7a13-47c4-829a-ae4ae5d3cff7")
 		)
 		(pin "3"
-			(uuid "ba337078-c7b1-4537-869e-7ab668aa8cab")
+			(uuid "9c7723c2-7a1b-4ca7-b624-4a670d1ceee9")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "Q4")
 					(unit 1)
 				)
@@ -2420,7 +2412,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "84b1dc5d-6d46-42b2-be07-2cced2d85ad1")
+		(uuid "85da785c-8d6d-4ace-8787-d9de53447e24")
 		(property "Reference" "R12"
 			(at 151.892 127 90)
 			(effects
@@ -2440,14 +2432,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "cc8c0007-0ece-4a33-b2ae-35d40bf1d82c")
+			(uuid "c2e6a2ba-3e87-45ca-a2c9-472849606d15")
 		)
 		(pin "2"
-			(uuid "9c5f2900-7322-450a-abd4-a3679d1e663c")
+			(uuid "ff500594-1e4c-46d5-977e-91a833856aba")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "R12")
 					(unit 1)
 				)
@@ -2456,16 +2448,16 @@
 	)
 	(symbol
 		(lib_id "D:D")
-		(at 165.1 127 270)
+		(at 165.1 127 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "16b1ddbe-23f7-48cf-bfbc-6505f324b998")
+		(uuid "bf9666d8-06c1-485e-8a60-61c4b6a93e8b")
 		(property "Reference" "D4"
-			(at 167.64 127 270)
+			(at 162.56 127 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2474,7 +2466,7 @@
 			)
 		)
 		(property "Value" "1N4148"
-			(at 162.56 127 270)
+			(at 167.64 127 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -2483,14 +2475,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "65fcf2c8-1324-4246-be9b-180ebaa91368")
+			(uuid "7a08cb82-9e76-4abb-a8fa-7b0fb9b9c0c4")
 		)
 		(pin "2"
-			(uuid "6873de0e-6afd-46ff-ada8-3b64683bb21b")
+			(uuid "52a34244-0a5f-4b45-a0b3-44f798c5a021")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "D4")
 					(unit 1)
 				)
@@ -2506,7 +2498,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "a62e4b9e-63de-4a49-b748-c226b38c031c")
+		(uuid "2f34ad84-6b1a-428b-a5bc-6778ebb15583")
 		(property "Reference" "#PWR07"
 			(at 149.86 111.76 0.0000)
 			(hide yes)
@@ -2527,11 +2519,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "e38ce3b6-d88e-4683-bde1-430aa9abd876")
+			(uuid "bbafff5f-77dc-4cba-abb9-fad03da63af8")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "#PWR07")
 					(unit 1)
 				)
@@ -2547,7 +2539,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "36704ff7-6ef7-4b07-8aa4-d90cd331b252")
+		(uuid "5fac87e2-60f8-4d69-af6e-ea3fa6fbb6e2")
 		(property "Reference" "#PWR08"
 			(at 149.86 163.83 0.0000)
 			(hide yes)
@@ -2568,11 +2560,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "27682150-52e3-4e41-aeb2-bd95386d5fd6")
+			(uuid "c2ec1225-bb34-41f7-984b-193bd813f88c")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "#PWR08")
 					(unit 1)
 				)
@@ -2588,7 +2580,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "3480f5b6-ff2e-4cc5-b0ee-d10ce1138256")
+		(uuid "a9d60aa5-0293-440c-8cc6-dec7e2dc94b2")
 		(property "Reference" "R8"
 			(at 116.84 159.512 180)
 			(effects
@@ -2608,14 +2600,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "120ed92f-9467-4ac5-a869-f2895ce0c0f5")
+			(uuid "0ea8d496-8714-41b5-b80b-51ca388d44bc")
 		)
 		(pin "2"
-			(uuid "634c47ba-a17e-481f-a36a-a1fde3704181")
+			(uuid "e6678f30-1fd2-43b0-a89c-267aa29c97c4")
 		)
 		(instances
 			(project "Relay Range Ladder"
-				(path "/fa4591ea-c8c0-4d18-8d69-9ae6b5fcdff9"
+				(path "/435656b3-59c3-4f82-97a8-6813afec584c"
 					(reference "R8")
 					(unit 1)
 				)
@@ -2630,7 +2622,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "92a76dde-0d98-4838-ae2d-16f95454bdd1")
+		(uuid "5b9b3b09-f0d9-44e6-af43-c4a05a8773b8")
 	)
 	(wire
 		(pts
@@ -2640,7 +2632,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "9e7b99b3-e648-44ef-995b-cfc668ecc3fa")
+		(uuid "7422ac76-3d69-4303-b01f-ae98e663fc7b")
 	)
 	(wire
 		(pts
@@ -2650,7 +2642,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "002be639-c320-4aac-886c-2ff389f8f567")
+		(uuid "9af1ff4c-6796-4212-bc6a-e9705a8e4b3d")
 	)
 	(wire
 		(pts
@@ -2660,7 +2652,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "9702c05b-3c21-4ed7-93a0-0d096a9cd536")
+		(uuid "d31f55e8-8d5c-43a8-843a-6519d1bafd7b")
 	)
 	(wire
 		(pts
@@ -2670,7 +2662,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "a1f2ee63-fa71-4a6b-9146-39ea88f9cbc4")
+		(uuid "9f48110a-7844-4147-b530-644ede0b8177")
 	)
 	(wire
 		(pts
@@ -2680,7 +2672,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "b91a52b8-45c4-4bb4-a680-7d151aacda9e")
+		(uuid "e57240b2-9cea-4f2a-b5aa-2500342dc1c3")
 	)
 	(wire
 		(pts
@@ -2690,7 +2682,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "87799fc9-c8cf-4f6f-b497-d43c17d81c72")
+		(uuid "7b0248ee-2c69-45a8-821a-eb5ac647c820")
 	)
 	(wire
 		(pts
@@ -2700,7 +2692,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "cb4f08f7-c98b-434d-95c3-6b2c091292d3")
+		(uuid "4fbff240-50ff-4305-8780-9c677da06362")
 	)
 	(wire
 		(pts
@@ -2710,7 +2702,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "ea45235e-215d-45aa-bdfa-a77f8abeab94")
+		(uuid "df1ec417-fd37-45e7-9475-c483172ef4c0")
 	)
 	(wire
 		(pts
@@ -2720,7 +2712,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "4c053d0a-7146-4193-b1aa-e18e8ba7bc26")
+		(uuid "775dc913-55ed-4641-acf4-c9952ed9ceaa")
 	)
 	(wire
 		(pts
@@ -2730,7 +2722,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "376b583f-f8a1-4fd5-86f8-87ac1f5382c3")
+		(uuid "d88c9629-3ab3-4a37-b0ea-8ea529158e89")
 	)
 	(wire
 		(pts
@@ -2740,7 +2732,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "be221af3-98fa-4ac7-bdf4-45253120fd3c")
+		(uuid "945fdcf8-ee38-4f97-9196-a8a32f9281de")
 	)
 	(wire
 		(pts
@@ -2750,7 +2742,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "0fe87ac1-0dc0-4ab0-845b-c4e0b3b0a3f6")
+		(uuid "9be5a4a9-d994-4914-922b-9099ac576260")
 	)
 	(wire
 		(pts
@@ -2760,7 +2752,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "7dbf0f1d-6e81-4b8c-9b17-2af2eb78f914")
+		(uuid "eea41723-64ad-41dc-8248-25a651a1a298")
 	)
 	(wire
 		(pts
@@ -2770,7 +2762,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "7c751d4d-f9b7-48e8-b7bb-91267170ce58")
+		(uuid "8ad6e8f0-d143-4762-a24a-1b09ba4dd681")
 	)
 	(wire
 		(pts
@@ -2780,7 +2772,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "b7ddc3ac-16ac-466e-b747-6b2c666e299d")
+		(uuid "4dac12cb-afca-4765-a5ea-bc6800e59190")
 	)
 	(wire
 		(pts
@@ -2790,7 +2782,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "a1631dd2-98e9-46b0-a015-fa378a6b85f8")
+		(uuid "b3e871df-f870-4831-b76b-1e0353215eeb")
 	)
 	(wire
 		(pts
@@ -2800,7 +2792,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "7192b4fb-1f60-4465-9621-cbd0035be894")
+		(uuid "2cae71fb-730b-4734-bd30-2fd376862acb")
 	)
 	(wire
 		(pts
@@ -2810,7 +2802,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "752d7548-3f56-4489-bd30-055b7074d138")
+		(uuid "2452aaf7-43c7-4736-80fb-10e165ae9ee1")
 	)
 	(wire
 		(pts
@@ -2820,7 +2812,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "e8606891-851b-4821-9316-4ca2d815bc77")
+		(uuid "efc58034-94c1-4c3b-a4f1-a784aefec26d")
 	)
 	(wire
 		(pts
@@ -2830,7 +2822,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "babce000-576e-4dd7-99b3-791f5360ee50")
+		(uuid "7c5a8ca8-4752-4e70-a618-4ae9c98234f5")
 	)
 	(wire
 		(pts
@@ -2840,7 +2832,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "3287d39d-fac7-4c86-a84e-411d841d8b2e")
+		(uuid "91b3b3df-5fc4-4a39-9dc4-86bd791d00e5")
 	)
 	(wire
 		(pts
@@ -2850,7 +2842,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "f826cb76-44f8-4df7-9204-896c45ccc316")
+		(uuid "9e757e51-c2f5-4939-a7c5-37e7d1574407")
 	)
 	(wire
 		(pts
@@ -2860,7 +2852,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "f567a3bc-5d0b-4b72-b986-9a09701ce616")
+		(uuid "645b3302-fafd-43f1-b957-e49d310f61a5")
 	)
 	(wire
 		(pts
@@ -2870,7 +2862,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "ad870453-b489-4c27-998e-629125e8d148")
+		(uuid "0c739e75-43a9-4b3f-bf4c-93b33c78e8b2")
 	)
 	(wire
 		(pts
@@ -2880,7 +2872,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "f1745b50-5d5c-4395-b6df-fc706102f93d")
+		(uuid "cf70c01a-8a31-42b6-895c-239ba7c98a85")
 	)
 	(wire
 		(pts
@@ -2890,7 +2882,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "b7cdd323-db1f-46ab-b5f5-c9defeaf5c1c")
+		(uuid "29a2bba3-88d4-4215-b677-8062bfc1da2b")
 	)
 	(wire
 		(pts
@@ -2900,7 +2892,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "932a14cb-8b87-4333-beda-25bc0465f857")
+		(uuid "57ab1b26-dadc-4469-8385-c00f079ae588")
 	)
 	(wire
 		(pts
@@ -2910,7 +2902,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "6843cf77-a081-4977-af84-7fb12e443c73")
+		(uuid "efcdfa0e-ad2f-4ff2-a47b-38e622901a8b")
 	)
 	(wire
 		(pts
@@ -2920,7 +2912,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "8544b342-05cd-4ae9-b67e-37a00efd1578")
+		(uuid "9620c4b2-e1ec-4660-852b-c0c51f2b993e")
 	)
 	(wire
 		(pts
@@ -2930,7 +2922,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "62a9a9e0-ec52-46e5-bcaf-b6e65e355e74")
+		(uuid "ff7bc71d-3522-4898-b4cf-513d608c6594")
 	)
 	(wire
 		(pts
@@ -2940,7 +2932,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "69830f24-ed93-4fa4-98b6-bd01ff2c7060")
+		(uuid "206e5522-6a36-4774-a271-401909975975")
 	)
 	(wire
 		(pts
@@ -2950,7 +2942,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "7203da17-2dbd-462f-b81a-d6bb2cdb60e6")
+		(uuid "c47e5d2b-724d-45e7-96fa-455bb0e58dc6")
 	)
 	(wire
 		(pts
@@ -2960,7 +2952,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "ad8635c3-a10c-4438-94aa-c0da15c01757")
+		(uuid "7d8d4fcb-8497-4439-89eb-a4bf20c2be56")
 	)
 	(wire
 		(pts
@@ -2970,7 +2962,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "e354771a-5200-41c7-9c58-e6e94c93eb0d")
+		(uuid "faf5c067-19fa-451c-ba8a-52f805c5ee8f")
 	)
 	(wire
 		(pts
@@ -2980,7 +2972,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "78f70e88-0a1b-44ec-867b-41efce0082f9")
+		(uuid "0effacae-afed-406b-99ac-2e827fe2bc5f")
 	)
 	(wire
 		(pts
@@ -2990,7 +2982,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "a76fca4b-b9b1-4b24-9d5b-c02e08d59209")
+		(uuid "2d3db048-5d7d-4cf2-afb2-77cb62f45d68")
 	)
 	(wire
 		(pts
@@ -3000,7 +2992,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "95c5d0a0-9a16-439f-befc-0be13cb9082b")
+		(uuid "e23c9f99-9236-4345-a20e-1c85352c960c")
 	)
 	(wire
 		(pts
@@ -3010,7 +3002,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "fbe01bf1-aa51-4783-bb77-2b6aa8970530")
+		(uuid "96fedc27-1b79-4865-9daf-ed49102968ad")
 	)
 	(wire
 		(pts
@@ -3020,7 +3012,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "faa6ebb5-e6bf-44f1-a655-64a38b8b936d")
+		(uuid "5f9cc2e8-9cd5-44bb-aafb-a97da430b03a")
 	)
 	(wire
 		(pts
@@ -3030,7 +3022,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "342d704e-6f1e-4273-904a-f1e98508a5be")
+		(uuid "0151c2e2-87f3-459e-a331-7e90e83cfda8")
 	)
 	(wire
 		(pts
@@ -3040,7 +3032,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "d07bd782-1a23-4e79-9669-75f39921ba7f")
+		(uuid "d455134a-9bd1-4f15-9025-b0dfee828922")
 	)
 	(wire
 		(pts
@@ -3050,7 +3042,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "83c13822-8f08-4dfc-a1aa-1954f855b0de")
+		(uuid "94498e19-d582-4e43-8897-10dc8d2c4b49")
 	)
 	(wire
 		(pts
@@ -3060,7 +3052,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "f8ca3f39-340a-4be5-92ce-c5b108d9dcee")
+		(uuid "ec5805d4-80cc-4613-82e9-053cddf55b40")
 	)
 	(wire
 		(pts
@@ -3070,7 +3062,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "d6147b25-0149-43c0-bc5c-c448017a0bf0")
+		(uuid "ee78e29c-3135-4ffd-bffc-eff9fecb431c")
 	)
 	(wire
 		(pts
@@ -3080,7 +3072,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "3f31d139-b3ee-4bb2-9ea8-c688887a4c43")
+		(uuid "62ce5fc1-4ab8-4d02-ab41-d50ac8b02e4d")
 	)
 	(wire
 		(pts
@@ -3090,7 +3082,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "13ed713a-a2cf-487c-b35c-b45e74fd6077")
+		(uuid "752b143e-1c19-4a26-b202-3c4aa7360bd1")
 	)
 	(wire
 		(pts
@@ -3100,55 +3092,55 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "081e74b3-de8e-4bc1-bf8d-1786c84916ef")
+		(uuid "c21a81a3-7b0a-4815-9395-96cd4d5b4e85")
 	)
 	(junction
 		(at 43.18 123.19)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "5f1fee7c-0f17-4e6e-b522-6f4729cec8dd")
+		(uuid "62f68ebd-ee26-4ab8-8040-09dc307f176b")
 	)
 	(junction
 		(at 43.18 130.81)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "c2d6c751-593d-487c-8161-3c3b7a7c6437")
+		(uuid "bc43e3b4-f70b-47c5-bf1f-47d2c1532273")
 	)
 	(junction
 		(at 78.74 123.19)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "ec2c9e13-4cc5-46db-a062-30b836967f9b")
+		(uuid "80fc9056-11d7-437d-8fde-822e9b176080")
 	)
 	(junction
 		(at 78.74 130.81)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "c23be4b9-47cb-4d17-8947-9578894579ff")
+		(uuid "c1ca3c11-7e0f-4815-afe3-638c9009d12d")
 	)
 	(junction
 		(at 114.3 123.19)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "e3938840-285a-4b37-85cf-0ebf06ab57d9")
+		(uuid "c8df8ff7-5ebc-4eab-a15e-b5ae8c4dfbb3")
 	)
 	(junction
 		(at 114.3 130.81)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "9152222a-7da7-46e3-9643-32f21df56151")
+		(uuid "ea051b45-74e9-4225-9174-08745d8617ca")
 	)
 	(junction
 		(at 149.86 123.19)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "8687328e-d869-4c60-b41d-e8c8a69841ce")
+		(uuid "a265128e-c436-4140-9e1c-e541c55c8967")
 	)
 	(junction
 		(at 149.86 130.81)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "b1cf9214-7162-430c-a5e1-34a2752680f0")
+		(uuid "7b525150-a3bd-40fa-b50b-3b55ab26c1f3")
 	)
 	(label "INV"
 		(at 35.56 45.72 0)
@@ -3158,7 +3150,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "80fdce22-2a47-4067-8dc9-465392dd8eae")
+		(uuid "e489db5e-3675-4289-91c5-4e7e044c1b2d")
 	)
 	(label "OUT"
 		(at 127 45.72 0)
@@ -3168,7 +3160,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "038a3302-3949-491e-a497-0dabadffdf57")
+		(uuid "cea0b193-1de1-482f-86f8-c656cbe36320")
 	)
 	(label "GP1.0"
 		(at 1.27 157.48 0)
@@ -3178,7 +3170,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "039ee67c-12ca-44a1-8bdb-92114b5e7e9a")
+		(uuid "b3d52cba-6349-41bf-944f-6181ad9c34cd")
 	)
 	(label "GP1.1"
 		(at 36.83 157.48 0)
@@ -3188,7 +3180,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "7028657f-4c70-4dc7-83c8-9ccc033d9eca")
+		(uuid "2c753d1f-de0b-438e-9220-4788bd184357")
 	)
 	(label "GP1.2"
 		(at 72.39 157.48 0)
@@ -3198,7 +3190,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "a83f9c94-00d0-4703-8a33-0689fc7d7752")
+		(uuid "3cc04412-b70c-42cd-8dc1-4da1904dbcca")
 	)
 	(label "GP1.3"
 		(at 107.95 157.48 0)
@@ -3208,7 +3200,63 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "b4c6e5a3-4e30-4e6d-9b81-fe69f7681f4e")
+		(uuid "f9cb2c76-919f-44df-a366-47f4ee847da8")
+	)
+	(text "RELAY RANGE-SWITCHING LADDER"
+		(exclude_from_sim no)
+		(at 20.32 15.24 0.0000)
+		(effects
+			(font
+				(size 4 4)
+				(bold yes)
+			)
+			(justify left)
+		)
+		(uuid "ce798ad6-6c01-42d4-a258-88e44260ef05")
+	)
+	(text "4 decades: Rf = 10M / 100M / 1G / 10G (reed relay SPST)"
+		(exclude_from_sim no)
+		(at 20.32 30.48 0.0000)
+		(effects
+			(font
+				(size 2.5 2.5)
+			)
+			(justify left)
+		)
+		(uuid "b2384da4-2913-4181-b99c-368496cf0957")
+	)
+	(text "FUNCTION: Selects TIA feedback resistor via SPST reed relays."
+		(exclude_from_sim no)
+		(at 20.32 43.18 0.0000)
+		(effects
+			(font
+				(size 1.8 1.8)
+			)
+			(justify left)
+		)
+		(uuid "6947f751-cfe5-4385-a635-e17a7f6f8654")
+	)
+	(text "MCU GPIO drives NPN transistor coil drivers. Flyback diodes protect"
+		(exclude_from_sim no)
+		(at 20.32 53.34 0.0000)
+		(effects
+			(font
+				(size 1.8 1.8)
+			)
+			(justify left)
+		)
+		(uuid "3d8c1995-a4e4-433a-b983-0bf5fb25637c")
+	)
+	(text "against relay coil back-EMF. Only one relay closed at a time."
+		(exclude_from_sim no)
+		(at 20.32 63.5 0.0000)
+		(effects
+			(font
+				(size 1.8 1.8)
+			)
+			(justify left)
+		)
+		(uuid "c4be453a-a0f8-4148-9489-d9e905f0a2f7")
 	)
 	(sheet_instances
 		(path "/"

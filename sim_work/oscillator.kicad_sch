@@ -2,7 +2,7 @@
 	(version 20250114)
 	(generator "eeschema")
 	(generator_version "9.0")
-	(uuid "075f6cc2-500d-4818-87f7-12acd1047ab1")
+	(uuid "de47d635-bb16-490a-9463-fbb7ddc35300")
 	(paper "A3")
 	(title_block
 		(title "State Variable Oscillator - ADuCM362 + DAC7800 + AD636")
@@ -790,6 +790,9 @@
 			(embedded_fonts no)
 		)
 		(symbol "D:D"
+			(pin_numbers
+				(hide yes)
+			)
 			(pin_names
 				(offset 1.016)
 				(hide yes)
@@ -828,7 +831,7 @@
 					)
 				)
 			)
-			(property "Datasheet" "https://ngspice.sourceforge.io/docs/ngspice-html-manual/manual.xhtml#cha_DIODEs"
+			(property "Datasheet" ""
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -839,7 +842,7 @@
 					)
 				)
 			)
-			(property "Description" "Diode for simulation or PCB"
+			(property "Description" "Diode"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -872,18 +875,7 @@
 					)
 				)
 			)
-			(property "Sim.Params" "rs=50m cjo=10p"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "simulation"
+			(property "ki_keywords" "diode"
 				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
@@ -994,7 +986,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "da358697-6928-4690-bb21-81566c785748")
+		(uuid "e0dbe5c3-0dc9-4771-94de-81ce18da329a")
 		(property "Reference" "U1"
 			(at 121.92 107.95 0.0000)
 			(effects
@@ -1014,32 +1006,32 @@
 			)
 		)
 		(pin "1"
-			(uuid "7f4ee343-5fd9-458f-9dc5-3a393f8ef4e9")
+			(uuid "a0152f04-bc9e-4a73-a6a5-d0c0c78395bf")
 		)
 		(pin "2"
-			(uuid "996fb7bb-55c1-461f-b0a5-938d814af0b7")
+			(uuid "b9976d39-8479-4e78-a9ae-c2a2ae737cd3")
 		)
 		(pin "3"
-			(uuid "74ba093b-7f04-4442-b63d-b2ece9ebc3bd")
+			(uuid "afb95b98-dc4c-485b-ba75-298d7393377b")
 		)
 		(pin "4"
-			(uuid "48f29449-6f04-41e3-b546-f2207ca2b3b6")
+			(uuid "5695d74f-57c4-4142-9a81-58687edb98bb")
 		)
 		(pin "5"
-			(uuid "53123e6f-a76f-4504-bd61-28cae81e607c")
+			(uuid "a17e1e09-ea31-4093-ad5e-b0a0a76e5509")
 		)
 		(pin "6"
-			(uuid "7aa5a65c-661b-414c-9e01-1d803e6cf8fc")
+			(uuid "72611668-fe88-4ce0-a83e-4c54b5b5fe5a")
 		)
 		(pin "7"
-			(uuid "cbd9d8d3-d570-45f7-b5bf-f990ac4328bd")
+			(uuid "7bb2f15b-ad0b-4d35-8261-bafd58d17926")
 		)
 		(pin "8"
-			(uuid "ffe9791e-a417-406d-9552-fffaaa7d6a6b")
+			(uuid "764bc2e3-294b-4ba2-bac7-d768f7a21f5b")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "U1")
 					(unit 1)
 				)
@@ -1055,7 +1047,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "7b4ece31-d8c1-4f12-a8d9-ef538e876ab3")
+		(uuid "5a57aabb-2629-4f4b-9308-8c28c359b04b")
 		(property "Reference" "R1"
 			(at 63.5 75.692 180)
 			(effects
@@ -1075,14 +1067,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "99fba01a-66d7-4c85-a4b8-650b27f678ef")
+			(uuid "7b739f04-f3ae-4a93-a764-ad598317e60d")
 		)
 		(pin "2"
-			(uuid "fdcbf786-e5b2-43ae-8965-0ec4470d4324")
+			(uuid "61511047-5c33-47cd-9a39-27d9792d6de4")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "R1")
 					(unit 1)
 				)
@@ -1098,7 +1090,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "a3ce6347-c2ff-4b76-8b06-8599432bb20d")
+		(uuid "8c18a244-3809-4ea7-a5dd-ce5b596dd3d0")
 		(property "Reference" "R2"
 			(at 63.5 101.092 180)
 			(effects
@@ -1118,14 +1110,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "01c69035-b239-45ef-92cf-0cc49aa0eb9b")
+			(uuid "2b9b29d6-42aa-446f-9cbf-4a271172f5b6")
 		)
 		(pin "2"
-			(uuid "1d3e5f25-4517-4a92-9653-8431f75a3ef8")
+			(uuid "eb1d8484-d72c-4126-8a85-4b4992f95f8d")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "R2")
 					(unit 1)
 				)
@@ -1141,7 +1133,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "52326cc7-21b6-4bd8-ad4d-36aaee6bc77c")
+		(uuid "df9fc8d1-84fb-46ca-a80d-ae46477515e4")
 		(property "Reference" "R3"
 			(at 114.3 85.852 180)
 			(effects
@@ -1161,14 +1153,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "aeed33ee-2050-412d-91c6-58536e76666e")
+			(uuid "23a53fb1-db0f-4c54-94a8-be4d7cf408be")
 		)
 		(pin "2"
-			(uuid "1d6463cd-6488-4c2c-8959-6deef804e57d")
+			(uuid "2b6907b0-2ea2-4f6b-b221-86679e478fd5")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "R3")
 					(unit 1)
 				)
@@ -1184,7 +1176,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "9fad3475-9c45-438f-a1e9-984cbebefc67")
+		(uuid "0fd070ab-2ec2-4edb-9ca2-219322692bec")
 		(property "Reference" "#PWR001"
 			(at 114.3 113.03 0.0000)
 			(hide yes)
@@ -1205,11 +1197,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "d26fc100-fd91-4430-be1e-17b7522bf2cd")
+			(uuid "2618919a-2093-4dce-b3c4-acee91dcf4d2")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "#PWR001")
 					(unit 1)
 				)
@@ -1225,7 +1217,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "46b1766b-e28d-4b5e-92a3-ef0dbc6c6859")
+		(uuid "04a9f429-55b4-480e-976b-8a872259ad1f")
 		(property "Reference" "#PWR002"
 			(at 119.38 74.93 0.0000)
 			(hide yes)
@@ -1246,11 +1238,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "352976e9-83e2-4b24-bfb7-8419f34bc04c")
+			(uuid "e8c6d278-d7c0-4e02-aba9-2d5c68a49544")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "#PWR002")
 					(unit 1)
 				)
@@ -1267,7 +1259,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "0f518479-28f8-4c94-98f3-aec61e15f67c")
+		(uuid "e5a7eae1-9390-4767-bc0e-fe868aeda87a")
 		(property "Reference" "U2"
 			(at 241.3 120.65 0.0000)
 			(effects
@@ -1287,32 +1279,32 @@
 			)
 		)
 		(pin "1"
-			(uuid "26d24a1c-88c2-4926-848f-b8733c6babdd")
+			(uuid "484d4112-0c92-4993-b5e2-5cecad6e88ca")
 		)
 		(pin "2"
-			(uuid "05bd84f2-8e41-4333-906b-be3afe94a843")
+			(uuid "adbe5bc8-fb37-40cd-9ec4-91b03ea2457f")
 		)
 		(pin "3"
-			(uuid "4c36c993-e9bf-4d06-8a08-9f54446f87a8")
+			(uuid "461eac92-1a90-4784-a180-043611dc165a")
 		)
 		(pin "4"
-			(uuid "7247cc49-0ceb-48dd-b873-19da25008992")
+			(uuid "0ced4ea5-69ba-4372-b58e-5311e35a9d3b")
 		)
 		(pin "5"
-			(uuid "1c06f4c1-734e-445e-9f2e-c1cd599766d9")
+			(uuid "79d03a2b-14d9-44ce-bd5e-d6ad3c836742")
 		)
 		(pin "6"
-			(uuid "fee882d6-efa2-45c7-ae61-fce61a839a10")
+			(uuid "ecf86aa1-6d82-4435-b521-54d7edeb6195")
 		)
 		(pin "7"
-			(uuid "5e1dd7b1-5045-44e9-b9d5-52e706b3739f")
+			(uuid "9b472a23-9050-452b-a4de-1091c50b0713")
 		)
 		(pin "8"
-			(uuid "88bc352d-dcc9-4c7e-a1d3-ee9b8a6114c0")
+			(uuid "5f7b7f34-982f-482a-b632-405741f49731")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "U2")
 					(unit 1)
 				)
@@ -1328,7 +1320,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "783172bc-ad9d-4d19-8338-6d10849b3723")
+		(uuid "04652f63-2d33-4627-9ef3-d33307e071e0")
 		(property "Reference" "R4"
 			(at 198.12 113.792 180)
 			(effects
@@ -1348,14 +1340,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "154b97dd-c72c-4b96-b5f4-c0ae06719843")
+			(uuid "c0fc7ccd-298e-41e0-b756-53dc4bdb5b0d")
 		)
 		(pin "2"
-			(uuid "bb8000a5-2f4b-4627-b023-fe2347814960")
+			(uuid "fd2103e4-f221-46a4-bd96-76d6c8057491")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "R4")
 					(unit 1)
 				)
@@ -1371,7 +1363,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "212cff57-b5ee-44f7-8bec-bcca174150b4")
+		(uuid "0055be13-4d92-40f1-9c26-2911e2b1dff3")
 		(property "Reference" "C1"
 			(at 238.76 97.155 90)
 			(effects
@@ -1391,14 +1383,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "00965af9-b9f6-4bed-9f64-918ee9645b86")
+			(uuid "04bd5461-167a-422a-aa0a-da044316eb6d")
 		)
 		(pin "2"
-			(uuid "8b5ad1f2-d90b-480f-b520-1b9e4202a30e")
+			(uuid "aa5b45ab-1427-48ca-b0c5-7e8546423edc")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "C1")
 					(unit 1)
 				)
@@ -1414,7 +1406,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "93c3444e-7bff-4cf7-89a5-bfc2b2c915f0")
+		(uuid "50efcd45-5a7f-4c9c-95c5-b6bf4a1a8058")
 		(property "Reference" "R5"
 			(at 241.3 88.392 180)
 			(effects
@@ -1434,14 +1426,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "4c9db25d-0ffd-424b-a34f-1cd5f2689117")
+			(uuid "9aaa393e-c253-4c5c-b4e3-0c87d154ff83")
 		)
 		(pin "2"
-			(uuid "271ac454-5ce5-48b6-a479-f93029f2355c")
+			(uuid "9b68804d-87cf-47bc-bbc2-9ca788835178")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "R5")
 					(unit 1)
 				)
@@ -1457,7 +1449,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "0270b1ae-d4c4-4a72-9275-3259bf7ba836")
+		(uuid "b610138a-6bba-4d07-a0d4-b141d9290aea")
 		(property "Reference" "D1"
 			(at 228.6 78.74 0.0000)
 			(effects
@@ -1477,14 +1469,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "41e85868-78c7-4e43-823a-caaffb6c32b0")
+			(uuid "2ed65eba-49c9-42b7-bb90-2cfe1e4b84f9")
 		)
 		(pin "2"
-			(uuid "f9f58abb-242a-412b-b1c7-fb93372d5669")
+			(uuid "794ffb6d-1b77-42fb-bbb7-f3d0e2802b29")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "D1")
 					(unit 1)
 				)
@@ -1500,7 +1492,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "bb7c1bc4-5bae-4cc4-a98e-3ce8b4cf3538")
+		(uuid "db56c27b-4383-4f47-9a81-9a7048528b37")
 		(property "Reference" "D2"
 			(at 254 73.66 180)
 			(effects
@@ -1520,14 +1512,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "54d24457-e5e7-425b-bae6-9fe950e23e95")
+			(uuid "54695548-e36d-4b59-8a59-32d2d1c14201")
 		)
 		(pin "2"
-			(uuid "572cd052-ef3b-445a-b07a-a56d87d9b330")
+			(uuid "b30cb557-1372-47e1-a9bf-4a0179f783d9")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "D2")
 					(unit 1)
 				)
@@ -1543,7 +1535,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "61a00e9b-467f-4b16-a293-5c963c554a40")
+		(uuid "bf28a325-11fa-4845-a4a6-0cabe812f2e5")
 		(property "Reference" "#PWR003"
 			(at 233.68 125.73 0.0000)
 			(hide yes)
@@ -1564,11 +1556,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "848cad50-31e3-4a03-8dd1-a23fd1c7262c")
+			(uuid "1f69707d-c586-4485-bdcb-55ca46c340be")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "#PWR003")
 					(unit 1)
 				)
@@ -1584,7 +1576,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "dcf4d277-e3f9-44a2-82fb-4e5c790ae912")
+		(uuid "bbd89f56-80bb-41ed-bc60-8eb989606191")
 		(property "Reference" "#PWR004"
 			(at 238.76 95.25 0.0000)
 			(hide yes)
@@ -1605,11 +1597,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "0dd2c80a-969c-4626-b23a-e07714c7afb8")
+			(uuid "c334abf0-949c-4152-a587-bc9ff5cd32b1")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "#PWR004")
 					(unit 1)
 				)
@@ -1625,7 +1617,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "9a83e9fc-c9d2-4abd-b388-8a2e3ad56dd2")
+		(uuid "ca337af2-1fd7-430c-8c9c-a4da7a6a5d43")
 		(property "Reference" "R10"
 			(at 279.4 103.632 180)
 			(effects
@@ -1645,14 +1637,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "6a6bb3a0-b238-4840-9225-fa6ac8172027")
+			(uuid "e1dfa61f-bde2-45ae-8971-ad12a32529a3")
 		)
 		(pin "2"
-			(uuid "01cb8efb-9e49-4fc6-91ab-b1cd6e804b55")
+			(uuid "3ebe4257-02a8-481c-910c-bb64ce0370c1")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "R10")
 					(unit 1)
 				)
@@ -1668,7 +1660,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "d8e8d920-b465-45a9-b7c4-f3db4111275a")
+		(uuid "2207c801-32b8-4e5d-ba35-691827f99d33")
 		(property "Reference" "R11"
 			(at 300.482 121.92 90)
 			(effects
@@ -1688,14 +1680,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "1011f10f-b27a-4e2d-8824-72ef051f6b47")
+			(uuid "c2f40597-6927-4435-b48c-1f97d34272c4")
 		)
 		(pin "2"
-			(uuid "511231ea-7c1c-4dce-a30b-547623912d6b")
+			(uuid "7f685d0d-7b25-441c-a25b-114dcd277152")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "R11")
 					(unit 1)
 				)
@@ -1711,7 +1703,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "7524577f-7d86-4116-bc95-d086315fb3aa")
+		(uuid "785880b4-3ee5-4cc4-967f-0fce04497e9f")
 		(property "Reference" "#PWR005"
 			(at 298.45 132.08 0.0000)
 			(hide yes)
@@ -1732,11 +1724,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "03a3b542-ec9a-42d9-b2ca-ec8683e9f5b8")
+			(uuid "21806a87-18f3-4c78-8428-cdd7f55c0201")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "#PWR005")
 					(unit 1)
 				)
@@ -1752,7 +1744,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "50ecce26-ed64-44ad-abc0-af7c3a688dca")
+		(uuid "2b617316-339d-4974-8111-eaf8a6713ef7")
 		(property "Reference" "C3"
 			(at 360.045 124.46 0.0000)
 			(effects
@@ -1772,14 +1764,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "3c8b0ae7-9421-4285-82e6-b5f1667c196e")
+			(uuid "87feb0f0-3d35-49e2-9e97-d7173439af5a")
 		)
 		(pin "2"
-			(uuid "328d4c83-5caa-40d1-8bb9-64f38dadb2be")
+			(uuid "0e5d8836-2b2b-4f6d-971e-341eb53ae0e1")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "C3")
 					(unit 1)
 				)
@@ -1795,7 +1787,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "353a1835-7e52-4a52-9f20-c5abd3f7b2dd")
+		(uuid "69dd1d0b-94e9-4b4f-9448-800c390a6c46")
 		(property "Reference" "#PWR006"
 			(at 359.41 132.08 0.0000)
 			(hide yes)
@@ -1816,11 +1808,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "23b6ab13-8673-48c4-bff0-a633e72cf6dd")
+			(uuid "dc739f67-349d-4382-8aff-1316480900d9")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "#PWR006")
 					(unit 1)
 				)
@@ -1837,7 +1829,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "71ffc161-098d-408c-a354-5e3194958be7")
+		(uuid "f76021a2-8c02-4df6-abed-96411d3e3a3e")
 		(property "Reference" "U3"
 			(at 134.62 234.95 0.0000)
 			(effects
@@ -1857,32 +1849,32 @@
 			)
 		)
 		(pin "1"
-			(uuid "dc46d9b6-cef2-4e9d-a903-779af52fd4d0")
+			(uuid "3003d0f4-daf3-40dc-b39d-a51309a19cd1")
 		)
 		(pin "2"
-			(uuid "b22afcd7-dd7d-4e5c-b3a5-65a8b839b77b")
+			(uuid "6960b45f-86df-4a5c-ae6c-556699d0074d")
 		)
 		(pin "3"
-			(uuid "b49e240f-3e8b-43e1-8dd4-c6f07a82b90a")
+			(uuid "49a07f2d-bb3f-405b-90fe-daeb6d8469a9")
 		)
 		(pin "4"
-			(uuid "133c7a9f-5942-4b72-bdfc-50eb2b74fee6")
+			(uuid "af91e576-0524-434a-ad89-de82ecd60777")
 		)
 		(pin "5"
-			(uuid "03d943cc-c2b9-46c2-ba67-784711e6c99b")
+			(uuid "88e20979-313e-4a5e-b735-39ad37ae9e64")
 		)
 		(pin "6"
-			(uuid "24133289-689c-4f5b-bb6c-af7eb8451fa2")
+			(uuid "d7091557-6b5a-4e55-93cd-d11ad6723843")
 		)
 		(pin "7"
-			(uuid "8880b9e3-f8e8-4f9c-98ea-4913e81b5fb8")
+			(uuid "7f095d98-25da-4636-9d34-7da8167c7874")
 		)
 		(pin "8"
-			(uuid "0ade2689-a091-4a41-86e5-35b2717f345d")
+			(uuid "1023efea-f90d-4051-81c7-5e2597b59fa6")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "U3")
 					(unit 1)
 				)
@@ -1898,7 +1890,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "4c7dbe29-0746-4ad0-b524-244ab40d179a")
+		(uuid "61b7115b-0191-4dfd-91af-5bed98e524f3")
 		(property "Reference" "R6"
 			(at 91.44 228.092 180)
 			(effects
@@ -1918,14 +1910,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "2f7de729-7006-4028-87fc-56667d0b3693")
+			(uuid "a84c707b-5e91-447c-b049-284adec6c6a6")
 		)
 		(pin "2"
-			(uuid "6bc9c3ff-41a0-40a2-a599-db4c7568bed5")
+			(uuid "291cbaf8-1e42-4ca0-9de6-602cb813af68")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "R6")
 					(unit 1)
 				)
@@ -1941,7 +1933,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "fe48842c-86d6-41a7-b377-c22982518c7c")
+		(uuid "cc359617-9e51-44ae-9c1d-9d4a4f3b68e8")
 		(property "Reference" "C2"
 			(at 132.08 211.455 90)
 			(effects
@@ -1961,14 +1953,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "780269c8-b912-4078-accb-b78906ac2fba")
+			(uuid "eb2a5f4b-d50e-49a1-b4cd-fbf77f26fbc6")
 		)
 		(pin "2"
-			(uuid "7d37aa82-4543-4160-a859-e212d586cfd8")
+			(uuid "53ec486d-b097-456c-9987-2e9ca3537f7f")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "C2")
 					(unit 1)
 				)
@@ -1984,7 +1976,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "a75cfae3-32cd-4bed-b023-2008a1edbc3d")
+		(uuid "ef4e5ce7-db65-4e8a-b832-649e2d831a8f")
 		(property "Reference" "R7"
 			(at 134.62 202.692 180)
 			(effects
@@ -2004,14 +1996,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "8e65888f-829f-4435-ac3f-18906512d1ee")
+			(uuid "78f01284-462a-45b9-975e-9131abe21d79")
 		)
 		(pin "2"
-			(uuid "a8909d96-d755-4cef-814d-6a16c8515e41")
+			(uuid "bd6c5efb-1d51-4441-ab38-73ebf9a65340")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "R7")
 					(unit 1)
 				)
@@ -2027,7 +2019,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "53a3265d-1d6f-47c9-99e6-9505ce8525fc")
+		(uuid "0843ef39-88b5-48a2-a1c5-ea0f9fcb0c4f")
 		(property "Reference" "D3"
 			(at 121.92 193.04 0.0000)
 			(effects
@@ -2047,14 +2039,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "1613a856-7cda-4b6b-a756-98c76f846a97")
+			(uuid "dca0b0fb-996c-44b8-886a-67e6b90d3130")
 		)
 		(pin "2"
-			(uuid "dac3378f-3a46-43e6-ba79-1066106e19fd")
+			(uuid "7306ebd5-ea5c-4bd2-89b1-79750bcceacc")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "D3")
 					(unit 1)
 				)
@@ -2070,7 +2062,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "83ab931f-5e49-45ea-b230-49b4702ac683")
+		(uuid "4d8e4249-fa2b-479e-ae4d-149d37f096a0")
 		(property "Reference" "D4"
 			(at 147.32 187.96 180)
 			(effects
@@ -2090,14 +2082,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "dc1b8747-a743-4812-aa74-88bf216e558d")
+			(uuid "20509721-623d-4174-87f3-f78370f03f45")
 		)
 		(pin "2"
-			(uuid "d5209578-0d4b-49c9-a36c-78335f6d8d2d")
+			(uuid "fc58ceb3-82f4-45a0-909c-c440ed944dff")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "D4")
 					(unit 1)
 				)
@@ -2113,7 +2105,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "5d62a89c-fc61-48b2-b681-bdf24801af6b")
+		(uuid "b5427023-1bb1-4a47-b135-4499220825c1")
 		(property "Reference" "#PWR007"
 			(at 127 240.03 0.0000)
 			(hide yes)
@@ -2134,11 +2126,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "578a5aa8-ffdd-463c-a61c-9523ebb5205c")
+			(uuid "46eb61d2-9d8a-4b78-bc9f-7a658f61ce20")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "#PWR007")
 					(unit 1)
 				)
@@ -2154,7 +2146,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "5b2d56ae-6ce7-4743-a410-d9cb80e86b07")
+		(uuid "7cee8acb-686a-4a5d-bcaf-0be24a61f186")
 		(property "Reference" "#PWR008"
 			(at 132.08 209.55 0.0000)
 			(hide yes)
@@ -2175,11 +2167,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "18ef0105-02ae-4c65-b1dc-1e1f0b257be6")
+			(uuid "c7369131-1e6e-4344-aaf3-c27244e8b5f5")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "#PWR008")
 					(unit 1)
 				)
@@ -2195,7 +2187,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "ca5bac75-30b2-45ed-81d0-423a65e401e9")
+		(uuid "4a11751c-cfb9-42e7-9fdb-522e6d38deba")
 		(property "Reference" "R8"
 			(at 184.912 254 90)
 			(effects
@@ -2215,14 +2207,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "34175bbc-405c-4b5d-8a72-8d66432e2c5b")
+			(uuid "ff275168-68d3-4e54-a699-b1f84e4941a6")
 		)
 		(pin "2"
-			(uuid "bdea8225-12f1-44ff-8934-5d1b6647f908")
+			(uuid "5ca07b97-4316-4099-b64f-f1c6081c94fd")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "R8")
 					(unit 1)
 				)
@@ -2238,7 +2230,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "20311198-fc17-48ca-80ec-bd80ea29170b")
+		(uuid "bdcdf37c-7310-450c-bea1-346cbbbdc820")
 		(property "Reference" "#PWR009"
 			(at 182.88 264.16 0.0000)
 			(hide yes)
@@ -2259,11 +2251,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "a93eb254-5d15-4e96-b598-8cb50e99c03c")
+			(uuid "b03e200a-6947-4c9f-bcd2-09726b3f26c3")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "#PWR009")
 					(unit 1)
 				)
@@ -2279,7 +2271,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "b86b8a73-7d74-4843-9d42-85109590ce35")
+		(uuid "8dd6c95e-fa56-41a1-8989-1496d1540b3d")
 		(property "Reference" "R9"
 			(at 152.4 192.532 180)
 			(effects
@@ -2299,14 +2291,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "2abd9d8b-8cd9-482c-b5b4-6499a5588fa5")
+			(uuid "02030896-6bd2-44e5-b5bd-b1a5792d4bee")
 		)
 		(pin "2"
-			(uuid "537ce829-2f7b-4a9c-a33a-68ee27ea4e82")
+			(uuid "e7244756-6b4f-460e-8fc7-21db2f52399b")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "R9")
 					(unit 1)
 				)
@@ -2322,7 +2314,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "cb6c885f-2750-4339-95a0-56d25df067f7")
+		(uuid "8db1fa15-6b1c-4e3c-962d-7a769ca73e43")
 		(property "Reference" "#PWR010"
 			(at 148.59 204.47 0.0000)
 			(hide yes)
@@ -2343,11 +2335,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "9381f957-02ed-4c22-b16e-a1e9a7d1c659")
+			(uuid "a72f3481-ab75-4722-bf5e-4b870f933adc")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "#PWR010")
 					(unit 1)
 				)
@@ -2363,7 +2355,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "b8b85146-0ebb-4578-ab23-25b241eaa148")
+		(uuid "5d0f3227-16e4-4f0a-ac8d-43075f0cd972")
 		(property "Reference" "C6"
 			(at 153.035 248.92 0.0000)
 			(effects
@@ -2383,14 +2375,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "9b747aca-8156-4688-80e7-41af4931afa8")
+			(uuid "bbe37b4f-467e-45e0-82f3-51bb041c4a57")
 		)
 		(pin "2"
-			(uuid "c6d7202b-8611-4253-b56e-45bc0133bbbe")
+			(uuid "7774527c-e2ae-4a0b-a279-14690bd0acaa")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "C6")
 					(unit 1)
 				)
@@ -2406,7 +2398,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "18c0bc91-3cd2-4c64-9a23-bb81189b9a89")
+		(uuid "86e50534-47fd-47d7-af18-7ee8b07a0377")
 		(property "Reference" "#PWR011"
 			(at 152.4 256.54 0.0000)
 			(hide yes)
@@ -2427,11 +2419,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "109a6d3e-3f0a-4a81-a216-ed02d7e0507f")
+			(uuid "4d76c7a7-44e9-471c-b097-885857921321")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "#PWR011")
 					(unit 1)
 				)
@@ -2447,7 +2439,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "b4f43570-5374-440e-a315-6cd1e2f1f3a5")
+		(uuid "bf4596e7-6b37-4d66-afd7-a85d0a8c07e3")
 		(property "Reference" "#PWR012"
 			(at 208.28 222.25 0.0000)
 			(hide yes)
@@ -2468,11 +2460,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "e3aff915-cd5f-4cf5-80e7-2f45bfcd693a")
+			(uuid "3f8a6293-3cc4-4e52-bee6-bb767d04893e")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "#PWR012")
 					(unit 1)
 				)
@@ -2488,7 +2480,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "99c9b896-5b38-4926-8ea5-c7596300666a")
+		(uuid "e06a17e3-3db3-45c5-80de-afb9a832a13e")
 		(property "Reference" "C7"
 			(at 208.915 248.92 0.0000)
 			(effects
@@ -2508,14 +2500,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "4e14645d-82d8-4f72-a1e6-6bc7b36b19fc")
+			(uuid "f2b4babe-9a5f-4fff-840e-e61e4c2bcbf6")
 		)
 		(pin "2"
-			(uuid "97dbaf9d-8d8d-45b8-b2f7-4941e820a30c")
+			(uuid "86a05297-23f2-4e36-8e93-dfc229a8fb67")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "C7")
 					(unit 1)
 				)
@@ -2531,7 +2523,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "2b52d816-887a-48a9-9c89-ff59d7db63d9")
+		(uuid "1a16f81b-df2a-4af8-9bd7-eff881e5d623")
 		(property "Reference" "#PWR013"
 			(at 208.28 256.54 0.0000)
 			(hide yes)
@@ -2552,11 +2544,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "3d63d510-7d87-4372-b4aa-96264ed9fd8c")
+			(uuid "83fa1649-bf86-4a93-94e4-d2b867f08c2d")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "#PWR013")
 					(unit 1)
 				)
@@ -2572,7 +2564,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "c223d401-5315-49de-9fd2-7655d4b4858f")
+		(uuid "93a932b8-4179-4483-8c51-9250b95e5104")
 		(property "Reference" "C8"
 			(at 264.795 248.92 0.0000)
 			(effects
@@ -2592,14 +2584,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "92020b9b-5d44-4bb0-9d9b-1e097c5c29bd")
+			(uuid "b64938ff-59da-42ab-a7ae-316f413ee5a1")
 		)
 		(pin "2"
-			(uuid "9762573b-b65a-4ea2-864f-cc2aa9c2a961")
+			(uuid "638d2322-fe40-4a6a-a612-bbd069afcc1c")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "C8")
 					(unit 1)
 				)
@@ -2615,7 +2607,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "f080149e-e6ed-45d1-9f9b-0fc832a5ba2f")
+		(uuid "88381546-1c39-48cf-8585-69e01f889a66")
 		(property "Reference" "#PWR014"
 			(at 264.16 256.54 0.0000)
 			(hide yes)
@@ -2636,11 +2628,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "7d74f9f3-ce6e-4105-b1ce-17e85c2d0838")
+			(uuid "48c1c9dc-6248-4578-8639-00b0a0b6bba9")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "#PWR014")
 					(unit 1)
 				)
@@ -2656,7 +2648,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "7bcd2734-13fc-43c3-af04-a68403d30c62")
+		(uuid "4b6cd6f6-9c7e-47f6-bd89-45e5df570f32")
 		(property "Reference" "#PWR015"
 			(at 322.58 295.91 0.0000)
 			(hide yes)
@@ -2677,11 +2669,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "a2604068-fdff-4398-9285-f8cb86b030cf")
+			(uuid "b9b996e4-f840-4690-9255-1d1cadafcb8d")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "#PWR015")
 					(unit 1)
 				)
@@ -2697,7 +2689,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "92b9ddfe-356c-49f2-b354-10281a776bd3")
+		(uuid "7501e353-a4a2-4fdb-8217-b743e947ba01")
 		(property "Reference" "C4"
 			(at 348.615 198.12 0.0000)
 			(effects
@@ -2717,14 +2709,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "54d84646-6f09-499b-ad53-9c8356768f2c")
+			(uuid "1f7bedbf-c72c-42a1-89f8-e4d2fbe121aa")
 		)
 		(pin "2"
-			(uuid "6a503f13-cc26-4b7e-800b-4a01e8affeb4")
+			(uuid "a5dc3905-4193-495d-ad8f-5b129a6102b7")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "C4")
 					(unit 1)
 				)
@@ -2740,7 +2732,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "56f92b24-fc2b-46b2-85f2-5670351345fa")
+		(uuid "d4ed3866-81b7-4265-aea1-b8acca63a6c4")
 		(property "Reference" "#PWR016"
 			(at 347.98 200.66 0.0000)
 			(hide yes)
@@ -2761,11 +2753,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "94f92944-8cf2-4090-b60e-49954f04304e")
+			(uuid "870652e1-0150-410c-8a66-5486bfc43f58")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "#PWR016")
 					(unit 1)
 				)
@@ -2781,7 +2773,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "11f8c343-7160-402a-bbea-9282810287cd")
+		(uuid "82139af4-eb93-4b08-a603-dfe24ed1ac37")
 		(property "Reference" "C5"
 			(at 368.935 198.12 0.0000)
 			(effects
@@ -2801,14 +2793,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "987c7baf-70bc-49c6-81a4-f7f317fac8db")
+			(uuid "34ec8407-37ef-4c17-8584-b4e22a02eb81")
 		)
 		(pin "2"
-			(uuid "3f70ec57-ed0c-4d7b-93db-85bc555c9dfe")
+			(uuid "7e41fbc4-938f-4f74-b5c5-ec90522031db")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "C5")
 					(unit 1)
 				)
@@ -2824,7 +2816,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "749dc572-4755-48af-8674-c3cb0042f05c")
+		(uuid "34aac31f-9004-475c-8603-7972089df626")
 		(property "Reference" "#PWR017"
 			(at 368.3 200.66 0.0000)
 			(hide yes)
@@ -2845,11 +2837,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "08ba53b4-3848-4f37-a8d0-b277d00e29a2")
+			(uuid "5f8161e8-a360-4d72-80da-e071884f9944")
 		)
 		(instances
 			(project "State Variable Oscillator with MDAC Control"
-				(path "/075f6cc2-500d-4818-87f7-12acd1047ab1"
+				(path "/de47d635-bb16-490a-9463-fbb7ddc35300"
 					(reference "#PWR017")
 					(unit 1)
 				)
@@ -2864,7 +2856,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "f8382918-a1bb-4577-a22d-b7f783f38e93")
+		(uuid "c21b0819-1d95-474a-92c4-72e21d792b99")
 	)
 	(wire
 		(pts
@@ -2874,7 +2866,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "768fa943-437a-4106-9432-910a4299feb0")
+		(uuid "faa7aae2-2596-46dc-a86a-b623d3970831")
 	)
 	(wire
 		(pts
@@ -2884,7 +2876,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "06b3d9fa-4b39-4867-ae3b-79c41190d7e1")
+		(uuid "31ac8ba2-85fd-4d87-bfc7-6904115c34ac")
 	)
 	(wire
 		(pts
@@ -2894,7 +2886,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "a8fc8c09-7fb9-4688-b9f3-0581d2c10577")
+		(uuid "f6d1d54c-cc55-44ca-bf19-22795f52f013")
 	)
 	(wire
 		(pts
@@ -2904,7 +2896,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "7fd88dfe-3983-42f7-ae04-a4945a24cfcd")
+		(uuid "3e02205e-0ccd-4fa1-a2b1-5c3e674d71b1")
 	)
 	
 	(wire
@@ -2915,7 +2907,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "47c9fd87-1b92-4cfc-8527-99f64c6c7f32")
+		(uuid "b25db484-839e-411b-aa3f-fa4aef7f3f0c")
 	)
 	(wire
 		(pts
@@ -2925,7 +2917,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "40e18538-fae4-4544-8c4d-10e2f6b8ff4d")
+		(uuid "2505f8f9-8ade-43ef-a352-5a8e81a4af37")
 	)
 	(wire
 		(pts
@@ -2935,7 +2927,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "67c060ca-36aa-4036-b4c6-19e2b1831af1")
+		(uuid "7674c597-7666-40ac-9d3c-f43381e3e160")
 	)
 	(wire
 		(pts
@@ -2945,7 +2937,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "1493733c-d179-4423-90c7-ff1311f5713c")
+		(uuid "61f5e2bf-93dd-4df6-ad44-5a9737fee838")
 	)
 	(wire
 		(pts
@@ -2955,7 +2947,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "20f9f16c-5801-4599-87d3-c1bc0a63bfce")
+		(uuid "5ba6fa51-eb45-41e8-9534-ed5bd5f6dea6")
 	)
 	(wire
 		(pts
@@ -2965,7 +2957,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "99305bb5-ac3f-444a-900e-2da0ba1b1584")
+		(uuid "1aebebf1-2a7b-4e5c-b509-b074ff9d1e7c")
 	)
 	(wire
 		(pts
@@ -2975,7 +2967,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "9a3a0b28-1a60-4b23-9085-f24e3566919c")
+		(uuid "1a01fe57-48e3-4069-8e31-fd26b2139878")
 	)
 	(wire
 		(pts
@@ -2985,7 +2977,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "36b4eef8-0941-400d-98bc-fe0d9376c599")
+		(uuid "ce5e86be-fde3-4662-a203-f1838fb78495")
 	)
 	(wire
 		(pts
@@ -2995,7 +2987,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "0b612a46-5e58-41d0-b9fa-2f57c432c0de")
+		(uuid "2468516b-01db-4f6b-a45a-ef06b09757e2")
 	)
 	(wire
 		(pts
@@ -3005,7 +2997,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "147222da-10dd-41bb-a808-f1301d631059")
+		(uuid "ae6d1189-dae8-440e-9b07-da7548b2aaed")
 	)
 	(wire
 		(pts
@@ -3015,7 +3007,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "edd80963-b233-4f67-aff2-39c5ab540092")
+		(uuid "f27a718f-9881-4522-88aa-40154f96f48f")
 	)
 	
 	(wire
@@ -3026,7 +3018,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "c2a4664d-26b8-432b-84e9-83014f336731")
+		(uuid "9f21eeb5-7d91-4a5f-870e-f4cbf83c36c5")
 	)
 	(wire
 		(pts
@@ -3036,7 +3028,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "881ea759-55e3-4f6e-8e18-5fb61a799e23")
+		(uuid "faed73a4-afe3-4d19-908e-e9a1f5041c1e")
 	)
 	(wire
 		(pts
@@ -3046,7 +3038,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "a44a4686-cbfe-41a7-9a24-7f56ae3b5212")
+		(uuid "9401caa8-27c3-45cb-99bd-f230af0a048f")
 	)
 	(wire
 		(pts
@@ -3056,7 +3048,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "fc4c29b3-dfbf-4592-bd18-f33e275cc6fb")
+		(uuid "3b0314f6-65be-4c48-beb5-a289c5fb3f9c")
 	)
 	(wire
 		(pts
@@ -3066,7 +3058,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "f5a37abb-acec-4bc1-a0e1-5fefef5c9fed")
+		(uuid "e3bee34e-83c9-424b-97d3-005b09b9a557")
 	)
 	(wire
 		(pts
@@ -3076,7 +3068,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "2888c06c-6b71-4080-be6f-b60e9f2b27f0")
+		(uuid "953d8858-9743-47fe-b320-3e5e00f47fa6")
 	)
 	(wire
 		(pts
@@ -3086,7 +3078,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "1dc1f22c-7cc1-48a3-a10f-a73938dc77ef")
+		(uuid "743e9055-7d7c-4cff-9ae7-25b2bebec24c")
 	)
 	(wire
 		(pts
@@ -3096,7 +3088,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "be6dd21a-ac99-4d12-9699-a2a5707253bb")
+		(uuid "dd4ec503-eb30-4d54-b202-c7dec826a0b2")
 	)
 	
 	(wire
@@ -3107,7 +3099,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "010aa185-cc5d-4797-a7ba-f540a8b0b44d")
+		(uuid "28e00fdf-9282-4112-9f3f-60cb38690bef")
 	)
 	(wire
 		(pts
@@ -3117,7 +3109,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "05ad87df-ef6c-443d-a951-7d5c2cb2574f")
+		(uuid "67c45125-3dcf-4b8d-8603-47bb48ecbc33")
 	)
 	
 	(wire
@@ -3128,7 +3120,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "62dc65ec-5922-431e-978e-decc5cc0e95f")
+		(uuid "e6b3dfc8-1ca2-4481-9863-77a9e514ac60")
 	)
 	(wire
 		(pts
@@ -3138,7 +3130,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "6614e051-1de8-44fe-946c-2f350ef8d66d")
+		(uuid "a7ad202d-de91-4e66-b855-fae721359c0f")
 	)
 	(wire
 		(pts
@@ -3148,7 +3140,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "94fa6e90-2ca7-4063-a8a6-0d35b1c9c849")
+		(uuid "db3a2898-a15a-4229-a6ad-e6a49d115683")
 	)
 	(wire
 		(pts
@@ -3158,7 +3150,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "f3aa9366-00f2-4705-9eaf-755f567c2728")
+		(uuid "a1da76ad-66b9-47e9-bb0b-314d98e886e5")
 	)
 	(wire
 		(pts
@@ -3168,7 +3160,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "342beed1-4e00-488d-add5-a7d6ff803b59")
+		(uuid "f845ed6c-67d0-4b2a-957d-e3dc7b1fc805")
 	)
 	(wire
 		(pts
@@ -3178,7 +3170,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "1f24777d-94dc-4904-9ce6-a4c41bdbf86e")
+		(uuid "642a6051-cacb-455f-acf7-3e63584da743")
 	)
 	(wire
 		(pts
@@ -3188,7 +3180,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "7aaf3b85-1d8a-49d2-b5b8-18015a0e5227")
+		(uuid "f84bb56d-7f88-4308-98ab-f1430f5928ce")
 	)
 	(wire
 		(pts
@@ -3198,7 +3190,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "5867a0d6-1990-4685-9e2a-10bbbd3e32e6")
+		(uuid "f0eacb4d-6c5f-41d9-90dd-23c8b5f5bb60")
 	)
 	(wire
 		(pts
@@ -3208,7 +3200,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "a3fa2f65-2744-45f6-ab53-feeaf29a2545")
+		(uuid "8f032dc2-c948-4d94-a971-fb9aef46b3a3")
 	)
 	(wire
 		(pts
@@ -3218,7 +3210,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "6f4897ef-be58-4a50-bf0c-0f9d70996f7c")
+		(uuid "2fe64c2e-7fcd-4842-b8a0-a3b8e31f5052")
 	)
 	(wire
 		(pts
@@ -3228,7 +3220,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "1d91780f-343c-439a-90be-8a5d739a19d8")
+		(uuid "2abf82a1-4ab6-4e2c-a996-190c0f50f319")
 	)
 	(wire
 		(pts
@@ -3238,7 +3230,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "7cb6bdba-a3b9-4418-aae9-f019ef5b1444")
+		(uuid "cb1e2607-341f-4234-9299-77b095c8832c")
 	)
 	(wire
 		(pts
@@ -3248,7 +3240,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "87bb5043-46c2-4d20-b75a-a50395881c2c")
+		(uuid "1fe9e182-b071-4d18-bf56-751039a87f4c")
 	)
 	(wire
 		(pts
@@ -3258,7 +3250,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "b2041374-c01b-4656-884f-7a093df94671")
+		(uuid "9d083449-88a4-4cf0-ba03-5fc94f299fd3")
 	)
 	(wire
 		(pts
@@ -3268,7 +3260,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "11d59366-a164-47a6-88d5-a1d5b99319cf")
+		(uuid "0909df31-7e6a-4079-a095-24f20b2b2076")
 	)
 	(wire
 		(pts
@@ -3278,7 +3270,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "b32c35ae-b95a-4ea7-8be8-4178a7992247")
+		(uuid "e718b81f-c693-433d-8cd4-3bc01add9880")
 	)
 	(wire
 		(pts
@@ -3288,7 +3280,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "70b6d427-ed9a-40bd-b8f2-027ad89884aa")
+		(uuid "eeb2c461-ca22-4494-ad24-49e724202843")
 	)
 	
 	(wire
@@ -3299,7 +3291,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "74804853-4d68-46c7-abd5-343b89a1473e")
+		(uuid "e16b6e6b-0ce1-4334-8fa3-9cecf6fb282a")
 	)
 	(wire
 		(pts
@@ -3309,7 +3301,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "726e6149-a70a-49b8-aa8a-7fa2e7467a91")
+		(uuid "3761d819-ee8f-4a6f-aeb0-6f9657126696")
 	)
 	(wire
 		(pts
@@ -3319,7 +3311,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "f1257a45-d5ea-4072-b6db-8b780ce3b518")
+		(uuid "26cbaffc-aa76-45d5-80a0-d8a14cbe4261")
 	)
 	(wire
 		(pts
@@ -3329,7 +3321,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "13cc6a82-2aa9-4434-aa81-6e27a062d2e4")
+		(uuid "07a5e41a-d112-4954-b5ad-74570414b3d4")
 	)
 	(wire
 		(pts
@@ -3339,7 +3331,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "5f17e861-5450-4d29-b9f7-1f54ba947389")
+		(uuid "88d78a59-48b7-431e-b66f-bdca73a66d80")
 	)
 	(wire
 		(pts
@@ -3349,7 +3341,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "208c251f-2a21-4950-aa4a-00e4d00f8a53")
+		(uuid "6c183e8c-567e-45ed-a5e0-9070a978554b")
 	)
 	(wire
 		(pts
@@ -3359,7 +3351,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "8e6f4a3a-20ac-45b5-95e4-d821d03b2463")
+		(uuid "fac66fa4-5a7e-4e6f-9cae-57eed0411ad0")
 	)
 	(wire
 		(pts
@@ -3369,7 +3361,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "74579ad5-ee6f-4e18-a250-d8f465c7a37f")
+		(uuid "bed8f4db-4495-4d86-90d9-7a946ec68d8c")
 	)
 	
 	(wire
@@ -3380,7 +3372,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "2f1029ed-55dc-4a0e-a3a3-a90e44e0b99b")
+		(uuid "ced24721-503a-416f-9936-9d8a25880d2d")
 	)
 	(wire
 		(pts
@@ -3390,7 +3382,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "9916b107-c42e-488d-8bec-81a71f866914")
+		(uuid "2890de7a-04a7-4bfe-9d93-34776ca19bbd")
 	)
 	
 	(wire
@@ -3401,7 +3393,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "35ae5973-f371-4fa7-b333-932604dba8bd")
+		(uuid "3ce82bfc-f0f6-4448-825d-6135d7635a6d")
 	)
 	(wire
 		(pts
@@ -3411,7 +3403,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "562f6c20-f2c7-4eb0-b913-6e94f3540cd3")
+		(uuid "ac88830c-8a28-4784-acf7-bb954a4177a0")
 	)
 	(wire
 		(pts
@@ -3421,7 +3413,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "9da7f3cf-d38a-45e1-9010-374ea1410e38")
+		(uuid "f30f337f-a5d0-4056-a82c-f71578f62639")
 	)
 	(wire
 		(pts
@@ -3431,7 +3423,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "9b60b214-3ba3-4d05-9e07-e8dea7a5fff5")
+		(uuid "c8cf8b91-1a85-45e4-8685-fb0e770f99e4")
 	)
 	(wire
 		(pts
@@ -3441,7 +3433,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "edc8a3d1-d565-436c-94c6-880434632899")
+		(uuid "6a25f2db-5605-43e5-86ea-3d70b330c70f")
 	)
 	(wire
 		(pts
@@ -3451,7 +3443,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "b4f373ee-27e8-4e49-af02-17576f03fa8b")
+		(uuid "0380c5ee-57aa-46e1-8088-6af61e5d2371")
 	)
 	(wire
 		(pts
@@ -3461,7 +3453,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "64b8496c-67a8-4790-b069-8f4a0dc4ac37")
+		(uuid "50e59cbd-b0e3-4c8d-8008-953e9d665c30")
 	)
 	(wire
 		(pts
@@ -3471,7 +3463,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "b5673f20-d557-4476-a3ae-6a13cde3c492")
+		(uuid "46a373c0-7ee5-403b-a4c9-4cb1696fddc4")
 	)
 	(wire
 		(pts
@@ -3481,7 +3473,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "e5227f45-d5d9-4471-9212-a6a67a7fb767")
+		(uuid "fb03c41b-4bd4-4655-a6d9-ca47cc191a6c")
 	)
 	(wire
 		(pts
@@ -3491,7 +3483,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "f9ad970f-4abb-4697-8a53-83042c44d543")
+		(uuid "2ce19fde-34d9-479a-8d30-7874d7e0c6f8")
 	)
 	(wire
 		(pts
@@ -3501,7 +3493,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "275c333a-b103-40e3-b76e-21244d6d2785")
+		(uuid "f8b201a4-0212-4935-8ae1-270f4e0fbc25")
 	)
 	(wire
 		(pts
@@ -3511,7 +3503,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "2784b9c4-8d08-4ab0-bffb-72ca4686d5ae")
+		(uuid "dab552e7-9660-474d-a0a4-30175d01d8e4")
 	)
 	(wire
 		(pts
@@ -3521,7 +3513,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "ff8945e5-aa4e-4629-ab6f-1e3ed2b093d3")
+		(uuid "d89d19da-ac21-4830-92d2-9f22184680f0")
 	)
 	(wire
 		(pts
@@ -3531,7 +3523,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "a6d7ab56-b367-400e-9306-d6e57efa2131")
+		(uuid "571a9bf8-da61-47d9-b1e8-f1cafae67dfb")
 	)
 	(wire
 		(pts
@@ -3541,7 +3533,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "3390c8ca-7aa8-4e2b-b4ef-a6e1c01aca8b")
+		(uuid "339573b5-f79b-4831-ad60-ec2ad28e1fcf")
 	)
 	(wire
 		(pts
@@ -3551,7 +3543,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "b746164c-366b-4cf3-b9e6-87c5c53f4c1f")
+		(uuid "14979c09-8b90-4a09-ba46-4b6ee3fd3400")
 	)
 	(wire
 		(pts
@@ -3561,7 +3553,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "31861ecd-38a9-4f0a-b2e1-4d3def2a05dd")
+		(uuid "7afb0ce7-99df-4f15-8cc1-2338feeeb010")
 	)
 	(wire
 		(pts
@@ -3571,7 +3563,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "b2b23af1-6454-4509-bac0-e5ddbc528ece")
+		(uuid "90a85906-8167-42f1-bf93-9e1102e28a3c")
 	)
 	(wire
 		(pts
@@ -3581,7 +3573,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "101e7917-c9df-42ab-804f-230b3a8b8200")
+		(uuid "dc6cab37-ebd4-4185-9598-c845d76c3a25")
 	)
 	(wire
 		(pts
@@ -3591,7 +3583,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "069b8ccf-d0fd-49cd-8a9f-7ae8ffff39f3")
+		(uuid "2551a02c-46e4-4c75-93d9-8d88d46adb0b")
 	)
 	(wire
 		(pts
@@ -3601,7 +3593,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "bc06662d-1a2c-4c9b-a92d-240e1c0ae155")
+		(uuid "2c0479b7-31fc-4e25-9b0e-eef1e85e59f3")
 	)
 	(wire
 		(pts
@@ -3611,7 +3603,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "7578b0e6-8ceb-4fd5-b775-edb6dfa76c42")
+		(uuid "0923116b-fa3d-4d2b-ac65-eea0533f38e5")
 	)
 	(wire
 		(pts
@@ -3621,7 +3613,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "bb01784e-5bd2-4b8a-a512-e62e0a8605b4")
+		(uuid "b40c28ff-b3a4-424a-b2e7-37f777b002c8")
 	)
 	(wire
 		(pts
@@ -3631,7 +3623,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "148a5dc2-bc8e-4b98-a1fd-f4d728ae546d")
+		(uuid "6bd04b1b-fcd6-42cf-9069-f15e596456c9")
 	)
 	(wire
 		(pts
@@ -3641,7 +3633,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "31595668-4f3b-4eb9-8916-117d54035b0e")
+		(uuid "d69df44e-865c-468a-8c71-1b3faee73b4c")
 	)
 	(wire
 		(pts
@@ -3651,7 +3643,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "c05c8e25-6b15-4c44-a8f8-78d67383b3fa")
+		(uuid "16fd2cbb-07e9-41a5-ac6e-10d90e85ece0")
 	)
 	(wire
 		(pts
@@ -3661,7 +3653,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "ca2bdf7c-ec26-4172-b2ab-bc2c8bd69072")
+		(uuid "55399a61-c8e3-42bf-83ad-548b1e9ef8f9")
 	)
 	(wire
 		(pts
@@ -3671,7 +3663,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "099de160-397b-4bc8-9c5a-86d988334e36")
+		(uuid "5fb292d7-1610-4b28-abfb-1e7e208d388b")
 	)
 	(wire
 		(pts
@@ -3681,7 +3673,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "6c85784d-c624-49ed-8b5b-00e28020b2f2")
+		(uuid "09bec864-4a74-4cdd-9c12-c6399ffbbb0a")
 	)
 	(wire
 		(pts
@@ -3691,7 +3683,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "e0c50e8d-2084-4306-bd44-317f64b4e3f7")
+		(uuid "5a2ef886-082a-44b3-842c-1c790e821d94")
 	)
 	(wire
 		(pts
@@ -3701,103 +3693,103 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "83c6806f-3721-47fe-890c-99584a13a61e")
+		(uuid "e68c0d8f-bab0-437a-989b-3e53f8b8ff00")
 	)
 	(junction
 		(at 99.06 99.06)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "7a364134-fc8a-4718-a290-05972b6a7151")
+		(uuid "71e20d16-3d9c-48f1-8096-2d253a675955")
 	)
 	(junction
 		(at 129.54 101.6)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "46bfab2e-e1ed-495c-ac54-1c0d503c470d")
+		(uuid "3b136a95-a563-47bd-9f23-e56b31b3e971")
 	)
 	(junction
 		(at 237.49 111.76)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "ef72c89b-30a3-43b8-8459-b5051f1094f4")
+		(uuid "ab5d9ba6-f870-468c-87b2-614972360944")
 	)
 	(junction
 		(at 237.49 96.52)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "fa131dcf-e684-443a-aca6-29f74132d600")
+		(uuid "c5e20393-1283-422f-a619-054e76d031c0")
 	)
 	(junction
 		(at 248.92 96.52)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "3a5e5538-40b9-4824-a076-484df5c7ca26")
+		(uuid "6d86345d-3081-4c1f-b737-1381037f7efd")
 	)
 	(junction
 		(at 237.49 86.36)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "4f49c518-704b-47db-afc9-5eb336089073")
+		(uuid "3dbfa6a4-3774-46d1-a539-bc8b9914c56c")
 	)
 	(junction
 		(at 248.92 86.36)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "32684c7b-c3cb-48bb-a817-a99ed5cb888a")
+		(uuid "79777a79-ea04-425e-9eee-280ef1d016db")
 	)
 	(junction
 		(at 248.92 114.3)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "7177d400-1b98-4997-8251-5890d4747a23")
+		(uuid "d52ea101-d2fd-4a47-83b7-b8659ac035fc")
 	)
 	(junction
 		(at 298.45 101.6)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "d40b27e7-aaac-4371-9729-df799c4bea63")
+		(uuid "fbbb2d81-cd1f-4026-acf8-547e96c8505f")
 	)
 	(junction
 		(at 359.41 101.6)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "454e0428-ccee-4d21-922e-3439704b5b49")
+		(uuid "cfda8447-a929-4156-9f66-74caaa4ad171")
 	)
 	(junction
 		(at 130.81 226.06)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "7703330e-be14-4361-9116-ff40b94987ea")
+		(uuid "d7056866-9ab7-4fa4-9784-d9febaa3b037")
 	)
 	(junction
 		(at 130.81 210.82)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "17693e42-c147-4e7e-a8eb-1958d95d1a90")
+		(uuid "9eb7418f-0778-49d9-bc86-5a4c5971599d")
 	)
 	(junction
 		(at 142.24 210.82)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "0e8ffd4a-0a5a-46df-ac89-7102584e0c51")
+		(uuid "5543fdee-fc05-4e18-ab37-9768afc5be9e")
 	)
 	(junction
 		(at 130.81 200.66)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "4c0c52a8-23fe-447c-8c4f-a8da91933be8")
+		(uuid "47fe3512-07d5-4f42-b7d6-e78d8765a16a")
 	)
 	(junction
 		(at 142.24 200.66)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "4c78e934-6730-4f77-815f-45ee1d6188cf")
+		(uuid "2029b4ce-05dc-4563-bf7b-d32dcaf073db")
 	)
 	(junction
 		(at 142.24 228.6)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "43a39e3c-1c66-4df3-abf9-7ee862c6c33e")
+		(uuid "d637836d-4064-45d7-aa2e-7c19b9507f63")
 	)
 	(label "LP"
 		(at 44.45 73.66 0)
@@ -3807,7 +3799,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "4a32c8fc-859e-45a9-9c6d-5be6e08755db")
+		(uuid "fb9b9da4-c62f-4c8d-93d8-10691019eeb5")
 	)
 	(label "BP"
 		(at 44.45 99.06 0)
@@ -3817,7 +3809,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "b9c8e015-92c4-4e1d-a881-8de526471f03")
+		(uuid "8fd8a86c-ef76-4e34-9ec7-566a3480910d")
 	)
 	(label "+15V"
 		(at 119.38 124.46 0)
@@ -3827,7 +3819,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "4c40d481-8d13-4475-a39c-aa182379db09")
+		(uuid "f6ff32b3-a4d9-45de-95f8-15045d9a42e7")
 	)
 	(label "HP"
 		(at 149.86 101.6 0)
@@ -3837,7 +3829,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "7bb995ac-3a26-422b-bd71-14c72f5d826a")
+		(uuid "92e1d62a-e0f1-4bdb-95fe-88c4f256501b")
 	)
 	(label "HP"
 		(at 137.16 111.76 0)
@@ -3847,7 +3839,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "0359cf3b-4810-4ff9-9798-c2a302f3770e")
+		(uuid "aefe55a6-eb8d-4848-b310-2f5e0086b030")
 	)
 	(label "VCTRL"
 		(at 157.48 132.08 0)
@@ -3857,7 +3849,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "5f90a0ce-3de0-4e22-9eb6-bcb215b48f85")
+		(uuid "02835bfc-44e7-4439-9f0a-e575dc203552")
 	)
 	(label "+15V"
 		(at 238.76 137.16 0)
@@ -3867,7 +3859,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "14e1fcfa-c3b8-46e1-b90a-b10f34833a7b")
+		(uuid "942301c0-0bdc-4cc9-9732-4cbc3038c2a4")
 	)
 	(label "BP"
 		(at 269.24 114.3 0)
@@ -3877,7 +3869,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "6c3ab107-95c4-4bc0-8d97-ef62a3ca6881")
+		(uuid "1face9a9-06f2-48ed-a87a-247e89f77f8b")
 	)
 	(label "BP"
 		(at 260.35 101.6 0)
@@ -3887,7 +3879,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "6ae86aed-3ac6-410b-b897-9eef1b654eba")
+		(uuid "83e447c1-77b1-4a27-9f71-ebbd5c941e05")
 	)
 	(label "AIN0"
 		(at 389.89 101.6 0)
@@ -3897,7 +3889,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "ca1d8095-4491-40be-a9fe-c8e8c922cf84")
+		(uuid "170b6f20-292b-405b-85c6-8b30c95c6a51")
 	)
 	(label "BP"
 		(at 30.48 226.06 0)
@@ -3907,7 +3899,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "95724bca-cd94-46b5-8ed8-893ffc8d1fbb")
+		(uuid "7e07053c-dce2-4c65-ba7b-b79f483f6c7e")
 	)
 	(label "VCTRL"
 		(at 50.8 246.38 0)
@@ -3917,7 +3909,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "00848d4e-9a75-4ed2-8b7e-637d1859735e")
+		(uuid "818efeab-c8a4-401c-ae4c-8cc7ca7c778c")
 	)
 	(label "+15V"
 		(at 132.08 251.46 0)
@@ -3927,7 +3919,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "6d6d0210-c431-4bdd-b438-a69e8172fbed")
+		(uuid "441025ff-697f-4091-8701-709386d36018")
 	)
 	(label "LP"
 		(at 162.56 228.6 0)
@@ -3937,7 +3929,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "8eb20df3-3b25-442d-8150-74cc43d131d7")
+		(uuid "c1985e16-d547-454f-a804-42b646f81787")
 	)
 	(label "BP"
 		(at 198.12 250.19 0)
@@ -3947,7 +3939,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "50e0ca7c-d842-4595-b2d1-0d926867a343")
+		(uuid "9da23ad7-36ca-48fc-8949-68258ca9b77a")
 	)
 	(label "HP"
 		(at 171.45 190.5 0)
@@ -3957,7 +3949,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "edd80692-ad3a-4b32-bf64-f9385b31b1ec")
+		(uuid "ca393388-08ff-4aa5-9908-5c18e3ee41b7")
 	)
 	(label "+15V"
 		(at 152.4 226.06 0)
@@ -3967,7 +3959,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "8ce30c7d-383e-469a-b500-1d826af6abf9")
+		(uuid "c5dbf0e5-d0e9-40cc-a221-c67110749bdc")
 	)
 	(label "3.3V"
 		(at 264.16 226.06 0)
@@ -3977,7 +3969,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "a9bd3f7c-3dab-438f-b364-69268c4b81f5")
+		(uuid "0d12f7d6-e7fd-4e40-ad08-93bdaf47d1f6")
 	)
 	(label "AIN0"
 		(at 266.7 210.82 0)
@@ -3987,7 +3979,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "216a8172-c1c4-4810-9f4b-9e22349d422b")
+		(uuid "473dc135-cf4a-42b1-a1c3-e0c0d7d8734b")
 	)
 	(label "BP_ZC"
 		(at 266.7 231.14 0)
@@ -3997,7 +3989,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "331f2360-ca52-4871-bb05-f4053ca32ba4")
+		(uuid "ea4c6d01-f571-43d0-a856-d8eb47cdd9cb")
 	)
 	(label "UART_RX"
 		(at 266.7 251.46 0)
@@ -4007,7 +3999,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "0a7ae7e9-5597-4929-b911-cbd0a856b337")
+		(uuid "ed3fedf2-8a7f-41b8-a0b4-d149cb9978d2")
 	)
 	(label "SPI0_CLK"
 		(at 363.22 210.82 0)
@@ -4017,7 +4009,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "f70d8311-9492-429a-a961-41452bf700b5")
+		(uuid "6f76e639-c530-4bc6-be4b-57f24e0ba628")
 	)
 	(label "SPI0_MOSI"
 		(at 363.22 231.14 0)
@@ -4027,7 +4019,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "310c4509-7562-4e8a-93a8-47f8d84107fa")
+		(uuid "5423275d-119c-440c-90f6-e166e99588d5")
 	)
 	(label "DAC_CS"
 		(at 363.22 251.46 0)
@@ -4037,7 +4029,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "740faf40-998a-48ec-9e47-3a9006e666d0")
+		(uuid "8f09b89e-54ad-4f8f-8c6c-c286858aa54a")
 	)
 	(label "UART_TX"
 		(at 363.22 271.78 0)
@@ -4047,7 +4039,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "bd66da3e-d630-451b-9a15-1aaf01e13275")
+		(uuid "eb89c51c-8669-4f64-8f21-d2a839195279")
 	)
 	(label "3.3V"
 		(at 322.58 180.34 0)
@@ -4057,7 +4049,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "a5e897bb-0ba7-4571-9b47-aa77b3b246a0")
+		(uuid "277d1e6a-f656-4a67-b7ec-5cd8c24dc8a2")
 	)
 	(rectangle
 		(start 297.18 185.42)
@@ -4069,7 +4061,7 @@
 		(fill
 			(type none)
 		)
-		(uuid "b7501941-fb9c-4a41-a40d-acfa21b3af2e")
+		(uuid "054dacce-a280-4e20-8ddf-c92d1e192893")
 	)
 	(text "SUMMING AMPLIFIER"
 		(exclude_from_sim no)
@@ -4080,7 +4072,7 @@
 				(bold yes)
 			)
 		)
-		(uuid "b404e5dc-e355-4f79-bcc2-5bfe14e1fd2f")
+		(uuid "cc0f8ce8-8e16-42f3-999e-7f667e9134f4")
 	)
 	(text "INTEGRATOR 1 (HP->BP) + MDAC"
 		(exclude_from_sim no)
@@ -4091,7 +4083,7 @@
 				(bold yes)
 			)
 		)
-		(uuid "042e83fc-d901-4b86-ac79-885b1c9896af")
+		(uuid "7ace6879-cc8b-4d91-ab13-93452cbf1972")
 	)
 	(text "XDAC1\nDAC7800"
 		(exclude_from_sim no)
@@ -4101,7 +4093,7 @@
 				(size 2.5 2.5)
 			)
 		)
-		(uuid "190a2215-6d4e-4010-8264-72fcb14e88e0")
+		(uuid "2be5aab8-dede-4e3d-a945-7cc5a5b8d01d")
 	)
 	(text "Zener AGC\nBV=1.1V"
 		(exclude_from_sim no)
@@ -4111,7 +4103,7 @@
 				(size 2 2)
 			)
 		)
-		(uuid "2e0f1a63-9cec-4ff4-8e81-b953eda70349")
+		(uuid "2b53f183-8682-48c1-a612-044d39e07495")
 	)
 	(text "f = D / (4096 * 2pi * 10k * 470p)\n[25Hz - 30kHz]"
 		(exclude_from_sim no)
@@ -4121,7 +4113,7 @@
 				(size 2 2)
 			)
 		)
-		(uuid "ce39c9b8-8941-471b-a76c-057b63c74a6c")
+		(uuid "43898b23-6afd-46eb-be8b-92425bed8e27")
 	)
 	(text "AD636 RMS DETECTOR"
 		(exclude_from_sim no)
@@ -4132,7 +4124,7 @@
 				(bold yes)
 			)
 		)
-		(uuid "f2d8a88d-6500-487c-ba92-4bc079f3d128")
+		(uuid "6e63baf6-8a0a-48c2-b35a-146b9252806f")
 	)
 	(text "1/5 attenuator\nVin/5 to AD636"
 		(exclude_from_sim no)
@@ -4142,7 +4134,7 @@
 				(size 2 2)
 			)
 		)
-		(uuid "117e1b23-c95e-4575-8431-6326fc37f5f7")
+		(uuid "6fd4601c-efd8-48e2-a061-5e87171554db")
 	)
 	(text "U4\nAD636\nRMS-to-DC"
 		(exclude_from_sim no)
@@ -4152,7 +4144,7 @@
 				(size 2.5 2.5)
 			)
 		)
-		(uuid "a3ff94bf-ee47-4833-adbb-8bac564ef49e")
+		(uuid "14a3bef4-871a-4f80-9b1e-155e0eca9b3c")
 	)
 	(text "CAV"
 		(exclude_from_sim no)
@@ -4162,7 +4154,7 @@
 				(size 2 2)
 			)
 		)
-		(uuid "d96178d9-f679-4e37-8f3a-597f2121a380")
+		(uuid "46dfcc44-45a7-4516-aed2-6914f3753a29")
 	)
 	(text "INTEGRATOR 2 (BP->LP) + MDAC"
 		(exclude_from_sim no)
@@ -4173,7 +4165,7 @@
 				(bold yes)
 			)
 		)
-		(uuid "8387f1a5-4281-410f-91c5-5dbf7e8a4ba0")
+		(uuid "6c7aaf10-6de7-4951-b381-e7bcdac7a96e")
 	)
 	(text "XDAC2\nDAC7800"
 		(exclude_from_sim no)
@@ -4183,7 +4175,7 @@
 				(size 2.5 2.5)
 			)
 		)
-		(uuid "71f32795-2c73-430a-a83c-df4cf66c8fa5")
+		(uuid "5495f670-0e1a-453c-9f49-876edaf67780")
 	)
 	(text "Zener AGC\nBV=1.1V"
 		(exclude_from_sim no)
@@ -4193,7 +4185,7 @@
 				(size 2 2)
 			)
 		)
-		(uuid "cc1f7b95-b23b-4f9d-a77a-2f13826151e2")
+		(uuid "1f5e1532-5f8a-451f-86ca-412d26a149ba")
 	)
 	(text "STARTUP KICK + POWER SUPPLY"
 		(exclude_from_sim no)
@@ -4204,7 +4196,7 @@
 				(bold yes)
 			)
 		)
-		(uuid "8bd48592-c6eb-4c98-b7da-9c92de3dc8e1")
+		(uuid "67828e26-3f78-489a-b57c-e7ab5404892c")
 	)
 	(text "Startup Kick\nPULSE 0.1V 10us"
 		(exclude_from_sim no)
@@ -4214,7 +4206,7 @@
 				(size 2 2)
 			)
 		)
-		(uuid "cd7fabff-6ee1-464f-99f2-8c0968e6f254")
+		(uuid "f30379f4-70a6-4c9f-84e6-36384299851b")
 	)
 	(text "+15V\nbulk"
 		(exclude_from_sim no)
@@ -4224,7 +4216,7 @@
 				(size 2 2)
 			)
 		)
-		(uuid "8b122fb0-453d-4552-9e70-42b7fcf83062")
+		(uuid "2a035e00-1ddf-49c8-888f-58d5d387990d")
 	)
 	(text "-15V\nbulk"
 		(exclude_from_sim no)
@@ -4234,7 +4226,7 @@
 				(size 2 2)
 			)
 		)
-		(uuid "a7ea7b6b-42a7-4338-ab71-35770da1aed6")
+		(uuid "9809baf4-b63c-404f-b83c-85307918b990")
 	)
 	(text "3.3V MCU\n(LDO from +15V)"
 		(exclude_from_sim no)
@@ -4244,7 +4236,7 @@
 				(size 2 2)
 			)
 		)
-		(uuid "a52264be-f207-4bed-833c-1f3db158b2ed")
+		(uuid "5a6a2a7d-b593-4a82-af28-5a2bff8d0bb6")
 	)
 	(text "ADuCM362 MCU"
 		(exclude_from_sim no)
@@ -4255,7 +4247,7 @@
 				(bold yes)
 			)
 		)
-		(uuid "0817d8de-a0fd-4b27-b5b3-cb11f4d1e77e")
+		(uuid "079e00d9-5be9-4df9-b202-e0d9e6b2d3b4")
 	)
 	(text "U5\nADuCM362\nARM Cortex-M3"
 		(exclude_from_sim no)
@@ -4266,7 +4258,7 @@
 				(bold yes)
 			)
 		)
-		(uuid "db3ecf47-0fe1-4672-b9e0-c7d91ee025d1")
+		(uuid "70be3b59-b71a-4ca6-8010-d75e10e3d3e6")
 	)
 	(text "AIN0"
 		(exclude_from_sim no)
@@ -4276,7 +4268,7 @@
 				(size 1.8 1.8)
 			)
 		)
-		(uuid "cffb1e89-8f8a-4c6d-87ef-0477b1e4bdde")
+		(uuid "18602c3e-f9fc-46b1-9122-c8bf3f5abdfe")
 	)
 	(text "P0.5_ZC"
 		(exclude_from_sim no)
@@ -4286,7 +4278,7 @@
 				(size 1.8 1.8)
 			)
 		)
-		(uuid "19ede4b0-4c7b-4bdd-8f15-90641c3515b9")
+		(uuid "0eed78d7-84d2-49ed-954e-7a029bbee7a1")
 	)
 	(text "UART_RX"
 		(exclude_from_sim no)
@@ -4296,7 +4288,7 @@
 				(size 1.8 1.8)
 			)
 		)
-		(uuid "d3042c4f-1473-4744-8665-bdb17d3e6936")
+		(uuid "775bd414-bf24-484c-a765-52023ba7c111")
 	)
 	(text "SPI0 -> DAC7800\ncontrols VCTRL"
 		(exclude_from_sim no)
@@ -4306,7 +4298,7 @@
 				(size 1.8 1.8)
 			)
 		)
-		(uuid "07bf32c6-74fa-4c0e-88e9-82c7492da1e5")
+		(uuid "755fc172-8a36-408f-8b2e-629207797038")
 	)
 	(text "UART (115200 8N1) to host PC"
 		(exclude_from_sim no)
@@ -4316,7 +4308,7 @@
 				(size 2 2)
 			)
 		)
-		(uuid "e1614236-3e9c-4159-8b0a-f4d184383adf")
+		(uuid "616fe77d-e9e7-4534-a4c3-0375c02ff44f")
 	)
 	(text "Timer1 capture: zero-crossing frequency measurement"
 		(exclude_from_sim no)
@@ -4326,7 +4318,7 @@
 				(size 1.8 1.8)
 			)
 		)
-		(uuid "504db18b-52a3-4dd2-9a2e-a9181ac4209c")
+		(uuid "33e44d67-15e6-4c09-97b4-803413ae4814")
 	)
 	(sheet_instances
 		(path "/"

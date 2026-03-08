@@ -288,6 +288,13 @@ def fix_kicad_sch(path, mirror_refs=None):
         text
     )
 
+    # Left-justify free text annotations (default is center, clips at margins)
+    text = re.sub(
+        r'(\(text "[^"]*"\s*\n\s*\(exclude_from_sim [^\)]+\)\s*\n\s*\(at [^\)]+\)\s*\n\s*\(effects\s*\n\s*\(font\s*\n(?:\s*\([^\)]+\)\s*\n)*\s*\))\s*\n(\s*\))',
+        r'\1\n\t\t\t(justify left)\n\2',
+        text
+    )
+
     # Add mirror to specific components
     if mirror_refs:
         for ref in mirror_refs:
@@ -2561,6 +2568,18 @@ def build_electrometer_362(**kwargs):
 
     G = 2.54
 
+    # ── Block title and description ──
+    sch.add_text("ELECTROMETER TIA (ADuCM362 PLATFORM)",
+                 position=(8 * G, 6 * G), size=4.0, bold=True)
+    sch.add_text("ADA4530-1 TIA, 4-range relay-switched Rf (10M-10G), 24-bit ADC",
+                 position=(8 * G, 12 * G), size=2.5)
+    sch.add_text("FUNCTION: Complete electrometer front-end. TIA converts current to",
+                 position=(8 * G, 17 * G), size=1.8)
+    sch.add_text("voltage. Relay ladder selects range. ADuCM362 24-bit sigma-delta",
+                 position=(8 * G, 21 * G), size=1.8)
+    sch.add_text("ADC reads differential (TIA_OUT - VREF). Single 3.3V supply.",
+                 position=(8 * G, 25 * G), size=1.8)
+
     # ── Parameterized clearances (correction loop compatible) ──
     fb_gap      = kwargs.get('fb_gap', 5)        # feedback Rf above inv input (G)
     cf_gap      = kwargs.get('cf_gap', 3)        # Cf above Rf row (G)
@@ -2633,6 +2652,11 @@ def build_electrometer_362(**kwargs):
     sch.add_wire(start=cf_right, end=(out_pin[0], cf_y))
     sch.add_wire(start=(out_pin[0], cf_y), end=(out_pin[0], rf_y))
 
+    # Junction dots at T-junctions
+    sch.junctions.add(position=(junc_x, junc_y))     # input wire / feedback branch
+    sch.junctions.add(position=(junc_x, rf_y))        # Rf / Cf branch point
+    sch.junctions.add(position=(out_pin[0], rf_y))     # output column Rf/Cf merge
+
     # ── REFERENCE VOLTAGE DIVIDER (100k/100k for 1.65V mid-supply) ──
     # R3 (100k) from VCC to ni_pin, R4 (100k) from ni_pin to GND
     ref_x = ni_pin[0] - div_offset*G  # spaced from op-amp for readability
@@ -2672,6 +2696,7 @@ def build_electrometer_362(**kwargs):
     # Connect C2 top to reference midpoint
     sch.add_wire(start=c2_top, end=(c2_x, mid_y))
     sch.add_wire(start=(c2_x, mid_y), end=(ref_x, mid_y))
+    sch.junctions.add(position=(ref_x, mid_y))        # divider / C2 / ni_pin
 
     # ── ADC OUTPUT SECTION ──
     # R2 (10M) load resistor from output column to GND
@@ -2830,6 +2855,18 @@ def build_relay_ladder():
 
     G = 2.54
 
+    # ── Block title and description ──
+    sch.add_text("RELAY RANGE-SWITCHING LADDER",
+                 position=(8 * G, 6 * G), size=4.0, bold=True)
+    sch.add_text("4 decades: Rf = 10M / 100M / 1G / 10G (reed relay SPST)",
+                 position=(8 * G, 12 * G), size=2.5)
+    sch.add_text("FUNCTION: Selects TIA feedback resistor via SPST reed relays.",
+                 position=(8 * G, 17 * G), size=1.8)
+    sch.add_text("MCU GPIO drives NPN transistor coil drivers. Flyback diodes protect",
+                 position=(8 * G, 21 * G), size=1.8)
+    sch.add_text("against relay coil back-EMF. Only one relay closed at a time.",
+                 position=(8 * G, 25 * G), size=1.8)
+
     # ══════════════════════════════════════════════════════════════
     # SECTION 1: FEEDBACK RESISTOR LADDER (4 rows, SW + Rf)
     # ══════════════════════════════════════════════════════════════
@@ -2944,11 +2981,12 @@ def build_relay_ladder():
         # Wire: coil bottom -> Q collector
         sch.add_wire(start=coil_bot, end=q_c)
 
-        # Flyback diode in PARALLEL with coil (rot=270: K at top, A at bottom)
+        # Flyback diode in PARALLEL with coil
+        # D:D rot=90: K(-3.81,0)->(0,-3.81)=top, A(+3.81,0)->(0,+3.81)=bottom
         d_cx = coil_cx + 6*G
         sch.components.add(
             lib_id="D:D", reference=f"D{idx+1}",
-            value="1N4148", position=(d_cx, coil_y), rotation=270
+            value="1N4148", position=(d_cx, coil_y), rotation=90
         )
         d_k = (d_cx, coil_y - 3.81)   # cathode (top) -> 5V_ISO
         d_a = (d_cx, coil_y + 3.81)   # anode (bottom) -> collector
@@ -3117,32 +3155,43 @@ def build_input_filters():
             sch.add_label(f"CH_IN_{ch_num}", position=(col_x, row_y))
 
             # ---- ESD CLAMP: cathode-to-cathode at signal (MM20 BAV199 topology) ----
-            # Top diode: rot=90 -> K(bar) at bottom toward signal, A at top toward GND
+            # D:D default: K at (-3.81,0), A at (+3.81,0)
+            # rot=270: K(-3.81,0)->(0,+3.81)=bottom, A(+3.81,0)->(0,-3.81)=top
+            # rot=90:  K(-3.81,0)->(0,-3.81)=top,    A(+3.81,0)->(0,+3.81)=bottom
+            # Top diode: rot=270 -> K at bottom (toward signal), A at top (toward GND)
             sch.components.add(
                 lib_id="D:D", reference=f"D{ch_num * 2 - 1}",
-                value="BAV199", position=(diode_x, row_y - 3.81), rotation=90)
+                value="BAV199", position=(diode_x, row_y - 3.81), rotation=270)
 
-            # Bot diode: rot=270 -> K(bar) at top toward signal, A at bottom toward GND
+            # Bot diode: rot=90 -> K at top (toward signal), A at bottom (toward GND)
             sch.components.add(
                 lib_id="D:D", reference=f"D{ch_num * 2}",
-                value="BAV199", position=(diode_x, row_y + 3.81), rotation=270)
+                value="BAV199", position=(diode_x, row_y + 3.81), rotation=90)
 
             # ---- GND at D_up anode (top) ----
+            # Top diode rot=270: A at (diode_x, row_y - 7.62)
+            d_up_anode_y = row_y - 7.62
+            gnd_up_y = d_up_anode_y - 3 * G
+            sch.add_wire(start=(diode_x, d_up_anode_y), end=(diode_x, gnd_up_y))
             sch.components.add(
                 lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
-                value="GND", position=(diode_x, row_y - 7.62))
+                value="GND", position=(diode_x, gnd_up_y))
             pwr_idx += 1
 
             # ---- GND at D_dn anode (bottom) ----
+            # Bottom diode rot=90: A at (diode_x, row_y + 7.62)
+            d_dn_anode_y = row_y + 7.62
+            gnd_dn_y = d_dn_anode_y + 3 * G
+            sch.add_wire(start=(diode_x, d_dn_anode_y), end=(diode_x, gnd_dn_y))
             sch.components.add(
                 lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
-                value="GND", position=(diode_x, row_y + 7.62))
+                value="GND", position=(diode_x, gnd_dn_y))
             pwr_idx += 1
 
-            # ---- 1M series resistor (horizontal, default rot=0) ----
+            # ---- 1M series resistor (horizontal, rot=90) ----
             sch.components.add(
                 lib_id="R:R", reference=f"R{ch_num}",
-                value="1M", position=(r_cx, row_y))
+                value="1M", position=(r_cx, row_y), rotation=90)
 
             # ---- 10nF filter cap (vertical, default C:C orientation) ----
             # C:C default: pin1 at top (cy-3.81), pin2 at bottom (cy+3.81)
@@ -3151,19 +3200,27 @@ def build_input_filters():
                 value="10n", position=(c_cx, row_y + 3.81))
 
             # ---- GND at C pin2 (bottom) ----
+            # C pin2 at (c_cx, row_y + 7.62), GND below with wire
+            c_pin2_y = row_y + 7.62
+            gnd_c_y = c_pin2_y + 3 * G
+            sch.add_wire(start=(c_cx, c_pin2_y), end=(c_cx, gnd_c_y))
             sch.components.add(
                 lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
-                value="GND", position=(c_cx, row_y + 7.62))
+                value="GND", position=(c_cx, gnd_c_y))
             pwr_idx += 1
 
             # ---- MUX OUTPUT LABEL ----
             sch.add_label(f"MUX_{grp_name}{mux_ch}", position=(label_out, row_y))
 
             # ---- WIRES ----
-            # Wire A: input label -> R pin1 (passes through D junction at diode_x)
+            # Wire A: input label -> R pin1 (passes through D cathodes at diode_x)
             sch.add_wire(start=(col_x, row_y), end=(r_cx - 3.81, row_y))
-            # Wire B: R pin2 -> MUX label (passes through C pin1 at c_cx)
+            # Wire B: R pin2 -> C pin1 -> MUX label
             sch.add_wire(start=(r_cx + 3.81, row_y), end=(label_out, row_y))
+            # Junction at diode cathode-to-cathode point on signal wire
+            sch.junctions.add(position=(diode_x, row_y))
+            # Junction at C pin1 to show R-C connection
+            sch.junctions.add(position=(c_cx, row_y))
 
     sch_path = os.path.join(WORK_DIR, "input_filters.kicad_sch")
     sch.save(sch_path)
@@ -3183,6 +3240,18 @@ def build_analog_mux():
     sch = create_schematic("Analog Multiplexer - 2x MAX338 (CD4051B)")
     sch.set_paper_size("A4")
     G = 2.54
+
+    # ── Block title and description ──
+    sch.add_text("ANALOG MULTIPLEXER (2x MAX338)",
+                 position=(8 * G, 6 * G), size=4.0, bold=True)
+    sch.add_text("16:1 channel select via ADDR[A0:A2] + EN_A/EN_B",
+                 position=(8 * G, 12 * G), size=2.5)
+    sch.add_text("FUNCTION: Routes one of 16 input channels to TIA_IN. MUX A handles",
+                 position=(8 * G, 17 * G), size=1.8)
+    sch.add_text("channels 1-8, MUX B handles 9-16. Only one mux active at a time",
+                 position=(8 * G, 21 * G), size=1.8)
+    sch.add_text("(inactive mux is high-Z). MCU controls address and enable lines.",
+                 position=(8 * G, 25 * G), size=1.8)
 
     # CD4051B pin offsets from center (schematic coords, rot=0):
     #   Left:  A(pin11) dy=-12.7, B(pin10) dy=-10.16, C(pin9) dy=-7.62
@@ -3309,6 +3378,18 @@ def build_mux_tia(**kwargs):
     sch.set_paper_size("A4")
     G = 2.54
 
+    # ── Block title and description ──
+    sch.add_text("TRANSIMPEDANCE AMPLIFIER (ADA4530-1)",
+                 position=(8 * G, 6 * G), size=4.0, bold=True)
+    sch.add_text("Vout = Iin x Rf,  Rf selected by relay ladder (10M to 10G)",
+                 position=(8 * G, 12 * G), size=2.5)
+    sch.add_text("FUNCTION: Converts picoamp-level input current to voltage. ADA4530-1",
+                 position=(8 * G, 17 * G), size=1.8)
+    sch.add_text("sub-femtoamp bias current enables measurement down to ~50 fA.",
+                 position=(8 * G, 21 * G), size=1.8)
+    sch.add_text("VREF (1.65V) biases non-inv input for single-supply 3.3V operation.",
+                 position=(8 * G, 25 * G), size=1.8)
+
     # ── Place op-amp (mirrored: (-) on top for TIA convention) ──
     ux, uy = 46 * G, 44 * G
     sch.components.add(
@@ -3364,6 +3445,11 @@ def build_mux_tia(**kwargs):
     sch.add_wire(start=cf_right, end=(out_pin[0], cf_y))
     sch.add_wire(start=(out_pin[0], cf_y), end=(out_pin[0], rf_y))
 
+    # Junction dots at T-junctions
+    sch.junctions.add(position=(junc_x, junc_y))     # input / feedback branch
+    sch.junctions.add(position=(junc_x, rf_y))        # Rf / Cf branch
+    sch.junctions.add(position=(out_pin[0], rf_y))     # output column merge
+
     # INV/OUT labels for relay ladder connection
     sch.add_label("INV", position=(junc_x, rf_y - 2 * G))
     sch.add_wire(start=(junc_x, rf_y - 2 * G), end=(junc_x, rf_y))
@@ -3404,6 +3490,7 @@ def build_mux_tia(**kwargs):
     c2_bot = (c2_x, r4_y + 3.81)
     sch.add_wire(start=c2_top, end=(c2_x, mid_y))
     sch.add_wire(start=(c2_x, mid_y), end=(ref_x, mid_y))
+    sch.junctions.add(position=(ref_x, mid_y))        # divider / C2 / ni_pin
 
     # ── ADC OUTPUT ──
     # AIN0 label on output
@@ -3455,6 +3542,7 @@ def build_mux_tia(**kwargs):
     sch_path = os.path.join(WORK_DIR, "mux_tia.kicad_sch")
     sch.save(sch_path)
     fix_kicad_sch(sch_path, mirror_refs=["U1"])
+    merge_collinear_wires(sch_path)
     return sch_path
 
 
@@ -3484,6 +3572,18 @@ def build_mcu_section(**kwargs):
     sch = create_schematic("ADuCM362 MCU + ADC Interface (CN-0359 based)")
     sch.set_paper_size("A4")
     G = 2.54
+
+    # ── Block title and description ──
+    sch.add_text("ADuCM362 MCU + ADC INTERFACE",
+                 position=(8 * G, 6 * G), size=4.0, bold=True)
+    sch.add_text("ARM Cortex-M3, dual 24-bit sigma-delta ADC, CN-0359 reference",
+                 position=(8 * G, 12 * G), size=2.5)
+    sch.add_text("FUNCTION: Digital controller for the electrometer platform.",
+                 position=(8 * G, 17 * G), size=1.8)
+    sch.add_text("ADC0 reads TIA output (AIN0) vs reference (AIN1). GPIO P0",
+                 position=(8 * G, 21 * G), size=1.8)
+    sch.add_text("controls mux address/enable. GPIO P1 drives relay coils.",
+                 position=(8 * G, 25 * G), size=1.8)
 
     # MCU block center position
     cx, cy = 50 * G, 40 * G
@@ -5484,6 +5584,10 @@ def build_osc_block_summing_amp():
                  position=(8 * G, 12 * G), size=2.5)
     sch.add_text("LP gain = -10k/10k = -1.0     BP gain = -22k/10k = -2.2",
                  position=(8 * G, 17 * G), size=2.0)
+    sch.add_text("FUNCTION: Combines LP and BP feedback signals with phase inversion.",
+                 position=(8 * G, 23 * G), size=1.8)
+    sch.add_text("The HP output feeds both integrators, closing the oscillation loop.",
+                 position=(8 * G, 27 * G), size=1.8)
 
     # ── U1 LM4562 op-amp ──
     u1_x, u1_y = 48 * G, 48 * G
@@ -5564,13 +5668,13 @@ def build_osc_block_summing_amp():
     sch.junctions.add(position=u1_out)
 
     # ── Interface annotations ──
-    sch.add_text("Interfaces:", position=(8 * G, 80 * G), size=2.5, bold=True)
+    sch.add_text("Interfaces:", position=(8 * G, 62 * G), size=2.5, bold=True)
     sch.add_text("LP input: from Integrator 2 (U3) output",
-                 position=(8 * G, 85 * G), size=2.0)
+                 position=(8 * G, 66 * G), size=2.0)
     sch.add_text("BP input: from Integrator 1 (U2) output",
-                 position=(8 * G, 90 * G), size=2.0)
+                 position=(8 * G, 70 * G), size=2.0)
     sch.add_text("HP output: to Integrator 1 (U2) via DAC7800 XDAC1",
-                 position=(8 * G, 95 * G), size=2.0)
+                 position=(8 * G, 74 * G), size=2.0)
 
     # ── Save ──
     sch_path = os.path.join(WORK_DIR, "osc_block_summing_amp.kicad_sch")
@@ -5614,6 +5718,12 @@ def build_osc_block_integrator1():
                  position=(8 * G, 12 * G), size=2.5)
     sch.add_text("Frequency range: 25 Hz (D=3) to 30 kHz (D=3640)",
                  position=(8 * G, 17 * G), size=2.0)
+    sch.add_text("FUNCTION: Integrates HP signal to produce BP output. DAC7800 MDAC",
+                 position=(8 * G, 23 * G), size=1.8)
+    sch.add_text("controls effective resistance, setting oscillation frequency. Zener",
+                 position=(8 * G, 27 * G), size=1.8)
+    sch.add_text("diodes (D1/D2, BV=1.1V) clamp output to ~1V RMS (passive AGC).",
+                 position=(8 * G, 31 * G), size=1.8)
 
     # ── U2 LM4562 ──
     u2_x, u2_y = 55 * G, 60 * G
@@ -5679,25 +5789,55 @@ def build_osc_block_integrator1():
     sch.junctions.add(position=(inv1_junc[0], cint1_y))
     sch.junctions.add(position=(u2_out[0], cint1_y))
 
-    # ── Zener AGC: D1/D2 back-to-back ──
+    # ── Zener AGC: D1/D2 back-to-back (anode-to-anode) ──
+    # Layout: D1 and D2 horizontal, anodes face center, cathodes face outside.
+    # Cathode wires route DOWN then horizontally to the vertical buses
+    # so the connections are visually distinct from the anode-to-anode wire.
     zener1_y = u2_inv[1] - zener_vert * G
-    sch.components.add(lib_id="D:D", reference="D1", value="DZ09 BV=1.1",
+    cathode_drop = 3 * G  # vertical drop before horizontal cathode routing
+    sch.components.add(lib_id="D_Zener:D_Zener", reference="D1", value="DZ09 BV=1.1",
         position=(cint1_cx - 5 * G, zener1_y), rotation=0)
-    sch.components.add(lib_id="D:D", reference="D2", value="DZ09 BV=1.1",
+    sch.components.add(lib_id="D_Zener:D_Zener", reference="D2", value="DZ09 BV=1.1",
         position=(cint1_cx + 5 * G, zener1_y), rotation=180)
-    dz1_left = (cint1_cx - 5 * G - 3.81, zener1_y)
-    dz1_right = (cint1_cx - 5 * G + 3.81, zener1_y)
-    dz2_left = (cint1_cx + 5 * G - 3.81, zener1_y)
-    dz2_right = (cint1_cx + 5 * G + 3.81, zener1_y)
-    sch.add_wire(start=dz1_right, end=dz2_left)
-    sch.add_wire(start=dz1_left, end=(inv1_junc[0], zener1_y))
-    sch.add_wire(start=(inv1_junc[0], zener1_y), end=(inv1_junc[0], rdamp1_y))
-    sch.add_wire(start=dz2_right, end=(u2_out[0], zener1_y))
-    sch.add_wire(start=(u2_out[0], zener1_y), end=(u2_out[0], rdamp1_y))
+    # Pin positions: D1 rot=0 → K=left A=right; D2 rot=180 → A=left K=right
+    d1_k = (cint1_cx - 5 * G - 3.81, zener1_y)   # D1 cathode (left)
+    d1_a = (cint1_cx - 5 * G + 3.81, zener1_y)    # D1 anode (right)
+    d2_a = (cint1_cx + 5 * G - 3.81, zener1_y)    # D2 anode (left)
+    d2_k = (cint1_cx + 5 * G + 3.81, zener1_y)    # D2 cathode (right)
+    # Anode-to-anode center wire (horizontal at zener1_y)
+    sch.add_wire(start=d1_a, end=d2_a)
+    # D1 cathode: drop down, then horizontal to left bus
+    sch.add_wire(start=d1_k, end=(d1_k[0], zener1_y + cathode_drop))
+    sch.add_wire(start=(d1_k[0], zener1_y + cathode_drop),
+                 end=(inv1_junc[0], zener1_y + cathode_drop))
+    # Left bus: from cathode junction down to damping resistor
+    sch.add_wire(start=(inv1_junc[0], zener1_y + cathode_drop),
+                 end=(inv1_junc[0], rdamp1_y))
+    sch.junctions.add(position=(inv1_junc[0], zener1_y + cathode_drop))
     sch.junctions.add(position=(inv1_junc[0], rdamp1_y))
+    # D2 cathode: drop down, then horizontal to right bus
+    sch.add_wire(start=d2_k, end=(d2_k[0], zener1_y + cathode_drop))
+    sch.add_wire(start=(d2_k[0], zener1_y + cathode_drop),
+                 end=(u2_out[0], zener1_y + cathode_drop))
+    # Right bus: from cathode junction down to damping resistor
+    sch.add_wire(start=(u2_out[0], zener1_y + cathode_drop),
+                 end=(u2_out[0], rdamp1_y))
+    sch.junctions.add(position=(u2_out[0], zener1_y + cathode_drop))
     sch.junctions.add(position=(u2_out[0], rdamp1_y))
-    sch.add_text("Zener AGC\nBV=1.1V\n(back-to-back)",
-                 position=(cint1_cx - 2 * G, zener1_y + 5 * G), size=2.0)
+    # Cathode/Anode labels
+    sch.add_text("K", position=(d1_k[0] - 0.5 * G, zener1_y - 2.5 * G), size=2.0)
+    sch.add_text("A", position=(d1_a[0] + 0.5 * G, zener1_y - 2.5 * G), size=2.0)
+    sch.add_text("A", position=(d2_a[0] - 2 * G, zener1_y - 2.5 * G), size=2.0)
+    sch.add_text("K", position=(d2_k[0] + 0.5 * G, zener1_y - 2.5 * G), size=2.0)
+    # Directional labels at junction points
+    sch.add_text("to inv(-)",
+                 position=(inv1_junc[0] - 8 * G, zener1_y + cathode_drop), size=1.8)
+    sch.add_text("to output",
+                 position=(u2_out[0] + 2 * G, zener1_y + cathode_drop), size=1.8)
+    sch.add_text("Zener AGC: D1/D2 back-to-back, BV=1.1V",
+                 position=(cint1_cx - 8 * G, zener1_y + 5 * G), size=2.0)
+    sch.add_text("Anodes joined center. K1->inv(-), K2->output.",
+                 position=(cint1_cx - 8 * G, zener1_y + 8 * G), size=2.0)
 
     # NI to GND
     gnd2_y = u2_ni[1] + 8 * G
@@ -5726,15 +5866,15 @@ def build_osc_block_integrator1():
 
     # ── Annotations ──
     sch.add_text("D=121: f~997Hz    D=3: f~25Hz    D=3640: f~30kHz",
-                 position=(8 * G, 82 * G), size=2.0)
+                 position=(8 * G, 58 * G), size=2.0)
 
-    sch.add_text("Interfaces:", position=(8 * G, 88 * G), size=2.5, bold=True)
+    sch.add_text("Interfaces:", position=(8 * G, 62 * G), size=2.5, bold=True)
     sch.add_text("HP input: from Summing Amplifier (U1) output",
-                 position=(8 * G, 93 * G), size=2.0)
+                 position=(8 * G, 66 * G), size=2.0)
     sch.add_text("BP output: to Integrator 2 (U3), RMS Detector (U4), Summing Amp (U1)",
-                 position=(8 * G, 98 * G), size=2.0)
+                 position=(8 * G, 70 * G), size=2.0)
     sch.add_text("VCTRL: from MCU (U5) SPI0 via DAC7800",
-                 position=(8 * G, 103 * G), size=2.0)
+                 position=(8 * G, 74 * G), size=2.0)
 
     # ── Save ──
     sch_path = os.path.join(WORK_DIR, "osc_block_integrator1.kicad_sch")
@@ -5771,6 +5911,12 @@ def build_osc_block_rms_detector():
                  position=(8 * G, 12 * G), size=2.5)
     sch.add_text("AD636 true RMS-to-DC converter, CAV=10uF averaging capacitor",
                  position=(8 * G, 17 * G), size=2.0)
+    sch.add_text("FUNCTION: Converts BP AC signal to DC voltage proportional to RMS",
+                 position=(8 * G, 23 * G), size=1.8)
+    sch.add_text("amplitude. 1/5 attenuator scales ~1V RMS to ~200mV for AD636 input.",
+                 position=(8 * G, 27 * G), size=1.8)
+    sch.add_text("MCU reads AIN0 to verify oscillation amplitude during calibration.",
+                 position=(8 * G, 31 * G), size=1.8)
 
     # ── Attenuator ──
     att_x = 24 * G
@@ -5802,43 +5948,66 @@ def build_osc_block_rms_detector():
     sch.add_text("1/5 attenuator\nVin/5 to AD636",
                  position=(att2_x + 6 * G, att_y), size=2.0)
 
-    # ── AD636 block ──
+    # ── AD636 block (drawn as IC box with pins) ──
     ad636_x = att2_x + 28 * G
     ad636_y = att_y
-    sch.add_wire(start=(att2_x, att_y), end=(ad636_x - 10 * G, att_y))
-    sch.add_text("U4\nAD636\nRMS-to-DC",
-                 position=(ad636_x - 8 * G, att_y - 8 * G), size=2.5)
+    # Wire from attenuator to AD636 input
+    ad636_in_x = ad636_x - 10 * G
+    sch.add_wire(start=(att2_x, att_y), end=(ad636_in_x, att_y))
 
-    # C3 (10u) - CAV averaging cap
-    cav_x = ad636_x
-    cav_y = att_y + 10 * G
+    # Draw AD636 as a rectangle box (using wire segments)
+    box_left = ad636_in_x
+    box_right = ad636_x + 4 * G
+    box_top = att_y - 8 * G
+    box_bot = att_y + 8 * G
+    # Box outline (4 sides)
+    sch.add_wire(start=(box_left, box_top), end=(box_right, box_top))
+    sch.add_wire(start=(box_right, box_top), end=(box_right, box_bot))
+    sch.add_wire(start=(box_right, box_bot), end=(box_left, box_bot))
+    sch.add_wire(start=(box_left, box_bot), end=(box_left, box_top))
+    # IC label inside box
+    sch.add_text("U4", position=(box_left + 2 * G, box_top + 3 * G), size=2.5)
+    sch.add_text("AD636", position=(box_left + 2 * G, box_top + 7 * G), size=2.5)
+    sch.add_text("RMS-to-DC", position=(box_left + 2 * G, box_top + 11 * G), size=1.8)
+    # Pin labels on box edges
+    sch.add_text("VIN", position=(box_left - 5 * G, att_y), size=1.8)
+    sch.add_text("VOUT", position=(box_right + 1 * G, att_y), size=1.8)
+    sch.add_text("CAV", position=(box_left + 5 * G, box_bot + 2 * G), size=1.8)
+    # Input wire connects to box left at signal level
+    sch.junctions.add(position=(box_left, att_y))
+    # Output wire exits box right at signal level
+    ad636_out_x = box_right
+
+    # C3 (10u) - CAV averaging cap (connected to bottom of IC box)
+    cav_x = (box_left + box_right) / 2
+    cav_y = box_bot + 6 * G
     sch.components.add(lib_id="C:C", reference="C3", value="10u",
         position=(cav_x, cav_y))
     cav_top = (cav_x, cav_y - 3.81)
     cav_bot = (cav_x, cav_y + 3.81)
-    sch.add_wire(start=(ad636_x - 2 * G, att_y), end=(cav_x, att_y))
-    sch.add_wire(start=(cav_x, att_y), end=cav_top)
-    sch.add_text("CAV", position=(cav_x + 5 * G, cav_y), size=2.0)
+    # Wire from box bottom to cap top
+    sch.add_wire(start=(cav_x, box_bot), end=cav_top)
+    sch.junctions.add(position=(cav_x, box_bot))
     gnd_cav_y = cav_bot[1] + 6 * G
     sch.add_wire(start=cav_bot, end=(cav_x, gnd_cav_y))
     sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
         value="GND", position=(cav_x, gnd_cav_y))
     pwr_idx += 1
 
-    # AIN0 output
-    ain0_x = ad636_x + 14 * G
+    # AIN0 output (from AD636 output pin)
+    ain0_x = ad636_out_x + 14 * G
     sch.add_label("AIN0", position=(ain0_x, att_y))
-    sch.add_wire(start=(cav_x, att_y), end=(ain0_x, att_y))
-    sch.junctions.add(position=(cav_x, att_y))
+    sch.add_wire(start=(ad636_out_x, att_y), end=(ain0_x, att_y))
+    sch.junctions.add(position=(ad636_out_x, att_y))
 
     # ── Interface annotations ──
-    sch.add_text("Interfaces:", position=(8 * G, 80 * G), size=2.5, bold=True)
+    sch.add_text("Interfaces:", position=(8 * G, 62 * G), size=2.5, bold=True)
     sch.add_text("BP input: from Integrator 1 (U2) output",
-                 position=(8 * G, 85 * G), size=2.0)
+                 position=(8 * G, 66 * G), size=2.0)
     sch.add_text("AIN0 output: to MCU (U5) ADC input",
-                 position=(8 * G, 90 * G), size=2.0)
+                 position=(8 * G, 70 * G), size=2.0)
     sch.add_text("AD636 RMS averaging time constant ~ R_internal * C3 ~ 100ms",
-                 position=(8 * G, 95 * G), size=2.0)
+                 position=(8 * G, 74 * G), size=2.0)
 
     # ── Save ──
     sch_path = os.path.join(WORK_DIR, "osc_block_rms_detector.kicad_sch")
@@ -5880,6 +6049,12 @@ def build_osc_block_integrator2():
                  position=(8 * G, 12 * G), size=2.5)
     sch.add_text("Mirrors Integrator 1, R8=100k output load",
                  position=(8 * G, 17 * G), size=2.0)
+    sch.add_text("FUNCTION: Second integrator converts BP to LP, completing the 90-degree",
+                 position=(8 * G, 23 * G), size=1.8)
+    sch.add_text("phase shift chain. LP feeds back to summing amp, closing the oscillation",
+                 position=(8 * G, 27 * G), size=1.8)
+    sch.add_text("loop. R8 (100k) provides DC load to prevent charge buildup.",
+                 position=(8 * G, 31 * G), size=1.8)
 
     # ── U3 LM4562 ──
     u3_x, u3_y = 55 * G, 60 * G
@@ -5941,25 +6116,50 @@ def build_osc_block_integrator2():
     sch.junctions.add(position=(inv2_junc[0], cint2_y))
     sch.junctions.add(position=(u3_out[0], cint2_y))
 
-    # ── Zener AGC D3/D4 ──
+    # ── Zener AGC D3/D4 back-to-back (anode-to-anode) ──
+    # Cathode wires route DOWN then horizontally to buses for visual clarity
     zener2_y = u3_inv[1] - zener_vert * G
-    sch.components.add(lib_id="D:D", reference="D3", value="DZ09 BV=1.1",
+    cathode_drop = 3 * G
+    sch.components.add(lib_id="D_Zener:D_Zener", reference="D3", value="DZ09 BV=1.1",
         position=(cint2_cx - 5 * G, zener2_y), rotation=0)
-    sch.components.add(lib_id="D:D", reference="D4", value="DZ09 BV=1.1",
+    sch.components.add(lib_id="D_Zener:D_Zener", reference="D4", value="DZ09 BV=1.1",
         position=(cint2_cx + 5 * G, zener2_y), rotation=180)
-    dz3_left = (cint2_cx - 5 * G - 3.81, zener2_y)
-    dz3_right = (cint2_cx - 5 * G + 3.81, zener2_y)
-    dz4_left = (cint2_cx + 5 * G - 3.81, zener2_y)
-    dz4_right = (cint2_cx + 5 * G + 3.81, zener2_y)
-    sch.add_wire(start=dz3_right, end=dz4_left)
-    sch.add_wire(start=dz3_left, end=(inv2_junc[0], zener2_y))
-    sch.add_wire(start=(inv2_junc[0], zener2_y), end=(inv2_junc[0], rdamp2_y))
-    sch.add_wire(start=dz4_right, end=(u3_out[0], zener2_y))
-    sch.add_wire(start=(u3_out[0], zener2_y), end=(u3_out[0], rdamp2_y))
+    d3_k = (cint2_cx - 5 * G - 3.81, zener2_y)
+    d3_a = (cint2_cx - 5 * G + 3.81, zener2_y)
+    d4_a = (cint2_cx + 5 * G - 3.81, zener2_y)
+    d4_k = (cint2_cx + 5 * G + 3.81, zener2_y)
+    # Anode-to-anode center wire
+    sch.add_wire(start=d3_a, end=d4_a)
+    # D3 cathode: drop down, then horizontal to left bus
+    sch.add_wire(start=d3_k, end=(d3_k[0], zener2_y + cathode_drop))
+    sch.add_wire(start=(d3_k[0], zener2_y + cathode_drop),
+                 end=(inv2_junc[0], zener2_y + cathode_drop))
+    sch.add_wire(start=(inv2_junc[0], zener2_y + cathode_drop),
+                 end=(inv2_junc[0], rdamp2_y))
+    sch.junctions.add(position=(inv2_junc[0], zener2_y + cathode_drop))
     sch.junctions.add(position=(inv2_junc[0], rdamp2_y))
+    # D4 cathode: drop down, then horizontal to right bus
+    sch.add_wire(start=d4_k, end=(d4_k[0], zener2_y + cathode_drop))
+    sch.add_wire(start=(d4_k[0], zener2_y + cathode_drop),
+                 end=(u3_out[0], zener2_y + cathode_drop))
+    sch.add_wire(start=(u3_out[0], zener2_y + cathode_drop),
+                 end=(u3_out[0], rdamp2_y))
+    sch.junctions.add(position=(u3_out[0], zener2_y + cathode_drop))
     sch.junctions.add(position=(u3_out[0], rdamp2_y))
-    sch.add_text("Zener AGC\nBV=1.1V\n(back-to-back)",
-                 position=(cint2_cx - 2 * G, zener2_y + 5 * G), size=2.0)
+    # Labels
+    sch.add_text("K", position=(d3_k[0] - 0.5 * G, zener2_y - 2.5 * G), size=2.0)
+    sch.add_text("A", position=(d3_a[0] + 0.5 * G, zener2_y - 2.5 * G), size=2.0)
+    sch.add_text("A", position=(d4_a[0] - 2 * G, zener2_y - 2.5 * G), size=2.0)
+    sch.add_text("K", position=(d4_k[0] + 0.5 * G, zener2_y - 2.5 * G), size=2.0)
+    # Directional labels at junction points
+    sch.add_text("to inv(-)",
+                 position=(inv2_junc[0] - 8 * G, zener2_y + cathode_drop), size=1.8)
+    sch.add_text("to output",
+                 position=(u3_out[0] + 2 * G, zener2_y + cathode_drop), size=1.8)
+    sch.add_text("Zener AGC: D3/D4 back-to-back, BV=1.1V",
+                 position=(cint2_cx - 8 * G, zener2_y + 5 * G), size=2.0)
+    sch.add_text("Anodes joined center. K3->inv(-), K4->output.",
+                 position=(cint2_cx - 8 * G, zener2_y + 8 * G), size=2.0)
 
     # NI to GND
     gnd3_y = u3_ni[1] + 8 * G
@@ -6002,13 +6202,13 @@ def build_osc_block_integrator2():
     pwr_idx += 1
 
     # ── Interface annotations ──
-    sch.add_text("Interfaces:", position=(8 * G, 88 * G), size=2.5, bold=True)
+    sch.add_text("Interfaces:", position=(8 * G, 62 * G), size=2.5, bold=True)
     sch.add_text("BP input: from Integrator 1 (U2) output",
-                 position=(8 * G, 93 * G), size=2.0)
+                 position=(8 * G, 66 * G), size=2.0)
     sch.add_text("LP output: to Summing Amplifier (U1) LP input",
-                 position=(8 * G, 98 * G), size=2.0)
+                 position=(8 * G, 70 * G), size=2.0)
     sch.add_text("VCTRL: from MCU (U5) SPI0 via DAC7800",
-                 position=(8 * G, 103 * G), size=2.0)
+                 position=(8 * G, 74 * G), size=2.0)
 
     # ── Save ──
     sch_path = os.path.join(WORK_DIR, "osc_block_integrator2.kicad_sch")
@@ -6046,6 +6246,10 @@ def build_osc_block_power_supply():
                  position=(8 * G, 12 * G), size=2.5)
     sch.add_text("Power: +15V/-15V analog supply, 3.3V MCU via LDO from +15V",
                  position=(8 * G, 17 * G), size=2.0)
+    sch.add_text("FUNCTION: R9 injects a brief pulse into HP at power-on to break",
+                 position=(8 * G, 23 * G), size=1.8)
+    sch.add_text("equilibrium and start oscillation. Bulk caps filter supply noise.",
+                 position=(8 * G, 27 * G), size=1.8)
 
     # ── Startup kick section ──
     kick_x = 20 * G
@@ -6115,13 +6319,13 @@ def build_osc_block_power_supply():
     sch.add_text("3.3V MCU supply\n(LDO from +15V)", position=(reg_x + 5 * G, pwr_y - 4 * G), size=2.0)
 
     # ── Interface annotations ──
-    sch.add_text("Interfaces:", position=(8 * G, 82 * G), size=2.5, bold=True)
+    sch.add_text("Interfaces:", position=(8 * G, 62 * G), size=2.5, bold=True)
     sch.add_text("HP output: startup pulse injected via R9 (one-shot at power-on)",
-                 position=(8 * G, 87 * G), size=2.0)
+                 position=(8 * G, 66 * G), size=2.0)
     sch.add_text("+15V/-15V: powers U1/U2/U3 LM4562 op-amps",
-                 position=(8 * G, 92 * G), size=2.0)
+                 position=(8 * G, 70 * G), size=2.0)
     sch.add_text("3.3V: powers U5 ADuCM362 MCU",
-                 position=(8 * G, 97 * G), size=2.0)
+                 position=(8 * G, 74 * G), size=2.0)
 
     # ── Save ──
     sch_path = os.path.join(WORK_DIR, "osc_block_power_supply.kicad_sch")
@@ -6160,6 +6364,14 @@ def build_osc_block_mcu():
                  position=(8 * G, 12 * G), size=2.5)
     sch.add_text("SPI0 controls dual DAC7800 MDACs, Timer1 measures BP frequency",
                  position=(8 * G, 17 * G), size=2.0)
+    sch.add_text("FUNCTION: Digital brain of the oscillator. Sets frequency via SPI to",
+                 position=(8 * G, 23 * G), size=1.8)
+    sch.add_text("DAC7800 MDACs, measures actual frequency via Timer1 capture of BP",
+                 position=(8 * G, 27 * G), size=1.8)
+    sch.add_text("zero-crossings (16MHz clock), reads amplitude via 24-bit ADC from AD636.",
+                 position=(8 * G, 31 * G), size=1.8)
+    sch.add_text("Runs 16-point self-calibration stored in flash. UART host interface.",
+                 position=(8 * G, 35 * G), size=1.8)
 
     # ── MCU block ──
     mcu_x = 40 * G
@@ -6258,15 +6470,15 @@ def build_osc_block_mcu():
                  position=(left_x - 8 * G, mcu_y + pin_spacing + 5 * G), size=1.8)
 
     # ── Interface annotations ──
-    sch.add_text("Interfaces:", position=(8 * G, 88 * G), size=2.5, bold=True)
+    sch.add_text("Interfaces:", position=(8 * G, 58 * G), size=2.5, bold=True)
     sch.add_text("AIN0: from AD636 RMS detector (U4) DC output",
-                 position=(8 * G, 93 * G), size=2.0)
+                 position=(8 * G, 62 * G), size=2.0)
     sch.add_text("BP_ZC: from Integrator 1 (U2) BP zero-crossing",
-                 position=(8 * G, 98 * G), size=2.0)
+                 position=(8 * G, 66 * G), size=2.0)
     sch.add_text("SPI0: to DAC7800 XDAC1/XDAC2 for frequency control",
-                 position=(8 * G, 103 * G), size=2.0)
+                 position=(8 * G, 70 * G), size=2.0)
     sch.add_text("UART: to host PC for commands (F<hz>, D<code>, CAL, M, S)",
-                 position=(8 * G, 108 * G), size=2.0)
+                 position=(8 * G, 74 * G), size=2.0)
 
     # ── Save ──
     sch_path = os.path.join(WORK_DIR, "osc_block_mcu.kicad_sch")
@@ -6567,21 +6779,33 @@ def build_oscillator(**kwargs):
     sch.junctions.add(position=(u2_out[0], cint1_y))
 
     # Zener AGC: Dz1, Dz2 back-to-back (anode-to-anode center)
+    # Cathode wires route DOWN then horizontally to buses for visual clarity
     zener1_y = u2_inv[1] - zener_vert * G
-    sch.components.add(lib_id="D:D", reference="D1", value="DZ09 BV=1.1",
+    cathode_drop = 3 * G
+    sch.components.add(lib_id="D_Zener:D_Zener", reference="D1", value="DZ09 BV=1.1",
         position=(cint1_cx - 5 * G, zener1_y), rotation=0)
-    sch.components.add(lib_id="D:D", reference="D2", value="DZ09 BV=1.1",
+    sch.components.add(lib_id="D_Zener:D_Zener", reference="D2", value="DZ09 BV=1.1",
         position=(cint1_cx + 5 * G, zener1_y), rotation=180)
-    dz1_left = (cint1_cx - 5 * G - 3.81, zener1_y)
-    dz1_right = (cint1_cx - 5 * G + 3.81, zener1_y)
-    dz2_left = (cint1_cx + 5 * G - 3.81, zener1_y)
-    dz2_right = (cint1_cx + 5 * G + 3.81, zener1_y)
-    sch.add_wire(start=dz1_right, end=dz2_left)
-    sch.add_wire(start=dz1_left, end=(inv1_junc[0], zener1_y))
-    sch.add_wire(start=(inv1_junc[0], zener1_y), end=(inv1_junc[0], rdamp1_y))
-    sch.add_wire(start=dz2_right, end=(u2_out[0], zener1_y))
-    sch.add_wire(start=(u2_out[0], zener1_y), end=(u2_out[0], rdamp1_y))
+    d1_k = (cint1_cx - 5 * G - 3.81, zener1_y)
+    d1_a = (cint1_cx - 5 * G + 3.81, zener1_y)
+    d2_a = (cint1_cx + 5 * G - 3.81, zener1_y)
+    d2_k = (cint1_cx + 5 * G + 3.81, zener1_y)
+    sch.add_wire(start=d1_a, end=d2_a)
+    # D1 cathode: drop down, then horizontal to left bus
+    sch.add_wire(start=d1_k, end=(d1_k[0], zener1_y + cathode_drop))
+    sch.add_wire(start=(d1_k[0], zener1_y + cathode_drop),
+                 end=(inv1_junc[0], zener1_y + cathode_drop))
+    sch.add_wire(start=(inv1_junc[0], zener1_y + cathode_drop),
+                 end=(inv1_junc[0], rdamp1_y))
+    sch.junctions.add(position=(inv1_junc[0], zener1_y + cathode_drop))
     sch.junctions.add(position=(inv1_junc[0], rdamp1_y))
+    # D2 cathode: drop down, then horizontal to right bus
+    sch.add_wire(start=d2_k, end=(d2_k[0], zener1_y + cathode_drop))
+    sch.add_wire(start=(d2_k[0], zener1_y + cathode_drop),
+                 end=(u2_out[0], zener1_y + cathode_drop))
+    sch.add_wire(start=(u2_out[0], zener1_y + cathode_drop),
+                 end=(u2_out[0], rdamp1_y))
+    sch.junctions.add(position=(u2_out[0], zener1_y + cathode_drop))
     sch.junctions.add(position=(u2_out[0], rdamp1_y))
     sch.add_text("Zener AGC\nBV=1.1V", position=(cint1_cx - 2 * G, zener1_y + 5 * G), size=2.0)
 
@@ -6744,21 +6968,33 @@ def build_oscillator(**kwargs):
     sch.junctions.add(position=(u3_out[0], cint2_y))
 
     # Zener AGC Dz3/Dz4 back-to-back (anode-to-anode center)
+    # Cathode wires route DOWN then horizontally to buses for visual clarity
     zener2_y = u3_inv[1] - zener_vert * G
-    sch.components.add(lib_id="D:D", reference="D3", value="DZ09 BV=1.1",
+    cathode_drop = 3 * G
+    sch.components.add(lib_id="D_Zener:D_Zener", reference="D3", value="DZ09 BV=1.1",
         position=(cint2_cx - 5 * G, zener2_y), rotation=0)
-    sch.components.add(lib_id="D:D", reference="D4", value="DZ09 BV=1.1",
+    sch.components.add(lib_id="D_Zener:D_Zener", reference="D4", value="DZ09 BV=1.1",
         position=(cint2_cx + 5 * G, zener2_y), rotation=180)
-    dz3_left = (cint2_cx - 5 * G - 3.81, zener2_y)
-    dz3_right = (cint2_cx - 5 * G + 3.81, zener2_y)
-    dz4_left = (cint2_cx + 5 * G - 3.81, zener2_y)
-    dz4_right = (cint2_cx + 5 * G + 3.81, zener2_y)
-    sch.add_wire(start=dz3_right, end=dz4_left)
-    sch.add_wire(start=dz3_left, end=(inv2_junc[0], zener2_y))
-    sch.add_wire(start=(inv2_junc[0], zener2_y), end=(inv2_junc[0], rdamp2_y))
-    sch.add_wire(start=dz4_right, end=(u3_out[0], zener2_y))
-    sch.add_wire(start=(u3_out[0], zener2_y), end=(u3_out[0], rdamp2_y))
+    d3_k = (cint2_cx - 5 * G - 3.81, zener2_y)
+    d3_a = (cint2_cx - 5 * G + 3.81, zener2_y)
+    d4_a = (cint2_cx + 5 * G - 3.81, zener2_y)
+    d4_k = (cint2_cx + 5 * G + 3.81, zener2_y)
+    sch.add_wire(start=d3_a, end=d4_a)
+    # D3 cathode: drop down, then horizontal to left bus
+    sch.add_wire(start=d3_k, end=(d3_k[0], zener2_y + cathode_drop))
+    sch.add_wire(start=(d3_k[0], zener2_y + cathode_drop),
+                 end=(inv2_junc[0], zener2_y + cathode_drop))
+    sch.add_wire(start=(inv2_junc[0], zener2_y + cathode_drop),
+                 end=(inv2_junc[0], rdamp2_y))
+    sch.junctions.add(position=(inv2_junc[0], zener2_y + cathode_drop))
     sch.junctions.add(position=(inv2_junc[0], rdamp2_y))
+    # D4 cathode: drop down, then horizontal to right bus
+    sch.add_wire(start=d4_k, end=(d4_k[0], zener2_y + cathode_drop))
+    sch.add_wire(start=(d4_k[0], zener2_y + cathode_drop),
+                 end=(u3_out[0], zener2_y + cathode_drop))
+    sch.add_wire(start=(u3_out[0], zener2_y + cathode_drop),
+                 end=(u3_out[0], rdamp2_y))
+    sch.junctions.add(position=(u3_out[0], zener2_y + cathode_drop))
     sch.junctions.add(position=(u3_out[0], rdamp2_y))
     sch.add_text("Zener AGC\nBV=1.1V", position=(cint2_cx - 2 * G, zener2_y + 5 * G), size=2.0)
 

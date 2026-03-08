@@ -474,6 +474,27 @@ Reference schematic: `~/Downloads/all tec/gen 3 systems/.../Appendix D Circuit D
   - 4 channels with 200ms/ch, RTD ramps 25→27°C to simulate thermal drift
   - Per-channel temperature logged: firmware can compensate for drift
 
+**Session 9 changes (2026-03-08): Block schematic review + portability**
+- **Input filters**: Fixed 3 critical issues:
+  - R:R 1M resistors had no rotation (vertical) — added rotation=90 for horizontal placement
+  - BAV199 ESD diode rotations swapped (90↔270) — cathodes now connect at signal wire
+  - Added junction dots at diode cathode-to-cathode signal connection
+  - Added explicit wires from diode anodes to GND symbols (was relying on pin coincidence)
+  - Added explicit wires from cap pin2 to GND symbols
+- **Relay ladder**: Flyback diode rotation=270 wrong (pins horizontal, wires assumed vertical) — changed to rotation=90 (K at top, A at bottom)
+- **Electrometer 362 + Mux TIA**: Added 4 missing junction dots each at T-junctions (input/feedback branch, Rf/Cf split, output column merge, divider midpoint)
+- **Mux TIA**: Added merge_collinear_wires() post-processing (was missing)
+- **AD636 RMS detector**: Replaced text-only "U4 AD636" annotation with drawn IC box (wire rectangle with pin labels VIN/VOUT/CAV)
+- **Oscillator blocks**: D_Zener:D_Zener symbol for Zener diodes, L-shaped cathode routing with directional labels
+- **TIA block annotations**: Added title/function descriptions to all 5 TIA block build functions (analog_mux, mux_tia, relay_ladder, electrometer_362, mcu_section)
+- **Repo portability**:
+  - Created requirements.txt (numpy, matplotlib, kicad-sch-api, PyMuPDF, Pillow)
+  - Added D_Zener.kicad_sym to bundled symbols/ directory
+  - Updated .gitignore for docs/ and requirements.txt
+  - Created docs/oscillator_guide.md — comprehensive technical guide
+- **SimGUI**: Builds clean (dotnet build, 0 errors)
+- All block PDFs verified and exported to Downloads/CircuitForge_PDFs/
+
 **Key simulation findings:**
 - Mux charge dump: filter capacitors store charge while channel is unselected; closing the switch dumps Q=C*V into TIA → saturation. Fix: omit caps in mux switching sim (real firmware handles settling)
 - Floating TIA_IN: during break-before-make switch transitions, TIA_IN floats → instant op-amp saturation with 1G Rf (recovery takes >> 10ms). Fix: R_BIAS (100M) to ground
