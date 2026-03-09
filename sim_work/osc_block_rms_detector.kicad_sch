@@ -2,7 +2,7 @@
 	(version 20250114)
 	(generator "eeschema")
 	(generator_version "9.0")
-	(uuid "042bf1bb-c13b-45a5-b8e4-6eb55b7897a6")
+	(uuid "bfdb2d96-2e88-4703-95e2-d794edc6855a")
 	(paper "A4")
 	(title_block
 		(title "State Variable Oscillator - AD636 RMS Detector")
@@ -427,7 +427,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "99d5bbac-a9cf-48cc-b075-00b6e8dfd4e0")
+		(uuid "e47c4590-085b-425b-87d9-7655ec6f78bf")
 		(property "Reference" "R10"
 			(at 60.96 123.952 180)
 			(effects
@@ -447,14 +447,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "7976fbab-b253-4346-9174-0fc7168c0d7f")
+			(uuid "a0158a74-145f-4ea0-92ea-b1dc0adc35f7")
 		)
 		(pin "2"
-			(uuid "365e2b56-75ab-49d0-9d48-473e433681b4")
+			(uuid "db4d4b9c-0b35-4624-9d19-6058c736b91a")
 		)
 		(instances
 			(project "Oscillator - RMS Detector"
-				(path "/042bf1bb-c13b-45a5-b8e4-6eb55b7897a6"
+				(path "/bfdb2d96-2e88-4703-95e2-d794edc6855a"
 					(reference "R10")
 					(unit 1)
 				)
@@ -470,7 +470,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "297b726c-37c6-4bae-bfb9-7b0e74920ccd")
+		(uuid "2ef6c758-0262-425a-9bd7-fef86f41847e")
 		(property "Reference" "R11"
 			(at 87.122 147.32 90)
 			(effects
@@ -490,14 +490,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "eb1579fe-f550-4fb9-8f35-4e10459cb9fe")
+			(uuid "9af65324-80b2-4434-8374-71f6697bc819")
 		)
 		(pin "2"
-			(uuid "0b4d762d-1ba1-4f21-b3be-ab8350b889a7")
+			(uuid "b914af89-11fb-4a47-bed9-3b3502de140b")
 		)
 		(instances
 			(project "Oscillator - RMS Detector"
-				(path "/042bf1bb-c13b-45a5-b8e4-6eb55b7897a6"
+				(path "/bfdb2d96-2e88-4703-95e2-d794edc6855a"
 					(reference "R11")
 					(unit 1)
 				)
@@ -513,7 +513,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "78124c69-285a-4046-8f3d-d40bffbe9b43")
+		(uuid "0b121c24-17ae-4161-b1ea-f79b7cdf96f6")
 		(property "Reference" "#PWR001"
 			(at 85.09 160.02 0.0000)
 			(hide yes)
@@ -534,11 +534,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "03c331d4-83fe-4ec1-a590-a3aac64d0caa")
+			(uuid "62b18b8e-59dd-46d4-865e-a13d70acd54d")
 		)
 		(instances
 			(project "Oscillator - RMS Detector"
-				(path "/042bf1bb-c13b-45a5-b8e4-6eb55b7897a6"
+				(path "/bfdb2d96-2e88-4703-95e2-d794edc6855a"
 					(reference "#PWR001")
 					(unit 1)
 				)
@@ -554,7 +554,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "b526b948-adb7-4425-ad2f-0de0271d7396")
+		(uuid "a5b4506a-47e3-4858-9628-f55ed8a0d217")
 		(property "Reference" "C3"
 			(at 149.225 160.02 0.0000)
 			(effects
@@ -574,14 +574,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "b378c0bf-939b-4dcd-8792-262118c044f5")
+			(uuid "87176184-39ab-488f-9527-6e9f3e124bc0")
 		)
 		(pin "2"
-			(uuid "6d1f95f0-8ae8-413c-bbcd-fba6fa477d24")
+			(uuid "6b8bdad6-50d1-4644-81b7-bf0e9843c9e2")
 		)
 		(instances
 			(project "Oscillator - RMS Detector"
-				(path "/042bf1bb-c13b-45a5-b8e4-6eb55b7897a6"
+				(path "/bfdb2d96-2e88-4703-95e2-d794edc6855a"
 					(reference "C3")
 					(unit 1)
 				)
@@ -597,7 +597,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "cb37d2cf-bd2c-4515-b032-292ed0f4b5bb")
+		(uuid "c082e0f2-ded1-43a1-a79a-7aac555be500")
 		(property "Reference" "#PWR002"
 			(at 148.59 170.18 0.0000)
 			(hide yes)
@@ -618,11 +618,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "ca8fda0a-23ef-42b4-9672-4fc83fa39ce0")
+			(uuid "f8ba7188-424a-46dc-b279-3fb6e8f96a73")
 		)
 		(instances
 			(project "Oscillator - RMS Detector"
-				(path "/042bf1bb-c13b-45a5-b8e4-6eb55b7897a6"
+				(path "/bfdb2d96-2e88-4703-95e2-d794edc6855a"
 					(reference "#PWR002")
 					(unit 1)
 				)
@@ -637,7 +637,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "b17186b3-3d54-49f2-8705-96e009cfbdec")
+		(uuid "091ee657-bcf9-42d0-aa33-5ed4426772af")
 	)
 	(wire
 		(pts
@@ -647,7 +647,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "91d2c4f5-631e-40eb-a99f-fb3ff553af3c")
+		(uuid "b107bc28-3887-4fd6-a758-505dcccce8eb")
 	)
 	(wire
 		(pts
@@ -657,7 +657,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "6cb9553b-45af-4e56-8f4b-72bed780ede3")
+		(uuid "c2e309e9-1298-4677-b9cf-95dc02dbaef4")
 	)
 	(wire
 		(pts
@@ -667,7 +667,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "1123184a-2fe2-454a-8cb9-dcc26415b659")
+		(uuid "9c76d954-2b16-4aee-8076-6861bced3ce0")
 	)
 	(wire
 		(pts
@@ -677,7 +677,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "ada8ac38-928c-4169-97f5-b3ed718537eb")
+		(uuid "0e01a14b-684c-4b81-89d7-bdfbeb4dfb09")
 	)
 	(wire
 		(pts
@@ -687,7 +687,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "531c9275-ea0c-45d7-b311-5c2b62aec2af")
+		(uuid "a7c798be-0fa6-450c-80c7-2611c3bf2028")
 	)
 	(wire
 		(pts
@@ -697,7 +697,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "95d7d7bd-8907-43ea-a74f-6f7c9eefa813")
+		(uuid "67a01d5c-6de8-4545-8c0c-ea8cb92277e7")
 	)
 	(wire
 		(pts
@@ -707,7 +707,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "7e07bcf2-88ef-4144-8760-8c981a3888d3")
+		(uuid "07b715dc-96b3-4391-b64a-c4a7513af2ca")
 	)
 	(wire
 		(pts
@@ -717,7 +717,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "d4ae0718-ef55-4a3d-8121-c36ef94c27ea")
+		(uuid "5e40817d-ce55-4e82-ae89-96fd80221bda")
 	)
 	(wire
 		(pts
@@ -727,7 +727,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "12ee07ef-25e3-4a6d-9b9c-b4480293d533")
+		(uuid "290bcb8f-d8d3-443b-9dcc-1838afb2f22f")
 	)
 	(wire
 		(pts
@@ -737,7 +737,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "b93845ac-7654-4d66-a2a7-a871f1e1e623")
+		(uuid "eeea4fad-144f-4f6a-a431-a670804c14e0")
 	)
 	(wire
 		(pts
@@ -747,31 +747,31 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "55d5c8fd-b35d-4550-aa87-dcfbab70fabb")
+		(uuid "980a98f2-9baf-421e-9b24-51d8a11251f4")
 	)
 	(junction
 		(at 85.09 121.92)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "90073faa-5413-4f91-b506-523ebf790d8e")
+		(uuid "b874e9d6-28b7-4ed7-81fa-34ae7848c683")
 	)
 	(junction
 		(at 130.81 121.92)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "cecbb8e3-aa37-4e95-8472-b00e3f942a8e")
+		(uuid "5cea7481-40a9-426e-959d-a684515e8ab0")
 	)
 	(junction
 		(at 148.59 142.24)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "b0f24f6f-3002-409e-83b0-36bad23289d0")
+		(uuid "9cbcdcf8-7e44-44d2-a4b7-6a29f23b8350")
 	)
 	(junction
 		(at 166.37 121.92)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "3bcc1493-a9a9-4c4c-b024-35c91bf6d78b")
+		(uuid "cdf08898-2268-4f9f-904a-ec00d87ee97c")
 	)
 	(label "BP"
 		(at 36.83 121.92 0)
@@ -781,7 +781,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "3b6c3415-c388-45be-85ee-bdded62fae94")
+		(uuid "c27bd3cb-da23-408e-8272-a853e4bfd17d")
 	)
 	(label "AIN0"
 		(at 201.93 121.92 0)
@@ -791,7 +791,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "aad692bd-8de0-4c1b-8b7e-9b9fc053624e")
+		(uuid "df76f074-4d9f-4157-90a0-d2546637273e")
 	)
 	(text "AD636 RMS DETECTOR (U4)"
 		(exclude_from_sim no)
@@ -803,7 +803,7 @@
 			)
 			(justify left)
 		)
-		(uuid "41354cf7-32f7-452e-9956-254eb3466976")
+		(uuid "a5d8fe64-7dda-41e8-91f1-626106f3fb49")
 	)
 	(text "Vout_RMS = BP * R11/(R10+R11) = BP * 10k/(40k+10k) = BP/5"
 		(exclude_from_sim no)
@@ -814,7 +814,7 @@
 			)
 			(justify left)
 		)
-		(uuid "a1c6b0c5-72eb-4a67-af21-9b8c60c8715d")
+		(uuid "5ae811fd-f8f2-497a-ab36-483e8742306b")
 	)
 	(text "AD636 true RMS-to-DC converter, CAV=10uF averaging capacitor"
 		(exclude_from_sim no)
@@ -825,7 +825,7 @@
 			)
 			(justify left)
 		)
-		(uuid "b6b09b0f-3ba3-4424-9269-b6aa001428cb")
+		(uuid "4e81b7ce-ad08-44bf-9926-b560c39fef49")
 	)
 	(text "FUNCTION: Converts BP AC signal to DC voltage proportional to RMS"
 		(exclude_from_sim no)
@@ -836,7 +836,7 @@
 			)
 			(justify left)
 		)
-		(uuid "9c552039-c20f-42a3-a58e-7b320185beaa")
+		(uuid "c2169649-9f4b-4036-84e7-dd32e360e80f")
 	)
 	(text "amplitude. 1/5 attenuator scales ~1V RMS to ~200mV for AD636 input."
 		(exclude_from_sim no)
@@ -847,7 +847,7 @@
 			)
 			(justify left)
 		)
-		(uuid "1f46313f-bd9c-425b-a91c-5060ff9ca429")
+		(uuid "999d80e4-5d6a-430e-b8a1-f93fb2ca0cc2")
 	)
 	(text "MCU reads AIN0 to verify oscillation amplitude during calibration."
 		(exclude_from_sim no)
@@ -858,7 +858,7 @@
 			)
 			(justify left)
 		)
-		(uuid "bf124a58-57c1-4b83-a9ec-0b70111bb1dc")
+		(uuid "43631157-ecd8-481f-ba10-376334d91945")
 	)
 	(text "1/5 attenuator\nVin/5 to AD636"
 		(exclude_from_sim no)
@@ -869,7 +869,7 @@
 			)
 			(justify left)
 		)
-		(uuid "983c9aab-6dcc-47bf-9f21-8b0ded798728")
+		(uuid "c4b0ed8f-64ed-4a62-b9e3-bb64914dfa8b")
 	)
 	(text "U4"
 		(exclude_from_sim no)
@@ -880,7 +880,7 @@
 			)
 			(justify left)
 		)
-		(uuid "46ff959a-8f0b-4aa6-8e8a-2d8644d2c8e0")
+		(uuid "7c53e4ff-e3fe-41b3-aeba-9690ec395577")
 	)
 	(text "AD636"
 		(exclude_from_sim no)
@@ -891,7 +891,7 @@
 			)
 			(justify left)
 		)
-		(uuid "391c2b84-297d-495d-af23-25c0a674c90c")
+		(uuid "a4efa7d8-021d-430f-a753-f53b040c04db")
 	)
 	(text "RMS-to-DC"
 		(exclude_from_sim no)
@@ -902,7 +902,7 @@
 			)
 			(justify left)
 		)
-		(uuid "2218d830-3c82-420a-b84b-ce89fa96a8fd")
+		(uuid "11177848-8dd3-4ba4-b162-72e1b24be47e")
 	)
 	(text "VIN"
 		(exclude_from_sim no)
@@ -913,7 +913,7 @@
 			)
 			(justify left)
 		)
-		(uuid "35fedeff-79b2-442b-bbea-7dc9d57d6f36")
+		(uuid "f7b9176d-24c2-42b8-bc78-ebcc3097a10b")
 	)
 	(text "VOUT"
 		(exclude_from_sim no)
@@ -924,7 +924,7 @@
 			)
 			(justify left)
 		)
-		(uuid "e568ea62-1c9f-4d0a-954e-cd9dcb9785cf")
+		(uuid "f292ff78-b9c8-408b-9972-8c2d159bd4b0")
 	)
 	(text "CAV"
 		(exclude_from_sim no)
@@ -935,7 +935,7 @@
 			)
 			(justify left)
 		)
-		(uuid "be13713f-4dac-4a23-a00b-6757929dedb5")
+		(uuid "04bf5f47-648d-47a9-bf85-9500dc987cc9")
 	)
 	(text "Interfaces:"
 		(exclude_from_sim no)
@@ -947,7 +947,7 @@
 			)
 			(justify left)
 		)
-		(uuid "e7ad2126-068e-4769-8e42-11d7b77adc8a")
+		(uuid "97bcec0b-1c8d-43a0-b307-136ed372ce9e")
 	)
 	(text "BP input: from Integrator 1 (U2) output"
 		(exclude_from_sim no)
@@ -958,7 +958,7 @@
 			)
 			(justify left)
 		)
-		(uuid "9623b0f2-3f42-4a14-aab9-7948d3ff4137")
+		(uuid "852f88a6-df7a-45f3-ad6b-ef09641dd108")
 	)
 	(text "AIN0 output: to MCU (U5) ADC input"
 		(exclude_from_sim no)
@@ -969,7 +969,7 @@
 			)
 			(justify left)
 		)
-		(uuid "01dc2010-1736-489b-87be-068d5804cd11")
+		(uuid "055d60be-b1f9-4e22-80bd-83ee071c47df")
 	)
 	(text "AD636 RMS averaging time constant ~ R_internal * C3 ~ 100ms"
 		(exclude_from_sim no)
@@ -980,7 +980,7 @@
 			)
 			(justify left)
 		)
-		(uuid "6e3ff788-09e6-4cb0-801c-8ff7ff2c5ec9")
+		(uuid "accb2acf-8281-4e59-8b8f-173d897cc8a8")
 	)
 	(sheet_instances
 		(path "/"

@@ -2,7 +2,7 @@
 	(version 20250114)
 	(generator "eeschema")
 	(generator_version "9.0")
-	(uuid "0aa0564e-5a8b-4527-900e-69c0f4e778f3")
+	(uuid "1cc531ed-13bc-415a-8cf0-396766e5bba2")
 	(paper "A4")
 	(title_block
 		(title "State Variable Oscillator - Integrator 1 (HP to BP)")
@@ -957,14 +957,13 @@
 	(symbol
 		(lib_id "LM741:LM741")
 		(at 139.7 152.4 0)
-		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "23bfea9c-9d17-4324-986a-e08722a95fbb")
+		(uuid "f700366a-d2ec-4442-b96f-c101d4a96230")
 		(property "Reference" "U2"
 			(at 139.7 158.75 0.0000)
 			(effects
@@ -984,32 +983,32 @@
 			)
 		)
 		(pin "1"
-			(uuid "294c05ce-f90c-4880-b005-176f0e51c1ab")
+			(uuid "bfd31865-86c0-4bce-a48c-83d1041d4840")
 		)
 		(pin "2"
-			(uuid "a22452fe-7a40-4dec-9493-71e3665fd0c8")
+			(uuid "addc29ab-3090-4ead-8299-b98266bf419f")
 		)
 		(pin "3"
-			(uuid "fd797172-93c3-4cac-a91a-b05fb0fc9a01")
+			(uuid "69de945b-4b13-4538-9301-699433fe4836")
 		)
 		(pin "4"
-			(uuid "460adfe8-d933-480d-af8a-367ee9dc6976")
+			(uuid "d0384493-766a-4d83-b293-63fc98f6974f")
 		)
 		(pin "5"
-			(uuid "7359797c-db82-409b-aedd-40371453fa11")
+			(uuid "ecd23979-046d-4b48-bff7-f5ce5c00611a")
 		)
 		(pin "6"
-			(uuid "2e433420-4802-4699-9b28-fd9781bc76cf")
+			(uuid "e63f87c4-77b7-4b0a-b9c5-541d37ae4b9d")
 		)
 		(pin "7"
-			(uuid "ff26d0e6-e0c7-4581-a563-55483ed4e92f")
+			(uuid "99ce95e0-c4a9-482f-9baa-a3e4e74e14d2")
 		)
 		(pin "8"
-			(uuid "4c26e5d7-fb9a-421b-a23a-469a91b3f95e")
+			(uuid "2b9f8aa8-53ba-4310-91e5-5357224deb38")
 		)
 		(instances
 			(project "Oscillator - Integrator 1"
-				(path "/0aa0564e-5a8b-4527-900e-69c0f4e778f3"
+				(path "/1cc531ed-13bc-415a-8cf0-396766e5bba2"
 					(reference "U2")
 					(unit 1)
 				)
@@ -1025,7 +1024,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "897db095-6b95-4a82-aed2-ff2f3a506967")
+		(uuid "a4e74adf-1932-407f-bcb4-c6ba0218f485")
 		(property "Reference" "R4"
 			(at 96.52 151.892 180)
 			(effects
@@ -1045,14 +1044,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "2ec5675b-a33e-40ef-bebc-b358db32c354")
+			(uuid "ad2fece1-58ae-4aa9-8de6-2aa8dd573336")
 		)
 		(pin "2"
-			(uuid "58d86ebe-6524-4ce4-9de6-9eb3e84a3f4e")
+			(uuid "ec8562cf-da17-4232-be9d-5fa27bc27b95")
 		)
 		(instances
 			(project "Oscillator - Integrator 1"
-				(path "/0aa0564e-5a8b-4527-900e-69c0f4e778f3"
+				(path "/1cc531ed-13bc-415a-8cf0-396766e5bba2"
 					(reference "R4")
 					(unit 1)
 				)
@@ -1068,7 +1067,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "6e2a88bf-5c8f-424c-9dbb-d6b14211f319")
+		(uuid "cac23827-127d-46f6-887f-4817163f3cf9")
 		(property "Reference" "C1"
 			(at 137.16 130.175 90)
 			(effects
@@ -1088,14 +1087,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "deba3b0c-784a-408a-a872-38ba8d7282a3")
+			(uuid "aea56ca9-8b02-4fa6-9909-0fc1408dffb0")
 		)
 		(pin "2"
-			(uuid "764b6cf0-467c-4e82-9463-037296cfec1f")
+			(uuid "afa4a9b0-20ca-46d6-aae9-379896b1f65a")
 		)
 		(instances
 			(project "Oscillator - Integrator 1"
-				(path "/0aa0564e-5a8b-4527-900e-69c0f4e778f3"
+				(path "/1cc531ed-13bc-415a-8cf0-396766e5bba2"
 					(reference "C1")
 					(unit 1)
 				)
@@ -1111,7 +1110,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "52365fdb-a657-423d-aa34-e9e5fc8f76e6")
+		(uuid "7cd16f61-e09f-456e-baef-77e1f091228f")
 		(property "Reference" "R5"
 			(at 139.7 116.332 180)
 			(effects
@@ -1131,14 +1130,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "4520dd62-07c1-463a-a898-4e380c7624e2")
+			(uuid "cac75dc7-a26c-4849-b650-28089cd6ae9e")
 		)
 		(pin "2"
-			(uuid "523b03a0-a57c-4419-9137-587157f6fb04")
+			(uuid "cfcea019-9aeb-46d7-939c-8b8619d85755")
 		)
 		(instances
 			(project "Oscillator - Integrator 1"
-				(path "/0aa0564e-5a8b-4527-900e-69c0f4e778f3"
+				(path "/1cc531ed-13bc-415a-8cf0-396766e5bba2"
 					(reference "R5")
 					(unit 1)
 				)
@@ -1154,7 +1153,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "31ce2d64-adbf-4bca-a92b-78b96d702438")
+		(uuid "d777714f-3152-40a6-8da7-6bf5a899186d")
 		(property "Reference" "D1"
 			(at 127 101.6 0.0000)
 			(effects
@@ -1174,14 +1173,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "94523d9f-cd97-4d12-ba7e-71f56101bb13")
+			(uuid "7c4be9a4-7827-4720-b22b-6de3aa093377")
 		)
 		(pin "2"
-			(uuid "83869268-922b-45e4-9fa6-84cd8cd28e0c")
+			(uuid "526265b8-da36-4445-84b5-14e0bb11de0e")
 		)
 		(instances
 			(project "Oscillator - Integrator 1"
-				(path "/0aa0564e-5a8b-4527-900e-69c0f4e778f3"
+				(path "/1cc531ed-13bc-415a-8cf0-396766e5bba2"
 					(reference "D1")
 					(unit 1)
 				)
@@ -1197,7 +1196,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "112de1c8-07be-425e-ba03-24d65763a521")
+		(uuid "95bc36dc-8fbe-4ea4-8054-250d6e5d82d4")
 		(property "Reference" "D2"
 			(at 152.4 96.52 180)
 			(effects
@@ -1217,14 +1216,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "3afb3560-4fea-4610-8c77-a7e9ac6a3e8b")
+			(uuid "f086d993-7a68-49a3-8b27-f93841fb6c61")
 		)
 		(pin "2"
-			(uuid "2f4a20e0-2034-42a4-bfd4-f21120569a99")
+			(uuid "fd86da7a-4852-4f62-9451-f8adb4e0d62b")
 		)
 		(instances
 			(project "Oscillator - Integrator 1"
-				(path "/0aa0564e-5a8b-4527-900e-69c0f4e778f3"
+				(path "/1cc531ed-13bc-415a-8cf0-396766e5bba2"
 					(reference "D2")
 					(unit 1)
 				)
@@ -1240,7 +1239,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "6e105691-c19c-4618-9370-28f8b1463a56")
+		(uuid "a6203fd3-326b-498e-a765-e30e8c1408cf")
 		(property "Reference" "#PWR001"
 			(at 132.08 168.91 0.0000)
 			(hide yes)
@@ -1261,11 +1260,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "7630254d-cd8d-49f6-b6ae-2de52a3dc96b")
+			(uuid "4358b2fc-3b0e-4f71-b645-5657383185e8")
 		)
 		(instances
 			(project "Oscillator - Integrator 1"
-				(path "/0aa0564e-5a8b-4527-900e-69c0f4e778f3"
+				(path "/1cc531ed-13bc-415a-8cf0-396766e5bba2"
 					(reference "#PWR001")
 					(unit 1)
 				)
@@ -1281,7 +1280,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "0f1b79e4-c7f0-404d-9e0c-efa0928afecf")
+		(uuid "608b907a-8fd2-46f1-8637-2ba008e7a4af")
 		(property "Reference" "#PWR002"
 			(at 137.16 130.81 0.0000)
 			(hide yes)
@@ -1302,11 +1301,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "1d7472f5-781d-48cb-9e3a-1be991645d7b")
+			(uuid "e6bbd761-71fb-436b-ad5e-023c21751ee2")
 		)
 		(instances
 			(project "Oscillator - Integrator 1"
-				(path "/0aa0564e-5a8b-4527-900e-69c0f4e778f3"
+				(path "/1cc531ed-13bc-415a-8cf0-396766e5bba2"
 					(reference "#PWR002")
 					(unit 1)
 				)
@@ -1315,33 +1314,33 @@
 	)
 	(wire
 		(pts
-			(xy 35.56 149.86) (xy 50.8 149.86)
+			(xy 20.32 149.86) (xy 45.72 149.86)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "8ae11f7f-a23a-4e83-bdc6-ca04e9e49b5e")
+		(uuid "285f92ec-c5e6-4811-a8c8-dc0d6f23fb69")
 	)
 	(wire
 		(pts
-			(xy 50.8 149.86) (xy 92.71 149.86)
+			(xy 76.2 149.86) (xy 92.71 149.86)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "4bb08312-ffaf-4b1f-9506-8a9ff8e11249")
+		(uuid "b1eca117-0f2a-4851-8fa2-dda5525031df")
 	)
 	(wire
 		(pts
-			(xy 55.88 170.18) (xy 55.88 165.1)
+			(xy 60.96 162.56) (xy 60.96 172.72)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "1077188a-b87e-4334-8e3e-a5793e319208")
+		(uuid "3a04109d-2c9f-403c-91fb-f3749a9df373")
 	)
 	(wire
 		(pts
@@ -1351,7 +1350,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "98d6c9c7-e73a-4ca2-a6c7-c64609483e87")
+		(uuid "03b9a7d8-b209-4b7f-b627-13c009e1a47b")
 	)
 	
 	(wire
@@ -1362,7 +1361,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "abd51a19-ab67-4bb9-af31-e3b2cd00ae70")
+		(uuid "79cd9a45-9082-46ff-a7a2-dcd2369d0a0b")
 	)
 	(wire
 		(pts
@@ -1372,7 +1371,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "59db8cbe-0e14-455a-8c1c-85b8d3c42d8a")
+		(uuid "6f46f0ad-1f28-4c9c-bf4d-a7f1119fc796")
 	)
 	(wire
 		(pts
@@ -1382,7 +1381,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "ca34633d-24c5-4d89-9fa2-91e9cd36d94a")
+		(uuid "0ffbab3c-867b-4054-8c61-193417f6bb8c")
 	)
 	(wire
 		(pts
@@ -1392,7 +1391,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "8e7f475c-6dc0-4d4b-a8ce-8e24df41c656")
+		(uuid "b45c1cd8-184e-4c8b-ba69-6c9a88f781c7")
 	)
 	(wire
 		(pts
@@ -1402,7 +1401,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "9a608582-9f7e-4ae5-bbd9-4b9d7c480f7f")
+		(uuid "11d2c6f5-b266-409d-b7b6-e2b3724907eb")
 	)
 	(wire
 		(pts
@@ -1412,7 +1411,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "ea709fcb-9b9e-4ae6-8bec-55dfe9b1d681")
+		(uuid "a1b1aa7b-ac2a-4a68-bc41-8ac4daba8bf2")
 	)
 	(wire
 		(pts
@@ -1422,7 +1421,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "1497db84-3615-4436-b6be-af38493d4773")
+		(uuid "5642a2ba-45a5-4d14-b970-7aec08b24a44")
 	)
 	(wire
 		(pts
@@ -1432,7 +1431,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "db0f9297-046b-44d7-a9f3-706ed24f5a64")
+		(uuid "a22065c9-ff85-4a71-ab5b-c2e2e5041b82")
 	)
 	(wire
 		(pts
@@ -1442,7 +1441,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "34aac472-3a56-4b70-abe0-0ae930c2673b")
+		(uuid "70fc19be-7e0d-4ecc-8c7d-43ca706a927f")
 	)
 	(wire
 		(pts
@@ -1452,7 +1451,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "5968223f-b355-4e1e-9199-29b7e2821944")
+		(uuid "07c8cf00-6d1e-4668-8656-b471a6f5fe00")
 	)
 	(wire
 		(pts
@@ -1462,7 +1461,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "64191f39-aca5-466a-a287-7a19148939e2")
+		(uuid "ee2658c1-8d4b-4159-9c57-1d78c14af3b2")
 	)
 	(wire
 		(pts
@@ -1472,7 +1471,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "30c59e83-d703-46d9-b54b-b9f9356ea297")
+		(uuid "64aa5e7a-d54a-468f-8688-bffb6b4318c6")
 	)
 	(wire
 		(pts
@@ -1482,7 +1481,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "d535d6e2-d7a7-4132-b277-f065b4304930")
+		(uuid "0284b13e-e50f-43d6-8ef8-9a2c1c978e19")
 	)
 	(wire
 		(pts
@@ -1492,7 +1491,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "de64ee46-be10-4815-b219-9da7a0f05eb3")
+		(uuid "6f5a3706-be94-4348-a5cc-928722829386")
 	)
 	(wire
 		(pts
@@ -1502,7 +1501,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "afd7c26a-748f-47cd-876c-057e40efa0e5")
+		(uuid "2404e891-e172-4a8a-bc70-d75dc888b492")
 	)
 	(wire
 		(pts
@@ -1512,7 +1511,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "39145b02-2c21-4b4c-85d1-d71bc98ae24e")
+		(uuid "5e260166-0726-4993-917a-ba93c9804db0")
 	)
 	(wire
 		(pts
@@ -1522,7 +1521,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "fc3aab04-a60c-4ac4-857a-2c40ad8bb5df")
+		(uuid "376504ae-2532-4d11-abcc-063800e41e90")
 	)
 	(wire
 		(pts
@@ -1532,7 +1531,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "4468fce3-163a-41fb-b12b-f2e4a5ce7f3b")
+		(uuid "49cbb690-6852-4685-b6dc-df285da296aa")
 	)
 	(wire
 		(pts
@@ -1542,75 +1541,75 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "dc6bd0b7-1a36-4adc-b885-f27ddc767f77")
+		(uuid "cab6b73b-9bf9-4c27-a397-43b34191a148")
 	)
 	(junction
 		(at 135.89 149.86)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "90ee9e98-cb3d-4294-a785-b190105b85e0")
+		(uuid "d695e8e5-0e14-4e4c-b85a-f09fafb42b7f")
 	)
 	(junction
 		(at 135.89 129.54)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "d5575558-2aba-4524-bfc5-cf6909ea3546")
+		(uuid "72591341-366c-480a-bd85-99f00fcb562a")
 	)
 	(junction
 		(at 147.32 129.54)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "5e4dfd44-3559-46be-82a5-0d98953956a1")
+		(uuid "6d608a23-1781-4964-892c-23a72bf6e4e7")
 	)
 	(junction
 		(at 135.89 106.68)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "ee163de0-18b3-4904-b36a-fba4890f42c2")
+		(uuid "f9b7226a-b95f-4f88-a53a-09e96297955c")
 	)
 	(junction
 		(at 135.89 114.3)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "dcb9758e-9e1f-40c3-9560-c21acf9da2f3")
+		(uuid "d3e0406b-65c4-4e8f-8ff6-81533c361cda")
 	)
 	(junction
 		(at 147.32 106.68)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "1e9cfdf9-a4a1-405d-a20b-f132fd3d66bb")
+		(uuid "990b9fd3-a250-492f-9353-cb8bd4b62d79")
 	)
 	(junction
 		(at 147.32 114.3)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "b206b5e6-9872-4714-af47-836b910afbdb")
+		(uuid "93ec7138-323b-411f-a001-9a24cc6809e6")
 	)
 	(junction
 		(at 147.32 152.4)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "f197c29f-daca-41f7-bc72-873e6b3f824a")
+		(uuid "f7117549-b095-48cf-a9ae-2c0d3346353f")
 	)
 	(label "HP"
-		(at 35.56 149.86 0)
+		(at 20.32 149.86 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
-		(uuid "80f81a7a-83fa-4b23-84f9-d6b5ff40aa5a")
+		(uuid "a1ece7f2-9cdb-4b90-b6dd-7c7750fd9683")
 	)
 	(label "VCTRL"
-		(at 55.88 170.18 0)
+		(at 60.96 172.72 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
-		(uuid "6a83757c-fcf8-4087-9915-6333aa50847a")
+		(uuid "c9d314d8-87ed-45cb-a24a-ab7d1e20baf0")
 	)
 	(label "+15V"
 		(at 137.16 180.34 0)
@@ -1620,7 +1619,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "bd46d08d-5fcc-448c-9f8c-7fad1ee8a8f9")
+		(uuid "279dde84-4cc5-4a89-986e-85d772756f6b")
 	)
 	(label "BP"
 		(at 172.72 152.4 0)
@@ -1630,7 +1629,19 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "4c0bfddd-f82b-483b-991b-26d1da5638e3")
+		(uuid "4ff791cb-8a93-4ea3-ab98-da8475f9947d")
+	)
+	(rectangle
+		(start 45.72 137.16)
+		(end 76.2 162.56)
+		(stroke
+			(width 0.3)
+			(type solid)
+		)
+		(fill
+			(type none)
+		)
+		(uuid "246ca0a5-0d01-4c6e-9666-208bedd16040")
 	)
 	(text "INTEGRATOR 1: HP -> BP (U2 + XDAC1)"
 		(exclude_from_sim no)
@@ -1642,7 +1653,7 @@
 			)
 			(justify left)
 		)
-		(uuid "76e4c786-788c-4aa6-882d-34c714e4f068")
+		(uuid "2386a168-60bd-4b0b-866b-c25f14e61d41")
 	)
 	(text "f = D / (4096 * 2pi * R4 * C1) = D / (4096 * 2pi * 10k * 470p)"
 		(exclude_from_sim no)
@@ -1653,7 +1664,7 @@
 			)
 			(justify left)
 		)
-		(uuid "090a28ba-19d4-4ecf-bc06-f5e2f4bb391d")
+		(uuid "b16601e6-2a39-4a6a-bf91-e8b85dfd1699")
 	)
 	(text "Frequency range: 25 Hz (D=3) to 30 kHz (D=3640)"
 		(exclude_from_sim no)
@@ -1664,7 +1675,7 @@
 			)
 			(justify left)
 		)
-		(uuid "d4b2eab3-b192-4852-8485-3cf34800e839")
+		(uuid "a775bb6a-2248-4daa-b4c5-ebb6c7feff23")
 	)
 	(text "FUNCTION: Integrates HP signal to produce BP output. DAC7800 MDAC"
 		(exclude_from_sim no)
@@ -1675,7 +1686,7 @@
 			)
 			(justify left)
 		)
-		(uuid "e953636c-2b25-4789-872e-be35dde9dcee")
+		(uuid "7b92e667-4e53-47fc-8055-a2d9a81ecbfb")
 	)
 	(text "controls effective resistance, setting oscillation frequency. Zener"
 		(exclude_from_sim no)
@@ -1686,7 +1697,7 @@
 			)
 			(justify left)
 		)
-		(uuid "78aa879d-64f7-48d0-9a80-ffd88ef8d41b")
+		(uuid "6512703c-36a3-4632-86d1-a6f8fc694f74")
 	)
 	(text "diodes (D1/D2, BV=1.1V) clamp output to ~1V RMS (passive AGC)."
 		(exclude_from_sim no)
@@ -1697,18 +1708,52 @@
 			)
 			(justify left)
 		)
-		(uuid "a37cd6dd-8f3b-4eb3-b130-6e84405de7af")
+		(uuid "64b77e98-316f-4bb3-b64a-d45a7466ccfd")
 	)
 	(text "XDAC1\nDAC7800"
 		(exclude_from_sim no)
-		(at 55.88 139.7 0.0000)
+		(at 50.8 142.24 0.0000)
 		(effects
 			(font
-				(size 2.5 2.5)
+				(size 2 2)
+				(bold yes)
 			)
 			(justify left)
 		)
-		(uuid "ccc37105-4ac6-4c30-b1d3-c2dd8f6930e4")
+		(uuid "5b85688b-e750-4369-a4dd-b86d6942c8ab")
+	)
+	(text "VREF"
+		(exclude_from_sim no)
+		(at 48.26 152.4 0.0000)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+			(justify left)
+		)
+		(uuid "86bd499d-9a1a-4c64-a99d-e4cb43266f0a")
+	)
+	(text "IOUT"
+		(exclude_from_sim no)
+		(at 63.5 152.4 0.0000)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+			(justify left)
+		)
+		(uuid "f82bdfad-81e4-42e9-afa1-2f038dcd73a3")
+	)
+	(text "VCTRL"
+		(exclude_from_sim no)
+		(at 53.34 154.94 0.0000)
+		(effects
+			(font
+				(size 1.5 1.5)
+			)
+			(justify left)
+		)
+		(uuid "7fd49b26-2ca6-45b0-ab77-0d382184695f")
 	)
 	(text "K"
 		(exclude_from_sim no)
@@ -1719,7 +1764,7 @@
 			)
 			(justify left)
 		)
-		(uuid "efb3749c-91be-4078-8e53-3070403a7f67")
+		(uuid "74974f8f-74f9-4698-a040-3f3dddeb2810")
 	)
 	(text "A"
 		(exclude_from_sim no)
@@ -1730,7 +1775,7 @@
 			)
 			(justify left)
 		)
-		(uuid "f21f1cba-4824-434e-b266-be96e5035ab6")
+		(uuid "10e9adf5-803d-480b-b4af-6c743a9d50a0")
 	)
 	(text "A"
 		(exclude_from_sim no)
@@ -1741,7 +1786,7 @@
 			)
 			(justify left)
 		)
-		(uuid "7d5ed286-78e2-419f-b1f9-b992cd5f81ec")
+		(uuid "295161aa-98e4-4e2c-b286-0938ffe9e6a4")
 	)
 	(text "K"
 		(exclude_from_sim no)
@@ -1752,7 +1797,7 @@
 			)
 			(justify left)
 		)
-		(uuid "9729a663-343b-4701-b69a-ad5c93b94bf4")
+		(uuid "2fd61d46-ddbc-46f7-9c5c-e7aacecd043a")
 	)
 	(text "to inv(-)"
 		(exclude_from_sim no)
@@ -1763,7 +1808,7 @@
 			)
 			(justify left)
 		)
-		(uuid "949ae78c-1238-4e58-884f-effd6ce85b71")
+		(uuid "7b71d14f-335d-4ea1-a80b-928ddcded852")
 	)
 	(text "to output"
 		(exclude_from_sim no)
@@ -1774,7 +1819,7 @@
 			)
 			(justify left)
 		)
-		(uuid "a691579d-ac25-487c-9569-8734b476f3fa")
+		(uuid "0ec49524-ca64-49ba-9cd8-22d6e473967c")
 	)
 	(text "Zener AGC: D1/D2 back-to-back, BV=1.1V"
 		(exclude_from_sim no)
@@ -1785,7 +1830,7 @@
 			)
 			(justify left)
 		)
-		(uuid "97348f47-787c-4105-83ad-d3749ee00b08")
+		(uuid "98475749-c5a9-44d0-940e-5be472cbd129")
 	)
 	(text "Anodes joined center. K1->inv(-), K2->output."
 		(exclude_from_sim no)
@@ -1796,7 +1841,7 @@
 			)
 			(justify left)
 		)
-		(uuid "e351fcbd-98ff-44bc-a828-f04b17ccb79e")
+		(uuid "3b709c7a-41f1-4408-9504-601d41c8b4c0")
 	)
 	(text "D=121: f~997Hz    D=3: f~25Hz    D=3640: f~30kHz"
 		(exclude_from_sim no)
@@ -1807,7 +1852,7 @@
 			)
 			(justify left)
 		)
-		(uuid "418a92db-b137-4b50-8cfb-7a5a41a9fb1f")
+		(uuid "e33d46ae-ca58-4e57-99ca-98dad2664f93")
 	)
 	(text "Interfaces:"
 		(exclude_from_sim no)
@@ -1819,7 +1864,7 @@
 			)
 			(justify left)
 		)
-		(uuid "bebd6d32-81c5-4cfe-b15d-ee319ee6c036")
+		(uuid "73009195-c065-43d4-8de9-533c11f92702")
 	)
 	(text "HP input: from Summing Amplifier (U1) output"
 		(exclude_from_sim no)
@@ -1830,7 +1875,7 @@
 			)
 			(justify left)
 		)
-		(uuid "3607b9f9-80d8-4e2a-8b35-5df70e882102")
+		(uuid "632e121a-a077-4867-b899-8235e230d103")
 	)
 	(text "BP output: to Integrator 2 (U3), RMS Detector (U4), Summing Amp (U1)"
 		(exclude_from_sim no)
@@ -1841,7 +1886,7 @@
 			)
 			(justify left)
 		)
-		(uuid "df06d5b3-ce2e-46b3-99ea-3079d2b2742f")
+		(uuid "655729cf-e2bc-42b5-8e01-dd9637a63fe0")
 	)
 	(text "VCTRL: from MCU (U5) SPI0 via DAC7800"
 		(exclude_from_sim no)
@@ -1852,7 +1897,7 @@
 			)
 			(justify left)
 		)
-		(uuid "b47c5858-8417-4a0c-b480-f751c139df5f")
+		(uuid "b0a79718-f237-4623-a5fc-4be0e3b28e91")
 	)
 	(sheet_instances
 		(path "/"

@@ -3,8 +3,8 @@
 
 .title SVO Frequency Test D=121
 
-.include C:/Users/Robert/Documents/LTspice/StateVarOsc/models/LM4562.lib
-.include C:/Users/Robert/Documents/LTspice/StateVarOsc/models/DAC7800.lib
+.include "C:/Users/bob43/Downloads/state variable Osc/State-Variable-Oscillator-MDAC/StateVarOsc/models/LM4562.lib"
+.include "C:/Users/bob43/Downloads/state variable Osc/State-Variable-Oscillator-MDAC/StateVarOsc/models/DAC7800.lib"
 
 * === Power Supply ===
 VCC vcc 0 DC 15
@@ -71,11 +71,11 @@ meas tran hp_pp pp v(hp) from=0.4000 to=0.5000
 meas tran lp_pp pp v(lp) from=0.4000 to=0.5000
 
 * Write results to file
-echo "freq = $&freq" > C:/Users/Robert/Documents/LTspice/sim_work/oscillator_d121_results.txt
-echo "bp_pp = $&bp_pp" >> C:/Users/Robert/Documents/LTspice/sim_work/oscillator_d121_results.txt
-echo "bp_rms = $&bp_rms" >> C:/Users/Robert/Documents/LTspice/sim_work/oscillator_d121_results.txt
-echo "hp_pp = $&hp_pp" >> C:/Users/Robert/Documents/LTspice/sim_work/oscillator_d121_results.txt
-echo "lp_pp = $&lp_pp" >> C:/Users/Robert/Documents/LTspice/sim_work/oscillator_d121_results.txt
+echo "freq = $&freq" > oscillator_d121_results.txt
+echo "bp_pp = $&bp_pp" >> oscillator_d121_results.txt
+echo "bp_rms = $&bp_rms" >> oscillator_d121_results.txt
+echo "hp_pp = $&hp_pp" >> oscillator_d121_results.txt
+echo "lp_pp = $&lp_pp" >> oscillator_d121_results.txt
 
 echo ""
 echo "=== Results for D=121 ==="

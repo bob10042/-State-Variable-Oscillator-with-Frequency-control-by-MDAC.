@@ -2,7 +2,7 @@
 	(version 20250114)
 	(generator "eeschema")
 	(generator_version "9.0")
-	(uuid "43ac9c58-d0b7-48d2-9ce8-13d1d74936da")
+	(uuid "b8a2ab47-be11-4a0b-b51b-4df75dac2644")
 	(paper "A4")
 	(title_block
 		(title "Electrometer Transimpedance Amplifier (TIA)")
@@ -1136,14 +1136,13 @@
 	(symbol
 		(lib_id "LM741:LM741")
 		(at 127 111.76 0)
-		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "f5116949-b5b5-4bcd-aabb-8f79f7223440")
+		(uuid "0e2442b6-57af-4430-b498-f7eb6a66819b")
 		(property "Reference" "U1"
 			(at 127 118.11 0.0000)
 			(effects
@@ -1163,32 +1162,32 @@
 			)
 		)
 		(pin "1"
-			(uuid "0bbb79a5-47dc-485c-afdb-89cfdbbea872")
+			(uuid "d827ddfc-f25d-4488-8ee1-bf134b7c2115")
 		)
 		(pin "2"
-			(uuid "3a4ed8d6-8032-4790-9345-1fd88863a568")
+			(uuid "a1a9a00e-fccf-4665-967f-8023b64c082d")
 		)
 		(pin "3"
-			(uuid "a96abd92-e057-4795-82b3-94dee154bd17")
+			(uuid "9ce67c87-9aa6-4260-a529-f0465ca933db")
 		)
 		(pin "4"
-			(uuid "a82b7d6c-4927-4bf2-ba85-ac84602de5a0")
+			(uuid "f3143f7b-be74-40bb-b954-243ca702a27b")
 		)
 		(pin "5"
-			(uuid "b92570af-3749-43bb-95db-fef857cbca28")
+			(uuid "ca3a810f-43f2-48f7-85b6-503cf5030913")
 		)
 		(pin "6"
-			(uuid "7428838d-ae2e-44d4-8eef-78ad790232e2")
+			(uuid "75ef1233-51c0-4241-9ecf-fc6afddaaee2")
 		)
 		(pin "7"
-			(uuid "c29d951c-969d-4b20-a4eb-1111a6fbfc5b")
+			(uuid "fcf8e00d-2c91-4ef9-a516-050aa708c5b7")
 		)
 		(pin "8"
-			(uuid "53e06b0a-db48-4531-b9fa-0844faf18262")
+			(uuid "caf678b8-b0c3-4ef1-9cb8-96026e4a0309")
 		)
 		(instances
 			(project "Electrometer TIA"
-				(path "/43ac9c58-d0b7-48d2-9ce8-13d1d74936da"
+				(path "/b8a2ab47-be11-4a0b-b51b-4df75dac2644"
 					(reference "U1")
 					(unit 1)
 				)
@@ -1204,7 +1203,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "86e3cdb8-bd06-464d-8d2b-828bda88febe")
+		(uuid "10b14472-e081-4a92-be30-43539e5d60b0")
 		(property "Reference" "R1"
 			(at 127 88.392 180)
 			(effects
@@ -1224,14 +1223,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "adbcc245-8e2b-4317-ad35-45c17452f482")
+			(uuid "96ee5aac-83dd-4d7e-9993-c2943cce41ef")
 		)
 		(pin "2"
-			(uuid "a5e77f56-3356-48e0-bf56-04c73c9a5ce9")
+			(uuid "63c2b87c-5ec7-4035-a5c4-5e17249717fd")
 		)
 		(instances
 			(project "Electrometer TIA"
-				(path "/43ac9c58-d0b7-48d2-9ce8-13d1d74936da"
+				(path "/b8a2ab47-be11-4a0b-b51b-4df75dac2644"
 					(reference "R1")
 					(unit 1)
 				)
@@ -1247,7 +1246,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "56c2f38b-d056-4a3a-a39c-e44e5cb0e307")
+		(uuid "be52ad22-37fc-4555-a6df-55565379bbd8")
 		(property "Reference" "C1"
 			(at 124.46 71.755 90)
 			(effects
@@ -1267,14 +1266,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "5ac88d9a-ec4f-48d5-8e43-7a7e7cac684a")
+			(uuid "71741dbe-48ae-426b-979c-621b4316c358")
 		)
 		(pin "2"
-			(uuid "cc48c3bb-69b8-4cba-8d2f-138f5a57ecb1")
+			(uuid "daf521a4-9191-4c14-9408-992641473067")
 		)
 		(instances
 			(project "Electrometer TIA"
-				(path "/43ac9c58-d0b7-48d2-9ce8-13d1d74936da"
+				(path "/b8a2ab47-be11-4a0b-b51b-4df75dac2644"
 					(reference "C1")
 					(unit 1)
 				)
@@ -1290,7 +1289,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "fb27d718-2181-4fd8-9e7e-f5388c5b42d0")
+		(uuid "91d858ec-6b40-426b-8789-25f1752a33d5")
 		(property "Reference" "R2"
 			(at 162.052 129.54 90)
 			(effects
@@ -1310,14 +1309,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "af9eb626-aa6e-40e8-ba06-4e45605e0966")
+			(uuid "e40a4e44-c61d-4af1-95a5-4182e72d42f0")
 		)
 		(pin "2"
-			(uuid "2659b9c2-0e25-4945-a3b7-b001c627c626")
+			(uuid "2da77c9d-102c-4608-9b04-0a70c13a1c7f")
 		)
 		(instances
 			(project "Electrometer TIA"
-				(path "/43ac9c58-d0b7-48d2-9ce8-13d1d74936da"
+				(path "/b8a2ab47-be11-4a0b-b51b-4df75dac2644"
 					(reference "R2")
 					(unit 1)
 				)
@@ -1333,7 +1332,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "97aefb40-c92c-492f-b83f-b58da4ae9d9c")
+		(uuid "9ea4a3a4-6545-486d-8056-ea8535eb7b51")
 		(property "Reference" "#PWR01"
 			(at 119.38 115.57 0.0000)
 			(hide yes)
@@ -1354,11 +1353,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "7fe54a0c-39cd-4ea9-b8fe-c27597e2b39c")
+			(uuid "4dd49549-7a00-40d7-8565-cb4aab2d8d73")
 		)
 		(instances
 			(project "Electrometer TIA"
-				(path "/43ac9c58-d0b7-48d2-9ce8-13d1d74936da"
+				(path "/b8a2ab47-be11-4a0b-b51b-4df75dac2644"
 					(reference "#PWR01")
 					(unit 1)
 				)
@@ -1374,7 +1373,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "8ce342e5-d11c-4bce-8dfb-14dc301482e2")
+		(uuid "3981af5a-5c7c-4465-9a89-d300442ce2e0")
 		(property "Reference" "#PWR02"
 			(at 124.46 123.19 0.0000)
 			(hide yes)
@@ -1395,11 +1394,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "d6db8707-a532-45ad-87b6-60c5a3865040")
+			(uuid "19e47826-9cfe-4591-b8d5-d0abb7d6e2b9")
 		)
 		(instances
 			(project "Electrometer TIA"
-				(path "/43ac9c58-d0b7-48d2-9ce8-13d1d74936da"
+				(path "/b8a2ab47-be11-4a0b-b51b-4df75dac2644"
 					(reference "#PWR02")
 					(unit 1)
 				)
@@ -1415,7 +1414,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "492af267-c1da-43b6-a418-c2f1ced46022")
+		(uuid "e7ee11c2-c0a9-48f0-a4b7-3550efae3729")
 		(property "Reference" "#PWR03"
 			(at 124.46 92.71 0.0000)
 			(hide yes)
@@ -1436,11 +1435,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "b5bbb38d-155a-492a-b8d6-25a62b072ffb")
+			(uuid "efe38fdc-d5f5-4181-95b9-15cd52409607")
 		)
 		(instances
 			(project "Electrometer TIA"
-				(path "/43ac9c58-d0b7-48d2-9ce8-13d1d74936da"
+				(path "/b8a2ab47-be11-4a0b-b51b-4df75dac2644"
 					(reference "#PWR03")
 					(unit 1)
 				)
@@ -1456,7 +1455,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "19434a20-8109-4251-af32-b88b5a72f69a")
+		(uuid "5ca45872-f6b6-4cd3-91fd-4837b827e08d")
 		(property "Reference" "#PWR04"
 			(at 160.02 134.62 0.0000)
 			(hide yes)
@@ -1477,11 +1476,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "20d647a9-1052-448a-b3f9-b27c356b0272")
+			(uuid "13948f64-421e-4d4f-88c8-1b5468f04dd6")
 		)
 		(instances
 			(project "Electrometer TIA"
-				(path "/43ac9c58-d0b7-48d2-9ce8-13d1d74936da"
+				(path "/b8a2ab47-be11-4a0b-b51b-4df75dac2644"
 					(reference "#PWR04")
 					(unit 1)
 				)
@@ -1497,7 +1496,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "077a89dc-4dd2-4f27-a4b6-490ca4cdcc59")
+		(uuid "775430fc-afef-410b-9989-93aa2bc60a8f")
 		(property "Reference" "V1"
 			(at 88.9 116.84 0.0000)
 			(effects
@@ -1517,14 +1516,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "9e9d3ff7-6353-43f7-9f94-658f275c709c")
+			(uuid "1645baed-15d1-458f-a02e-4bbf0da09161")
 		)
 		(pin "2"
-			(uuid "31a23d1c-8951-4939-a833-598d9c7a384f")
+			(uuid "85b054ae-033a-4869-a342-0e4134b02379")
 		)
 		(instances
 			(project "Electrometer TIA"
-				(path "/43ac9c58-d0b7-48d2-9ce8-13d1d74936da"
+				(path "/b8a2ab47-be11-4a0b-b51b-4df75dac2644"
 					(reference "V1")
 					(unit 1)
 				)
@@ -1540,7 +1539,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "b282dc36-9b49-4254-a097-658dbbdaa39f")
+		(uuid "e8d6e9ab-0731-4fbf-970a-e80d5153882f")
 		(property "Reference" "#PWR05"
 			(at 86.36 120.65 0.0000)
 			(hide yes)
@@ -1561,11 +1560,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "b943f450-a90d-4af2-8edb-59c48bfeb126")
+			(uuid "d8270e2a-f14c-4f61-9703-52adc9c795b3")
 		)
 		(instances
 			(project "Electrometer TIA"
-				(path "/43ac9c58-d0b7-48d2-9ce8-13d1d74936da"
+				(path "/b8a2ab47-be11-4a0b-b51b-4df75dac2644"
 					(reference "#PWR05")
 					(unit 1)
 				)
@@ -1580,7 +1579,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "adbd482e-689d-4478-b9cf-55d3ac07e184")
+		(uuid "f0e74dbd-3e60-4ad5-98d3-c11805f30c53")
 	)
 	(wire
 		(pts
@@ -1590,7 +1589,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "e95a94fb-173f-435f-9c31-aacdf1765fb8")
+		(uuid "7f76b033-4491-4bfb-80a2-322a9fd8d916")
 	)
 	(wire
 		(pts
@@ -1600,7 +1599,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "1f316d95-5fd9-40e2-9186-5a20067c98c8")
+		(uuid "a6066c6d-3de5-4f1a-895e-533f69579daf")
 	)
 	(wire
 		(pts
@@ -1610,7 +1609,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "acea4dde-c095-41b0-956f-9c22c0a2eccd")
+		(uuid "02468e95-0fa4-4791-83e1-c0053cc6cd77")
 	)
 	(wire
 		(pts
@@ -1620,7 +1619,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "becf70c4-4f3e-4dab-824d-eddef69ad6a3")
+		(uuid "8f060737-a9b9-4c48-b393-3cc84dd91793")
 	)
 	(wire
 		(pts
@@ -1630,7 +1629,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "da463ca5-ba70-4c09-b7d1-1da2a5c577e7")
+		(uuid "c8ef7227-39b0-4a53-95c8-0d22acb4672f")
 	)
 	(wire
 		(pts
@@ -1640,7 +1639,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "81a658db-c015-4687-9f67-4dd7d41c2d63")
+		(uuid "03143ab1-3559-4d1a-8d41-0b54e5bfc9b5")
 	)
 	(wire
 		(pts
@@ -1650,7 +1649,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "66cd45e6-24fd-4492-9710-f4027ac78096")
+		(uuid "f166cb6a-193f-47a2-8d95-a04936de0e87")
 	)
 	(wire
 		(pts
@@ -1660,7 +1659,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "86ca7716-9234-4842-9a94-36fb422fccf5")
+		(uuid "9b6a3217-94e1-4948-8e22-28f11067fcef")
 	)
 	(wire
 		(pts
@@ -1670,7 +1669,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "8dcbc56b-ffc4-4c3f-98e4-cccb4da2125e")
+		(uuid "1775d99f-5677-4742-b2b9-dc783ad6b8be")
 	)
 	(wire
 		(pts
@@ -1680,7 +1679,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "08b009d3-b6e4-4387-a6af-c322580942be")
+		(uuid "0feb7017-815a-46be-90e5-88b8cef49fca")
 	)
 	(wire
 		(pts
@@ -1690,7 +1689,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "2b732e00-a8ad-460e-8384-90a7dfb0b8f2")
+		(uuid "5f9608ed-f287-4524-8595-0e9fd26e0beb")
 	)
 	(wire
 		(pts
@@ -1700,7 +1699,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "2af8ea9a-689e-47e3-8ca3-5f04f1ae1a0d")
+		(uuid "b8f61fdb-2ef8-4a64-939a-3569f1224a4f")
 	)
 	(wire
 		(pts
@@ -1710,7 +1709,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "e78428ad-40a4-4a65-ad58-d2b46568d1f2")
+		(uuid "4cb2dcd8-dac8-4b6f-9794-6985488a8ea2")
 	)
 	(wire
 		(pts
@@ -1720,7 +1719,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "d0ba0122-34a2-41ee-b5bf-3a696c8fd0dd")
+		(uuid "f6a152cc-e1de-4853-a324-31289091dbc3")
 	)
 	(wire
 		(pts
@@ -1730,7 +1729,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "61b04515-3116-4346-b473-0c500068f302")
+		(uuid "7d3687b1-df0c-4109-9104-ac61ece5925a")
 	)
 	(wire
 		(pts
@@ -1740,7 +1739,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "03a60ebc-e1f3-4c67-b69d-50d919d750ff")
+		(uuid "7ecc3f26-c2c5-4380-a03d-609b87023720")
 	)
 	(wire
 		(pts
@@ -1750,7 +1749,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "6ce40e68-670b-4c8d-99b1-f5868b0eefdf")
+		(uuid "a2320e1d-31cf-4ed1-95f6-f4ee9530e62b")
 	)
 	(label "OUT"
 		(at 172.72 125.73 0)
@@ -1760,7 +1759,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "a7a3209d-29b3-4821-b9c4-e77abb7db92e")
+		(uuid "3047eafc-f0ac-403a-a3f8-48a52fb54083")
 	)
 	(label "TRIAX_IN"
 		(at 99.06 109.22 0)
@@ -1770,7 +1769,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "874e22c4-66bb-4fc3-833d-eae90a309a0f")
+		(uuid "31dbfc3e-768c-405f-89be-ab50c01f9961")
 	)
 	(sheet_instances
 		(path "/"

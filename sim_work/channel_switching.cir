@@ -1,0 +1,266 @@
+* Channel Switching Simulation: 16 channels multiplexed
+* Op-amp: LMC6001 Ultra-Low Bias, Range 8: Rf=10G
+* Each channel has different DC current (halving pattern)
+* Channels switch every 200ms
+
+* ---- Power Supply ----
+VCC VCC 0 DC 5
+VEE VEE 0 DC -5
+
+* ---- Mux Switch Model ----
+.model SW_MUX SW(VT=2.5 VH=0.5 RON=100 ROFF=1e12)
+
+* ---- Channel 1: I=100.0fA ----
+* Sensor model: current source with R_DUT ground return
+Isrc1 0 CH1_IN DC 1e-13
+R_DUT1 CH1_IN 0 100Meg
+R_IN1 CH1_IN MUX1_IN 1k
+S_MUX1 MUX1_IN TIA_IN EN1 0 SW_MUX
+* ---- Channel 2: I=250.0fA ----
+* Sensor model: current source with R_DUT ground return
+Isrc2 0 CH2_IN DC 2.5e-13
+R_DUT2 CH2_IN 0 100Meg
+R_IN2 CH2_IN MUX2_IN 1k
+S_MUX2 MUX2_IN TIA_IN EN2 0 SW_MUX
+* ---- Channel 3: I=500.0fA ----
+* Sensor model: current source with R_DUT ground return
+Isrc3 0 CH3_IN DC 5e-13
+R_DUT3 CH3_IN 0 100Meg
+R_IN3 CH3_IN MUX3_IN 1k
+S_MUX3 MUX3_IN TIA_IN EN3 0 SW_MUX
+* ---- Channel 4: I=1.000pA ----
+* Sensor model: current source with R_DUT ground return
+Isrc4 0 CH4_IN DC 1e-12
+R_DUT4 CH4_IN 0 100Meg
+R_IN4 CH4_IN MUX4_IN 1k
+S_MUX4 MUX4_IN TIA_IN EN4 0 SW_MUX
+* ---- Channel 5: I=750.0fA ----
+* Sensor model: current source with R_DUT ground return
+Isrc5 0 CH5_IN DC 7.5e-13
+R_DUT5 CH5_IN 0 100Meg
+R_IN5 CH5_IN MUX5_IN 1k
+S_MUX5 MUX5_IN TIA_IN EN5 0 SW_MUX
+* ---- Channel 6: I=300.0fA ----
+* Sensor model: current source with R_DUT ground return
+Isrc6 0 CH6_IN DC 3e-13
+R_DUT6 CH6_IN 0 100Meg
+R_IN6 CH6_IN MUX6_IN 1k
+S_MUX6 MUX6_IN TIA_IN EN6 0 SW_MUX
+* ---- Channel 7: I=150.0fA ----
+* Sensor model: current source with R_DUT ground return
+Isrc7 0 CH7_IN DC 1.5e-13
+R_DUT7 CH7_IN 0 100Meg
+R_IN7 CH7_IN MUX7_IN 1k
+S_MUX7 MUX7_IN TIA_IN EN7 0 SW_MUX
+* ---- Channel 8: I=800.0fA ----
+* Sensor model: current source with R_DUT ground return
+Isrc8 0 CH8_IN DC 8e-13
+R_DUT8 CH8_IN 0 100Meg
+R_IN8 CH8_IN MUX8_IN 1k
+S_MUX8 MUX8_IN TIA_IN EN8 0 SW_MUX
+* ---- Channel 9: I=50.0fA ----
+* Sensor model: current source with R_DUT ground return
+Isrc9 0 CH9_IN DC 5e-14
+R_DUT9 CH9_IN 0 100Meg
+R_IN9 CH9_IN MUX9_IN 1k
+S_MUX9 MUX9_IN TIA_IN EN9 0 SW_MUX
+* ---- Channel 10: I=400.0fA ----
+* Sensor model: current source with R_DUT ground return
+Isrc10 0 CH10_IN DC 4e-13
+R_DUT10 CH10_IN 0 100Meg
+R_IN10 CH10_IN MUX10_IN 1k
+S_MUX10 MUX10_IN TIA_IN EN10 0 SW_MUX
+* ---- Channel 11: I=600.0fA ----
+* Sensor model: current source with R_DUT ground return
+Isrc11 0 CH11_IN DC 6e-13
+R_DUT11 CH11_IN 0 100Meg
+R_IN11 CH11_IN MUX11_IN 1k
+S_MUX11 MUX11_IN TIA_IN EN11 0 SW_MUX
+* ---- Channel 12: I=200.0fA ----
+* Sensor model: current source with R_DUT ground return
+Isrc12 0 CH12_IN DC 2e-13
+R_DUT12 CH12_IN 0 100Meg
+R_IN12 CH12_IN MUX12_IN 1k
+S_MUX12 MUX12_IN TIA_IN EN12 0 SW_MUX
+* ---- Channel 13: I=900.0fA ----
+* Sensor model: current source with R_DUT ground return
+Isrc13 0 CH13_IN DC 9e-13
+R_DUT13 CH13_IN 0 100Meg
+R_IN13 CH13_IN MUX13_IN 1k
+S_MUX13 MUX13_IN TIA_IN EN13 0 SW_MUX
+* ---- Channel 14: I=350.0fA ----
+* Sensor model: current source with R_DUT ground return
+Isrc14 0 CH14_IN DC 3.5e-13
+R_DUT14 CH14_IN 0 100Meg
+R_IN14 CH14_IN MUX14_IN 1k
+S_MUX14 MUX14_IN TIA_IN EN14 0 SW_MUX
+* ---- Channel 15: I=550.0fA ----
+* Sensor model: current source with R_DUT ground return
+Isrc15 0 CH15_IN DC 5.5e-13
+R_DUT15 CH15_IN 0 100Meg
+R_IN15 CH15_IN MUX15_IN 1k
+S_MUX15 MUX15_IN TIA_IN EN15 0 SW_MUX
+* ---- Channel 16: I=120.0fA ----
+* Sensor model: current source with R_DUT ground return
+Isrc16 0 CH16_IN DC 1.2e-13
+R_DUT16 CH16_IN 0 100Meg
+R_IN16 CH16_IN MUX16_IN 1k
+S_MUX16 MUX16_IN TIA_IN EN16 0 SW_MUX
+
+* ---- Mux Enable Signals (sequential, non-overlapping) ----
+V_EN1 EN1 0 PULSE(0 5 0.0 1u 1u 0.2 4.25)
+V_EN2 EN2 0 PULSE(0 5 0.2 1u 1u 0.2 4.25)
+V_EN3 EN3 0 PULSE(0 5 0.4 1u 1u 0.2 4.25)
+V_EN4 EN4 0 PULSE(0 5 0.6000000000000001 1u 1u 0.2 4.25)
+V_EN5 EN5 0 PULSE(0 5 0.8 1u 1u 0.2 4.25)
+V_EN6 EN6 0 PULSE(0 5 1.0 1u 1u 0.2 4.25)
+V_EN7 EN7 0 PULSE(0 5 1.2000000000000002 1u 1u 0.2 4.25)
+V_EN8 EN8 0 PULSE(0 5 1.4000000000000001 1u 1u 0.2 4.25)
+V_EN9 EN9 0 PULSE(0 5 1.6 1u 1u 0.2 4.25)
+V_EN10 EN10 0 PULSE(0 5 1.8 1u 1u 0.2 4.25)
+V_EN11 EN11 0 PULSE(0 5 2.0 1u 1u 0.2 4.25)
+V_EN12 EN12 0 PULSE(0 5 2.2 1u 1u 0.2 4.25)
+V_EN13 EN13 0 PULSE(0 5 2.4000000000000004 1u 1u 0.2 4.25)
+V_EN14 EN14 0 PULSE(0 5 2.6 1u 1u 0.2 4.25)
+V_EN15 EN15 0 PULSE(0 5 2.8000000000000003 1u 1u 0.2 4.25)
+V_EN16 EN16 0 PULSE(0 5 3.0 1u 1u 0.2 4.25)
+
+* ---- TIA ----
+XU1 0 INV VCC VEE TIA_OUT LMC6001_NS
+
+* ---- Feedback Network (Range 8) ----
+Rf INV TIA_OUT 10G
+Cf INV TIA_OUT 1p
+
+* ---- Mux to TIA connection ----
+R_WIRE TIA_IN INV 1
+* Bias path prevents TIA_IN float during mux transitions
+* R_BIAS scaled per range to minimize noise gain: 1 + Rf/R_BIAS
+R_BIAS TIA_IN 0 100G
+
+* ---- ADC Load ----
+RL TIA_OUT AIN0 100
+R_ADC AIN0 0 10Meg
+
+* ---- Precision options for high-impedance ranges ----
+.options gmin=1e-16
+.options abstol=1e-16
+.options reltol=1e-5
+
+* ---- Analysis ----
+.tran 10u 3.25
+
+.control
+run
+wrdata C:/Users/bob43/Downloads/state variable Osc/State-Variable-Oscillator-MDAC/sim_work/channel_switching_range8_results.txt V(CH1_IN) V(CH2_IN) V(CH3_IN) V(CH4_IN) V(CH5_IN) V(CH6_IN) V(CH7_IN) V(CH8_IN) V(CH9_IN) V(CH10_IN) V(CH11_IN) V(CH12_IN) V(CH13_IN) V(CH14_IN) V(CH15_IN) V(CH16_IN) V(TIA_OUT) V(AIN0)
+quit
+.endc
+
+.SUBCKT LMC6001_NS     1   2  99  50  28
+* CAUTION:  SET .OPTIONS GMIN=1E-16 TO CORRECTLY MODEL INPUT BIAS CURRENT.
+*
+* Features:
+* Operates from single supply
+* Rail-to-rail output swing
+* Low offset voltage (max) =           800uV
+* Ultra low input current (max) =      100fA
+* Slew rate =                        1.5V/uS
+* Gain-bandwidth product =            1.3MHz
+* Supply current =                     450uA
+*
+* NOTE: This CMOS electrometer simulates guaranteed (100% tested)
+*       input offset voltage (VOS)   input bias current (IB)
+*
+* NOTE: - Noise is not modeled.
+*       - Asymmetrical gain is not modeled.
+*
+CI1 1  50 2P
+CI2 2  50 2P
+* 1.634 Hz pole capacitor
+C3  98 9  9.715N
+* 1.1 MHz pole capacitor
+C4  6  5  13.95P
+* 4.98 MHz pole capacitor
+C5  98 15 31.9F
+* Drain-substrate capacitor
+C6  50 4  3P
+* 28.6 MHz pole capacitor
+C7  98 11 5.62F
+DP1 1  99 DA
+DP2 50 1  DD
+DP3 2  99 DB
+DP4 50 2  DC
+D1  9  8  DX
+D2  10 9  DX
+D3  18 20 DX
+D4  21 18 DX
+D5  26 24 DX
+D6  25 27 DX
+D7  22 99 DX
+D8  50 22 DX
+D9  0  14 DX
+D10 12 0  DX
+EH  97 98 99    49 1.0
+EN  0  96 0     50 1.0
+* Input offset voltage -|
+EOS 7  1  POLY(1) 16 49 800U 1
+EP  97 0  99    0  1.0
+E1  97 19 99    18 1.0
+* Sourcing load +Vs current
+F1  99 0  VA2   1
+* Sinking load -Vs current
+F2  0  50 VA3   1
+F3  13 0  VA1   1
+G1  98 9  5     6  0.1
+G2  98 11 9     49 1U
+G3  98 15 11    49 1U
+* DC CMRR
+G4  98 16 POLY(2) 1 49 2 49 0 1.26E-8 1.26E-8
+G5  98 18 15    49 1U
+I1  99 4  33.46U
+I2  99 50 366.5U
+* Load dependent pole
+L1  22 28 80.4U
+* CMR lead inductor
+L2  16 17 73.1M
+* 3.30 MHz lead inductor
+L3  98 3  48.2M
+M1  5  2  4     99 MX
+M2  6  7  4     99 MX
+R3  5  50 5.18K
+R4  6  50 5.18K
+R5  98 9  1E7
+R8  99 49 50K
+R9  49 50 50K
+R10 18 3  1E6
+R12 98 11 1E6
+R13 98 17 1K
+* -Rout
+R16 23 24 70.7
+* +Rout
+R17 23 25 80.3
+* +Isc slope control
+R18 20 29 64K
+* -Isc slope control
+R19 21 30 130K
+R21 98 15 1E6
+R22 22 28 636
+VA1 19 23 0V
+VA2 14 13 0V
+VA3 13 12 0V
+V2  97 8  0.713V
+V3  10 96 0.710V
+V4  29 22 1.170V
+V5  22 30 0.63V
+V6  26 22 0.63V
+V7  22 27 0.63V
+* Input bias and offset current differences
+.MODEL  DA D    (IS=500FA)
+.MODEL  DB D    (IS=500FA)
+.MODEL  DC D    (IS=405FA)
+.MODEL  DD D    (IS=400FA)
+.MODEL  DX D    (IS=1.0E-14)
+.MODEL  MX PMOS (VTO=-2.456 KP=7.0547E-4)
+.ENDS
+
+.end

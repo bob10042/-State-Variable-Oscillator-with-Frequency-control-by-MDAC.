@@ -2,7 +2,7 @@
 	(version 20250114)
 	(generator "eeschema")
 	(generator_version "9.0")
-	(uuid "301a4b19-4aea-4be6-b0e1-3df22b423670")
+	(uuid "24bf9fde-d8d7-47e7-9f50-dfc7fc70fb36")
 	(paper "A4")
 	(title_block
 		(title "Electrometer TIA - ADuCM362 Platform")
@@ -1012,14 +1012,13 @@
 	(symbol
 		(lib_id "LM741:LM741")
 		(at 116.84 111.76 0)
-		(mirror x)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "0bc633e6-9264-485a-a53a-504ef03b48a1")
+		(uuid "d24567bf-bb8b-4a51-b176-be43da33064e")
 		(property "Reference" "U1"
 			(at 116.84 118.11 0.0000)
 			(effects
@@ -1039,32 +1038,32 @@
 			)
 		)
 		(pin "1"
-			(uuid "0c61be9f-d7df-4b77-9b1d-b504952bcc2c")
+			(uuid "3df89342-816f-4f0e-8292-1ead5dfaa349")
 		)
 		(pin "2"
-			(uuid "c57f53cc-2eea-4607-b247-3b291977d0a1")
+			(uuid "818ae6b7-fa40-46eb-97c7-79fa9b9c67fd")
 		)
 		(pin "3"
-			(uuid "54755914-4389-4da5-ab39-cd75ffb67dc7")
+			(uuid "b2b63293-26a2-4b5b-a36b-860690c1c8cf")
 		)
 		(pin "4"
-			(uuid "999e917c-04f0-4796-84e0-a224bba83967")
+			(uuid "152966ce-496a-430f-944b-d89c3cdbefdc")
 		)
 		(pin "5"
-			(uuid "c24694cb-ef6d-4fd8-890d-56f01899c72c")
+			(uuid "0c710248-6560-47bc-aa31-426ade7fa7ff")
 		)
 		(pin "6"
-			(uuid "265ad33a-3a91-42e0-8d25-2e2f6516584f")
+			(uuid "59554204-2c47-4bc6-b5dd-8d15824f1935")
 		)
 		(pin "7"
-			(uuid "b08a9ee5-ccb3-4a9d-abc5-ecf76b23568b")
+			(uuid "ed634344-b3d7-412c-925a-e45c4269b3ee")
 		)
 		(pin "8"
-			(uuid "cfa067fd-8955-4b28-8b6e-1967036e855b")
+			(uuid "2201360c-dc5f-436b-bcaf-8060ecc2480e")
 		)
 		(instances
 			(project "Electrometer TIA - ADuCM362"
-				(path "/301a4b19-4aea-4be6-b0e1-3df22b423670"
+				(path "/24bf9fde-d8d7-47e7-9f50-dfc7fc70fb36"
 					(reference "U1")
 					(unit 1)
 				)
@@ -1073,16 +1072,16 @@
 	)
 	(symbol
 		(lib_id "R:R")
-		(at 116.84 96.52 90)
+		(at 116.84 86.36 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "5c144c1b-7598-47e0-ab6a-7cc8b71febb4")
+		(uuid "c912347e-586c-4bf3-95f3-e8150dd49557")
 		(property "Reference" "R1"
-			(at 116.84 98.552 180)
+			(at 116.84 88.392 180)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1091,7 +1090,7 @@
 			)
 		)
 		(property "Value" "1G"
-			(at 116.84 96.52 180)
+			(at 116.84 86.36 180)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1100,14 +1099,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "1df17a41-b101-43ed-8d43-3828bf312103")
+			(uuid "1cc59900-131a-42a4-a001-d154a9f92d1f")
 		)
 		(pin "2"
-			(uuid "224d1354-77b5-43bd-85f5-cf6f642a26bc")
+			(uuid "60ba34b0-3fa0-40f6-9868-0fd143b18342")
 		)
 		(instances
 			(project "Electrometer TIA - ADuCM362"
-				(path "/301a4b19-4aea-4be6-b0e1-3df22b423670"
+				(path "/24bf9fde-d8d7-47e7-9f50-dfc7fc70fb36"
 					(reference "R1")
 					(unit 1)
 				)
@@ -1116,16 +1115,16 @@
 	)
 	(symbol
 		(lib_id "C:C")
-		(at 116.84 88.9 90)
+		(at 116.84 76.2 90)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "55ae5c3c-cb06-4ef9-a099-17fdabcad198")
+		(uuid "e970e364-21fd-4888-bfdf-edb1290adb00")
 		(property "Reference" "C1"
-			(at 114.3 89.535 90)
+			(at 114.3 76.835 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1134,7 +1133,7 @@
 			)
 		)
 		(property "Value" "10pF"
-			(at 119.38 89.535 90)
+			(at 119.38 76.835 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -1143,14 +1142,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "ca38970e-16e5-4ae6-b7cd-5d12283a0cd2")
+			(uuid "04de05fe-b231-47fc-9cfe-69b23dc683b7")
 		)
 		(pin "2"
-			(uuid "086781fb-80e6-44f1-b1c6-6bf1f7ce2fc8")
+			(uuid "717d8618-eb17-48e7-8682-64d4107cc064")
 		)
 		(instances
 			(project "Electrometer TIA - ADuCM362"
-				(path "/301a4b19-4aea-4be6-b0e1-3df22b423670"
+				(path "/24bf9fde-d8d7-47e7-9f50-dfc7fc70fb36"
 					(reference "C1")
 					(unit 1)
 				)
@@ -1166,7 +1165,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "b679f957-6d68-46fa-9f23-28a054843497")
+		(uuid "4ba639ff-8e1f-4ad2-81ec-7cc06bd8aec3")
 		(property "Reference" "R3"
 			(at 80.772 96.52 90)
 			(effects
@@ -1186,14 +1185,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "1756c20e-7bf9-4244-80d1-24ac995ca61d")
+			(uuid "18b7c3eb-07d0-4919-8fe2-ab075de65335")
 		)
 		(pin "2"
-			(uuid "7a3131fb-d4c4-4ae1-a2b2-41aea59cfc48")
+			(uuid "fff92d8d-bc5f-4510-bdd6-ca8c69957264")
 		)
 		(instances
 			(project "Electrometer TIA - ADuCM362"
-				(path "/301a4b19-4aea-4be6-b0e1-3df22b423670"
+				(path "/24bf9fde-d8d7-47e7-9f50-dfc7fc70fb36"
 					(reference "R3")
 					(unit 1)
 				)
@@ -1209,7 +1208,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "53816b1b-9125-4f25-80a3-d5ad33c08c31")
+		(uuid "697d54d0-f4b6-4696-924c-7f654c41655d")
 		(property "Reference" "R4"
 			(at 80.772 132.08 90)
 			(effects
@@ -1229,14 +1228,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "27bb36c7-5a21-49ff-805a-a5b0c4fe9f8a")
+			(uuid "55499bd9-f35f-4e85-8f93-936585a5b522")
 		)
 		(pin "2"
-			(uuid "2e5ae0c1-8464-4457-96e5-ed706ad3b31e")
+			(uuid "5e272172-b207-4481-ae3a-d68511c8359c")
 		)
 		(instances
 			(project "Electrometer TIA - ADuCM362"
-				(path "/301a4b19-4aea-4be6-b0e1-3df22b423670"
+				(path "/24bf9fde-d8d7-47e7-9f50-dfc7fc70fb36"
 					(reference "R4")
 					(unit 1)
 				)
@@ -1252,7 +1251,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "2421f97a-2c20-455a-a7ce-473eed22b573")
+		(uuid "0186ada4-bb7a-4ef1-aa85-e3a14c0fca20")
 		(property "Reference" "C2"
 			(at 92.075 134.62 0.0000)
 			(effects
@@ -1272,14 +1271,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "308bc44f-b291-4351-a485-63ab23e9b0bf")
+			(uuid "1a3ef696-bb69-4e0e-8463-74765dde8b2b")
 		)
 		(pin "2"
-			(uuid "4ca92326-32a4-4511-b787-254d3a32dcb3")
+			(uuid "f41bbf4a-23cf-45c1-9511-f7be9b42126e")
 		)
 		(instances
 			(project "Electrometer TIA - ADuCM362"
-				(path "/301a4b19-4aea-4be6-b0e1-3df22b423670"
+				(path "/24bf9fde-d8d7-47e7-9f50-dfc7fc70fb36"
 					(reference "C2")
 					(unit 1)
 				)
@@ -1295,7 +1294,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "4d914960-1c07-4906-a0cf-901d0ff6b416")
+		(uuid "577421bc-3057-45ee-ac21-142f7f62da60")
 		(property "Reference" "R2"
 			(at 126.492 132.08 90)
 			(effects
@@ -1315,14 +1314,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "92d0ad73-1b3a-4b7b-8318-31b506bc03fe")
+			(uuid "ca13d18e-9152-4995-b0cb-16bdf844aa62")
 		)
 		(pin "2"
-			(uuid "b923ddaf-d1e1-47c3-bb42-586c8af275f7")
+			(uuid "7f2528ae-68d2-4557-88b8-68022254530d")
 		)
 		(instances
 			(project "Electrometer TIA - ADuCM362"
-				(path "/301a4b19-4aea-4be6-b0e1-3df22b423670"
+				(path "/24bf9fde-d8d7-47e7-9f50-dfc7fc70fb36"
 					(reference "R2")
 					(unit 1)
 				)
@@ -1338,7 +1337,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "d5ce95e8-1464-4ece-a12b-a5dd996f1203")
+		(uuid "1217bbee-a1af-44eb-89fc-b561583d6ad8")
 		(property "Reference" "#PWR01"
 			(at 114.3 123.19 0.0000)
 			(hide yes)
@@ -1359,11 +1358,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "4aba74d0-d3ae-4224-a517-b87a3d5d3887")
+			(uuid "69fc6f6a-3b8a-462d-9d19-ba0cd4eb3eae")
 		)
 		(instances
 			(project "Electrometer TIA - ADuCM362"
-				(path "/301a4b19-4aea-4be6-b0e1-3df22b423670"
+				(path "/24bf9fde-d8d7-47e7-9f50-dfc7fc70fb36"
 					(reference "#PWR01")
 					(unit 1)
 				)
@@ -1379,7 +1378,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "abe1f931-2ca0-444a-b648-1ed82f9b8bb2")
+		(uuid "e587cba9-1b98-4b0f-8261-d47fa1bf98af")
 		(property "Reference" "#PWR02"
 			(at 114.3 90.17 0.0000)
 			(hide yes)
@@ -1400,11 +1399,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "699489b7-86a1-444d-914b-be50879ba845")
+			(uuid "4866f633-b0d2-475e-9c3e-bcb9a23295e7")
 		)
 		(instances
 			(project "Electrometer TIA - ADuCM362"
-				(path "/301a4b19-4aea-4be6-b0e1-3df22b423670"
+				(path "/24bf9fde-d8d7-47e7-9f50-dfc7fc70fb36"
 					(reference "#PWR02")
 					(unit 1)
 				)
@@ -1420,7 +1419,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "a5cd52a3-ced6-4dc4-9078-cb5ae4ca934d")
+		(uuid "81286e55-7876-4bff-bd7a-9f47e670231c")
 		(property "Reference" "#PWR03"
 			(at 78.74 81.28 0.0000)
 			(hide yes)
@@ -1441,11 +1440,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "4b088485-c038-4348-a654-8aa095b2d5c1")
+			(uuid "c5a123cb-b84b-4223-84fb-3fa12e7af202")
 		)
 		(instances
 			(project "Electrometer TIA - ADuCM362"
-				(path "/301a4b19-4aea-4be6-b0e1-3df22b423670"
+				(path "/24bf9fde-d8d7-47e7-9f50-dfc7fc70fb36"
 					(reference "#PWR03")
 					(unit 1)
 				)
@@ -1461,7 +1460,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "72addb9b-6090-41bc-8598-be41e00cd9e9")
+		(uuid "8ae991a1-adcf-4cee-9b65-513d37cf289c")
 		(property "Reference" "#PWR04"
 			(at 78.74 137.16 0.0000)
 			(hide yes)
@@ -1482,11 +1481,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "ebce21a6-1080-412b-8d66-9cd680e1fab7")
+			(uuid "f8f9ecbc-aad1-4810-9ffa-83665bf4a379")
 		)
 		(instances
 			(project "Electrometer TIA - ADuCM362"
-				(path "/301a4b19-4aea-4be6-b0e1-3df22b423670"
+				(path "/24bf9fde-d8d7-47e7-9f50-dfc7fc70fb36"
 					(reference "#PWR04")
 					(unit 1)
 				)
@@ -1502,7 +1501,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "902bdf29-5321-4174-980e-11d1c66858e1")
+		(uuid "09fea16b-a05c-4ed5-9497-dcfb1c8fcfbb")
 		(property "Reference" "#PWR05"
 			(at 91.44 137.16 0.0000)
 			(hide yes)
@@ -1523,11 +1522,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "65c6ceb6-bc57-47d8-980d-620f8cb0d63f")
+			(uuid "51c379d0-87dc-4f2f-b56d-bc3d075c4233")
 		)
 		(instances
 			(project "Electrometer TIA - ADuCM362"
-				(path "/301a4b19-4aea-4be6-b0e1-3df22b423670"
+				(path "/24bf9fde-d8d7-47e7-9f50-dfc7fc70fb36"
 					(reference "#PWR05")
 					(unit 1)
 				)
@@ -1543,7 +1542,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "faffcd50-68e6-4c29-a798-651bf9f6ce84")
+		(uuid "a791e11d-db42-4e63-9c26-f3b77aeea1e4")
 		(property "Reference" "#PWR06"
 			(at 124.46 137.16 0.0000)
 			(hide yes)
@@ -1564,11 +1563,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "1100bfa5-3f9e-43b6-b58c-858e514f1fda")
+			(uuid "702129fc-db3d-4c3e-b499-b0f8e18068ac")
 		)
 		(instances
 			(project "Electrometer TIA - ADuCM362"
-				(path "/301a4b19-4aea-4be6-b0e1-3df22b423670"
+				(path "/24bf9fde-d8d7-47e7-9f50-dfc7fc70fb36"
 					(reference "#PWR06")
 					(unit 1)
 				)
@@ -1584,7 +1583,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "3def549f-3ce3-4011-b0b9-3e0c12987bb9")
+		(uuid "a67336f9-91ea-4908-b5bf-9078ed8c7e88")
 		(property "Reference" "V1"
 			(at 66.04 116.84 0.0000)
 			(effects
@@ -1604,14 +1603,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "84a18657-ebec-4375-bafb-48228d01a6ba")
+			(uuid "4bf31c5d-d686-4126-8bb4-8754e425ee34")
 		)
 		(pin "2"
-			(uuid "0514c803-18d1-4137-b294-0395c43e2c24")
+			(uuid "70c0b69e-17a2-4fae-b343-10275c3ac432")
 		)
 		(instances
 			(project "Electrometer TIA - ADuCM362"
-				(path "/301a4b19-4aea-4be6-b0e1-3df22b423670"
+				(path "/24bf9fde-d8d7-47e7-9f50-dfc7fc70fb36"
 					(reference "V1")
 					(unit 1)
 				)
@@ -1627,7 +1626,7 @@
 		(on_board yes)
 		(dnp no)
 		(fields_autoplaced no)
-		(uuid "f8eee6a4-cc49-415b-9e23-a081d75db5ce")
+		(uuid "7e125697-9078-4952-97bc-8dd7f10a6560")
 		(property "Reference" "#PWR07"
 			(at 63.5 120.65 0.0000)
 			(hide yes)
@@ -1648,11 +1647,11 @@
 			)
 		)
 		(pin "1"
-			(uuid "6cba6826-940e-4344-829d-648d45e971b3")
+			(uuid "b6e44ea7-3de9-478f-9367-fc1a20238d95")
 		)
 		(instances
 			(project "Electrometer TIA - ADuCM362"
-				(path "/301a4b19-4aea-4be6-b0e1-3df22b423670"
+				(path "/24bf9fde-d8d7-47e7-9f50-dfc7fc70fb36"
 					(reference "#PWR07")
 					(unit 1)
 				)
@@ -1667,69 +1666,69 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "96917811-a02f-4d46-8331-cef76e315ada")
+		(uuid "47ba2e45-b2d5-4c79-8206-b1f4cda07dd1")
 	)
 	
 	(wire
 		(pts
-			(xy 96.52 96.52) (xy 113.03 96.52)
+			(xy 96.52 86.36) (xy 113.03 86.36)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "b562c862-678b-4c33-9544-7aa01f5b9836")
+		(uuid "dbe5b455-5ef6-4247-9917-fe88f4496d9e")
 	)
 	(wire
 		(pts
-			(xy 120.65 96.52) (xy 124.46 96.52)
+			(xy 120.65 86.36) (xy 124.46 86.36)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "684e01cb-8214-4453-a843-9dc4ae398480")
+		(uuid "cc56e806-459e-467f-baeb-fdb584b8c735")
 	)
 	(wire
 		(pts
-			(xy 124.46 96.52) (xy 124.46 111.76)
+			(xy 124.46 86.36) (xy 124.46 111.76)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "5a4548d1-9513-410c-b228-eb7a0e03e616")
+		(uuid "5f49c123-303c-4b6e-8a7a-6935aae82fa1")
 	)
 	
 	(wire
 		(pts
-			(xy 96.52 88.9) (xy 113.03 88.9)
+			(xy 96.52 76.2) (xy 113.03 76.2)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "51af904c-dd75-4d07-8a33-c06186f81c06")
+		(uuid "a22ca2a4-0ec3-47b5-b863-c3737dcd98b3")
 	)
 	(wire
 		(pts
-			(xy 120.65 88.9) (xy 124.46 88.9)
+			(xy 120.65 76.2) (xy 124.46 76.2)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "ffa0ab48-9db2-484e-ac5b-e2cea5734d5e")
+		(uuid "01d220d9-22fd-43be-aa84-5de7d0d2ff54")
 	)
 	(wire
 		(pts
-			(xy 124.46 88.9) (xy 124.46 96.52)
+			(xy 124.46 76.2) (xy 124.46 86.36)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "701bb2f2-97b6-44cc-bb7d-0b2714eba0d1")
+		(uuid "10e5d16b-e8dc-458a-96ed-f56a7e969d1f")
 	)
 	(wire
 		(pts
@@ -1739,7 +1738,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "8c3d0f2c-6e39-4a31-9658-90da155d49c7")
+		(uuid "e5a904f3-8226-4e2b-8b73-a73190c381c7")
 	)
 	
 	(wire
@@ -1750,7 +1749,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "b3fc283f-0829-4b58-914f-00c76f0e3968")
+		(uuid "d2aca9ca-5e08-49ea-984d-7cc471e792ba")
 	)
 	(wire
 		(pts
@@ -1760,7 +1759,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "65b51ad6-663c-460a-9993-9b16f8c93511")
+		(uuid "ca28564c-dde7-480f-8adf-8df1192b6611")
 	)
 	(wire
 		(pts
@@ -1770,7 +1769,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "505356c1-6b1e-42b5-a6fa-28d5bb42b6ac")
+		(uuid "589d3b75-f87b-4507-abc1-7dfb3fe965f0")
 	)
 	(wire
 		(pts
@@ -1780,7 +1779,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "2ec3d5d3-208d-463f-853a-f7bdd0dcb2a6")
+		(uuid "3dbcc5f4-8f7b-47b6-a759-ea7b0540eaa1")
 	)
 	(wire
 		(pts
@@ -1790,7 +1789,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "66f9c162-b165-4a12-b90a-a76bcec4033f")
+		(uuid "8bdb9ef0-0e34-4500-a985-07611cf5faed")
 	)
 	(wire
 		(pts
@@ -1800,7 +1799,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "b6720465-855a-454f-924a-1ab7ee1fa80b")
+		(uuid "593aa4aa-3f34-4445-917a-39985f536079")
 	)
 	(wire
 		(pts
@@ -1810,7 +1809,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "f1d30cc5-58e8-4b6d-8fae-a740074febc6")
+		(uuid "2c551ee7-b247-4da2-bd3d-2035b6951bf9")
 	)
 	(wire
 		(pts
@@ -1820,7 +1819,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "5a0bc432-d745-445a-be2e-a4697261a578")
+		(uuid "72f3250e-96e3-4736-8d3e-87b2ee4cd90e")
 	)
 	(wire
 		(pts
@@ -1830,7 +1829,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "8151ea9c-c943-4d21-8cc9-13a864fd4636")
+		(uuid "0620e208-95bc-4cf1-8cb6-be79cb3c9b23")
 	)
 	(wire
 		(pts
@@ -1840,37 +1839,37 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "a05d0b94-cf67-4e3f-8acf-3097ea641d00")
+		(uuid "ef9cba9f-29ca-431f-957b-605b392eee74")
 	)
 	(wire
 		(pts
-			(xy 63.5 81.28) (xy 63.5 109.22)
+			(xy 63.5 68.58) (xy 63.5 109.22)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "58a4b5f9-b743-46ff-a83d-e82dd408e9b8")
+		(uuid "f273a194-5631-4e0e-a297-a27fc9110737")
 	)
 	(wire
 		(pts
-			(xy 63.5 81.28) (xy 96.52 81.28)
+			(xy 63.5 68.58) (xy 96.52 68.58)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "3c887204-c312-4499-aea7-31804a774704")
+		(uuid "fea4ffe5-ec9e-49ed-8c0b-61e0f2e054e5")
 	)
 	(wire
 		(pts
-			(xy 96.52 81.28) (xy 96.52 109.22)
+			(xy 96.52 68.58) (xy 96.52 109.22)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "9d0e9628-0d33-4858-a48e-763136938dea")
+		(uuid "70819b08-2336-4171-a14b-ba1ddd948e5f")
 	)
 	(wire
 		(pts
@@ -1880,7 +1879,7 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "6d5cdc34-9a74-42b2-b301-6efca37a18a1")
+		(uuid "2a5902f6-8ec4-4e11-8668-91efbe0c3751")
 	)
 	(wire
 		(pts
@@ -1890,32 +1889,44 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "52ae8f24-d27c-4909-b1ef-53afaaed22c2")
+		(uuid "46cf38a7-37f4-429d-9f46-de1f2cb2d188")
 	)
 	
 	(junction
 		(at 96.52 109.22)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "268efb82-5b2a-4d0b-ae68-a0c306e0e89d")
+		(uuid "95129b13-9dd4-4f6e-8559-855cdbf527f9")
 	)
 	(junction
-		(at 96.52 96.52)
+		(at 96.52 86.36)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "cddd8ee2-5094-4bc3-a2a7-5e358cc1110b")
+		(uuid "b1577ec5-d325-4725-a3b7-841ddcdd406b")
 	)
 	(junction
-		(at 124.46 96.52)
+		(at 124.46 86.36)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "f9df4951-3207-444c-9cd8-e9bf3f948c0b")
+		(uuid "2569d110-73cb-436c-93e8-748f8185e262")
+	)
+	(junction
+		(at 124.46 111.76)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "59b37d81-b01d-438f-b0ea-1abd4dfa0804")
 	)
 	(junction
 		(at 78.74 114.3)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "1f93d98b-f7a0-42d9-aa3d-1636ede1133c")
+		(uuid "90c9c224-88d1-49c0-9ce5-b3b1da9632c3")
+	)
+	(junction
+		(at 91.44 114.3)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "257d8b5b-7ff0-4d23-95d3-fbc503b89262")
 	)
 	(label "AIN0"
 		(at 139.7 111.76 0)
@@ -1925,7 +1936,7 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "3fb112ad-bb13-4fdc-b383-508fd64752d2")
+		(uuid "7019eb50-4803-47be-85c1-8e0150151bb0")
 	)
 	(label "AIN1"
 		(at 99.06 114.3 0)
@@ -1935,17 +1946,17 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "ed937a77-7175-4056-b187-3e19502165c9")
+		(uuid "a2c16b49-169f-49a6-9c62-a07063015005")
 	)
 	(label "TRIAX_IN"
-		(at 71.12 81.28 0)
+		(at 71.12 68.58 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
-		(uuid "ca67f381-a6aa-4c8a-bc6f-76871f60c209")
+		(uuid "9c285032-a975-45ee-a4c2-b20339b25fd1")
 	)
 	(text "ELECTROMETER TIA (ADuCM362 PLATFORM)"
 		(exclude_from_sim no)
@@ -1957,7 +1968,7 @@
 			)
 			(justify left)
 		)
-		(uuid "ed74172d-1564-4f82-bf2c-f6d6fd38663a")
+		(uuid "9213a591-957a-40c2-ac15-82fa4e4695ec")
 	)
 	(text "ADA4530-1 TIA, 4-range relay-switched Rf (10M-10G), 24-bit ADC"
 		(exclude_from_sim no)
@@ -1968,7 +1979,7 @@
 			)
 			(justify left)
 		)
-		(uuid "6113cb47-bb08-495d-88f6-3feeddf9a0a6")
+		(uuid "cfc559e8-6621-4bcb-a4a5-22da59cd1d70")
 	)
 	(text "FUNCTION: Complete electrometer front-end. TIA converts current to"
 		(exclude_from_sim no)
@@ -1979,7 +1990,7 @@
 			)
 			(justify left)
 		)
-		(uuid "42d72020-af9e-48b7-855d-410dc6719afe")
+		(uuid "aea3c43e-849a-4d0e-9a4f-6ac9855ed617")
 	)
 	(text "voltage. Relay ladder selects range. ADuCM362 24-bit sigma-delta"
 		(exclude_from_sim no)
@@ -1990,7 +2001,7 @@
 			)
 			(justify left)
 		)
-		(uuid "3fb154e4-fc44-42d5-bab5-75e55703a378")
+		(uuid "ea9b1224-3c9d-4217-a621-a16a34904690")
 	)
 	(text "ADC reads differential (TIA_OUT - VREF). Single 3.3V supply."
 		(exclude_from_sim no)
@@ -2001,7 +2012,7 @@
 			)
 			(justify left)
 		)
-		(uuid "3f3c96a1-ae78-4464-97db-85c756e0e179")
+		(uuid "4020b3d3-455f-4e18-a639-d1e435dd8b3f")
 	)
 	(sheet_instances
 		(path "/"

@@ -10,6 +10,7 @@ public partial class MainForm : Form
     private readonly SimulationRunner _simRunner = new();
     private IProjectConfig _project;
     private readonly List<object> _allResults = new();
+    private bool _showAmplitudePlot = false;
 
     private static readonly string SimWorkDir = Path.Combine(SimGUI.Services.SimulationRunner.RepoRoot, "sim_work");
 
@@ -29,6 +30,7 @@ public partial class MainForm : Form
     {
         _project = project;
         _allResults.Clear();
+        _showAmplitudePlot = false;
 
         // Update form title
         Text = _project.FormTitle;
@@ -46,6 +48,11 @@ public partial class MainForm : Form
         // Show/hide calibrate button (oscillator only)
         _btnCalibrate.Visible = _project is OscillatorConfig;
         _btnCalibrate.Enabled = false;
+
+        // Show/hide toggle plot button (comparison only)
+        _btnTogglePlot.Visible = _project is ComparisonConfig;
+        _btnTogglePlot.Enabled = false;
+        _btnTogglePlot.Text = "Amplitude View";
 
         // Rebuild grid columns
         _dataGrid.Columns.Clear();
@@ -84,6 +91,7 @@ public partial class MainForm : Form
             {
                 0 => new ElectrometerConfig(),
                 1 => new OscillatorConfig(),
+                2 => new ComparisonConfig(),
                 _ => new ElectrometerConfig(),
             };
             SwitchProject(newProject);
@@ -92,6 +100,7 @@ public partial class MainForm : Form
         _btnRunSim.Click += async (_, _) => await RunSimulation();
         _btnRunAll.Click += async (_, _) => await RunAllSweepPoints();
         _btnCalibrate.Click += (_, _) => RunCalibration();
+        _btnTogglePlot.Click += (_, _) => ToggleComparisonPlot();
         _btnLoadFile.Click += (_, _) => LoadResultFile();
         _btnExportCsv.Click += (_, _) => ExportCsv();
         _btnScreenshot.Click += (_, _) => TakeScreenshot();
@@ -127,6 +136,13 @@ public partial class MainForm : Form
             return;
         }
 
+        // Comparison mode: run both MDAC + analog
+        if (_project is ComparisonConfig compConfig)
+        {
+            await RunSingleComparisonAsync(compConfig);
+            return;
+        }
+
         int idx = SelectedSweepIndex;
         string args = _project.GetCommandArgs(idx);
 
@@ -137,7 +153,7 @@ public partial class MainForm : Form
         SetStatus($"Running {_project.SweepPointNames[idx]}...");
         _txtOutput.Clear();
 
-        await Task.Run(() => _simRunner.RunGenericAsync(args));
+        await _simRunner.RunGenericAsync(args);
 
         _btnRunSim.Text = _project.RunSingleLabel;
         _btnRunAll.Enabled = true;
@@ -190,6 +206,13 @@ public partial class MainForm : Form
             return;
         }
 
+        // Comparison mode: run both MDAC + analog at all points
+        if (_project is ComparisonConfig compConfig)
+        {
+            await RunComparisonSweepAsync(compConfig);
+            return;
+        }
+
         _btnRunSim.Enabled = false;
         _btnRunAll.Text = "Cancel";
         _btnExportCsv.Enabled = false;
@@ -211,7 +234,7 @@ public partial class MainForm : Form
             SetStatus($"Point {i + 1}/{_project.SweepCount}: {pointName}...");
             _cboSweepPoint.SelectedIndex = i;
 
-            await Task.Run(() => _simRunner.RunGenericAsync(args));
+            await _simRunner.RunGenericAsync(args);
 
             string resultsPath = _project.GetResultsFilePath(i);
             if (File.Exists(resultsPath))
@@ -260,6 +283,190 @@ public partial class MainForm : Form
         }
 
         SetStatus($"Sweep done: {_allResults.Count}/{_project.SweepCount} points");
+    }
+
+    // ------------------------------------------------------------------
+    // Comparison mode: single point
+    // ------------------------------------------------------------------
+
+    private async Task RunSingleComparisonAsync(ComparisonConfig compConfig)
+    {
+        int idx = SelectedSweepIndex;
+        string pointName = compConfig.SweepPointNames[idx];
+
+        _btnRunSim.Text = "Cancel";
+        _btnRunAll.Enabled = false;
+        _btnExportCsv.Enabled = false;
+        _btnTogglePlot.Enabled = false;
+        _txtOutput.Clear();
+
+        AppendOutput($"========== COMPARING AT {pointName} ==========");
+
+        // Run MDAC simulation
+        string mdacArgs = compConfig.GetCommandArgs(idx);
+        AppendOutput($"\n  [MDAC] Running: {mdacArgs}...");
+        SetStatus($"MDAC: {pointName}...");
+        await _simRunner.RunGenericAsync(mdacArgs);
+
+        // Run Analog simulation
+        string analogArgs = compConfig.GetAnalogCommandArgs(idx);
+        AppendOutput($"\n  [ANALOG] Running: {analogArgs}...");
+        SetStatus($"Analog: {pointName}...");
+        await _simRunner.RunGenericAsync(analogArgs);
+
+        _btnRunSim.Text = compConfig.RunSingleLabel;
+        _btnRunAll.Enabled = true;
+
+        // Parse both results
+        string mdacPath = compConfig.GetResultsFilePath(idx);
+        string analogPath = compConfig.GetAnalogResultsFilePath(idx);
+
+        if (File.Exists(mdacPath) && File.Exists(analogPath))
+        {
+            try
+            {
+                var mdacResult = (OscillatorPointData)compConfig.ParseResults(mdacPath, idx);
+                var analogResult = (OscillatorPointData)compConfig.ParseResults(analogPath, idx);
+                var comparison = compConfig.BuildComparison(idx, mdacResult, analogResult);
+
+                _dataGrid.Rows.Clear();
+                compConfig.PopulateGrid(_dataGrid, comparison);
+
+                _formsPlot.Plot.Clear();
+                compConfig.PlotSingle(_formsPlot.Plot, comparison);
+                _formsPlot.Refresh();
+
+                compConfig.UpdateStatusBar(_statusLabels, comparison);
+                compConfig.PrintReport(AppendOutput, comparison);
+
+                _allResults.Clear();
+                _allResults.Add(comparison);
+                _btnExportCsv.Enabled = true;
+
+                SetStatus($"{pointName} comparison complete");
+            }
+            catch (Exception ex)
+            {
+                SetStatus($"Parse error: {ex.Message}");
+                AppendOutput($"Parse error: {ex.Message}");
+            }
+        }
+        else
+        {
+            if (!File.Exists(mdacPath))
+                AppendOutput($"  MDAC results missing: {mdacPath}");
+            if (!File.Exists(analogPath))
+                AppendOutput($"  Analog results missing: {analogPath}");
+            SetStatus("Comparison failed - missing results");
+        }
+    }
+
+    // ------------------------------------------------------------------
+    // Comparison mode: full sweep
+    // ------------------------------------------------------------------
+
+    private async Task RunComparisonSweepAsync(ComparisonConfig compConfig)
+    {
+        _btnRunSim.Enabled = false;
+        _btnRunAll.Text = "Cancel";
+        _btnExportCsv.Enabled = false;
+        _btnTogglePlot.Enabled = false;
+        _allResults.Clear();
+        _dataGrid.Rows.Clear();
+        _formsPlot.Plot.Clear();
+        _formsPlot.Refresh();
+        _txtOutput.Clear();
+
+        AppendOutput("========== COMPARISON SWEEP: MDAC vs ANALOG (8 POINTS x 2 DESIGNS = 16 SIMULATIONS) ==========");
+
+        for (int i = 0; i < compConfig.SweepCount; i++)
+        {
+            string pointName = compConfig.SweepPointNames[i];
+            AppendOutput($"\n>>> {pointName} <<<");
+            SetStatus($"Point {i + 1}/{compConfig.SweepCount}: {pointName}...");
+            _cboSweepPoint.SelectedIndex = i;
+
+            // Run MDAC simulation
+            string mdacArgs = compConfig.GetCommandArgs(i);
+            AppendOutput($"  [MDAC] {mdacArgs}...");
+            await _simRunner.RunGenericAsync(mdacArgs);
+
+            // Run Analog simulation
+            string analogArgs = compConfig.GetAnalogCommandArgs(i);
+            AppendOutput($"  [ANALOG] {analogArgs}...");
+            await _simRunner.RunGenericAsync(analogArgs);
+
+            // Parse both results
+            string mdacPath = compConfig.GetResultsFilePath(i);
+            string analogPath = compConfig.GetAnalogResultsFilePath(i);
+
+            if (File.Exists(mdacPath) && File.Exists(analogPath))
+            {
+                try
+                {
+                    var mdacResult = (OscillatorPointData)compConfig.ParseResults(mdacPath, i);
+                    var analogResult = (OscillatorPointData)compConfig.ParseResults(analogPath, i);
+                    var comparison = compConfig.BuildComparison(i, mdacResult, analogResult);
+                    _allResults.Add(comparison);
+                    compConfig.PopulateGrid(_dataGrid, comparison);
+                    compConfig.PrintReport(AppendOutput, comparison);
+                }
+                catch (Exception ex)
+                {
+                    AppendOutput($"  Parse error at point {i}: {ex.Message}");
+                }
+            }
+            else
+            {
+                if (!File.Exists(mdacPath))
+                    AppendOutput($"  MDAC results missing: {mdacPath}");
+                if (!File.Exists(analogPath))
+                    AppendOutput($"  Analog results missing: {analogPath}");
+            }
+        }
+
+        _btnRunSim.Enabled = true;
+        _btnRunAll.Text = compConfig.RunAllLabel;
+        _btnExportCsv.Enabled = _allResults.Count > 0;
+        _btnTogglePlot.Enabled = _allResults.Count > 0;
+
+        if (_allResults.Count > 0)
+        {
+            _showAmplitudePlot = false;
+            _btnTogglePlot.Text = "Amplitude View";
+            _formsPlot.Plot.Clear();
+            compConfig.PlotAll(_formsPlot.Plot, _allResults);
+            _formsPlot.Refresh();
+            compConfig.UpdateStatusBarMulti(_statusLabels, _allResults);
+        }
+
+        // Print comparison summary
+        compConfig.PrintSweepSummary(AppendOutput, _allResults);
+        SetStatus($"Comparison done: {_allResults.Count}/{compConfig.SweepCount} points");
+    }
+
+    // ------------------------------------------------------------------
+    // Toggle comparison plot view
+    // ------------------------------------------------------------------
+
+    private void ToggleComparisonPlot()
+    {
+        if (_project is not ComparisonConfig compConfig || _allResults.Count == 0) return;
+
+        _showAmplitudePlot = !_showAmplitudePlot;
+        _formsPlot.Plot.Clear();
+
+        if (_showAmplitudePlot)
+        {
+            compConfig.PlotAmplitude(_formsPlot.Plot, _allResults);
+            _btnTogglePlot.Text = "Frequency View";
+        }
+        else
+        {
+            compConfig.PlotAll(_formsPlot.Plot, _allResults);
+            _btnTogglePlot.Text = "Amplitude View";
+        }
+        _formsPlot.Refresh();
     }
 
     // ------------------------------------------------------------------
@@ -340,10 +547,18 @@ public partial class MainForm : Form
             {
                 int idx = SelectedSweepIndex;
 
-                // Auto-detect: if filename contains "oscillator", parse as oscillator
+                // Auto-detect: if filename contains "analog_osc", switch to comparison
                 string fname = Path.GetFileName(dlg.FileName);
                 object result;
-                if (fname.Contains("oscillator"))
+                if (fname.Contains("analog_osc"))
+                {
+                    if (_project is not ComparisonConfig)
+                    {
+                        _cboProject.SelectedIndex = 2; // triggers SwitchProject
+                    }
+                    result = _project.ParseResults(dlg.FileName, idx);
+                }
+                else if (fname.Contains("oscillator"))
                 {
                     // Switch to oscillator project if not already
                     if (_project is not OscillatorConfig)
@@ -462,6 +677,9 @@ public partial class MainForm : Form
         _allResults.Clear();
         _btnExportCsv.Enabled = false;
         _btnCalibrate.Enabled = false;
+        _btnTogglePlot.Enabled = false;
+        _showAmplitudePlot = false;
+        _btnTogglePlot.Text = "Amplitude View";
         _project.ClearStatusBar(_statusLabels);
         SetStatus("Ready");
     }

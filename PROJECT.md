@@ -1462,4 +1462,53 @@ Fix audioamp schematic connection issues, add comprehensive pin connectivity ver
    - Map schematic nodes to ngspice simulation results
 4. **Image-to-circuit conversion** — OCR/vision pipeline: photo → netlist → simulation
 
-*Last updated: 2026-03-06 (Session 21)*
+---
+
+## Session 22 — SimGUI Fixes, DAC7800 IC Boxes, Comparison Mode, Schematic Layout Fixes
+
+### Achievements
+
+1. **DAC7800 drawn as proper IC boxes** — Replaced text-only labels with rectangle
+   boxes showing pin labels (VREF, IOUT, VCTRL). New `_draw_dac7800_box()` helper
+   draws a solid rectangle with labeled pins. Applied to all 4 DAC7800 instances
+   (integrator1, integrator2, oscillator MDAC1, oscillator MDAC2).
+
+2. **Electrometer 362 layout fixes** — Fixed overlapping V- GND / feedback R1
+   (fb_gap 5→9, cf_gap 3→4). Added junction dots at 3 T-junctions that were missing
+   after `merge_collinear_wires()` (divider tee, C2 bypass tee, output branch).
+
+3. **Summing amplifier gain annotations corrected** — Was showing "BP gain = -2.2"
+   (wrong). Corrected to "BP gain = -(10k/22k) = -0.455, Q = R2/R3 = 2.2".
+
+4. **SimGUI Python path fix** — SimulationRunner was using `FileName = "python"` which
+   hit the wrong Python (msys64 without numpy). Added `FindPython()` method that
+   searches Python312/313/311 in AppData before falling back to PATH.
+
+5. **SimGUI subprocess popup fix** — When SimGUI launched Python and Python launched
+   ngspice, ngspice created visible console popup windows. Added
+   `CREATE_NO_WINDOW` flag to all `subprocess.run()` calls in kicad_pipeline.py
+   via `_SUBPROCESS_KWARGS` dict (Windows only).
+
+6. **SimGUI async fix** — Removed unnecessary `Task.Run()` wrapping of
+   `RunGenericAsync()` calls in MainForm.cs. Direct `await` is cleaner.
+
+7. **Comparison project added to SimGUI** — New "Comparison" mode runs both MDAC and
+   analog oscillator designs at matching frequency points. Side-by-side grid and
+   dual-line chart (Steel Blue for MDAC, Burnt Orange for Analog, Gray for ideal).
+   Toggle button switches between frequency accuracy and amplitude stability views.
+
+8. **All 20 PDF schematics regenerated** — Fresh PDFs with all fixes applied. Organized
+   into project folders in Downloads (Electrometer, Oscillator, Amplifier, Input System).
+
+### Code Changes
+- `kicad_pipeline.py`: `_draw_dac7800_box()` helper, `_SUBPROCESS_KWARGS` for
+  CREATE_NO_WINDOW, electrometer_362 spacing/junctions, summing amp annotations,
+  `write_analog_osc_netlist()` + `analog_osc` entry point
+- `SimGUI/Services/SimulationRunner.cs`: `FindPython()` method, `_pythonExe` field
+- `SimGUI/MainForm.cs`: Direct `await` instead of `Task.Run()`, comparison mode methods
+- `SimGUI/MainForm.Designer.cs`: Added "Comparison" to project combo, toggle button
+- `SimGUI/Projects/ComparisonConfig.cs`: New IProjectConfig for MDAC vs Analog comparison
+- `SimGUI/Models/ComparisonPointData.cs`: New data model for paired results
+- `docs/comparison_guide.md`: Circuit differences, fix recommendations, quick start
+
+*Last updated: 2026-03-09 (Session 22)*

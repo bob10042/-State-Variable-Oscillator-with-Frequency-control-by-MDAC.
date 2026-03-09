@@ -113,6 +113,11 @@ if LTSPICE_LIB_DIR:
 
 os.makedirs(WORK_DIR, exist_ok=True)
 
+# On Windows, suppress console popup windows when running subprocess calls from GUI
+_SUBPROCESS_KWARGS = {}
+if os.name == 'nt':
+    _SUBPROCESS_KWARGS['creationflags'] = subprocess.CREATE_NO_WINDOW
+
 def _get_ltspice_lib_path():
     """Return the LTspice .lib path for netlist includes, with backslash escaping."""
     if LTSPICE_LIB_DIR:
@@ -627,7 +632,7 @@ def export_svg(sch_path, svg_path=None):
     # kicad-cli puts output in a subdirectory named after -o
     result = subprocess.run(
         [KICAD_CLI, "sch", "export", "svg", "-o", svg_path, sch_path],
-        capture_output=True, text=True, timeout=30
+        capture_output=True, text=True, timeout=30, **_SUBPROCESS_KWARGS
     )
     if result.returncode != 0:
         raise RuntimeError(f"kicad-cli failed: {result.stderr.strip()}")
@@ -1572,7 +1577,7 @@ def build_inverting_amp():
     vp_pin  = (ux - 2.54, uy + 7.62)   # V+ BOTTOM
     vm_pin  = (ux - 2.54, uy - 7.62)   # V- TOP
 
-    print(f"  U1 (mirrored) inv={inv_pin}, ni={ni_pin}, out={out_pin}")
+    print(f"  U1 inv={inv_pin}, ni={ni_pin}, out={out_pin}")
 
     # Rin (10k) - horizontal, to the left of (-) input
     rin_x = inv_pin[0] - 14*G
@@ -1703,7 +1708,7 @@ def build_inverting_amp():
     # ── Save with mirror ──
     sch_path = os.path.join(WORK_DIR, "inv_amp.kicad_sch")
     sch.save(sch_path)
-    fix_kicad_sch(sch_path, mirror_refs=["U1"])  # mirror op-amp: (-) on top
+    fix_kicad_sch(sch_path)  # no mirror: LM741 default already has (-) on top
     print(f"  Schematic saved: {sch_path}")
 
     try:
@@ -1938,7 +1943,6 @@ def build_signal_conditioner():
     sch.add_wire(start=(n2_x, n2_y), end=(n2_x, c4_y))
     sch.add_wire(start=(n2_x, c4_y), end=c4_left)
     sch.add_wire(start=c4_right, end=(u2_out[0], c4_y))
-    sch.add_wire(start=(u2_out[0], c4_y), end=u2_out)
 
     # --- Stage 2: Unity gain feedback (U2 out -> U2 inv) ---
     # U2 (-) connects to output via wire above
@@ -1947,7 +1951,11 @@ def build_signal_conditioner():
     u2_fb_y = u2_inv[1] - 7*G
     sch.add_wire(start=u2_inv, end=(u2_inv[0], u2_fb_y))
     sch.add_wire(start=(u2_inv[0], u2_fb_y), end=(u2_out[0], u2_fb_y))
-    sch.add_wire(start=(u2_out[0], u2_fb_y), end=u2_out)
+
+    # Single vertical wire from C4 height down through feedback junction to output
+    # (avoids overlapping collinear wires on the output column)
+    sch.add_wire(start=(u2_out[0], c4_y), end=u2_out)
+    sch.junctions.add(position=(u2_out[0], u2_fb_y))  # feedback tee
 
     # --- Output chain ---
     wire_manhattan(sch, u2_out[0], u2_out[1], c2_left[0], c2_left[1])
@@ -2025,10 +2033,10 @@ def build_signal_conditioner():
     sch.add_label("OUT", position=(out_lbl_x, r5_top[1]))
     sch.add_wire(start=r5_top, end=(out_lbl_x, r5_top[1]))
 
-    # ── Save with mirror (both op-amps) ──
+    # ── Save ──
     sch_path = os.path.join(WORK_DIR, "sig_cond.kicad_sch")
     sch.save(sch_path)
-    fix_kicad_sch(sch_path, mirror_refs=["U1", "U2"])
+    fix_kicad_sch(sch_path)
     print(f"  Schematic saved: {sch_path}")
 
     try:
@@ -2317,10 +2325,10 @@ def build_usb_ina():
     sch.add_label("OUT", position=(out_lbl_x, r8_top[1]))
     sch.add_wire(start=r8_top, end=(out_lbl_x, r8_top[1]))
 
-    # ── Save with mirror (all 3 op-amps) ──
+    # ── Save ──
     sch_path = os.path.join(WORK_DIR, "usb_ina.kicad_sch")
     sch.save(sch_path)
-    fix_kicad_sch(sch_path, mirror_refs=["U1", "U2", "U3"])
+    fix_kicad_sch(sch_path)
     print(f"  Schematic saved: {sch_path}")
 
     try:
@@ -2369,7 +2377,7 @@ def build_electrometer_tia():
 
     G = 2.54
 
-    # LM741 pin offsets (with mirror x: Y offsets negate)
+    # LM741 default pin offsets (no mirror needed: (-) already on top)
     #   pin2 inv(-): (-7.62, -2.54)  <- TOP-LEFT (current input)
     #   pin3 ni(+):  (-7.62, +2.54)  <- BOTTOM-LEFT (to GND)
     #   pin6 out:    (+7.62,  0)     <- RIGHT (output)
@@ -2385,14 +2393,14 @@ def build_electrometer_tia():
         position=(ux, uy)
     )
 
-    # Mirrored pin positions
+    # Default pin positions ((-) on top, (+) on bottom - standard KiCad convention)
     inv_pin = (ux - 7.62, uy - 2.54)   # (-) TOP-LEFT
     ni_pin  = (ux - 7.62, uy + 2.54)   # (+) BOTTOM-LEFT
     out_pin = (ux + 7.62, uy)           # output RIGHT
     vp_pin  = (ux - 2.54, uy + 7.62)   # V+ BOTTOM
     vm_pin  = (ux - 2.54, uy - 7.62)   # V- TOP
 
-    print(f"  U1 (mirrored) inv={inv_pin}, ni={ni_pin}, out={out_pin}")
+    print(f"  U1 inv={inv_pin}, ni={ni_pin}, out={out_pin}")
 
     # ── Rf (1G) - feedback resistor, horizontal ABOVE op-amp ──
     # Need enough gap above op-amp for VEE label + Rf label readability
@@ -2509,10 +2517,10 @@ def build_electrometer_tia():
     in_lbl_x = junc_x - 3*G
     sch.add_label("TRIAX_IN", position=(in_lbl_x, junc_y))
 
-    # ── Save with mirror ──
+    # ── Save ──
     sch_path = os.path.join(WORK_DIR, "electrometer.kicad_sch")
     sch.save(sch_path)
-    fix_kicad_sch(sch_path, mirror_refs=["U1"])
+    fix_kicad_sch(sch_path)
     print(f"  Schematic saved: {sch_path}")
 
     try:
@@ -2581,29 +2589,29 @@ def build_electrometer_362(**kwargs):
                  position=(8 * G, 25 * G), size=1.8)
 
     # ── Parameterized clearances (correction loop compatible) ──
-    fb_gap      = kwargs.get('fb_gap', 5)        # feedback Rf above inv input (G)
-    cf_gap      = kwargs.get('cf_gap', 3)        # Cf above Rf row (G)
+    fb_gap      = kwargs.get('fb_gap', 9)        # feedback Rf above inv input (G)
+    cf_gap      = kwargs.get('cf_gap', 4)        # Cf above Rf row (G)
     div_offset  = kwargs.get('div_offset', 12)   # divider X offset from ni_pin (G)
     div_vert    = kwargs.get('div_vert', 7)      # divider R vertical offset (G)
     adc_gap     = kwargs.get('adc_gap', 8)       # ADC load below output (G)
     input_ext   = kwargs.get('input_ext', 8)     # current source extension left (G)
 
     # ── Place op-amp ──
-    # Using LM741 symbol, mirrored so (-) is on top (TIA convention)
+    # Using LM741 symbol (no mirror): (-) at top-left, (+) at bottom-left
     ux, uy = 46*G, 44*G
     sch.components.add(
         lib_id="LM741:LM741", reference="U1",
         value="ADA4530-1", position=(ux, uy)
     )
 
-    # Mirrored pin positions (mirror x: Y offsets negate)
+    # Standard LM741 pin positions (no mirror)
     inv_pin = (ux - 7.62, uy - 2.54)   # (-) TOP-LEFT (current input)
     ni_pin  = (ux - 7.62, uy + 2.54)   # (+) BOTTOM-LEFT (reference)
     out_pin = (ux + 7.62, uy)           # output RIGHT
     vp_pin  = (ux - 2.54, uy + 7.62)   # V+ BOTTOM (3.3V)
     vm_pin  = (ux - 2.54, uy - 7.62)   # V- TOP (GND for single supply)
 
-    print(f"  U1 (mirrored) inv={inv_pin}, ni={ni_pin}, out={out_pin}")
+    print(f"  U1 inv={inv_pin}, ni={ni_pin}, out={out_pin}")
 
     # ── Junction point on wire between input and inv_pin ──
     junc_x = inv_pin[0] - 5*G
@@ -2656,6 +2664,7 @@ def build_electrometer_362(**kwargs):
     sch.junctions.add(position=(junc_x, junc_y))     # input wire / feedback branch
     sch.junctions.add(position=(junc_x, rf_y))        # Rf / Cf branch point
     sch.junctions.add(position=(out_pin[0], rf_y))     # output column Rf/Cf merge
+    sch.junctions.add(position=out_pin)                # output: feedback / R2 / AIN0
 
     # ── REFERENCE VOLTAGE DIVIDER (100k/100k for 1.65V mid-supply) ──
     # R3 (100k) from VCC to ni_pin, R4 (100k) from ni_pin to GND
@@ -2696,7 +2705,8 @@ def build_electrometer_362(**kwargs):
     # Connect C2 top to reference midpoint
     sch.add_wire(start=c2_top, end=(c2_x, mid_y))
     sch.add_wire(start=(c2_x, mid_y), end=(ref_x, mid_y))
-    sch.junctions.add(position=(ref_x, mid_y))        # divider / C2 / ni_pin
+    sch.junctions.add(position=(ref_x, mid_y))        # divider vertical / horizontal tee
+    sch.junctions.add(position=(c2_x, mid_y))          # C2 vertical / horizontal tee
 
     # ── ADC OUTPUT SECTION ──
     # R2 (10M) load resistor from output column to GND
@@ -2794,10 +2804,10 @@ def build_electrometer_362(**kwargs):
     # NOTE: Removed redundant OUT label - AIN0 is the output label.
     # The op-amp output connects directly to R2 and AIN0 via the output column.
 
-    # ── Save with mirror ──
+    # ── Save ──
     sch_path = os.path.join(WORK_DIR, "electrometer_362.kicad_sch")
     sch.save(sch_path)
-    fix_kicad_sch(sch_path, mirror_refs=["U1"])
+    fix_kicad_sch(sch_path)
     merge_collinear_wires(sch_path)
 
     # Scale factor: 1 = standard paper (professional layout), >1 = enlarged
@@ -3154,39 +3164,38 @@ def build_input_filters():
             # ---- INPUT LABEL ----
             sch.add_label(f"CH_IN_{ch_num}", position=(col_x, row_y))
 
-            # ---- ESD CLAMP: cathode-to-cathode at signal (MM20 BAV199 topology) ----
-            # D:D default: K at (-3.81,0), A at (+3.81,0)
-            # rot=270: K(-3.81,0)->(0,+3.81)=bottom, A(+3.81,0)->(0,-3.81)=top
-            # rot=90:  K(-3.81,0)->(0,-3.81)=top,    A(+3.81,0)->(0,+3.81)=bottom
-            # Top diode: rot=270 -> K at bottom (toward signal), A at top (toward GND)
+            # ---- ESD CLAMP: anti-parallel diodes (side-by-side below signal) ----
+            # D:D default (rot=0): K at (-3.81,0)=LEFT, A at (+3.81,0)=RIGHT
+            # rot=270: A at top (signal), K at bottom (GND) -> triangle ▽ -> positive clamp
+            # rot=90:  K at top (signal), A at bottom (GND) -> triangle △ -> negative clamp
+            # Side-by-side gives visually opposite triangles with correct anti-parallel clamping.
+            d_left_x  = diode_x - 1.5 * G   # D_odd: positive clamp (▽)
+            d_right_x = diode_x + 1.5 * G   # D_even: negative clamp (△)
+
             sch.components.add(
                 lib_id="D:D", reference=f"D{ch_num * 2 - 1}",
-                value="BAV199", position=(diode_x, row_y - 3.81), rotation=270)
+                value="BAV199", position=(d_left_x, row_y + 3.81), rotation=270)
 
-            # Bot diode: rot=90 -> K at top (toward signal), A at bottom (toward GND)
             sch.components.add(
                 lib_id="D:D", reference=f"D{ch_num * 2}",
-                value="BAV199", position=(diode_x, row_y + 3.81), rotation=90)
+                value="BAV199", position=(d_right_x, row_y + 3.81), rotation=90)
 
-            # ---- GND at D_up anode (top) ----
-            # Top diode rot=270: A at (diode_x, row_y - 7.62)
-            d_up_anode_y = row_y - 7.62
-            gnd_up_y = d_up_anode_y - 3 * G
-            sch.add_wire(start=(diode_x, d_up_anode_y), end=(diode_x, gnd_up_y))
+            # ---- Shared GND bus below both diodes ----
+            # D_odd K at (d_left_x, row_y + 7.62), D_even A at (d_right_x, row_y + 7.62)
+            gnd_bus_y = row_y + 7.62
+            gnd_y = gnd_bus_y + 2 * G
+            # Horizontal bus connecting both diode bottoms
+            sch.add_wire(start=(d_left_x, gnd_bus_y), end=(d_right_x, gnd_bus_y))
+            # Vertical wire down to GND symbol from center
+            sch.add_wire(start=(diode_x, gnd_bus_y), end=(diode_x, gnd_y))
             sch.components.add(
                 lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
-                value="GND", position=(diode_x, gnd_up_y))
+                value="GND", position=(diode_x, gnd_y))
             pwr_idx += 1
 
-            # ---- GND at D_dn anode (bottom) ----
-            # Bottom diode rot=90: A at (diode_x, row_y + 7.62)
-            d_dn_anode_y = row_y + 7.62
-            gnd_dn_y = d_dn_anode_y + 3 * G
-            sch.add_wire(start=(diode_x, d_dn_anode_y), end=(diode_x, gnd_dn_y))
-            sch.components.add(
-                lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
-                value="GND", position=(diode_x, gnd_dn_y))
-            pwr_idx += 1
+            # Junctions where diodes tee off signal wire
+            sch.junctions.add(position=(d_left_x, row_y))
+            sch.junctions.add(position=(d_right_x, row_y))
 
             # ---- 1M series resistor (horizontal, rot=90) ----
             sch.components.add(
@@ -3538,10 +3547,10 @@ def build_mux_tia(**kwargs):
     sch.components.add(lib_id="GND:GND", reference="#PWR05", value="GND",
         position=(c2_bot[0], gnd_c2_y))
 
-    # ── Save with mirror ──
+    # ── Save ──
     sch_path = os.path.join(WORK_DIR, "mux_tia.kicad_sch")
     sch.save(sch_path)
-    fix_kicad_sch(sch_path, mirror_refs=["U1"])
+    fix_kicad_sch(sch_path)
     merge_collinear_wires(sch_path)
     return sch_path
 
@@ -3920,20 +3929,23 @@ def build_full_system(**kwargs):
 
             sch.add_label(f"CH_IN_{ch_num}", position=(col_x, row_y))
 
-            # ESD clamp diodes (BAV199 common-cathode) - cathode-to-cathode at signal
-            # Matches MM20-TRI-SCH-1312_MB: both anodes to AGND, cathodes at signal
-            # Top diode: rot=90  -> K(bar) at bottom toward signal, A at top toward GND
-            # Bot diode: rot=270 -> K(bar) at top toward signal, A at bottom toward GND
+            # ESD clamp diodes (BAV199 anti-parallel, side-by-side below signal)
+            # D_odd rot=270: A at signal (top), K at GND (bottom) -> ▽ positive clamp
+            # D_even rot=90:  K at signal (top), A at GND (bottom) -> △ negative clamp
+            d_left_x  = diode_x - 1.5 * G
+            d_right_x = diode_x + 1.5 * G
             sch.components.add(lib_id="D:D", reference=f"D{ch_num * 2 - 1}",
-                value="BAV199", position=(diode_x, row_y - 3.81), rotation=90)
+                value="BAV199", position=(d_left_x, row_y + 3.81), rotation=270)
             sch.components.add(lib_id="D:D", reference=f"D{ch_num * 2}",
-                value="BAV199", position=(diode_x, row_y + 3.81), rotation=270)
+                value="BAV199", position=(d_right_x, row_y + 3.81), rotation=90)
 
+            # Shared GND bus below both diodes
+            gnd_bus_y = row_y + 7.62
+            gnd_y = gnd_bus_y + 2 * G
+            sch.add_wire(start=(d_left_x, gnd_bus_y), end=(d_right_x, gnd_bus_y))
+            sch.add_wire(start=(diode_x, gnd_bus_y), end=(diode_x, gnd_y))
             sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
-                value="GND", position=(diode_x, row_y - 7.62))
-            pwr_idx += 1
-            sch.components.add(lib_id="GND:GND", reference=f"#PWR0{pwr_idx:02d}",
-                value="GND", position=(diode_x, row_y + 7.62))
+                value="GND", position=(diode_x, gnd_y))
             pwr_idx += 1
 
             # 1M series resistor (rotation=90 for horizontal in signal path)
@@ -3949,22 +3961,14 @@ def build_full_system(**kwargs):
 
             sch.add_label(f"MUX_{grp_name}{mux_ch}", position=(label_out, row_y))
 
-            # Wires: signal path split at diode junction for proper ESD connection
-            # Bug fix: single wire from col_x to r_cx left BAV199 cathode pins
-            # mid-wire with no junction - KiCad may not connect them.
-            # Split into two segments at diode_x and add junction dot.
-            sch.add_wire(start=(col_x, row_y), end=(diode_x, row_y))
-            sch.add_wire(start=(diode_x, row_y), end=(r_cx - 3.81, row_y))
-            sch.junctions.add(position=(diode_x, row_y))
-            # Cap top pin also needs junction on signal wire
+            # Wires: signal path with diode junctions
+            sch.add_wire(start=(col_x, row_y), end=(r_cx - 3.81, row_y))
             sch.add_wire(start=(r_cx + 3.81, row_y), end=(c_cx, row_y))
             sch.add_wire(start=(c_cx, row_y), end=(label_out, row_y))
+            # Junctions where diodes tee off signal wire
+            sch.junctions.add(position=(d_left_x, row_y))
+            sch.junctions.add(position=(d_right_x, row_y))
             sch.junctions.add(position=(c_cx, row_y))
-            # Explicit GND wire stubs to ESD diode anode pins (belt-and-suspenders)
-            sch.add_wire(start=(diode_x, row_y - 7.62),
-                         end=(diode_x, row_y - 7.62 + 0.01))  # top GND stub
-            sch.add_wire(start=(diode_x, row_y + 7.62),
-                         end=(diode_x, row_y + 7.62 - 0.01))  # bot GND stub
 
     # ═══════════════════════════════════════════════════════════════════
     # REGION 2: ANALOG MUX (center-left, 2x CD4051B)
@@ -4780,7 +4784,7 @@ def build_full_system(**kwargs):
     # ── Save ──
     sch_path = os.path.join(WORK_DIR, "full_system.kicad_sch")
     sch.save(sch_path)
-    fix_kicad_sch(sch_path, mirror_refs=["U3"])
+    fix_kicad_sch(sch_path)
 
     # Scale all coordinates for readability (default 3x)
     sf = kwargs.get('scale_factor', 3)
@@ -5554,14 +5558,65 @@ def merge_pdfs(pdf_paths, output_path):
 
 
 # =============================================================
+# DAC7800 MDAC IC BOX DRAWING HELPER
+# =============================================================
+
+def _draw_dac7800_box(sch, ref, center_x, center_y, G=2.54):
+    """Draw a DAC7800 MDAC as a proper IC box with labeled pins.
+
+    Draws a solid rectangle with pin labels: VREF (left), IOUT (right),
+    RFB (right, below IOUT), VCTRL (bottom).
+
+    Args:
+        sch: Schematic object
+        ref: Reference designator (e.g. "XDAC1")
+        center_x: X center of IC box
+        center_y: Y center of IC box (signal line level)
+        G: Grid spacing (default 2.54mm)
+
+    Returns:
+        dict with pin positions: {'vref': (x,y), 'iout': (x,y), 'vctrl': (x,y)}
+    """
+    hw = 6 * G   # half-width
+    hh = 5 * G   # half-height
+
+    box_l = center_x - hw
+    box_r = center_x + hw
+    box_t = center_y - hh
+    box_b = center_y + hh
+
+    # IC body (solid rectangle)
+    sch.add_rectangle(
+        start=(box_l, box_t), end=(box_r, box_b),
+        stroke_width=0.3, stroke_type='solid')
+
+    # IC name inside box
+    sch.add_text(f"{ref}\nDAC7800",
+                 position=(center_x - 4 * G, center_y - 3 * G),
+                 size=2.0, bold=True)
+
+    # Pin labels inside box edges
+    sch.add_text("VREF", position=(box_l + G, center_y + G), size=1.5)
+    sch.add_text("IOUT", position=(box_r - 5 * G, center_y + G), size=1.5)
+    sch.add_text("VCTRL", position=(center_x - 3 * G, box_b - 3 * G), size=1.5)
+
+    return {
+        'vref': (box_l, center_y),
+        'iout': (box_r, center_y),
+        'vctrl': (center_x, box_b),
+    }
+
+
+# =============================================================
 # OSCILLATOR BLOCK SCHEMATICS (Individual A4 PDFs per block)
 # =============================================================
 
 def build_osc_block_summing_amp():
     """Oscillator Block 1/6: Summing Amplifier (U1 LM4562).
 
-    HP = -(R1/R3)*LP - (R2/R3)*BP
-    LP gain = -10k/10k = -1.0, BP gain = -22k/10k = -2.2
+    HP = -(Rf/R1)*LP - (Rf/R2)*BP = -(R3/R1)*LP - (R3/R2)*BP
+    LP gain = -(10k/10k) = -1.0, BP gain = -(10k/22k) = -0.455
+    Q factor = R2/R3 = 22k/10k = 2.2
     Interfaces: LP (from Int2), BP (from Int1), HP (to Int1 via DAC7800)
     """
     print("  Building block: Summing Amplifier...")
@@ -5571,8 +5626,8 @@ def build_osc_block_summing_amp():
         title="State Variable Oscillator - Summing Amplifier",
         company="CircuitForge",
         rev="1.0",
-        comments={1: "HP = -(R1/R3)*LP - (R2/R3)*BP",
-                  2: "LP gain = -1.0, BP gain = -2.2",
+        comments={1: "HP = -(Rf/R1)*LP - (Rf/R2)*BP, Rf=R3=10k",
+                  2: "LP gain = -1.0, BP gain = -0.455, Q = 2.2",
                   3: "Block 1 of 6"}
     )
     G = 2.54
@@ -5580,9 +5635,9 @@ def build_osc_block_summing_amp():
 
     # ── Block title annotations ──
     sch.add_text("SUMMING AMPLIFIER (U1)", position=(8 * G, 6 * G), size=4.0, bold=True)
-    sch.add_text("HP = -(R1/R3) * LP - (R2/R3) * BP",
+    sch.add_text("HP = -(Rf/R1) * LP - (Rf/R2) * BP    (Rf = R3 = 10k)",
                  position=(8 * G, 12 * G), size=2.5)
-    sch.add_text("LP gain = -10k/10k = -1.0     BP gain = -22k/10k = -2.2",
+    sch.add_text("LP gain = -(10k/10k) = -1.0     BP gain = -(10k/22k) = -0.455     Q = 2.2",
                  position=(8 * G, 17 * G), size=2.0)
     sch.add_text("FUNCTION: Combines LP and BP feedback signals with phase inversion.",
                  position=(8 * G, 23 * G), size=1.8)
@@ -5679,7 +5734,7 @@ def build_osc_block_summing_amp():
     # ── Save ──
     sch_path = os.path.join(WORK_DIR, "osc_block_summing_amp.kicad_sch")
     sch.save(sch_path)
-    fix_kicad_sch(sch_path, mirror_refs=["U1"])
+    fix_kicad_sch(sch_path)
     merge_collinear_wires(sch_path)
     print(f"    Saved: {sch_path}")
     return sch_path
@@ -5735,26 +5790,30 @@ def build_osc_block_integrator1():
     u2_vp  = (u2_x - 2.54, u2_y + 7.62)
     u2_vm  = (u2_x - 2.54, u2_y - 7.62)
 
-    # ── DAC7800 block (XDAC1) ──
+    # ── DAC7800 MDAC (XDAC1) - drawn as proper IC box ──
     dac1_x = u2_inv[0] - 28 * G
     dac1_y = u2_inv[1]
-    sch.add_label("HP", position=(dac1_x - 10 * G, dac1_y))
-    sch.add_wire(start=(dac1_x - 10 * G, dac1_y), end=(dac1_x - 4 * G, dac1_y))
-    sch.add_text("XDAC1\nDAC7800", position=(dac1_x - 2 * G, dac1_y - 4 * G), size=2.5)
+    dac1_pins = _draw_dac7800_box(sch, "XDAC1", dac1_x, dac1_y, G)
 
-    # R4 (10k) between MDAC and inv input
+    # HP label wired to VREF pin (left side of DAC box)
+    sch.add_label("HP", position=(dac1_pins['vref'][0] - 10 * G, dac1_y))
+    sch.add_wire(start=(dac1_pins['vref'][0] - 10 * G, dac1_y),
+                 end=dac1_pins['vref'])
+
+    # R4 (10k) between MDAC IOUT and inv input
     rint1_x = u2_inv[0] - 14 * G
     rint1_y = u2_inv[1]
     sch.components.add(lib_id="R:R", reference="R4", value="10k",
         position=(rint1_x, rint1_y), rotation=90)
     rint1_left = (rint1_x - 3.81, rint1_y)
     rint1_right = (rint1_x + 3.81, rint1_y)
-    sch.add_wire(start=(dac1_x - 4 * G, dac1_y), end=rint1_left)
+    sch.add_wire(start=dac1_pins['iout'], end=rint1_left)
 
-    # VCTRL label (with wire stub so label is connected)
-    ctrl_y1 = dac1_y + 8 * G
-    sch.add_label("VCTRL", position=(dac1_x - 2 * G, ctrl_y1))
-    sch.add_wire(start=(dac1_x - 2 * G, ctrl_y1), end=(dac1_x - 2 * G, ctrl_y1 - 2 * G))
+    # VCTRL label wired to VCTRL pin (bottom of DAC box)
+    ctrl_y1 = dac1_pins['vctrl'][1] + 4 * G
+    sch.add_label("VCTRL", position=(dac1_pins['vctrl'][0], ctrl_y1))
+    sch.add_wire(start=dac1_pins['vctrl'],
+                 end=(dac1_pins['vctrl'][0], ctrl_y1))
 
     # R4 to inv input
     sch.add_wire(start=rint1_right, end=u2_inv)
@@ -5879,7 +5938,7 @@ def build_osc_block_integrator1():
     # ── Save ──
     sch_path = os.path.join(WORK_DIR, "osc_block_integrator1.kicad_sch")
     sch.save(sch_path)
-    fix_kicad_sch(sch_path, mirror_refs=["U2"])
+    fix_kicad_sch(sch_path)
     merge_collinear_wires(sch_path)
     print(f"    Saved: {sch_path}")
     return sch_path
@@ -6066,24 +6125,30 @@ def build_osc_block_integrator2():
     u3_vp  = (u3_x - 2.54, u3_y + 7.62)
     u3_vm  = (u3_x - 2.54, u3_y - 7.62)
 
-    # ── DAC7800 #2 ──
+    # ── DAC7800 MDAC #2 (XDAC2) - drawn as proper IC box ──
     dac2_x = u3_inv[0] - 28 * G
     dac2_y = u3_inv[1]
-    sch.add_label("BP", position=(dac2_x - 10 * G, dac2_y))
-    sch.add_wire(start=(dac2_x - 10 * G, dac2_y), end=(dac2_x - 4 * G, dac2_y))
-    sch.add_text("XDAC2\nDAC7800", position=(dac2_x - 2 * G, dac2_y - 4 * G), size=2.5)
+    dac2_pins = _draw_dac7800_box(sch, "XDAC2", dac2_x, dac2_y, G)
 
-    # R6 (10k)
+    # BP label wired to VREF pin (left side of DAC box)
+    sch.add_label("BP", position=(dac2_pins['vref'][0] - 10 * G, dac2_y))
+    sch.add_wire(start=(dac2_pins['vref'][0] - 10 * G, dac2_y),
+                 end=dac2_pins['vref'])
+
+    # R6 (10k) between MDAC IOUT and inv input
     rint2_x = u3_inv[0] - 14 * G
     rint2_y = u3_inv[1]
     sch.components.add(lib_id="R:R", reference="R6", value="10k",
         position=(rint2_x, rint2_y), rotation=90)
     rint2_left = (rint2_x - 3.81, rint2_y)
     rint2_right = (rint2_x + 3.81, rint2_y)
-    sch.add_wire(start=(dac2_x - 4 * G, dac2_y), end=rint2_left)
-    ctrl_y2 = dac2_y + 8 * G
-    sch.add_label("VCTRL", position=(dac2_x - 2 * G, ctrl_y2))
-    sch.add_wire(start=(dac2_x - 2 * G, ctrl_y2), end=(dac2_x - 2 * G, ctrl_y2 - 2 * G))
+    sch.add_wire(start=dac2_pins['iout'], end=rint2_left)
+
+    # VCTRL label wired to VCTRL pin (bottom of DAC box)
+    ctrl_y2 = dac2_pins['vctrl'][1] + 4 * G
+    sch.add_label("VCTRL", position=(dac2_pins['vctrl'][0], ctrl_y2))
+    sch.add_wire(start=dac2_pins['vctrl'],
+                 end=(dac2_pins['vctrl'][0], ctrl_y2))
 
     sch.add_wire(start=rint2_right, end=u3_inv)
 
@@ -6213,7 +6278,7 @@ def build_osc_block_integrator2():
     # ── Save ──
     sch_path = os.path.join(WORK_DIR, "osc_block_integrator2.kicad_sch")
     sch.save(sch_path)
-    fix_kicad_sch(sch_path, mirror_refs=["U3"])
+    fix_kicad_sch(sch_path)
     merge_collinear_wires(sch_path)
     print(f"    Saved: {sch_path}")
     return sch_path
@@ -6635,7 +6700,7 @@ def build_oscillator(**kwargs):
     sch.components.add(lib_id="LM741:LM741", reference="U1",
         value="LM4562", position=(u1_x, u1_y))
 
-    # U1 pin positions (mirrored: inv(-) on top, ni(+) on bottom)
+    # U1 pin positions (default: inv(-) on top, ni(+) on bottom)
     u1_inv = (u1_x - 7.62, u1_y - 2.54)
     u1_ni  = (u1_x - 7.62, u1_y + 2.54)
     u1_out = (u1_x + 7.62, u1_y)
@@ -6725,24 +6790,28 @@ def build_oscillator(**kwargs):
     u2_vp  = (u2_x - 2.54, u2_y + 7.62)
     u2_vm  = (u2_x - 2.54, u2_y - 7.62)
 
-    # DAC7800 block (drawn as labeled box with CTRL input)
+    # DAC7800 MDAC (XDAC1) - proper IC box
     dac1_x = u2_inv[0] - 28 * G
     dac1_y = u2_inv[1]
-    sch.add_label("HP", position=(dac1_x - 10 * G, dac1_y))
-    sch.add_wire(start=(dac1_x - 10 * G, dac1_y), end=(dac1_x - 4 * G, dac1_y))
-    sch.add_text("XDAC1\nDAC7800", position=(dac1_x - 2 * G, dac1_y - 4 * G), size=2.5)
+    dac1_pins = _draw_dac7800_box(sch, "XDAC1", dac1_x, dac1_y, G)
 
-    # Rint1 (10k) between MDAC output and inv input
+    sch.add_label("HP", position=(dac1_pins['vref'][0] - 10 * G, dac1_y))
+    sch.add_wire(start=(dac1_pins['vref'][0] - 10 * G, dac1_y),
+                 end=dac1_pins['vref'])
+
+    # Rint1 (10k) between MDAC IOUT and inv input
     rint1_x = u2_inv[0] - 14 * G
     rint1_y = u2_inv[1]
     sch.components.add(lib_id="R:R", reference="R4", value="10k",
         position=(rint1_x, rint1_y), rotation=90)
     rint1_left = (rint1_x - 3.81, rint1_y)
     rint1_right = (rint1_x + 3.81, rint1_y)
-    sch.add_wire(start=(dac1_x - 4 * G, dac1_y), end=rint1_left)
+    sch.add_wire(start=dac1_pins['iout'], end=rint1_left)
     # CTRL label for DAC
-    ctrl_y1 = dac1_y + 8 * G
-    sch.add_label("VCTRL", position=(dac1_x - 2 * G, ctrl_y1))
+    ctrl_y1 = dac1_pins['vctrl'][1] + 4 * G
+    sch.add_label("VCTRL", position=(dac1_pins['vctrl'][0], ctrl_y1))
+    sch.add_wire(start=dac1_pins['vctrl'],
+                 end=(dac1_pins['vctrl'][0], ctrl_y1))
 
     # Wire Rint1 to inv input
     sch.add_wire(start=rint1_right, end=u2_inv)
@@ -6917,23 +6986,27 @@ def build_oscillator(**kwargs):
     u3_vp  = (u3_x - 2.54, u3_y + 7.62)
     u3_vm  = (u3_x - 2.54, u3_y - 7.62)
 
-    # DAC7800 #2 input
+    # DAC7800 MDAC #2 (XDAC2) - proper IC box
     dac2_x = u3_inv[0] - 28 * G
     dac2_y = u3_inv[1]
-    sch.add_label("BP", position=(dac2_x - 10 * G, dac2_y))
-    sch.add_wire(start=(dac2_x - 10 * G, dac2_y), end=(dac2_x - 4 * G, dac2_y))
-    sch.add_text("XDAC2\nDAC7800", position=(dac2_x - 2 * G, dac2_y - 4 * G), size=2.5)
+    dac2_pins = _draw_dac7800_box(sch, "XDAC2", dac2_x, dac2_y, G)
 
-    # Rint2 (10k)
+    sch.add_label("BP", position=(dac2_pins['vref'][0] - 10 * G, dac2_y))
+    sch.add_wire(start=(dac2_pins['vref'][0] - 10 * G, dac2_y),
+                 end=dac2_pins['vref'])
+
+    # Rint2 (10k) between MDAC IOUT and inv input
     rint2_x = u3_inv[0] - 14 * G
     rint2_y = u3_inv[1]
     sch.components.add(lib_id="R:R", reference="R6", value="10k",
         position=(rint2_x, rint2_y), rotation=90)
     rint2_left = (rint2_x - 3.81, rint2_y)
     rint2_right = (rint2_x + 3.81, rint2_y)
-    sch.add_wire(start=(dac2_x - 4 * G, dac2_y), end=rint2_left)
-    ctrl_y2 = dac2_y + 8 * G
-    sch.add_label("VCTRL", position=(dac2_x - 2 * G, ctrl_y2))
+    sch.add_wire(start=dac2_pins['iout'], end=rint2_left)
+    ctrl_y2 = dac2_pins['vctrl'][1] + 4 * G
+    sch.add_label("VCTRL", position=(dac2_pins['vctrl'][0], ctrl_y2))
+    sch.add_wire(start=dac2_pins['vctrl'],
+                 end=(dac2_pins['vctrl'][0], ctrl_y2))
 
     sch.add_wire(start=rint2_right, end=u3_inv)
 
@@ -7211,7 +7284,7 @@ def build_oscillator(**kwargs):
     # ── Save ──
     sch_path = os.path.join(WORK_DIR, "oscillator.kicad_sch")
     sch.save(sch_path)
-    fix_kicad_sch(sch_path, mirror_refs=["U1", "U2", "U3"])
+    fix_kicad_sch(sch_path)
     merge_collinear_wires(sch_path)
 
     # Scale factor: 1 = standard A3 (professional layout), >1 = enlarged
@@ -7258,14 +7331,15 @@ def write_oscillator_netlist(dac_code=121):
 
     models_dir = os.path.join(REPO_DIR, "StateVarOsc", "models").replace('\\', '/')
     results_file = os.path.join(WORK_DIR, f'oscillator_d{dac_code}_results.txt').replace('\\', '/')
+    results_filename = f'oscillator_d{dac_code}_results.txt'
 
     netlist = f"""* State Variable Oscillator - DAC code {dac_code} (expected {expected_freq:.1f} Hz)
 * Auto-generated by CircuitForge kicad_pipeline.py
 
 .title SVO Frequency Test D={dac_code}
 
-.include {models_dir}/LM4562.lib
-.include {models_dir}/DAC7800.lib
+.include "{models_dir}/LM4562.lib"
+.include "{models_dir}/DAC7800.lib"
 
 * === Power Supply ===
 VCC vcc 0 DC 15
@@ -7332,11 +7406,11 @@ meas tran hp_pp pp v(hp) from={meas_from:.4f} to={meas_to:.4f}
 meas tran lp_pp pp v(lp) from={meas_from:.4f} to={meas_to:.4f}
 
 * Write results to file
-echo "freq = $&freq" > {results_file}
-echo "bp_pp = $&bp_pp" >> {results_file}
-echo "bp_rms = $&bp_rms" >> {results_file}
-echo "hp_pp = $&hp_pp" >> {results_file}
-echo "lp_pp = $&lp_pp" >> {results_file}
+echo "freq = $&freq" > {results_filename}
+echo "bp_pp = $&bp_pp" >> {results_filename}
+echo "bp_rms = $&bp_rms" >> {results_filename}
+echo "hp_pp = $&hp_pp" >> {results_filename}
+echo "lp_pp = $&lp_pp" >> {results_filename}
 
 echo ""
 echo "=== Results for D={dac_code} ==="
@@ -7353,6 +7427,152 @@ quit
         f.write(netlist)
     print(f"  Netlist saved: {out_path}")
     print(f"  DAC code: {dac_code}, Vctrl: {vctrl:.6f}V, Expected freq: {expected_freq:.1f} Hz")
+    return out_path
+
+
+def write_analog_osc_netlist(target_freq_hz=1581.0):
+    """Write ngspice netlist for the friend's analog state variable oscillator.
+
+    Generates a SVF oscillator using LM4562 op-amps with the friend's original
+    component values: R_int (parameterized), C=10nF, and critically R7=100k
+    (very low damping) with NO amplitude limiting (no Zener clamps, broken AGC).
+
+    This faithfully reproduces the friend's circuit behavior: the JFET AGC loop
+    fails to regulate amplitude, so the oscillator clips at the supply rails.
+    Key differences from the MDAC design:
+      - R7=100k (vs 22k) -> Q~10 (vs Q~2.2) -> much less damping
+      - No Zener clamps -> output clips at +/-13.5V instead of +/-1.5V
+      - Fixed R/C frequency (no MDAC) -> R_int parameterized for target freq
+      - Result: ~27Vpp clipped output, ~9.5V RMS (vs ~3Vpp, ~1V RMS)
+
+    Args:
+        target_freq_hz: Target oscillation frequency in Hz.
+
+    Returns:
+        Path to the generated .cir netlist file.
+
+    Results written to sim_work/analog_osc_{freq}Hz_results.txt
+    with key=value pairs: freq, bp_pp, bp_rms, hp_pp, lp_pp
+    """
+    import math
+
+    C_INT = 10e-9  # 10nF (matches friend's schematic)
+    R_int = 1.0 / (2 * math.pi * target_freq_hz * C_INT)
+
+    # Adaptive sim time
+    period = 1.0 / max(target_freq_hz, 1.0)
+    sim_time = max(0.5, 30 * period)
+    tstep = min(1e-6, period / 50.0)
+
+    # Measurement window: last 20% (same as MDAC design)
+    meas_from = sim_time * 0.8
+    meas_to = sim_time
+
+    # Rise count for zero-crossing frequency measurement
+    rise_start = max(5, int(target_freq_hz * meas_from * 0.5))
+    rise_end = rise_start + 1
+
+    models_dir = os.path.join(REPO_DIR, "StateVarOsc", "models").replace('\\', '/')
+    freq_tag = f"{target_freq_hz:.0f}"
+    results_file = os.path.join(WORK_DIR, f'analog_osc_{freq_tag}Hz_results.txt').replace('\\', '/')
+    # Use just the filename for ngspice echo (cwd = sim_work, avoids space issues)
+    results_filename = f'analog_osc_{freq_tag}Hz_results.txt'
+
+    netlist = f"""* Friend's Analog State Variable Oscillator - target {target_freq_hz:.1f} Hz
+* R_int = {R_int:.1f} ohms (for C = 10nF)
+* Auto-generated by CircuitForge kicad_pipeline.py
+* Friend's design: AD824 op-amps, R7=100k (low damping), NO amplitude limiting
+* Result: oscillates but clips at supply rails (~27Vpp, ~9.5V RMS)
+
+.title Analog SVO Target={target_freq_hz:.0f}Hz
+
+.include "{models_dir}/LM4562.lib"
+
+* === Power Supply ===
+VCC vcc 0 DC 15
+VEE vee 0 DC -15
+
+* ======================================================================
+* SUMMING AMPLIFIER (U4 in friend's LTspice: AD824 -> LM4562)
+* ======================================================================
+* Friend's values: R5=10k feedback, R6=10k from LP, R7=100k from BP
+* R7=100k gives very low damping (Q ~ R7/R5 = 10) compared to MDAC (22k, Q~2.2)
+* Non-inverting input grounded (friend's JFET AGC fails to regulate,
+* so the positive feedback path is effectively broken)
+R5 hp sum_inv 10k
+R6 lp sum_inv 10k
+R7 bp sum_inv 100k
+XU4 0 sum_inv vcc vee hp LM4562
+
+* ======================================================================
+* INTEGRATOR 1: HP -> BP (U2 in friend's LTspice: AD824 -> LM4562)
+* ======================================================================
+* Friend's design: fixed R/C (no MDAC), no Zener clamp
+* R_int parameterized for target frequency: f = 1/(2*pi*R*C)
+R1 hp int1_inv {R_int:.4f}
+C1 int1_inv bp {C_INT:.2e}
+XU2 0 int1_inv vcc vee bp LM4562
+
+* ======================================================================
+* INTEGRATOR 2: BP -> LP (U1 in friend's LTspice: AD824 -> LM4562)
+* ======================================================================
+R3 bp int2_inv {R_int:.4f}
+C2 int2_inv lp {C_INT:.2e}
+XU1 0 int2_inv vcc vee lp LM4562
+
+* ======================================================================
+* STARTUP AND LOAD
+* ======================================================================
+* Startup kick (same approach as MDAC oscillator)
+Vkick kick_node 0 PULSE(0 0.1 0.1m 1n 1n 10u 1)
+Rkick kick_node hp 100k
+
+* Output load
+RL bp 0 100k
+
+* ======================================================================
+* ANALYSIS
+* ======================================================================
+.tran {tstep:.2e} {sim_time:.4f} UIC
+
+.control
+tran {tstep:.2e} {sim_time:.4f} uic
+
+* Frequency measurement (same method as MDAC oscillator)
+meas tran t1 when v(bp)=0 rise={rise_start}
+meas tran t2 when v(bp)=0 rise={rise_end}
+let period = t2 - t1
+let freq = 1 / period
+
+* Amplitude measurement (last 20% of sim)
+meas tran bp_pp pp v(bp) from={meas_from:.4f} to={meas_to:.4f}
+let bp_rms = bp_pp / (2 * 1.41421)
+meas tran hp_pp pp v(hp) from={meas_from:.4f} to={meas_to:.4f}
+meas tran lp_pp pp v(lp) from={meas_from:.4f} to={meas_to:.4f}
+
+* Write results to file (identical format to MDAC oscillator)
+* Use relative filename (ngspice cwd = sim_work dir)
+echo "freq = $&freq" > {results_filename}
+echo "bp_pp = $&bp_pp" >> {results_filename}
+echo "bp_rms = $&bp_rms" >> {results_filename}
+echo "hp_pp = $&hp_pp" >> {results_filename}
+echo "lp_pp = $&lp_pp" >> {results_filename}
+
+echo ""
+echo "=== Results for Analog Osc target={target_freq_hz:.0f}Hz ==="
+print freq
+print bp_pp
+print bp_rms
+quit
+.endc
+
+.end
+"""
+    out_path = os.path.join(WORK_DIR, f"analog_osc_{freq_tag}Hz.cir")
+    with open(out_path, 'w') as f:
+        f.write(netlist)
+    print(f"  Netlist saved: {out_path}")
+    print(f"  Target freq: {target_freq_hz:.1f} Hz, R_int: {R_int:.1f} ohms, C_int: {C_INT:.2e} F")
     return out_path
 
 
@@ -8294,7 +8514,7 @@ def simulate(netlist_path):
     result = subprocess.run(
         [NGSPICE, "-b", netlist_path],
         capture_output=True, text=True,
-        cwd=work_dir, timeout=600
+        cwd=work_dir, timeout=600, **_SUBPROCESS_KWARGS
     )
 
     if result.stdout:
@@ -8360,7 +8580,7 @@ def simulate_ltspice(netlist_path, node_names=None):
     result = subprocess.run(
         [LTSPICE, "-b", netlist_path],
         capture_output=True, text=True,
-        cwd=work_dir, timeout=120
+        cwd=work_dir, timeout=120, **_SUBPROCESS_KWARGS
     )
 
     # LTspice writes .raw file next to the input
@@ -8708,15 +8928,95 @@ def verify_pin_connections(sch_path, tolerance=0.6):
     return issues
 
 
+def verify_electrical_correctness(sch_path):
+    """Check electrical semantics: diode polarity, op-amp mirror, power pins.
+
+    Unlike verify_pin_connections (which only checks geometry), this verifies
+    that pins connect to electrically correct nets.
+
+    Returns:
+        list of (severity, message) tuples
+    """
+    issues = []
+
+    with open(sch_path, 'r', encoding='utf-8') as f:
+        text = f.read()
+
+    # --- Check 1: No mirror x on op-amp symbols ---
+    # mirror x swaps +/- inputs and V+/V- power, breaking wire connections
+    mirror_pat = re.compile(
+        r'\(symbol\s*\n'
+        r'\s*\(lib_id "([^"]+)"\)\s*\n'
+        r'\s*\(at [^\)]+\)\s*\n'
+        r'\s*\(mirror x\)',
+        re.MULTILINE
+    )
+    for m in mirror_pat.finditer(text):
+        lib_id = m.group(1)
+        # Only flag op-amp symbols (LM741, LM4562, etc), not transistors
+        if any(opamp in lib_id for opamp in ['LM741', 'LM4562', 'AD824',
+                'ADA4530', 'LMC6001', 'OPA', 'AD8']):
+            # Find the reference
+            chunk = text[m.start():m.start() + 500]
+            ref_m = re.search(r'"Reference"\s+"([^"]+)"', chunk)
+            ref = ref_m.group(1) if ref_m else '?'
+            issues.append(('ERROR',
+                f'Op-amp {ref} ({lib_id}) has mirror x — '
+                f'+/- inputs and V+/V- power pins are SWAPPED'))
+
+    # --- Check 2: ESD diode pairs have anti-parallel polarity ---
+    # For each pair (D_odd, D_even), verify they have different rotations
+    # so one clamps positive and the other clamps negative
+    diode_pat = re.compile(
+        r'\(symbol\s*\n'
+        r'\s*\(lib_id "D:D"\)\s*\n'
+        r'\s*\(at\s+([\d.]+)\s+([\d.]+)\s+(\d+)\)',
+        re.MULTILINE
+    )
+    diodes = {}
+    for m in diode_pat.finditer(text):
+        rot = int(m.group(3))
+        chunk = text[m.start():m.start() + 500]
+        ref_m = re.search(r'"Reference"\s+"(D\d+)"', chunk)
+        if ref_m:
+            diodes[ref_m.group(1)] = rot
+
+    # Check pairs: D1/D2, D3/D4, etc.
+    # Correct side-by-side anti-parallel: D_odd=270 (positive ▽), D_even=90 (negative △)
+    max_d = max((int(k[1:]) for k in diodes), default=0)
+    for i in range(1, max_d + 1, 2):
+        d_odd = f'D{i}'
+        d_even = f'D{i+1}'
+        if d_odd in diodes and d_even in diodes:
+            r_odd, r_even = diodes[d_odd], diodes[d_even]
+            if r_odd == 270 and r_even == 90:
+                pass  # Correct: odd=positive(▽), even=negative(△)
+            elif r_odd == 90 and r_even == 270:
+                pass  # Also valid (swapped roles)
+            elif r_odd == r_even:
+                issues.append(('ERROR',
+                    f'ESD pair {d_odd}/{d_even}: both rot={r_odd} — '
+                    f'same polarity clamping, not anti-parallel'))
+            else:
+                issues.append(('WARNING',
+                    f'ESD pair {d_odd}/{d_even}: rot={r_odd}/{r_even} — '
+                    f'verify anti-parallel polarity'))
+
+    if not issues:
+        issues.append(('PASS', 'Electrical correctness checks passed'))
+
+    return issues
+
+
 # Legacy PIN_DB kept for backward compatibility with check_floating_wires()
 # New code should use get_component_pins() which reads from .kicad_sym files
 PIN_DB = {
     'LM741': {
-        '2': (-7.62, +2.54),   # inv (-)
-        '3': (-7.62, -2.54),   # non-inv (+)
-        '4': (-2.54, +7.62),   # V-
-        '6': (+7.62, 0),       # output
-        '7': (-2.54, -7.62),   # V+
+        '2': (-7.62, -2.54),   # inv (-) TOP-LEFT
+        '3': (-7.62, +2.54),   # non-inv (+) BOTTOM-LEFT
+        '4': (-2.54, -7.62),   # V- TOP
+        '6': (+7.62, 0),       # output RIGHT
+        '7': (-2.54, +7.62),   # V+ BOTTOM
     },
     'R': { '1': (+3.81, 0), '2': (-3.81, 0) },
     'R_vert': { '1': (0, -3.81), '2': (0, +3.81) },
@@ -10465,6 +10765,13 @@ def verify_circuit(sch_path, circuit_type, sim_results=None, expected=None):
                 issues.append(('WARNING', f'{key}: not measured'))
 
     # ══════════════════════════════════════════════════════════════
+    # ELECTRICAL CORRECTNESS (op-amp polarity, diode orientation)
+    # ══════════════════════════════════════════════════════════════
+
+    elec_issues = verify_electrical_correctness(sch_path)
+    issues.extend(elec_issues)
+
+    # ══════════════════════════════════════════════════════════════
     # SUMMARY
     # ══════════════════════════════════════════════════════════════
 
@@ -10527,7 +10834,7 @@ def export_pdf(sch_path, pdf_dir=None):
     pdf_file = os.path.join(pdf_dir, os.path.splitext(os.path.basename(sch_path))[0] + '.pdf')
     result = subprocess.run(
         [KICAD_CLI, "sch", "export", "pdf", "-o", pdf_file, sch_path],
-        capture_output=True, text=True, timeout=30
+        capture_output=True, text=True, timeout=30, **_SUBPROCESS_KWARGS
     )
     if result.returncode != 0:
         raise RuntimeError(f"kicad-cli pdf failed: {result.stderr.strip()}")
@@ -10666,7 +10973,7 @@ def main():
     # Circuit selection
     circuit = "ce_amp"
     opamp = "LM741"
-    if len(sys.argv) >= 2 and sys.argv[1] in ("audioamp", "inv_amp", "ce_amp", "sig_cond", "usb_ina", "electrometer", "electrometer_362", "relay_ladder", "input_filters", "analog_mux", "mux_tia", "mcu_section", "full_system", "full_path", "channel_switch", "femtoamp_test", "avdd_monitor", "rtd_temp", "combined_log", "oscillator", "osc_blocks", "tia_blocks"):
+    if len(sys.argv) >= 2 and sys.argv[1] in ("audioamp", "inv_amp", "ce_amp", "sig_cond", "usb_ina", "electrometer", "electrometer_362", "relay_ladder", "input_filters", "analog_mux", "mux_tia", "mcu_section", "full_system", "full_path", "channel_switch", "femtoamp_test", "avdd_monitor", "rtd_temp", "combined_log", "oscillator", "osc_blocks", "tia_blocks", "analog_osc"):
         circuit = sys.argv[1]
     if len(sys.argv) >= 3 and sys.argv[2] in ("LM741", "AD797", "AD822", "AD843", "LMC6001", "LMC6001A", "OPA128", "ADA4530"):
         opamp = sys.argv[2]
@@ -11658,6 +11965,66 @@ def main():
                 print(f"\n[5] Results file not found: {results_path}")
         else:
             print("\n[4] Simulation failed")
+
+        print("\nDone!")
+        return
+
+    elif circuit == "analog_osc":
+        target_freq = 1581.0  # default (friend's original R=10k, C=10nF)
+        if len(sys.argv) >= 3:
+            try:
+                target_freq = float(sys.argv[2])
+            except ValueError:
+                pass
+
+        print(f"\n[1] Friend's Analog State Variable Oscillator: target {target_freq:.1f} Hz")
+
+        print(f"\n[2] Writing analog oscillator netlist...")
+        netlist_path = write_analog_osc_netlist(target_freq_hz=target_freq)
+
+        print("\n[3] Simulating...")
+        success = simulate(netlist_path)
+
+        if success:
+            freq_tag = f"{target_freq:.0f}"
+            results_path = os.path.join(WORK_DIR, f'analog_osc_{freq_tag}Hz_results.txt')
+            if os.path.exists(results_path):
+                print(f"\n[4] Results:")
+                with open(results_path) as f:
+                    for line in f:
+                        line = line.strip()
+                        if line:
+                            print(f"    {line}")
+
+                # Parse results for verification
+                results = {}
+                with open(results_path) as f:
+                    for line in f:
+                        parts = line.strip().split('=')
+                        if len(parts) == 2:
+                            key = parts[0].strip()
+                            try:
+                                results[key] = float(parts[1].strip())
+                            except ValueError:
+                                pass
+
+                freq = results.get('freq', 0)
+                bp_rms = results.get('bp_rms', 0)
+                bp_pp = results.get('bp_pp', 0)
+                freq_err = abs(freq - target_freq) / target_freq * 100 if target_freq > 0 else 0
+
+                print(f"\n  Verification:")
+                print(f"    Frequency: {freq:.1f} Hz (target {target_freq:.1f} Hz, error {freq_err:.1f}%)")
+                print(f"    BP RMS:    {bp_rms:.3f} V (target 1.03 V)")
+                print(f"    BP Vpp:    {bp_pp:.3f} V")
+                if bp_pp > 20:
+                    print(f"    WARNING:   Output clipping detected (Vpp > 20V) - AGC not functioning")
+                status = "PASS" if freq_err < 15 and bp_pp < 20 else "FAIL"
+                print(f"    Status:    {status}")
+            else:
+                print(f"\n[4] Results file not found: {results_path}")
+        else:
+            print("\n[3] Simulation failed")
 
         print("\nDone!")
         return

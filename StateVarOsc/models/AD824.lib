@@ -1,0 +1,74 @@
+* ============================================================
+* AD824 Behavioural Op-Amp Model for ngspice
+* Based on Analog Devices AD824 datasheet specifications
+*
+* Key specs modelled:
+*   Aol  = 100 dB (100,000 V/V)
+*   GBW  = 2 MHz
+*   SR   = 3.3 V/us
+*   Vos  = 0.5 mV (typical)
+*   Ib   = 10 pA (FET input, very low)
+*   Rin  = 1 Teraohm (FET input)
+*   Rout = 100 ohms (open-loop)
+*   Vs   = +/-2.5 to +/-15 V
+*   Vswing = +/-(Vs - 1.2V)  (rail-to-rail output)
+*
+* Architecture:
+*   Input stage:  differential Rin, FET bias currents, offset
+*   Gain stage:   Gm into R||C dominant pole
+*   Output stage: B-source limiter with Rout
+*
+* Pins: IN+ IN- VCC VEE OUT
+* Instance: XU1 inp inn vcc vee out AD824
+* ============================================================
+
+.subckt AD824 inp inn vcc vee out
+
+* === Design parameters ===
+* Aol = 100 dB = 100000 V/V
+* GBW = 2 MHz
+* fp = GBW / Aol = 20 Hz
+* Gm = Aol / Rint ; choose Rint = 1Meg -> Gm = 0.1 A/V
+* Cp = 1 / (2*pi*Rint*fp) = 7.96uF
+
+.param Aol = 100000
+.param GBW = 2e6
+.param Rint = 1e6
+.param Gm_val = {Aol / Rint}
+.param fp = {GBW / Aol}
+.param Cp_val = {1.0 / (6.28318 * Rint * fp)}
+.param Vos = 0.5e-3
+.param Ib = 10e-12
+.param Rin_diff = 1e12
+.param Rout_val = 100
+.param SR = 3.3e6
+
+* === Input stage ===
+* Differential input resistance
+Rin inp inn {Rin_diff}
+* Input bias currents (FET - very low)
+Ibp inp 0 DC {Ib}
+Ibn inn 0 DC {Ib}
+* Input offset voltage
+Vos inp_os inp DC {Vos}
+
+* === Gain stage (Gm * Rint with dominant pole) ===
+Gm 0 int inp_os inn {Gm_val}
+Rint_node int 0 {Rint}
+Cp int 0 {Cp_val}
+
+* === Slew rate limiting ===
+* Clamp Gm output current to limit slew rate
+* SR = I_max / Cp  =>  I_max = SR * Cp
+D1 int sr_hi DSLEW
+D2 sr_lo int DSLEW
+Vsr_hi sr_hi 0 DC {SR * Cp_val * 0.9}
+Vsr_lo sr_lo 0 DC {-SR * Cp_val * 0.9}
+.model DSLEW D(IS=1e-14 N=1 BV=100)
+
+* === Output stage with rail limiting ===
+* Output swing: +/-(Vs - 1.2V)
+Bout out_int 0 V = max(min(V(int), V(vcc)-1.2), V(vee)+1.2)
+Rout out_int out {Rout_val}
+
+.ends AD824

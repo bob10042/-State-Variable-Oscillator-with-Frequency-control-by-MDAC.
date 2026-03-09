@@ -34,18 +34,41 @@ public class SimulationRunner
         { 4, "1M" }, { 5, "10M" }, { 6, "100M" }, { 7, "1G" }, { 8, "10G" },
     };
 
+    private readonly string _pythonExe;
+
     public SimulationRunner()
     {
         // Derive repo root: SimGUI.exe is in SimGUI/SimGUI/bin/…, repo root is 4 levels up
         // Fallback: walk up from current directory looking for kicad_pipeline.py
         _workingDir = FindRepoRoot();
         _pythonScript = Path.Combine(_workingDir, "kicad_pipeline.py");
+        _pythonExe = FindPython();
     }
 
     private static string? _cachedRepoRoot;
 
     /// <summary>Repo root path (resolved once at startup, cached).</summary>
     public static string RepoRoot => _cachedRepoRoot ??= FindRepoRoot();
+
+    private static string FindPython()
+    {
+        // Prefer Python312 with numpy/py7zr installed (avoids msys64 python)
+        string[] candidates = new[]
+        {
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "Programs", "Python", "Python312", "python.exe"),
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "Programs", "Python", "Python313", "python.exe"),
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "Programs", "Python", "Python311", "python.exe"),
+        };
+        foreach (var path in candidates)
+        {
+            if (File.Exists(path)) return path;
+        }
+        // Fallback to PATH (may pick up wrong python)
+        return "python";
+    }
 
     private static string FindRepoRoot()
     {
@@ -91,7 +114,7 @@ public class SimulationRunner
 
         var psi = new ProcessStartInfo
         {
-            FileName = "python",
+            FileName = _pythonExe,
             Arguments = $"\"{_pythonScript}\" {arguments}",
             WorkingDirectory = _workingDir,
             UseShellExecute = false,
@@ -148,7 +171,7 @@ public class SimulationRunner
 
         var psi = new ProcessStartInfo
         {
-            FileName = "python",
+            FileName = _pythonExe,
             Arguments = $"\"{_pythonScript}\" {circuit} LMC6001 {range}",
             WorkingDirectory = _workingDir,
             UseShellExecute = false,

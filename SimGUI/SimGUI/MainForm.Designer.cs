@@ -33,7 +33,7 @@ partial class MainForm
 
         // Project selector combo (Electrometer / Oscillator)
         _cboProject = new ToolStripComboBox("Project") { DropDownStyle = ComboBoxStyle.DropDownList, Width = 120 };
-        _cboProject.Items.AddRange(new object[] { "Electrometer", "Oscillator" });
+        _cboProject.Items.AddRange(new object[] { "Electrometer", "Oscillator", "Comparison" });
         _cboProject.SelectedIndex = 0;
 
         // Sweep point selector combo (populated dynamically by project)
@@ -42,6 +42,7 @@ partial class MainForm
         _btnRunSim = new ToolStripButton("Run Range") { Image = null, DisplayStyle = ToolStripItemDisplayStyle.Text };
         _btnRunAll = new ToolStripButton("Run All Ranges") { DisplayStyle = ToolStripItemDisplayStyle.Text };
         _btnCalibrate = new ToolStripButton("Calibrate") { DisplayStyle = ToolStripItemDisplayStyle.Text, Enabled = false, Visible = false };
+        _btnTogglePlot = new ToolStripButton("Amplitude View") { DisplayStyle = ToolStripItemDisplayStyle.Text, Enabled = false, Visible = false };
         _btnLoadFile = new ToolStripButton("Load File") { DisplayStyle = ToolStripItemDisplayStyle.Text };
         _btnExportCsv = new ToolStripButton("Export CSV") { DisplayStyle = ToolStripItemDisplayStyle.Text, Enabled = false };
         _btnScreenshot = new ToolStripButton("Screenshot") { DisplayStyle = ToolStripItemDisplayStyle.Text };
@@ -53,6 +54,7 @@ partial class MainForm
             _btnRunSim, new ToolStripSeparator(),
             _btnRunAll, new ToolStripSeparator(),
             _btnCalibrate, new ToolStripSeparator(),
+            _btnTogglePlot, new ToolStripSeparator(),
             _btnLoadFile, new ToolStripSeparator(),
             _btnExportCsv, new ToolStripSeparator(),
             _btnScreenshot, new ToolStripSeparator(),
@@ -151,6 +153,7 @@ partial class MainForm
     private ToolStripButton _btnRunSim;
     private ToolStripButton _btnRunAll;
     private ToolStripButton _btnCalibrate;
+    private ToolStripButton _btnTogglePlot;
     private ToolStripButton _btnLoadFile;
     private ToolStripButton _btnExportCsv;
     private ToolStripButton _btnScreenshot;

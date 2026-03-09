@@ -79,8 +79,12 @@ CircuitForge is under active development, with the pipeline improving each sessi
 - **LTspice conversion**: Can convert LTspice example circuits (.asc files) into
   KiCad schematics + ngspice simulations. The `demo_loader.py` tool handles the
   LTspice-to-ngspice netlist translation automatically.
-- **20 circuit types** currently supported, from simple BJT amplifiers to a complete
+- **20+ circuit types** currently supported, from simple BJT amplifiers to a complete
   16-channel electrometer system with MCU firmware.
+- **DAC7800 IC representation**: MDAC chips drawn as labeled IC boxes with pin names
+  (VREF, IOUT, VCTRL) rather than generic op-amp triangles.
+- **Junction dot enforcement**: T-junctions after wire merging get proper junction dots
+  so connections are visually unambiguous in KiCad.
 
 ## What CircuitForge Does
 
@@ -121,8 +125,9 @@ build-simulate-verify pipeline:
 
 7. **SimGUI** - A .NET 8 WinForms desktop application (using ScottPlot 5 for
    charting) that wraps the Python pipeline with a graphical interface. It provides
-   project-selectable configurations (Electrometer, Oscillator), one-click simulation
-   runs across all parameter ranges, and interactive result browsing.
+   project-selectable configurations (Electrometer, Oscillator, Comparison), one-click
+   simulation runs across all parameter ranges, and interactive result browsing.
+   Subprocess calls run silently (no popup console windows on Windows).
 
 8. **Firmware Generation** - Produces C source code for the ADuCM362 microcontroller
    that runs the physical hardware: ADC configuration, multiplexer scanning, relay
@@ -132,7 +137,7 @@ build-simulate-verify pipeline:
 
 | Resource | Purpose |
 |----------|---------|
-| `kicad_pipeline.py` | Core engine (~10000 lines). Contains all circuit builders, netlist generators, simulators, plotters, and the self-learning correction loop. Run from the command line with a circuit type and parameters. |
+| `kicad_pipeline.py` | Core engine (~12200 lines). Contains all circuit builders, netlist generators, simulators, plotters, and the self-learning correction loop. Run from the command line with a circuit type and parameters. |
 | `kicad_libs/` | Custom KiCad symbol libraries (`.kicad_sym`) and SPICE model files (`.lib`, `.sub`). Includes vendor models for LMC6001, LM4562, DAC7800, AD636, CD4051B, and relay drivers. The LM741 symbol library provides the generic op-amp schematic shape used across all circuit types. |
 | `sim_work/` | Working directory where all generated files land: `.kicad_sch` schematics, `.cir` netlists, `.txt` raw results, `.png` plots, and intermediate files. |
 | `learned_rules.json` | Accumulated auto-correction rules. Each entry maps a problem pattern to its fix, so the pipeline improves over successive runs. |
@@ -153,9 +158,16 @@ build-simulate-verify pipeline:
 ### State Variable Oscillator
 - MDAC-controlled frequency: 25 Hz - 30 kHz
 - Zener AGC for 1V RMS amplitude stability
-- DAC7800 dual MDAC for integrator time constant control
+- DAC7800 dual MDAC for integrator time constant control (drawn as proper IC boxes in schematics)
 - AD636 RMS-to-DC converter for amplitude monitoring
 - ADuCM362 self-calibration firmware
+
+### Comparison (MDAC vs Analog Oscillator)
+- Side-by-side simulation of MDAC-controlled design vs a friend's analog SVF oscillator
+- Runs both designs at 8 matching frequency points (25 Hz - 30 kHz)
+- Dual-line charts: Steel Blue (MDAC) vs Burnt Orange (Analog) vs Gray (Ideal)
+- Toggle between frequency accuracy and amplitude stability views
+- Documents circuit differences and what's needed to fix the analog design
 
 ## Troubleshooting
 
@@ -176,12 +188,13 @@ build-simulate-verify pipeline:
 
 ```
 LTspice/
-  kicad_pipeline.py          # Main pipeline (~10000 lines, 20 circuit types)
+  kicad_pipeline.py          # Main pipeline (~12200 lines, 20+ circuit types)
   demo_loader.py             # LTspice .asc to ngspice converter
   requirements.txt           # Python dependencies (pip install -r requirements.txt)
   PROJECT.md                 # Project tracker
   docs/
     oscillator_guide.md      # State variable oscillator technical guide
+    comparison_guide.md      # MDAC vs Analog oscillator comparison
   sim_work/                  # Simulation working directory (generated files)
   symbols/                   # Bundled KiCad symbols (16 symbols used by pipeline)
   kicad_libs/                # Full KiCad symbol library (optional, not in git)
@@ -197,6 +210,7 @@ LTspice/
       IProjectConfig.cs      # Generic project interface
       OscillatorConfig.cs    # Oscillator frequency sweep + calibration sim
       ElectrometerConfig.cs  # 16-channel TIA wrapper
+      ComparisonConfig.cs    # MDAC vs Analog oscillator comparison
     Models/                  # Data models
     Services/                # Result parsers, CSV export, simulation runner
     MainForm.cs              # Main GUI (generic, project-switchable)
@@ -226,6 +240,9 @@ python kicad_pipeline.py oscillator 121
 # Electrometer range 2 (1G feedback)
 python kicad_pipeline.py channel_switch LMC6001 2
 
+# Analog oscillator comparison at 1 kHz
+python kicad_pipeline.py analog_osc 1000
+
 # Full system schematic
 python kicad_pipeline.py full_system
 ```
@@ -235,7 +252,7 @@ python kicad_pipeline.py full_system
 cd SimGUI/SimGUI
 dotnet run
 ```
-Select project (Electrometer/Oscillator) from the toolbar dropdown.
+Select project (Electrometer/Oscillator/Comparison) from the toolbar dropdown.
 
 ### CLI test mode
 ```bash
@@ -271,5 +288,6 @@ When the ADuCM362 firmware is running:
 | `full_system` | Complete 16-ch system on A0 sheet |
 | `channel_switch` | 16-channel mux switching sim |
 | `oscillator` | State variable oscillator + MDAC |
+| `analog_osc` | Analog SVF oscillator (friend's design, for comparison) |
 | `femtoamp_test` | 100 fA sensitivity test |
 | `avdd_monitor` | AVDD supply monitor |

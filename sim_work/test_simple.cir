@@ -1,0 +1,10 @@
+* Test Circuit
+V1 1 0 DC 5
+R1 1 0 1k
+.op
+.control
+run
+print V(1) I(V1)
+quit
+.endc
+.end
