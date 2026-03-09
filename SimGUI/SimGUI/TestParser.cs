@@ -58,5 +58,64 @@ public static class TestParser
         if (totalFail == 0 && totalPass > 0)
             Console.WriteLine(">> ALL CHANNELS ALL RANGES WITHIN TOLERANCE <<");
         Console.WriteLine(new string('=', 120));
+
+        // --- Generic Circuit Parser Test ---
+        Console.WriteLine("\n\n=== Generic Circuit Parser Test ===\n");
+        TestGenericParser(workDir);
+    }
+
+    private static void TestGenericParser(string workDir)
+    {
+        string metaPath = Path.Combine(workDir, "generic_sim_meta.json");
+        if (!File.Exists(metaPath))
+        {
+            Console.WriteLine($"  generic_sim_meta.json not found at {metaPath}");
+            Console.WriteLine("  Run: python kicad_pipeline.py generic_sim \"<circuit>.asc\" first");
+            return;
+        }
+
+        Console.WriteLine($"  Meta file: {metaPath}");
+
+        string[] probes = { "A", "B", "IN" };
+        try
+        {
+            var result = GenericResultParser.Parse(workDir, probes);
+
+            Console.WriteLine($"  Circuit: {result.CircuitName} ({result.CircuitPath})");
+            Console.WriteLine($"  All nodes: {string.Join(", ", result.AllNodes)}");
+            Console.WriteLine($"  Probed: {string.Join(", ", result.ProbedNodes)}");
+            Console.WriteLine($"  Analyses run: {string.Join(", ", result.AnalysesRun)}");
+            Console.WriteLine($"  Gain: {result.Gain:F2}x ({result.GainDb:F1} dB)");
+
+            Console.WriteLine($"\n  Transient nodes: {result.TransientNodes.Count}");
+            foreach (var tn in result.TransientNodes)
+            {
+                Console.WriteLine($"    {tn.NodeName}: {tn.Time.Length} pts, Vpp={tn.Vpp:F4}, Vdc={tn.Vdc:F4}, Vrms={tn.Vrms:F4}, Freq={tn.FreqHz:F1}Hz, Status={tn.Status}");
+            }
+
+            Console.WriteLine($"\n  AC/Bode nodes: {result.AcNodes.Count}");
+            foreach (var an in result.AcNodes)
+            {
+                Console.WriteLine($"    {an.NodeName}: {an.Frequency.Length} freq pts, {an.MagnitudeDb.Length} mag pts, {an.PhaseDeg.Length} phase pts");
+                if (an.MagnitudeDb.Length > 0)
+                    Console.WriteLine($"      DC gain={an.MagnitudeDb[0]:F1}dB, Peak={an.MagnitudeDb.Max():F1}dB");
+            }
+
+            // Validation
+            bool pass = true;
+            if (result.TransientNodes.Count == 0) { Console.WriteLine("  FAIL: No transient nodes!"); pass = false; }
+            if (result.AcNodes.Count == 0) { Console.WriteLine("  FAIL: No AC nodes!"); pass = false; }
+            foreach (var tn in result.TransientNodes)
+            {
+                if (tn.Time.Length < 10) { Console.WriteLine($"  FAIL: {tn.NodeName} has only {tn.Time.Length} time points!"); pass = false; }
+                if (tn.Voltage.Length != tn.Time.Length) { Console.WriteLine($"  FAIL: {tn.NodeName} time/voltage length mismatch!"); pass = false; }
+            }
+            Console.WriteLine(pass ? "\n  >> GENERIC PARSER TEST PASSED <<" : "\n  >> GENERIC PARSER TEST FAILED <<");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"  EXCEPTION: {ex.Message}");
+            Console.WriteLine($"  Stack: {ex.StackTrace}");
+        }
     }
 }

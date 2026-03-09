@@ -10930,6 +10930,774 @@ def export_full_system_regions(pdf_path, output_dir=None):
 # =============================================================
 # MAIN / CLI
 # =============================================================
+# =============================================================
+# GENERIC CIRCUIT ANALYSIS & SIMULATION
+# =============================================================
+
+def _extract_nodes_from_cir(netlist_text):
+    """Extract node names and simulation command from a .cir netlist."""
+    nodes = set()
+    sim_cmd = None
+    for line in netlist_text.split('\n'):
+        line = line.strip()
+        if not line or line.startswith('*'):
+            continue
+        if line.startswith('.'):
+            if re.match(r'\.(tran|ac|dc|noise|op)\b', line, re.I):
+                sim_cmd = line
+            continue
+        parts = line.split()
+        if len(parts) < 2:
+            continue
+        first_char = parts[0][0].upper()
+        if first_char in ('R', 'C', 'L', 'V', 'I', 'D'):
+            for p in parts[1:3]:
+                if p not in ('0', 'gnd', 'GND') and not p.startswith('.'):
+                    nodes.add(p)
+        elif first_char in ('Q', 'J', 'M'):
+            for p in parts[1:4]:
+                if p not in ('0', 'gnd', 'GND') and not p.startswith('.'):
+                    nodes.add(p)
+        elif first_char == 'X':
+            for p in parts[1:-1]:  # last token is subcircuit name
+                if p not in ('0', 'gnd', 'GND') and not p.startswith('.'):
+                    nodes.add(p)
+    return sorted(nodes), sim_cmd
+
+
+def _classify_nodes(nodes, netlist_lines):
+    """Classify circuit nodes into inputs, outputs, power, internal."""
+    power_patterns = re.compile(
+        r'^(VCC|VDD|VEE|VSS|AVDD|DVDD|V\+|V-|VPOS|VNEG|\+\d+V|-\d+V|\+3\.3V|\+5V|\+12V|-12V|5V_ISO)$',
+        re.I)
+    output_patterns = re.compile(r'^(OUT|OUTPUT|VOUT|OUT_INT|FILTERED|AIN\d|TIA_OUT)$', re.I)
+    input_patterns = re.compile(r'^(IN|INPUT|VIN|SIG|SIGNAL|CH\d+_IN)$', re.I)
+
+    inputs, outputs, power, internal = [], [], [], []
+    # Check sources: signal sources → input nodes, DC sources → power nodes
+    signal_source_nodes = set()
+    dc_source_nodes = set()
+    for line in netlist_lines:
+        line = line.strip()
+        if not line:
+            continue
+        parts = line.split()
+        if len(parts) < 3:
+            continue
+        if parts[0][0].upper() == 'V':
+            val = ' '.join(parts[3:]).upper() if len(parts) > 3 else ''
+            n_plus = parts[1]
+            if any(kw in val for kw in ('SINE', 'PULSE', 'PWL', 'AC')):
+                if n_plus not in ('0', 'gnd', 'GND'):
+                    signal_source_nodes.add(n_plus)
+            elif 'DC' in val or re.match(r'^-?\d', val):
+                if n_plus not in ('0', 'gnd', 'GND'):
+                    dc_source_nodes.add(n_plus)
+
+    for n in nodes:
+        if n in ('0', 'gnd', 'GND'):
+            continue
+        if power_patterns.match(n) or n in dc_source_nodes:
+            power.append(n)
+        elif input_patterns.match(n) or n in signal_source_nodes:
+            inputs.append(n)
+        elif output_patterns.match(n):
+            outputs.append(n)
+        else:
+            internal.append(n)
+
+    # If no explicit output found, pick first non-power non-input named node
+    if not outputs:
+        for n in internal[:]:
+            if not re.match(r'^N\d+$', n):
+                outputs.append(n)
+                internal.remove(n)
+                break
+
+    return {
+        'all': sorted(nodes),
+        'inputs': sorted(inputs),
+        'outputs': sorted(outputs),
+        'power': sorted(power),
+        'internal': sorted(internal),
+        'ground': ['0'],
+    }
+
+
+def _count_components(netlist_lines):
+    """Count component types in a netlist."""
+    counts = {'resistors': 0, 'capacitors': 0, 'inductors': 0,
+              'bjts': 0, 'mosfets': 0, 'jfets': 0, 'diodes': 0,
+              'voltage_sources': 0, 'current_sources': 0, 'subcircuits': 0}
+    for line in netlist_lines:
+        line = line.strip()
+        if not line or line.startswith('*') or line.startswith('.'):
+            continue
+        fc = line[0].upper()
+        if fc == 'R': counts['resistors'] += 1
+        elif fc == 'C': counts['capacitors'] += 1
+        elif fc == 'L': counts['inductors'] += 1
+        elif fc == 'Q': counts['bjts'] += 1
+        elif fc == 'M': counts['mosfets'] += 1
+        elif fc == 'J': counts['jfets'] += 1
+        elif fc == 'D': counts['diodes'] += 1
+        elif fc == 'V': counts['voltage_sources'] += 1
+        elif fc == 'I': counts['current_sources'] += 1
+        elif fc == 'X': counts['subcircuits'] += 1
+    return counts
+
+
+def _parse_sources(netlist_lines):
+    """Extract voltage/current source details."""
+    sources = []
+    for line in netlist_lines:
+        line = line.strip()
+        if not line or line.startswith('*') or line.startswith('.'):
+            continue
+        parts = line.split()
+        fc = parts[0][0].upper()
+        if fc not in ('V', 'I') or len(parts) < 4:
+            continue
+        name = parts[0]
+        n1, n2 = parts[1], parts[2]
+        val_str = ' '.join(parts[3:])
+        src = {'name': name, 'nodes': [n1, n2], 'value': val_str}
+        val_upper = val_str.upper()
+        if 'SINE' in val_upper or 'SIN(' in val_upper:
+            src['type'] = 'SINE'
+            m = re.search(r'SINE?\s*\(\s*([^\s,]+)\s+([^\s,]+)\s+([^\s,)]+)', val_str, re.I)
+            if m:
+                try:
+                    src['dc_offset'] = float(m.group(1))
+                    src['amplitude'] = float(m.group(2))
+                    src['freq_hz'] = float(m.group(3))
+                except ValueError:
+                    pass
+        elif 'PULSE' in val_upper:
+            src['type'] = 'PULSE'
+        elif 'PWL' in val_upper:
+            src['type'] = 'PWL'
+        elif 'AC' in val_upper:
+            src['type'] = 'AC'
+        else:
+            src['type'] = 'DC'
+        sources.append(src)
+    return sources
+
+
+def _detect_circuit_type(components, sources, nodes_class):
+    """Detect circuit type from component makeup and sources."""
+    has_signal = any(s['type'] in ('SINE', 'PULSE', 'PWL', 'AC') for s in sources)
+    has_bjts = components.get('bjts', 0) > 0
+    has_mosfets = components.get('mosfets', 0) > 0
+    has_opamps = components.get('subcircuits', 0) > 0  # op-amps are usually subcircuits
+    has_caps = components.get('capacitors', 0) > 0
+    has_diodes = components.get('diodes', 0) > 0
+    n_resistors = components.get('resistors', 0)
+
+    if has_signal and (has_bjts or has_mosfets or has_opamps) and n_resistors > 2:
+        if has_caps and has_opamps and n_resistors > 3:
+            return 'filter'
+        return 'amplifier'
+    if has_diodes and has_caps and not has_signal:
+        return 'power_supply'
+    if has_opamps and has_caps:
+        return 'filter'
+    return 'generic'
+
+
+def _fix_tran_cmd(cmd):
+    """Convert LTspice .tran format to ngspice format.
+
+    LTspice allows .tran <tstop> (single arg = stop time, auto step).
+    ngspice requires .tran <tstep> <tstop>.
+    Also strips LTspice-only keywords (startup, steady).
+    """
+    if not cmd or not cmd.strip().lower().startswith('.tran'):
+        return cmd
+    parts = cmd.strip().split()
+    # Filter LTspice-only keywords
+    cleaned = [parts[0]]
+    for p in parts[1:]:
+        if p.lower() in ('startup', 'steady'):
+            continue
+        cleaned.append(p)
+    if len(cleaned) == 2:
+        # Only stop time given — add step = tstop/1000
+        tstop = cleaned[1]
+        suffixes = {'t': 1e12, 'g': 1e9, 'meg': 1e6, 'k': 1e3,
+                     'm': 1e-3, 'u': 1e-6, 'n': 1e-9, 'p': 1e-12, 'f': 1e-15}
+        try:
+            m = re.match(r'^([0-9.eE+-]+)(meg|[tgkmunpf])?$', tstop, re.I)
+            if m:
+                val = float(m.group(1))
+                suffix = (m.group(2) or '').lower()
+                val *= suffixes.get(suffix, 1.0)
+                tstep = val / 1000
+                if tstep >= 1e-3:
+                    step_str = f"{tstep*1e3:.4g}m"
+                elif tstep >= 1e-6:
+                    step_str = f"{tstep*1e6:.4g}u"
+                elif tstep >= 1e-9:
+                    step_str = f"{tstep*1e9:.4g}n"
+                else:
+                    step_str = f"{tstep:.2e}"
+                return f".tran {step_str} {tstop}"
+        except (ValueError, TypeError):
+            pass
+        return f".tran 1u {tstop}"
+    # Fix tstep=0 (LTspice auto-step) — ngspice needs a real step value
+    if len(cleaned) >= 3 and cleaned[1] == '0':
+        tstop_str = cleaned[2]
+        suffixes = {'t': 1e12, 'g': 1e9, 'meg': 1e6, 'k': 1e3,
+                     'm': 1e-3, 'u': 1e-6, 'n': 1e-9, 'p': 1e-12, 'f': 1e-15}
+        try:
+            m = re.match(r'^\.?([0-9.eE+-]+)(meg|[tgkmunpf])?$', tstop_str, re.I)
+            if m:
+                val = float(m.group(1))
+                suffix = (m.group(2) or '').lower()
+                val *= suffixes.get(suffix, 1.0)
+                tstep = val / 1000
+                if tstep >= 1e-3:
+                    step_str = f"{tstep*1e3:.4g}m"
+                elif tstep >= 1e-6:
+                    step_str = f"{tstep*1e6:.4g}u"
+                elif tstep >= 1e-9:
+                    step_str = f"{tstep*1e9:.4g}n"
+                else:
+                    step_str = f"{tstep:.2e}"
+                cleaned[1] = step_str
+        except (ValueError, TypeError):
+            cleaned[1] = '1u'
+    return ' '.join(cleaned)
+
+
+def _suggest_analyses(circuit_type, sources, nodes_class, sim_cmd):
+    """Suggest appropriate analyses based on circuit type."""
+    suggestions = []
+    has_signal = any(s['type'] in ('SINE', 'PULSE', 'PWL', 'AC') for s in sources)
+    signal_src = next((s for s in sources if s.get('type') in ('SINE', 'PULSE', 'PWL', 'AC')), None)
+    default_probes = nodes_class['inputs'][:2] + nodes_class['outputs'][:2]
+    if not default_probes:
+        named = [n for n in nodes_class['all'] if not re.match(r'^N\d+$', n)]
+        default_probes = named[:4]
+
+    # Transient — almost always useful
+    tran_cmd = _fix_tran_cmd(sim_cmd) if sim_cmd and sim_cmd.lower().startswith('.tran') else '.tran 1u 10m'
+    suggestions.append({
+        'id': 'transient', 'name': 'Time Domain (Transient)',
+        'description': 'Voltage waveforms at all probed nodes over time',
+        'default_probes': default_probes,
+        'sim_cmd': tran_cmd,
+        'enabled_by_default': True,
+    })
+
+    # AC/Bode — useful for amplifiers and filters
+    if circuit_type in ('amplifier', 'filter', 'generic') and has_signal:
+        ac_probes = nodes_class['outputs'][:2] or default_probes[:2]
+        suggestions.append({
+            'id': 'ac_bode', 'name': 'Bode Plot (AC Analysis)',
+            'description': 'Gain (dB) and phase vs frequency',
+            'default_probes': ac_probes,
+            'sim_cmd': '.ac dec 100 1 10Meg',
+            'enabled_by_default': circuit_type in ('amplifier', 'filter'),
+        })
+
+    # DC Sweep — useful when there's a swept source
+    if has_signal and signal_src:
+        src_name = signal_src['name']
+        suggestions.append({
+            'id': 'dc_sweep', 'name': 'DC Sweep',
+            'description': f'Output vs {src_name} DC voltage',
+            'default_probes': nodes_class['outputs'][:2] or default_probes[:2],
+            'sim_cmd': f'.dc {src_name} -5 5 0.1',
+            'enabled_by_default': False,
+        })
+
+    # Key measurements — always available
+    metrics = ['vpp', 'vdc', 'vrms', 'freq_hz']
+    if circuit_type == 'amplifier':
+        metrics.extend(['gain', 'gain_dB', 'bandwidth_hz', 'thd_percent'])
+    elif circuit_type == 'filter':
+        metrics.extend(['bandwidth_hz', 'cutoff_hz', 'rolloff_dB_dec'])
+    suggestions.append({
+        'id': 'measurements', 'name': 'Key Measurements',
+        'description': 'Computed from simulation data',
+        'metrics': metrics,
+        'enabled_by_default': True,
+    })
+
+    return suggestions
+
+
+def _estimate_frequency(time, signal):
+    """Estimate dominant frequency from zero-crossings of AC component."""
+    ac = signal - np.mean(signal)
+    if np.max(np.abs(ac)) < 1e-6:
+        return 0.0
+    crossings = np.where(np.diff(np.sign(ac)))[0]
+    if len(crossings) < 2:
+        return 0.0
+    periods = np.diff(time[crossings])
+    half_period = float(np.median(periods))
+    if half_period > 0:
+        return 1.0 / (2 * half_period)
+    return 0.0
+
+
+def _measure_generic(results_path, node_names):
+    """Compute Vpp, Vdc, Vrms, and estimated frequency for each probed node."""
+    data = np.loadtxt(results_path)
+    n = min(len(node_names), data.shape[1] // 2)
+    time = data[:, 0]
+    measurements = {}
+    for i in range(n):
+        v = data[:, i * 2 + 1]
+        vpp = float(np.max(v) - np.min(v))
+        vdc = float(np.mean(v))
+        vrms = float(np.sqrt(np.mean(v ** 2)))
+        freq = _estimate_frequency(time, v)
+        measurements[node_names[i]] = {
+            'vpp': vpp, 'vdc': vdc, 'vrms': vrms,
+            'vmin': float(np.min(v)), 'vmax': float(np.max(v)),
+            'freq_hz': freq,
+        }
+    # Gain if >=2 nodes
+    if n >= 2:
+        vin_pp = measurements[node_names[0]]['vpp']
+        vout_pp = measurements[node_names[1]]['vpp']
+        if vin_pp > 1e-9:
+            measurements['_gain'] = vout_pp / vin_pp
+            measurements['_gain_dB'] = 20 * np.log10(vout_pp / vin_pp)
+    return measurements
+
+
+def _build_generic_netlist(clean_lines, sim_cmd, probe_nodes, lib_lines,
+                            model_lines, subckt_names, analysis='transient'):
+    """Build ngspice netlist for generic circuit simulation."""
+    from demo_loader import find_subckt_lib
+    final = []
+    # Title
+    if clean_lines and clean_lines[0].startswith('*'):
+        final.append(clean_lines[0])
+    else:
+        final.append("* Generic circuit simulation")
+    final.append("")
+    # Circuit lines (add AC stimulus for AC analysis)
+    start = 1 if clean_lines and clean_lines[0].startswith('*') else 0
+    for line in clean_lines[start:]:
+        if analysis == 'ac_bode' and re.match(r'^V\w+\s', line, re.I):
+            upper = line.upper()
+            if ('SINE' in upper or 'PULSE' in upper or 'PWL' in upper) and 'AC' not in upper:
+                line = line.rstrip() + ' AC 1'
+        final.append(line)
+    final.append("")
+    # Models
+    for m in model_lines:
+        final.append(m)
+    # Libraries
+    for lib in lib_lines:
+        final.append(lib)
+    for name in subckt_names:
+        sub_path = find_subckt_lib(name)
+        if sub_path:
+            final.append(f".include {sub_path}")
+    final.append("")
+
+    # Use relative filename (ngspice cwd is sim_work/)
+    results_file = f"generic_{analysis}_results.txt"
+
+    if analysis == 'ac_bode':
+        final.append(".ac dec 100 1 10Meg")
+        save_str = " ".join([f"vdb({n}) vp({n})" for n in probe_nodes])
+    elif analysis == 'dc_sweep':
+        final.append(sim_cmd if sim_cmd else ".dc V1 -5 5 0.1")
+        save_str = " ".join([f"V({n})" for n in probe_nodes])
+    else:  # transient
+        final.append(_fix_tran_cmd(sim_cmd) if sim_cmd else ".tran 1u 10m")
+        save_str = " ".join([f"V({n})" for n in probe_nodes])
+
+    final.append("")
+    final.append(".control")
+    final.append("run")
+    final.append(f"wrdata {results_file} {save_str}")
+    final.append("quit")
+    final.append(".endc")
+    final.append("")
+    final.append(".end")
+    return "\n".join(final), probe_nodes
+
+
+def _remove_missing_includes(netlist_text):
+    """Remove .include directives that reference non-existent files.
+
+    After subcircuit resolution, stale .include lines (e.g., '.include opamp.sub')
+    cause ngspice to fail if the file doesn't exist on disk.
+    """
+    lines = netlist_text.split('\n')
+    fixed = []
+    removed = 0
+    for line in lines:
+        m = re.match(r'\.include\s+(\S+)', line.strip(), re.I)
+        if m:
+            inc_file = m.group(1).strip('"').strip("'")
+            # Check if file exists (relative to WORK_DIR or absolute)
+            paths_to_check = [
+                inc_file,
+                os.path.join(WORK_DIR, inc_file),
+                os.path.join(REPO_DIR, inc_file),
+            ]
+            if not any(os.path.exists(p) for p in paths_to_check):
+                fixed.append(f'* (removed: file not found) {line.strip()}')
+                removed += 1
+                continue
+        fixed.append(line)
+    if removed > 0:
+        print(f"  Removed {removed} missing .include directive(s)")
+    return '\n'.join(fixed)
+
+
+def _fix_ltspice_syntax(netlist_text):
+    """Convert LTspice-specific SPICE syntax to standard ngspice.
+
+    Fixes:
+    1. VCCS/VCVS poly shorthand: G1 n+ n- (nc+,nc-) gain → G1 n+ n- nc+ nc- gain
+       Applies to G (VCCS), E (VCVS) sources.
+    2. Behavioral source prefix: BV → B (LTspice 'BV' is behavioral voltage)
+    """
+    lines = netlist_text.split('\n')
+    fixed = []
+    changes = 0
+
+    for line in lines:
+        stripped = line.strip()
+        if not stripped or stripped.startswith('*') or stripped.startswith('.'):
+            fixed.append(line)
+            continue
+
+        # Fix G/E source with (nc+,nc-) syntax
+        # Pattern: G1 n+ n- (nc+,nc-) gain  →  G1 n+ n- nc+ nc- gain
+        if stripped[0].upper() in ('G', 'E'):
+            m = re.match(
+                r'([GEge]\S+)\s+(\S+)\s+(\S+)\s+\((\S+?),(\S+?)\)\s+(.*)',
+                stripped)
+            if m:
+                name, np, nm, ncp, ncm, rest = m.groups()
+                new_line = f'{name} {np} {nm} {ncp} {ncm} {rest}'
+                fixed.append(new_line)
+                changes += 1
+                continue
+
+        # Fix BV (behavioral voltage) → B source
+        if stripped[0].upper() == 'B' and len(stripped) > 1 and stripped[1].upper() == 'V':
+            # BV1 n+ n- V=... → B1 n+ n- V=...
+            m = re.match(r'[Bb][Vv](\S*)\s+(.*)', stripped)
+            if m:
+                name_suffix, rest = m.groups()
+                new_line = f'B{name_suffix} {rest}'
+                fixed.append(new_line)
+                changes += 1
+                continue
+
+        fixed.append(line)
+
+    if changes > 0:
+        print(f"  Fixed {changes} LTspice-specific syntax element(s)")
+    return '\n'.join(fixed)
+
+
+def _resolve_missing_models(netlist_text):
+    """Find model names used in a netlist that lack .model definitions, and inject them.
+
+    Searches the MicroCap library for BJT, JFET, diode, and MOSFET models.
+    Returns netlist_text with .model lines injected before .end.
+    """
+    lines = netlist_text.split('\n')
+
+    # Collect model names already defined
+    defined = set()
+    for line in lines:
+        m = re.match(r'\.model\s+(\S+)', line, re.I)
+        if m:
+            defined.add(m.group(1).upper())
+        # Also check .subckt definitions
+        m = re.match(r'\.subckt\s+(\S+)', line, re.I)
+        if m:
+            defined.add(m.group(1).upper())
+
+    # Collect model names referenced by components
+    needed = set()
+    for line in lines:
+        stripped = line.strip()
+        if not stripped or stripped.startswith('*') or stripped.startswith('.'):
+            continue
+        first = stripped[0].upper()
+        parts = stripped.split()
+        if first == 'Q' and len(parts) >= 5:
+            needed.add(parts[4])  # Q1 C B E modelname
+        elif first == 'D' and len(parts) >= 4:
+            needed.add(parts[3])  # D1 A K modelname
+        elif first == 'J' and len(parts) >= 5:
+            needed.add(parts[4])  # J1 D G S modelname
+        elif first == 'M' and len(parts) >= 5:
+            needed.add(parts[4])  # M1 D G S B modelname (or M1 D G S modelname)
+
+    # Filter out already-defined models
+    missing = {n for n in needed if n.upper() not in defined}
+    if not missing:
+        return netlist_text
+
+    # Search MicroCap library for missing models
+    lib_dir = os.path.join(REPO_DIR, "models", "MicroCap-LIBRARY-for-ngspice")
+    found_models = []
+
+    if os.path.isdir(lib_dir):
+        for lib_file in os.listdir(lib_dir):
+            if not lib_file.endswith('.lib'):
+                continue
+            lib_path = os.path.join(lib_dir, lib_file)
+            try:
+                with open(lib_path, 'r', errors='replace') as f:
+                    content = f.read()
+                for model_name in list(missing):
+                    # Try exact match first, then strip trailing letter (A/B/C variants)
+                    candidates = [model_name]
+                    if re.match(r'.*\d[A-Za-z]$', model_name):
+                        candidates.append(model_name[:-1])  # e.g., 2N2219A → 2N2219
+
+                    for try_name in candidates:
+                        pattern = rf'^\.MODEL\s+{re.escape(try_name)}\s+\w+\s*\('
+                        match = re.search(pattern, content, re.MULTILINE | re.IGNORECASE)
+                        if match:
+                            # Extract the full model (including continuation lines)
+                            start = match.start()
+                            pos = match.end()
+                            while pos < len(content):
+                                nl = content.find('\n', pos)
+                                if nl == -1:
+                                    pos = len(content)
+                                    break
+                                next_line = content[nl + 1:nl + 10]
+                                if next_line.startswith('+'):
+                                    pos = nl + 1
+                                else:
+                                    pos = nl
+                                    break
+                            model_text = content[start:pos].strip()
+                            # If we found a variant, rename the model to match
+                            if try_name != model_name:
+                                model_text = re.sub(
+                                    rf'(\.MODEL\s+){re.escape(try_name)}',
+                                    rf'\g<1>{model_name}',
+                                    model_text, count=1, flags=re.IGNORECASE)
+                            # Strip carriage returns from model text
+                            model_text = model_text.replace('\r', '')
+                            # Collapse continuation lines then re-wrap at ~80 chars
+                            collapsed = re.sub(r'\s*\n\+\s*', ' ', model_text)
+                            # Re-wrap: split at spaces within the parenthesized params
+                            m_hdr = re.match(r'(\.MODEL\s+\S+\s+\w+\s*\()', collapsed)
+                            if m_hdr and len(collapsed) > 80:
+                                header = m_hdr.group(1)
+                                params = collapsed[len(header):].rstrip(')')
+                                parts = params.split()
+                                lines_out = [header]
+                                current = '+'
+                                for p in parts:
+                                    if len(current) + 1 + len(p) > 75:
+                                        lines_out.append(current)
+                                        current = '+ ' + p
+                                    else:
+                                        current += ' ' + p
+                                lines_out.append(current + ')')
+                                model_text = '\n'.join(lines_out)
+                            else:
+                                model_text = collapsed
+                            found_models.append(model_text)
+                            missing.discard(model_name)
+                            break  # Found it, stop trying candidates
+            except Exception:
+                continue
+
+    if not found_models:
+        return netlist_text
+
+    # Inject models before .end
+    model_block = '\n* Auto-resolved models\n' + '\n'.join(found_models) + '\n'
+    if '.end' in netlist_text.lower():
+        # Insert before .end
+        idx = netlist_text.lower().rfind('.end')
+        return netlist_text[:idx] + model_block + '\n' + netlist_text[idx:]
+    else:
+        return netlist_text + '\n' + model_block
+
+
+def _resolve_missing_subcircuits(netlist_text):
+    """Find subcircuit names used in X-lines that lack .subckt definitions, and inject them.
+
+    Searches the MicroCap library .lib files for .SUBCKT definitions.
+    Handles naming variants: LT1001 → LT1001_LT, LT1001_MC, etc.
+    Returns netlist_text with .subckt blocks and .include directives injected.
+    """
+    lines = netlist_text.split('\n')
+
+    # Collect already-defined subcircuits
+    defined = set()
+    for line in lines:
+        m = re.match(r'\.subckt\s+(\S+)', line, re.I)
+        if m:
+            defined.add(m.group(1).upper())
+        # Also count .include directives as potentially providing subcircuits
+        m = re.match(r'\.include\s+(\S+)', line, re.I)
+        if m:
+            defined.add('__INCLUDE__')  # Mark that includes exist
+
+    # Collect subcircuit names referenced by X components
+    needed = set()
+    for line in lines:
+        stripped = line.strip()
+        if not stripped or stripped.startswith('*') or stripped.startswith('.'):
+            continue
+        if stripped[0].upper() == 'X':
+            parts = stripped.split()
+            if len(parts) >= 3:
+                # Last token is subcircuit name (X1 pin1 pin2 ... subckt_name)
+                subckt_name = parts[-1]
+                needed.add(subckt_name)
+
+    # Filter out already-defined
+    missing = {n for n in needed if n.upper() not in defined}
+    if not missing:
+        return netlist_text
+
+    # Search MicroCap library for missing subcircuits
+    lib_dir = os.path.join(REPO_DIR, "models", "MicroCap-LIBRARY-for-ngspice")
+    found_blocks = []
+    rename_map = {}  # old_name → new_name (for renaming in netlist)
+
+    if os.path.isdir(lib_dir):
+        for lib_file in sorted(os.listdir(lib_dir)):
+            if not lib_file.endswith('.lib'):
+                continue
+            if not missing:
+                break
+            lib_path = os.path.join(lib_dir, lib_file)
+            try:
+                with open(lib_path, 'r', errors='replace') as f:
+                    content = f.read()
+                for subckt_name in list(missing):
+                    # Try exact match, then common suffixes
+                    candidates = [subckt_name]
+                    for suffix in ['_LT', '_MC', '_TI', '_AD', '_NS']:
+                        candidates.append(subckt_name + suffix)
+                    # Also try stripping trailing letters for variants
+                    if re.match(r'.*\d[A-Za-z]$', subckt_name):
+                        base = subckt_name[:-1]
+                        candidates.append(base)
+                        for suffix in ['_LT', '_MC', '_TI', '_AD', '_NS']:
+                            candidates.append(base + suffix)
+
+                    for try_name in candidates:
+                        pattern = rf'^\.SUBCKT\s+{re.escape(try_name)}\b'
+                        match = re.search(pattern, content, re.MULTILINE | re.IGNORECASE)
+                        if match:
+                            # Extract full subcircuit block (.SUBCKT ... .ENDS)
+                            start = match.start()
+                            # Find the matching .ENDS
+                            ends_pattern = rf'^\.ENDS\s+{re.escape(try_name)}\b|^\.ENDS\s*$'
+                            ends_match = re.search(ends_pattern, content[start:],
+                                                   re.MULTILINE | re.IGNORECASE)
+                            if ends_match:
+                                end = start + ends_match.end()
+                                subckt_block = content[start:end].strip()
+                                subckt_block = subckt_block.replace('\r', '')
+
+                                if try_name.upper() != subckt_name.upper():
+                                    # Rename the subcircuit to match what the circuit expects
+                                    subckt_block = re.sub(
+                                        rf'(\.SUBCKT\s+){re.escape(try_name)}',
+                                        rf'\g<1>{subckt_name}',
+                                        subckt_block, count=1, flags=re.IGNORECASE)
+                                    subckt_block = re.sub(
+                                        rf'(\.ENDS\s+){re.escape(try_name)}',
+                                        rf'\g<1>{subckt_name}',
+                                        subckt_block, count=1, flags=re.IGNORECASE)
+
+                                found_blocks.append(subckt_block)
+                                missing.discard(subckt_name)
+                                break
+            except Exception:
+                continue
+
+    if not found_blocks:
+        # Add warnings for missing subcircuits
+        if missing:
+            warn_block = '\n'.join(f'* WARNING: subcircuit {n} not found' for n in missing)
+            if '.end' in netlist_text.lower():
+                idx = netlist_text.lower().rfind('.end')
+                return netlist_text[:idx] + warn_block + '\n' + netlist_text[idx:]
+        return netlist_text
+
+    # Inject subcircuit blocks before .end
+    subckt_block = '\n* Auto-resolved subcircuits\n' + '\n\n'.join(found_blocks) + '\n'
+    if '.end' in netlist_text.lower():
+        idx = netlist_text.lower().rfind('.end')
+        return netlist_text[:idx] + subckt_block + '\n' + netlist_text[idx:]
+    else:
+        return netlist_text + '\n' + subckt_block
+
+
+def _inject_control_block(netlist_text, probe_nodes, analysis='transient'):
+    """Inject/replace .control block in an existing .cir file."""
+    lines = netlist_text.split('\n')
+    new_lines = []
+    in_control = False
+    sim_cmd = None
+    for line in lines:
+        stripped = line.strip().lower()
+        if stripped == '.control':
+            in_control = True
+            continue
+        if stripped == '.endc':
+            in_control = False
+            continue
+        if stripped == '.end':
+            continue
+        if in_control:
+            continue
+        if re.match(r'\.(tran|ac|dc|noise)\b', stripped):
+            sim_cmd = line.strip()
+            continue
+        # For AC analysis, add AC stimulus to signal sources (SINE/PULSE/PWL)
+        if analysis == 'ac_bode' and re.match(r'^V\w+\s', line, re.I):
+            upper = line.upper()
+            if ('SINE' in upper or 'PULSE' in upper or 'PWL' in upper) and 'AC' not in upper:
+                line = line.rstrip() + ' AC 1'
+        new_lines.append(line)
+
+    # Use relative filename (ngspice cwd is sim_work/)
+    results_file = f"generic_{analysis}_results.txt"
+
+    if analysis == 'ac_bode':
+        new_lines.append(".ac dec 100 1 10Meg")
+        save_str = " ".join([f"vdb({n}) vp({n})" for n in probe_nodes])
+    elif analysis == 'dc_sweep':
+        new_lines.append(sim_cmd if sim_cmd else ".dc V1 -5 5 0.1")
+        save_str = " ".join([f"V({n})" for n in probe_nodes])
+    else:
+        new_lines.append(_fix_tran_cmd(sim_cmd) if sim_cmd else ".tran 1u 10m")
+        save_str = " ".join([f"V({n})" for n in probe_nodes])
+
+    new_lines.append("")
+    new_lines.append(".control")
+    new_lines.append("run")
+    new_lines.append(f"wrdata {results_file} {save_str}")
+    new_lines.append("quit")
+    new_lines.append(".endc")
+    new_lines.append("")
+    new_lines.append(".end")
+    return "\n".join(new_lines)
+
+
 def main():
     """Main entry point - CLI circuit selection and pipeline execution.
 
@@ -10968,6 +11736,229 @@ def main():
             print(block)
         else:
             print(f"Model '{name}' not found")
+        return
+
+    # ---- analyze_circuit: inspect a circuit and suggest analyses ----
+    if len(sys.argv) >= 3 and sys.argv[1] == "analyze_circuit":
+        import json as _json
+        circuit_path = sys.argv[2]
+        if not os.path.exists(circuit_path):
+            print(f'{{"error": "File not found: {circuit_path}"}}')
+            sys.exit(1)
+        ext = os.path.splitext(circuit_path)[1].lower()
+        try:
+            if ext == '.asc':
+                # Use built-in .asc parser (no LTspice.exe required)
+                from asc_parser import parse_asc
+                asc_result = parse_asc(circuit_path)
+                if asc_result['error']:
+                    print(f'{{"error": "{asc_result["error"]}"}}')
+                    sys.exit(1)
+                netlist_text = asc_result['netlist']
+                all_nodes = asc_result['nodes']
+                sim_cmd = asc_result['sim_command']
+                netlist_lines = [l for l in netlist_text.split('\n') if l.strip()]
+                if asc_result.get('warnings'):
+                    for w in asc_result['warnings']:
+                        print(f'  WARNING: {w}', file=sys.stderr)
+            elif ext in ('.cir', '.net', '.sp', '.spice'):
+                from demo_loader import read_ltspice_file
+                if ext == '.net':
+                    text = read_ltspice_file(circuit_path)
+                else:
+                    text = open(circuit_path, 'r').read()
+                all_nodes, sim_cmd = _extract_nodes_from_cir(text)
+                netlist_lines = [l for l in text.split('\n') if l.strip()]
+            else:
+                print(f'{{"error": "Unsupported file type: {ext}. Supported: .asc .cir .net .sp"}}')
+                sys.exit(1)
+
+            nodes_class = _classify_nodes(all_nodes, netlist_lines)
+            components = _count_components(netlist_lines)
+            sources = _parse_sources(netlist_lines)
+            circuit_type = _detect_circuit_type(components, sources, nodes_class)
+            suggestions = _suggest_analyses(circuit_type, sources, nodes_class, sim_cmd)
+
+            result = {
+                'circuit_path': circuit_path.replace('\\', '/'),
+                'circuit_name': os.path.splitext(os.path.basename(circuit_path))[0],
+                'circuit_type': circuit_type,
+                'sim_command': sim_cmd or '.tran 1u 10m',
+                'nodes': nodes_class,
+                'components': components,
+                'sources': sources,
+                'suggested_analyses': suggestions,
+            }
+            print(_json.dumps(result, indent=2))
+        except Exception as e:
+            print(f'{{"error": "{str(e)}"}}')
+            sys.exit(1)
+        return
+
+    # ---- generic_sim: run simulation with selected analyses and probes ----
+    if len(sys.argv) >= 3 and sys.argv[1] == "generic_sim":
+        import json as _json
+        circuit_path = sys.argv[2]
+        if not os.path.exists(circuit_path):
+            print(f"ERROR: File not found: {circuit_path}")
+            sys.exit(1)
+
+        # Parse --analyses and --nodes args
+        analyses = ['transient']
+        user_nodes = []
+        i = 3
+        while i < len(sys.argv):
+            if sys.argv[i] == '--analyses' and i + 1 < len(sys.argv):
+                analyses = sys.argv[i + 1].split(',')
+                i += 2
+            elif sys.argv[i] == '--nodes' and i + 1 < len(sys.argv):
+                user_nodes = sys.argv[i + 1].split(',')
+                i += 2
+            else:
+                # Bare node names (legacy support)
+                user_nodes.append(sys.argv[i])
+                i += 1
+
+        ext = os.path.splitext(circuit_path)[1].lower()
+        try:
+            if ext == '.asc':
+                # Use built-in .asc parser (no LTspice.exe required)
+                from asc_parser import parse_asc
+                asc_result = parse_asc(circuit_path)
+                if asc_result['error']:
+                    print(f"ERROR: {asc_result['error']}")
+                    sys.exit(1)
+                text = asc_result['netlist']
+                all_nodes = asc_result['nodes']
+                if asc_result.get('warnings'):
+                    for w in asc_result['warnings']:
+                        print(f"  WARNING: {w}")
+                # Resolve missing model definitions (BJTs, diodes, etc.)
+                text = _resolve_missing_models(text)
+                # Resolve missing subcircuit definitions (op-amps, etc.)
+                text = _resolve_missing_subcircuits(text)
+                # Fix LTspice-specific syntax (VCCS poly, behavioral sources)
+                text = _fix_ltspice_syntax(text)
+                # Remove .include directives for files that don't exist
+                text = _remove_missing_includes(text)
+                # Now treat it like a .cir file
+                if user_nodes:
+                    probe_nodes = user_nodes
+                else:
+                    named = [n for n in all_nodes if not re.match(r'^N\d+$', n)]
+                    probe_nodes = named[:12] if named else all_nodes[:8]
+
+                meta = {'circuit_path': circuit_path, 'all_nodes': all_nodes,
+                        'probe_nodes': probe_nodes, 'analyses_run': analyses}
+
+                for analysis in analyses:
+                    if analysis == 'measurements':
+                        continue
+                    print(f"\n  Running {analysis} analysis...")
+                    netlist_text = _inject_control_block(text, probe_nodes, analysis)
+                    netlist_path = os.path.join(WORK_DIR, f"generic_{analysis}.cir")
+                    with open(netlist_path, 'w') as f:
+                        f.write(netlist_text)
+                    success = simulate(netlist_path)
+                    if success:
+                        results_file = os.path.join(WORK_DIR, f"generic_{analysis}_results.txt")
+                        if os.path.exists(results_file):
+                            if analysis == 'transient':
+                                meas = _measure_generic(results_file, probe_nodes)
+                                meta['transient'] = {
+                                    'results_file': f"generic_transient_results.txt",
+                                    'probes': probe_nodes, 'measurements': meas,
+                                }
+                                for node, m in meas.items():
+                                    if isinstance(m, dict):
+                                        print(f"    {node}: Vpp={m['vpp']:.4f}  Vdc={m['vdc']:.4f}  Vrms={m['vrms']:.4f}")
+                            elif analysis == 'ac_bode':
+                                meta['ac_bode'] = {
+                                    'results_file': f"generic_ac_bode_results.txt",
+                                    'probes': probe_nodes,
+                                }
+                        else:
+                            print(f"    WARNING: {analysis} results file not found")
+                    else:
+                        print(f"    {analysis} simulation failed")
+
+            elif ext in ('.cir', '.net', '.sp', '.spice'):
+                from demo_loader import read_ltspice_file
+                if ext == '.net':
+                    text = read_ltspice_file(circuit_path)
+                else:
+                    text = open(circuit_path, 'r').read()
+                all_nodes, sim_cmd = _extract_nodes_from_cir(text)
+                if user_nodes:
+                    probe_nodes = user_nodes
+                else:
+                    named = [n for n in all_nodes if not re.match(r'^N\d+$', n)]
+                    probe_nodes = named[:12] if named else all_nodes[:8]
+
+                meta = {'circuit_path': circuit_path, 'all_nodes': all_nodes,
+                        'probe_nodes': probe_nodes, 'analyses_run': analyses}
+
+                for analysis in analyses:
+                    if analysis == 'measurements':
+                        continue
+                    print(f"\n  Running {analysis} analysis...")
+                    netlist_text = _inject_control_block(text, probe_nodes, analysis)
+                    netlist_path = os.path.join(WORK_DIR, f"generic_{analysis}.cir")
+                    with open(netlist_path, 'w') as f:
+                        f.write(netlist_text)
+                    success = simulate(netlist_path)
+                    if success:
+                        results_file = os.path.join(WORK_DIR, f"generic_{analysis}_results.txt")
+                        if os.path.exists(results_file):
+                            if analysis == 'transient':
+                                meas = _measure_generic(results_file, probe_nodes)
+                                meta['transient'] = {
+                                    'results_file': f"generic_transient_results.txt",
+                                    'probes': probe_nodes, 'measurements': meas,
+                                }
+                                for node, m in meas.items():
+                                    if isinstance(m, dict):
+                                        print(f"    {node}: Vpp={m['vpp']:.4f}  Vdc={m['vdc']:.4f}  Vrms={m['vrms']:.4f}")
+                            elif analysis == 'ac_bode':
+                                meta['ac_bode'] = {
+                                    'results_file': f"generic_ac_bode_results.txt",
+                                    'probes': probe_nodes,
+                                }
+                    else:
+                        print(f"    {analysis} simulation failed")
+            else:
+                print(f"ERROR: Unsupported file type: {ext}. Supported: .asc .cir .net .sp")
+                sys.exit(1)
+
+            # Write metadata JSON
+            meta_path = os.path.join(WORK_DIR, "generic_sim_meta.json")
+            with open(meta_path, 'w') as f:
+                # Convert numpy types to Python native for JSON
+                def _convert(obj):
+                    if isinstance(obj, (np.floating, np.integer)):
+                        return float(obj)
+                    if isinstance(obj, np.ndarray):
+                        return obj.tolist()
+                    return obj
+                _json.dump(meta, f, indent=2, default=_convert)
+            print(f"\n  Metadata: {meta_path}")
+
+            # Also generate KiCad schematic if possible
+            if ext == '.asc':
+                print("\n  Generating KiCad schematic from netlist...")
+                try:
+                    sch_path = os.path.join(WORK_DIR, f"generic_circuit.kicad_sch")
+                    # Use demo_loader's data to build a basic schematic
+                    # (full schematic generation is a future enhancement)
+                    print(f"  Schematic: {sch_path} (future feature)")
+                except Exception as e:
+                    print(f"  Schematic generation: {e}")
+
+        except Exception as e:
+            import traceback
+            print(f"ERROR: {e}")
+            traceback.print_exc()
+            sys.exit(1)
         return
 
     # Circuit selection

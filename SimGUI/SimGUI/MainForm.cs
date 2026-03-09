@@ -54,6 +54,14 @@ public partial class MainForm : Form
         _btnTogglePlot.Enabled = false;
         _btnTogglePlot.Text = "Amplitude View";
 
+        // Show/hide generic circuit buttons
+        _btnLoadCircuit.Visible = _project is GenericCircuitConfig;
+        _btnViewCircuit.Visible = _project is GenericCircuitConfig;
+        _btnViewCircuit.Enabled = false;
+        _btnToggleView.Visible = _project is GenericCircuitConfig;
+        _btnToggleView.Enabled = false;
+        _btnToggleView.Text = "Bode View";
+
         // Rebuild grid columns
         _dataGrid.Columns.Clear();
         _dataGrid.Rows.Clear();
@@ -92,6 +100,7 @@ public partial class MainForm : Form
                 0 => new ElectrometerConfig(),
                 1 => new OscillatorConfig(),
                 2 => new ComparisonConfig(),
+                3 => new GenericCircuitConfig(),
                 _ => new ElectrometerConfig(),
             };
             SwitchProject(newProject);
@@ -101,6 +110,9 @@ public partial class MainForm : Form
         _btnRunAll.Click += async (_, _) => await RunAllSweepPoints();
         _btnCalibrate.Click += (_, _) => RunCalibration();
         _btnTogglePlot.Click += (_, _) => ToggleComparisonPlot();
+        _btnLoadCircuit.Click += async (_, _) => await LoadCircuitFile();
+        _btnViewCircuit.Click += (_, _) => ViewCircuitInLTspice();
+        _btnToggleView.Click += (_, _) => ToggleGenericView();
         _btnLoadFile.Click += (_, _) => LoadResultFile();
         _btnExportCsv.Click += (_, _) => ExportCsv();
         _btnScreenshot.Click += (_, _) => TakeScreenshot();
@@ -140,6 +152,13 @@ public partial class MainForm : Form
         if (_project is ComparisonConfig compConfig)
         {
             await RunSingleComparisonAsync(compConfig);
+            return;
+        }
+
+        // Generic circuit mode
+        if (_project is GenericCircuitConfig genConfig)
+        {
+            await RunGenericCircuitAsync(genConfig);
             return;
         }
 
@@ -210,6 +229,13 @@ public partial class MainForm : Form
         if (_project is ComparisonConfig compConfig)
         {
             await RunComparisonSweepAsync(compConfig);
+            return;
+        }
+
+        // Generic circuit: RunAll is same as RunSingle (all analyses at once)
+        if (_project is GenericCircuitConfig genConfig2)
+        {
+            await RunGenericCircuitAsync(genConfig2);
             return;
         }
 
@@ -664,6 +690,396 @@ public partial class MainForm : Form
     }
 
     // ------------------------------------------------------------------
+    // Generic circuit: Load + Analyze + Dialog
+    // ------------------------------------------------------------------
+
+    private async Task LoadCircuitFile()
+    {
+        if (_project is not GenericCircuitConfig genConfig) return;
+
+        // Try LTspice examples folders, fall back to sim_work
+        string ltspiceExamples = SimWorkDir;
+        string[] examplePaths = new[]
+        {
+            @"C:\Program Files\LTC\LTspiceXVII\examples\Educational",
+            @"C:\Program Files\LTC\LTspiceXVII\examples",
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "LTspice", "examples"),
+        };
+        foreach (var p in examplePaths)
+        {
+            if (Directory.Exists(p)) { ltspiceExamples = p; break; }
+        }
+
+        using var dlg = new OpenFileDialog
+        {
+            Title = "Load Circuit File",
+            Filter = "All Circuit Files (*.asc;*.cir;*.net;*.sp)|*.asc;*.cir;*.net;*.sp|LTspice (*.asc)|*.asc|SPICE Netlist (*.cir;*.net;*.sp)|*.cir;*.net;*.sp|All Files (*.*)|*.*",
+            InitialDirectory = ltspiceExamples,
+        };
+
+        if (dlg.ShowDialog() != DialogResult.OK) return;
+
+        string circuitPath = dlg.FileName;
+        SetStatus($"Analyzing: {Path.GetFileName(circuitPath)}...");
+        AppendOutput($"Analyzing circuit: {circuitPath}");
+
+        // Run analyze_circuit in Python
+        string args = $"analyze_circuit \"{circuitPath}\"";
+        string jsonOutput = "";
+
+        var psi = new System.Diagnostics.ProcessStartInfo
+        {
+            FileName = FindPythonExe(),
+            Arguments = $"\"{Path.Combine(SimulationRunner.RepoRoot, "kicad_pipeline.py")}\" {args}",
+            WorkingDirectory = SimulationRunner.RepoRoot,
+            UseShellExecute = false,
+            RedirectStandardOutput = true,
+            RedirectStandardError = true,
+            CreateNoWindow = true,
+        };
+
+        try
+        {
+            using var proc = System.Diagnostics.Process.Start(psi);
+            if (proc == null) { SetStatus("Failed to start analysis"); return; }
+            jsonOutput = await proc.StandardOutput.ReadToEndAsync();
+            string errOutput = await proc.StandardError.ReadToEndAsync();
+            await proc.WaitForExitAsync();
+
+            if (!string.IsNullOrEmpty(errOutput))
+                AppendOutput($"[Analysis stderr] {errOutput}");
+        }
+        catch (Exception ex)
+        {
+            SetStatus($"Analysis error: {ex.Message}");
+            AppendOutput($"Analysis error: {ex.Message}");
+            return;
+        }
+
+        // Parse the JSON analysis result
+        try
+        {
+            var analysis = System.Text.Json.JsonSerializer.Deserialize<System.Text.Json.JsonElement>(jsonOutput);
+            if (analysis.TryGetProperty("error", out var err))
+            {
+                AppendOutput($"Analysis error: {err.GetString()}");
+                SetStatus("Analysis failed");
+                return;
+            }
+
+            string circuitName = "";
+            string circuitType = "generic";
+            string[] allNodes = Array.Empty<string>();
+            string[] inputNodes = Array.Empty<string>();
+            string[] outputNodes = Array.Empty<string>();
+            var suggestedAnalyses = new List<(string id, string name, string desc, bool enabled)>();
+
+            if (analysis.TryGetProperty("circuit_name", out var cn))
+                circuitName = cn.GetString() ?? "";
+            if (analysis.TryGetProperty("circuit_type", out var ct))
+                circuitType = ct.GetString() ?? "generic";
+            if (analysis.TryGetProperty("nodes", out var nodes))
+            {
+                if (nodes.TryGetProperty("all", out var an))
+                    allNodes = an.EnumerateArray().Select(e => e.GetString() ?? "").Where(s => s != "").ToArray();
+                if (nodes.TryGetProperty("inputs", out var inp))
+                    inputNodes = inp.EnumerateArray().Select(e => e.GetString() ?? "").Where(s => s != "").ToArray();
+                if (nodes.TryGetProperty("outputs", out var outp))
+                    outputNodes = outp.EnumerateArray().Select(e => e.GetString() ?? "").Where(s => s != "").ToArray();
+            }
+            if (analysis.TryGetProperty("suggested_analyses", out var sa))
+            {
+                foreach (var item in sa.EnumerateArray())
+                {
+                    string id = item.TryGetProperty("id", out var sid) ? sid.GetString() ?? "" : "";
+                    string name = item.TryGetProperty("name", out var sn) ? sn.GetString() ?? "" : "";
+                    string desc = item.TryGetProperty("description", out var sd) ? sd.GetString() ?? "" : "";
+                    bool enabled = item.TryGetProperty("enabled_by_default", out var se) && se.GetBoolean();
+                    suggestedAnalyses.Add((id, name, desc, enabled));
+                }
+            }
+
+            // Components summary
+            string componentsSummary = "";
+            if (analysis.TryGetProperty("components", out var comp))
+            {
+                var parts = new List<string>();
+                foreach (var prop in comp.EnumerateObject())
+                {
+                    int count = prop.Value.GetInt32();
+                    if (count > 0) parts.Add($"{count} {prop.Name}");
+                }
+                componentsSummary = string.Join(", ", parts);
+            }
+
+            AppendOutput($"  Circuit: {circuitName} ({circuitType})");
+            AppendOutput($"  Components: {componentsSummary}");
+            AppendOutput($"  Nodes: {string.Join(", ", allNodes)}");
+
+            // Show analysis selection dialog
+            using var analysisDlg = new AnalysisSelectionDialog(
+                circuitName, circuitType, componentsSummary,
+                allNodes, inputNodes, outputNodes,
+                suggestedAnalyses);
+
+            if (analysisDlg.ShowDialog() != DialogResult.OK) return;
+
+            // Apply user selections
+            genConfig.SetCircuitInfo(
+                circuitPath, circuitName, circuitType,
+                allNodes, analysisDlg.SelectedProbes, analysisDlg.SelectedAnalyses);
+
+            // Update sweep combo with selected probes
+            _cboSweepPoint.Items.Clear();
+            foreach (var probe in analysisDlg.SelectedProbes)
+                _cboSweepPoint.Items.Add($"Node: {probe}");
+            if (_cboSweepPoint.Items.Count > 0)
+                _cboSweepPoint.SelectedIndex = 0;
+
+            Text = genConfig.FormTitle;
+            genConfig.ClearStatusBar(_statusLabels);
+            _btnViewCircuit.Enabled = circuitPath.EndsWith(".asc", StringComparison.OrdinalIgnoreCase);
+            SetStatus($"Ready: {circuitName} ({circuitType}) - Click Simulate");
+
+            AppendOutput($"  Selected analyses: {string.Join(", ", analysisDlg.SelectedAnalyses)}");
+            AppendOutput($"  Selected probes: {string.Join(", ", analysisDlg.SelectedProbes)}");
+        }
+        catch (Exception ex)
+        {
+            AppendOutput($"JSON parse error: {ex.Message}");
+            AppendOutput($"Raw output: {jsonOutput[..Math.Min(500, jsonOutput.Length)]}");
+            SetStatus("Analysis parse error");
+        }
+    }
+
+    private static string FindPythonExe()
+    {
+        string[] candidates = new[]
+        {
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "Programs", "Python", "Python312", "python.exe"),
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "Programs", "Python", "Python313", "python.exe"),
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "Programs", "Python", "Python311", "python.exe"),
+        };
+        foreach (var path in candidates)
+            if (File.Exists(path)) return path;
+        return "python";
+    }
+
+    // ------------------------------------------------------------------
+    // Generic circuit: View in LTspice
+    // ------------------------------------------------------------------
+
+    private void ViewCircuitInLTspice()
+    {
+        if (_project is not GenericCircuitConfig genConfig || !genConfig.HasCircuit) return;
+
+        string circuitPath = genConfig.CircuitPath;
+        if (!File.Exists(circuitPath))
+        {
+            AppendOutput($"Circuit file not found: {circuitPath}");
+            return;
+        }
+
+        // Find LTspice executable — prefer ADI version (has symbol libraries)
+        string[] ltspicePaths = new[]
+        {
+            @"C:\Program Files\ADI\LTspice\LTspice.exe",
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "Programs", "ADI", "LTspice", "LTspice.exe"),
+            @"C:\Program Files\LTC\LTspiceXVII\XVIIx64.exe",
+        };
+
+        string? ltspice = ltspicePaths.FirstOrDefault(File.Exists);
+        if (ltspice == null)
+        {
+            // Fallback: open with default association
+            try
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = circuitPath,
+                    UseShellExecute = true,
+                });
+                AppendOutput($"Opened circuit: {circuitPath}");
+            }
+            catch (Exception ex)
+            {
+                AppendOutput($"Could not open circuit: {ex.Message}");
+                MessageBox.Show($"Could not open {circuitPath}\n\nInstall LTspice to view circuit schematics.",
+                    "View Circuit", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            return;
+        }
+
+        try
+        {
+            System.Diagnostics.Process.Start(ltspice, $"\"{circuitPath}\"");
+            AppendOutput($"Opened in LTspice: {Path.GetFileName(circuitPath)}");
+        }
+        catch (Exception ex)
+        {
+            AppendOutput($"LTspice launch error: {ex.Message}");
+        }
+    }
+
+    // ------------------------------------------------------------------
+    // Generic circuit: Run simulation
+    // ------------------------------------------------------------------
+
+    private async Task RunGenericCircuitAsync(GenericCircuitConfig genConfig)
+    {
+        if (!genConfig.HasCircuit)
+        {
+            AppendOutput("No circuit loaded. Click 'Load Circuit' first.");
+            SetStatus("No circuit loaded");
+            return;
+        }
+
+        _btnRunSim.Text = "Cancel";
+        _btnRunAll.Enabled = false;
+        _btnLoadCircuit.Enabled = false;
+        _btnExportCsv.Enabled = false;
+        _btnToggleView.Enabled = false;
+        _txtOutput.Clear();
+
+        string args = genConfig.GetCommandArgs(0);
+        AppendOutput($"Command: python kicad_pipeline.py {args}");
+        AppendOutput($"Working dir: {SimulationRunner.RepoRoot}");
+        SetStatus("Simulating...");
+
+        try
+        {
+            await _simRunner.RunGenericAsync(args);
+        }
+        catch (Exception ex)
+        {
+            AppendOutput($"Simulation exception: {ex}");
+            SetStatus("Simulation error");
+        }
+
+        _btnRunSim.Text = genConfig.RunSingleLabel;
+        _btnRunAll.Enabled = true;
+        _btnLoadCircuit.Enabled = true;
+
+        // Parse results
+        string metaPath = genConfig.GetResultsFilePath(0);
+        string tranPath = Path.Combine(SimWorkDir, "generic_transient_results.txt");
+        string acPath = Path.Combine(SimWorkDir, "generic_ac_bode_results.txt");
+
+        AppendOutput($"Results meta: {(File.Exists(metaPath) ? "FOUND" : "MISSING")}");
+        AppendOutput($"Transient data: {(File.Exists(tranPath) ? $"FOUND ({new FileInfo(tranPath).Length:N0} bytes)" : "MISSING")}");
+        AppendOutput($"AC/Bode data: {(File.Exists(acPath) ? $"FOUND ({new FileInfo(acPath).Length:N0} bytes)" : "MISSING")}");
+
+        if (File.Exists(metaPath))
+        {
+            try
+            {
+                AppendOutput("Parsing results...");
+                var result = genConfig.ParseResults(metaPath, 0);
+
+                if (result is GenericCircuitResult gcr)
+                {
+                    AppendOutput($"  Transient nodes: {gcr.TransientNodes.Count}");
+                    AppendOutput($"  AC nodes: {gcr.AcNodes.Count}");
+                    foreach (var tn in gcr.TransientNodes)
+                        AppendOutput($"    {tn.NodeName}: {tn.Time.Length} pts, Vpp={tn.Vpp:F3}V, Status={tn.Status}");
+                    foreach (var an in gcr.AcNodes)
+                        AppendOutput($"    {an.NodeName}: {an.Frequency.Length} freq pts");
+
+                    if (gcr.TransientNodes.Count == 0 && gcr.AcNodes.Count == 0)
+                    {
+                        AppendOutput("WARNING: No simulation data found in result files!");
+                        AppendOutput($"  Check sim_work/ for generic_transient_results.txt and generic_ac_bode_results.txt");
+                    }
+                }
+
+                // Rebuild grid
+                _dataGrid.Columns.Clear();
+                _dataGrid.Rows.Clear();
+                foreach (var col in genConfig.CreateGridColumns())
+                {
+                    _dataGrid.Columns.Add(col);
+                    if (col.Name != "Node" && col.Name != "Status")
+                        col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+                }
+                genConfig.PopulateGrid(_dataGrid, result);
+
+                // Render plot
+                _formsPlot.Plot.Clear();
+                genConfig.PlotSingle(_formsPlot.Plot, result);
+                _formsPlot.Refresh();
+                AppendOutput("Plot rendered.");
+
+                genConfig.UpdateStatusBar(_statusLabels, result);
+                genConfig.PrintReport(AppendOutput, result);
+                _btnExportCsv.Enabled = true;
+
+                _allResults.Clear();
+                _allResults.Add(result);
+
+                // Enable Bode toggle if AC data available
+                _btnToggleView.Enabled = genConfig.HasAcData;
+
+                SetStatus("Simulation complete");
+            }
+            catch (Exception ex)
+            {
+                SetStatus($"Parse error: {ex.Message}");
+                AppendOutput($"Parse error: {ex.Message}");
+                AppendOutput($"Stack: {ex.StackTrace}");
+            }
+        }
+        else
+        {
+            SetStatus("Simulation failed - no results file");
+            AppendOutput($"Results meta file not found: {metaPath}");
+            if (File.Exists(tranPath))
+                AppendOutput("  Transient data exists but meta JSON is missing. The Python script may have crashed.");
+            AppendOutput("  Check output above for [ERR] messages from ngspice.");
+        }
+    }
+
+    // ------------------------------------------------------------------
+    // Toggle generic view (Transient / Bode)
+    // ------------------------------------------------------------------
+
+    private void ToggleGenericView()
+    {
+        if (_project is not GenericCircuitConfig genConfig || _allResults.Count == 0) return;
+
+        // Toggle view mode
+        genConfig.CurrentView = genConfig.CurrentView == GenericCircuitConfig.ViewMode.Transient
+            ? GenericCircuitConfig.ViewMode.Bode
+            : GenericCircuitConfig.ViewMode.Transient;
+
+        _btnToggleView.Text = genConfig.CurrentView == GenericCircuitConfig.ViewMode.Transient
+            ? "Bode View" : "Transient View";
+
+        // Rebuild grid columns for new view
+        _dataGrid.Columns.Clear();
+        _dataGrid.Rows.Clear();
+        foreach (var col in genConfig.CreateGridColumns())
+        {
+            _dataGrid.Columns.Add(col);
+            if (col.Name != "Node" && col.Name != "Status")
+                col.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+        }
+
+        // Repopulate grid and replot
+        if (_allResults[^1] is Models.GenericCircuitResult gcr)
+        {
+            genConfig.PopulateGrid(_dataGrid, gcr);
+            _formsPlot.Plot.Clear();
+            genConfig.PlotSingle(_formsPlot.Plot, gcr);
+            _formsPlot.Refresh();
+        }
+    }
+
+    // ------------------------------------------------------------------
     // Clear
     // ------------------------------------------------------------------
 
@@ -680,6 +1096,8 @@ public partial class MainForm : Form
         _btnTogglePlot.Enabled = false;
         _showAmplitudePlot = false;
         _btnTogglePlot.Text = "Amplitude View";
+        _btnToggleView.Enabled = false;
+        _btnToggleView.Text = "Bode View";
         _project.ClearStatusBar(_statusLabels);
         SetStatus("Ready");
     }

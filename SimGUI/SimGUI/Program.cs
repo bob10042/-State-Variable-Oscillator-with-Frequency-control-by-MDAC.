@@ -12,6 +12,24 @@ static class Program
         }
 
         ApplicationConfiguration.Initialize();
+
+        // Catch unhandled exceptions and log them
+        Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+        Application.ThreadException += (_, e) =>
+        {
+            string msg = $"Thread Exception:\n{e.Exception}";
+            string logPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "crash.log");
+            File.WriteAllText(logPath, msg);
+            MessageBox.Show(msg, "SimGUI Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        };
+        AppDomain.CurrentDomain.UnhandledException += (_, e) =>
+        {
+            string msg = $"Unhandled Exception:\n{e.ExceptionObject}";
+            string logPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "crash.log");
+            File.WriteAllText(logPath, msg);
+            MessageBox.Show(msg, "SimGUI Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        };
+
         Application.Run(new MainForm());
     }
 }

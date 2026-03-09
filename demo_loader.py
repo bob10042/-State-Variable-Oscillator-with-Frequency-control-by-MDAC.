@@ -44,10 +44,19 @@ def generate_netlist(asc_path):
     """Use LTspice to generate .net from .asc."""
     print(f"Using LTspice to generate netlist from {os.path.basename(asc_path)}...")
 
-    result = subprocess.run(
-        [LTSPICE, "-netlist", asc_path],
-        capture_output=True, timeout=30
-    )
+    # Windows: suppress GUI window, allow more time
+    kwargs = {}
+    if os.name == 'nt':
+        kwargs['creationflags'] = subprocess.CREATE_NO_WINDOW
+
+    try:
+        result = subprocess.run(
+            [LTSPICE, "-netlist", asc_path],
+            capture_output=True, timeout=60, **kwargs
+        )
+    except subprocess.TimeoutExpired:
+        # LTspice sometimes hangs — try to kill and check if netlist was generated
+        print("  LTspice timeout - checking if netlist was generated...")
     time.sleep(2)
 
     base = os.path.splitext(asc_path)[0]

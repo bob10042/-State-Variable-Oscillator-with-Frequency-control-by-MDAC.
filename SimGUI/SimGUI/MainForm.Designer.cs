@@ -33,7 +33,7 @@ partial class MainForm
 
         // Project selector combo (Electrometer / Oscillator)
         _cboProject = new ToolStripComboBox("Project") { DropDownStyle = ComboBoxStyle.DropDownList, Width = 120 };
-        _cboProject.Items.AddRange(new object[] { "Electrometer", "Oscillator", "Comparison" });
+        _cboProject.Items.AddRange(new object[] { "Electrometer", "Oscillator", "Comparison", "General Circuit" });
         _cboProject.SelectedIndex = 0;
 
         // Sweep point selector combo (populated dynamically by project)
@@ -43,6 +43,9 @@ partial class MainForm
         _btnRunAll = new ToolStripButton("Run All Ranges") { DisplayStyle = ToolStripItemDisplayStyle.Text };
         _btnCalibrate = new ToolStripButton("Calibrate") { DisplayStyle = ToolStripItemDisplayStyle.Text, Enabled = false, Visible = false };
         _btnTogglePlot = new ToolStripButton("Amplitude View") { DisplayStyle = ToolStripItemDisplayStyle.Text, Enabled = false, Visible = false };
+        _btnLoadCircuit = new ToolStripButton("Load Circuit") { DisplayStyle = ToolStripItemDisplayStyle.Text, Visible = false };
+        _btnViewCircuit = new ToolStripButton("View Circuit") { DisplayStyle = ToolStripItemDisplayStyle.Text, Enabled = false, Visible = false };
+        _btnToggleView = new ToolStripButton("Bode View") { DisplayStyle = ToolStripItemDisplayStyle.Text, Enabled = false, Visible = false };
         _btnLoadFile = new ToolStripButton("Load File") { DisplayStyle = ToolStripItemDisplayStyle.Text };
         _btnExportCsv = new ToolStripButton("Export CSV") { DisplayStyle = ToolStripItemDisplayStyle.Text, Enabled = false };
         _btnScreenshot = new ToolStripButton("Screenshot") { DisplayStyle = ToolStripItemDisplayStyle.Text };
@@ -55,6 +58,9 @@ partial class MainForm
             _btnRunAll, new ToolStripSeparator(),
             _btnCalibrate, new ToolStripSeparator(),
             _btnTogglePlot, new ToolStripSeparator(),
+            _btnLoadCircuit, new ToolStripSeparator(),
+            _btnViewCircuit, new ToolStripSeparator(),
+            _btnToggleView, new ToolStripSeparator(),
             _btnLoadFile, new ToolStripSeparator(),
             _btnExportCsv, new ToolStripSeparator(),
             _btnScreenshot, new ToolStripSeparator(),
@@ -141,6 +147,7 @@ partial class MainForm
         ClientSize = new Size(1600, 900);
         Text = "SimGUI - Circuit Simulation";
         StartPosition = FormStartPosition.CenterScreen;
+        WindowState = FormWindowState.Maximized;
         MinimumSize = new Size(1100, 650);
         BackColor = Color.FromArgb(235, 242, 250);
     }
@@ -154,6 +161,9 @@ partial class MainForm
     private ToolStripButton _btnRunAll;
     private ToolStripButton _btnCalibrate;
     private ToolStripButton _btnTogglePlot;
+    private ToolStripButton _btnLoadCircuit;
+    private ToolStripButton _btnViewCircuit;
+    private ToolStripButton _btnToggleView;
     private ToolStripButton _btnLoadFile;
     private ToolStripButton _btnExportCsv;
     private ToolStripButton _btnScreenshot;
