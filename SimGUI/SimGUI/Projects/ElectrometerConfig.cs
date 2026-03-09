@@ -143,6 +143,7 @@ public class ElectrometerConfig : IProjectConfig
 
     public void SetupPlot(Plot plot)
     {
+        MainForm.StylePlot(plot);
         plot.Title("TIA Output - 16 Channel Scan");
         plot.XLabel("Time (s)");
         plot.YLabel("Current");
@@ -153,6 +154,7 @@ public class ElectrometerConfig : IProjectConfig
     public void PlotSingle(Plot plot, object result)
     {
         plot.Clear();
+        MainForm.StylePlot(plot);
         if (result is not SimulationResult simResult) return;
         if (simResult.TimePoints.Length == 0 || simResult.Channels.Count == 0) return;
 
@@ -227,6 +229,7 @@ public class ElectrometerConfig : IProjectConfig
     public void PlotAll(Plot plot, List<object> results)
     {
         plot.Clear();
+        MainForm.StylePlot(plot);
         var simResults = results.OfType<SimulationResult>().ToList();
         if (simResults.Count == 0) return;
 

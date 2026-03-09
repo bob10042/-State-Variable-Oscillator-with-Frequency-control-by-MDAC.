@@ -690,6 +690,31 @@ public partial class MainForm : Form
 
     private void SetStatus(string text) => _lblToolStatus.Text = text;
 
+    /// <summary>Apply common chart styling for better appearance.</summary>
+    public static void StylePlot(ScottPlot.Plot plot)
+    {
+        // Background and data area
+        plot.FigureBackground.Color = ScottPlot.Color.FromHex("#F0F4FA");
+        plot.DataBackground.Color = ScottPlot.Colors.White;
+
+        // Grid styling
+        plot.Grid.MajorLineColor = ScottPlot.Color.FromHex("#D8E0EC");
+        plot.Grid.MinorLineColor = ScottPlot.Color.FromHex("#ECF0F6");
+        plot.Grid.MajorLineWidth = 1;
+
+        // Axis styling
+        plot.Axes.Bottom.Label.FontSize = 13;
+        plot.Axes.Left.Label.FontSize = 13;
+        plot.Axes.Bottom.TickLabelStyle.FontSize = 11;
+        plot.Axes.Left.TickLabelStyle.FontSize = 11;
+        plot.Axes.Bottom.MajorTickStyle.Length = 5;
+        plot.Axes.Left.MajorTickStyle.Length = 5;
+
+        // Legend styling
+        plot.Legend.FontSize = 10;
+        plot.Legend.OutlineColor = ScottPlot.Color.FromHex("#B0BED0");
+    }
+
     private void AppendOutput(string text)
     {
         _txtOutput.AppendText($"[{DateTime.Now:HH:mm:ss}] {text}{Environment.NewLine}");

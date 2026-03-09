@@ -187,6 +187,7 @@ public class ComparisonConfig : IProjectConfig
 
     public void SetupPlot(Plot plot)
     {
+        MainForm.StylePlot(plot);
         plot.Title("Oscillator Comparison: MDAC (blue) vs Analog (orange)");
         plot.XLabel("Target Frequency (Hz)");
         plot.YLabel("Measured Frequency (Hz)");
@@ -197,6 +198,7 @@ public class ComparisonConfig : IProjectConfig
     public void PlotSingle(Plot plot, object result)
     {
         plot.Clear();
+        MainForm.StylePlot(plot);
         if (result is not ComparisonPointData cp) return;
 
         var bars = new List<ScottPlot.Bar>
@@ -217,6 +219,7 @@ public class ComparisonConfig : IProjectConfig
     public void PlotAll(Plot plot, List<object> results)
     {
         plot.Clear();
+        MainForm.StylePlot(plot);
         var points = results.OfType<ComparisonPointData>()
             .OrderBy(p => p.TargetFreqHz).ToList();
         if (points.Count == 0) return;
@@ -277,6 +280,7 @@ public class ComparisonConfig : IProjectConfig
     public void PlotAmplitude(Plot plot, List<object> results)
     {
         plot.Clear();
+        MainForm.StylePlot(plot);
         var points = results.OfType<ComparisonPointData>()
             .OrderBy(p => p.TargetFreqHz).ToList();
         if (points.Count == 0) return;

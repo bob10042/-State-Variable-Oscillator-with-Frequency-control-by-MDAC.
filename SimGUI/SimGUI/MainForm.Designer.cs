@@ -66,7 +66,7 @@ partial class MainForm
         _splitContainer = new SplitContainer();
         _splitContainer.Dock = DockStyle.Fill;
         _splitContainer.Orientation = Orientation.Vertical;
-        _splitContainer.SplitterDistance = 600;
+        _splitContainer.SplitterDistance = 480;
         _splitContainer.SplitterWidth = 5;
         _splitContainer.BackColor = Color.FromArgb(180, 200, 225);
 
@@ -114,7 +114,7 @@ partial class MainForm
         _txtOutput.ReadOnly = true;
         _txtOutput.ScrollBars = ScrollBars.Vertical;
         _txtOutput.Dock = DockStyle.Bottom;
-        _txtOutput.Height = 120;
+        _txtOutput.Height = 90;
         _txtOutput.Font = new Font("Consolas", 8.5f);
         _txtOutput.BackColor = outputBg;
         _txtOutput.ForeColor = outputFg;
@@ -138,10 +138,10 @@ partial class MainForm
 
         // ---- Form properties ----
         AutoScaleMode = AutoScaleMode.Font;
-        ClientSize = new Size(1400, 800);
+        ClientSize = new Size(1600, 900);
         Text = "SimGUI - Circuit Simulation";
         StartPosition = FormStartPosition.CenterScreen;
-        MinimumSize = new Size(1000, 600);
+        MinimumSize = new Size(1100, 650);
         BackColor = Color.FromArgb(235, 242, 250);
     }
 

@@ -218,6 +218,7 @@ public class OscillatorConfig : IProjectConfig
 
     public void SetupPlot(Plot plot)
     {
+        MainForm.StylePlot(plot);
         plot.Title("State Variable Oscillator - Frequency Response");
         plot.XLabel("DAC Code");
         plot.YLabel("Frequency (Hz)");
@@ -228,6 +229,7 @@ public class OscillatorConfig : IProjectConfig
     public void PlotSingle(Plot plot, object result)
     {
         plot.Clear();
+        MainForm.StylePlot(plot);
         if (result is not OscillatorPointData pt) return;
 
         // Bar chart showing expected vs measured
@@ -260,6 +262,7 @@ public class OscillatorConfig : IProjectConfig
     public void PlotAll(Plot plot, List<object> results)
     {
         plot.Clear();
+        MainForm.StylePlot(plot);
         var points = results.OfType<OscillatorPointData>().OrderBy(p => p.DacCode).ToList();
         if (points.Count == 0) return;
 
