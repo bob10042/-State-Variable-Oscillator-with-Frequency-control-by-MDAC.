@@ -230,6 +230,17 @@ public class GenericCircuitConfig : IProjectConfig
             PlotSingle(plot, gcr);
     }
 
+    // Light background tints for stacked lanes (alternating)
+    private static readonly ScottPlot.Color[] LaneBgColors = new ScottPlot.Color[]
+    {
+        ScottPlot.Color.FromHex("#EBF2FA"),  // light blue
+        ScottPlot.Color.FromHex("#FFF8EB"),  // light amber
+        ScottPlot.Color.FromHex("#EBFAEF"),  // light green
+        ScottPlot.Color.FromHex("#FAEBEB"),  // light red
+        ScottPlot.Color.FromHex("#F3EBFA"),  // light purple
+        ScottPlot.Color.FromHex("#FAFAEB"),  // light yellow
+    };
+
     private void PlotTransient(Plot plot, GenericCircuitResult gcr)
     {
         plot.Clear();
@@ -244,39 +255,155 @@ public class GenericCircuitConfig : IProjectConfig
             return;
         }
 
-        int plotted = 0;
-        for (int i = 0; i < gcr.TransientNodes.Count; i++)
-        {
-            var node = gcr.TransientNodes[i];
-            if (node.Time.Length < 2) continue;
-
-            int ci = i % NodeColors.Length;
-            var scatter = plot.Add.Scatter(node.Time, node.Voltage);
-            scatter.LineWidth = 2f;
-            scatter.MarkerSize = 0;
-            scatter.Color = NodeColors[ci];
-            scatter.LegendText = $"{node.NodeName} (Vpp={node.Vpp:F3})";
-            plotted++;
-        }
-
-        if (plotted == 0)
+        // Filter to nodes with enough data
+        var validNodes = gcr.TransientNodes.Where(n => n.Time.Length >= 2).ToList();
+        if (validNodes.Count == 0)
         {
             plot.Title("No Valid Waveform Data");
             plot.Add.Annotation("All nodes have < 2 data points");
             return;
         }
 
+        // Use stacked lanes when 2+ signals, overlaid for single
+        if (validNodes.Count >= 2)
+            PlotTransientStacked(plot, validNodes, gcr);
+        else
+            PlotTransientSingle(plot, validNodes[0], gcr);
+    }
+
+    /// <summary>Single waveform - full plot area, thick line, measurements shown.</summary>
+    private void PlotTransientSingle(Plot plot, GenericNodeResult node, GenericCircuitResult gcr)
+    {
+        var scatter = plot.Add.Scatter(node.Time, node.Voltage);
+        scatter.LineWidth = 3f;
+        scatter.MarkerSize = 0;
+        scatter.Color = NodeColors[0];
+        scatter.LegendText = $"{node.NodeName}  Vpp={node.Vpp:F3}  Vdc={node.Vdc:F3}  Vrms={node.Vrms:F3}";
+
+        // Add zero reference line
+        var zline = plot.Add.HorizontalLine(0);
+        zline.LineWidth = 1;
+        zline.LinePattern = ScottPlot.LinePattern.Dotted;
+        zline.Color = new ScottPlot.Color(160, 160, 160);
+        zline.LegendText = "";
+
         string title = string.IsNullOrEmpty(_circuitName)
-            ? "Transient Analysis"
-            : $"{_circuitName} - Transient Analysis";
-        if (gcr.Gain > 0)
-            title += $" | Gain={gcr.Gain:F1}x ({gcr.GainDb:F1}dB)";
+            ? $"Transient - {node.NodeName}"
+            : $"{_circuitName} - {node.NodeName}";
+        if (node.FreqHz > 0) title += $" | f={FormatFreq(node.FreqHz)}";
 
         plot.Title(title);
         plot.XLabel("Time (s)");
         plot.YLabel("Voltage (V)");
         plot.Axes.AutoScale();
         plot.Axes.Margins(bottom: 0.05, top: 0.10);
+    }
+
+    /// <summary>Stacked oscilloscope-style lanes, one per node.</summary>
+    private void PlotTransientStacked(Plot plot, List<GenericNodeResult> nodes, GenericCircuitResult gcr)
+    {
+        int N = nodes.Count;
+        double laneSpacing = 1.15;  // gap between normalized lanes (1.0 = signal, 0.15 = gap)
+        double totalHeight = N * laneSpacing;
+
+        // Get time range for background rectangles
+        double tMin = nodes.Min(n => n.Time[0]);
+        double tMax = nodes.Max(n => n.Time[^1]);
+        double tPad = (tMax - tMin) * 0.02;
+
+        for (int i = 0; i < N; i++)
+        {
+            var node = nodes[i];
+            int ci = i % NodeColors.Length;
+
+            // Calculate normalization: map [vmin, vmax] -> [laneBase, laneBase+1]
+            double vmin = node.Voltage.Min();
+            double vmax = node.Voltage.Max();
+            double vrange = vmax - vmin;
+            if (vrange < 1e-12) vrange = 1.0;  // flat signal fallback
+
+            // Lane occupies Y range: [laneBase, laneBase + 1.0]
+            // Bottom node is index 0, top node is index N-1
+            double laneBase = (N - 1 - i) * laneSpacing;
+
+            // Background band for this lane
+            int bgIdx = i % LaneBgColors.Length;
+            var rect = plot.Add.Rectangle(tMin - tPad, tMax + tPad, laneBase - 0.02, laneBase + 1.02);
+            rect.FillColor = LaneBgColors[bgIdx];
+            rect.LineWidth = 0;
+            rect.LegendText = "";
+
+            // Separator line between lanes
+            if (i < N - 1)
+            {
+                var sep = plot.Add.HorizontalLine(laneBase + 1.02 + 0.05);
+                sep.LineWidth = 1;
+                sep.LinePattern = ScottPlot.LinePattern.Solid;
+                sep.Color = ScottPlot.Color.FromHex("#B0BED0");
+                sep.LegendText = "";
+            }
+
+            // Normalize voltage data into this lane
+            double[] yNorm = new double[node.Voltage.Length];
+            for (int j = 0; j < node.Voltage.Length; j++)
+                yNorm[j] = (node.Voltage[j] - vmin) / vrange + laneBase;
+
+            // Plot the waveform
+            var scatter = plot.Add.Scatter(node.Time, yNorm);
+            scatter.LineWidth = 2.5f;
+            scatter.MarkerSize = 0;
+            scatter.Color = NodeColors[ci];
+            scatter.LegendText = $"{node.NodeName}  [{vmin:F2}V .. {vmax:F2}V]  Vpp={node.Vpp:F3}";
+
+            // Mid-line for this lane (center reference)
+            var midLine = plot.Add.HorizontalLine(laneBase + 0.5);
+            midLine.LineWidth = 0.5f;
+            midLine.LinePattern = ScottPlot.LinePattern.Dotted;
+            midLine.Color = new ScottPlot.Color(180, 180, 180);
+            midLine.LegendText = "";
+
+            // Node label at left edge
+            var label = plot.Add.Text(
+                $" {node.NodeName}",
+                tMin - tPad * 0.5,
+                laneBase + 0.5);
+            label.LabelFontSize = 12;
+            label.LabelBold = true;
+            label.LabelFontColor = NodeColors[ci];
+            label.LabelAlignment = ScottPlot.Alignment.MiddleLeft;
+
+            // Scale annotation at right edge (min/max voltage)
+            var scaleLabel = plot.Add.Text(
+                $"{vmax:F2}V\n{vmin:F2}V",
+                tMax + tPad * 0.3,
+                laneBase + 0.5);
+            scaleLabel.LabelFontSize = 9;
+            scaleLabel.LabelFontColor = new ScottPlot.Color(100, 100, 100);
+            scaleLabel.LabelAlignment = ScottPlot.Alignment.MiddleLeft;
+        }
+
+        string title = string.IsNullOrEmpty(_circuitName)
+            ? "Transient Analysis"
+            : $"{_circuitName} - Transient";
+        if (gcr.Gain > 0)
+            title += $" | Gain={gcr.Gain:F1}x ({gcr.GainDb:F1}dB)";
+
+        plot.Title(title);
+        plot.XLabel("Time (s)");
+        plot.YLabel("");  // Y-axis is normalized, no units
+        plot.Axes.Left.TickLabelStyle.IsVisible = false;  // hide Y ticks (normalized)
+        plot.Axes.Left.MajorTickStyle.Length = 0;
+        plot.Axes.Left.MinorTickStyle.Length = 0;
+        plot.Axes.SetLimits(
+            left: tMin - tPad * 2, right: tMax + tPad * 3,
+            bottom: -0.15, top: totalHeight + 0.1);
+    }
+
+    private static string FormatFreq(double hz)
+    {
+        if (hz >= 1e6) return $"{hz / 1e6:F2} MHz";
+        if (hz >= 1e3) return $"{hz / 1e3:F1} kHz";
+        return $"{hz:F1} Hz";
     }
 
     private void PlotBode(Plot plot, GenericCircuitResult gcr)
@@ -306,33 +433,45 @@ public class GenericCircuitConfig : IProjectConfig
 
             int ci = i % NodeColors.Length;
 
-            // Magnitude trace (left Y-axis)
+            // Magnitude trace (left Y-axis) - thick solid line
             var magScatter = plot.Add.Scatter(node.Frequency, node.MagnitudeDb);
-            magScatter.LineWidth = 2.5f;
+            magScatter.LineWidth = 3f;
             magScatter.MarkerSize = 0;
             magScatter.Color = NodeColors[ci];
-            magScatter.LegendText = $"|{node.NodeName}| (dB)";
+            double dcGain = node.MagnitudeDb.Length > 0 ? node.MagnitudeDb[0] : 0;
+            magScatter.LegendText = $"|{node.NodeName}| DC={dcGain:F1}dB";
 
-            // Phase trace (right Y-axis) — slightly different shade
+            // Phase trace (right Y-axis) - dashed, offset color
             if (node.PhaseDeg.Length > 0)
             {
                 var phaseColor = NodeColors[(ci + 6) % NodeColors.Length];
                 var phaseScatter = plot.Add.Scatter(node.Frequency, node.PhaseDeg);
-                phaseScatter.LineWidth = 1.5f;
+                phaseScatter.LineWidth = 2f;
                 phaseScatter.MarkerSize = 0;
                 phaseScatter.Color = phaseColor;
                 phaseScatter.LinePattern = ScottPlot.LinePattern.Dashed;
                 phaseScatter.LegendText = $"\u2220{node.NodeName} (\u00b0)";
                 phaseScatter.Axes.YAxis = rightAxis;
             }
+
+            // -3dB reference line per node (at DC gain - 3)
+            if (node.MagnitudeDb.Length > 0)
+            {
+                double bwLine = dcGain - 3.0;
+                var bwRef = plot.Add.HorizontalLine(bwLine);
+                bwRef.LineWidth = 1;
+                bwRef.LinePattern = ScottPlot.LinePattern.DenselyDashed;
+                bwRef.Color = NodeColors[ci].WithAlpha(80);
+                bwRef.LegendText = "";
+            }
         }
 
-        // Add 0dB reference line
+        // 0dB reference line
         var hline = plot.Add.HorizontalLine(0);
         hline.LineWidth = 1;
         hline.LinePattern = ScottPlot.LinePattern.Dotted;
         hline.Color = new ScottPlot.Color(150, 150, 150);
-        hline.LegendText = "";
+        hline.LegendText = "0 dB";
 
         string title = string.IsNullOrEmpty(_circuitName)
             ? "Bode Plot (AC Analysis)"

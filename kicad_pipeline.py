@@ -12041,22 +12041,66 @@ def _fix_ltspice_syntax(netlist_text):
     """Convert LTspice-specific SPICE syntax to standard ngspice.
 
     Fixes:
-    1. VCCS/VCVS poly shorthand: G1 n+ n- (nc+,nc-) gain → G1 n+ n- nc+ nc- gain
+    1. VCCS/VCVS poly shorthand: G1 n+ n- (nc+,nc-) gain -> G1 n+ n- nc+ nc- gain
        Applies to G (VCCS), E (VCVS) sources.
-    2. Behavioral source prefix: BV → B (LTspice 'BV' is behavioral voltage)
+    2. Behavioral source prefix: BV -> B (LTspice 'BV' is behavioral voltage)
+    3. LTspice model types: LPNP -> PNP, LNPN -> NPN (lateral variants)
+    4. Rser=/Rpar=/Cpar= on C/L elements -> separate R/C components
     """
     lines = netlist_text.split('\n')
     fixed = []
+    extra_lines = []  # additional R/C elements from Rser/Rpar/Cpar
     changes = 0
 
     for line in lines:
         stripped = line.strip()
-        if not stripped or stripped.startswith('*') or stripped.startswith('.'):
+        if not stripped or stripped.startswith('*'):
             fixed.append(line)
             continue
 
+        # Fix .model with LTspice-specific types (LPNP -> PNP, LNPN -> NPN)
+        if stripped.upper().startswith('.MODEL'):
+            new_line = re.sub(r'\bLPNP\b', 'PNP', stripped, flags=re.IGNORECASE)
+            new_line = re.sub(r'\bLNPN\b', 'NPN', new_line, flags=re.IGNORECASE)
+            if new_line != stripped:
+                fixed.append(new_line)
+                changes += 1
+                continue
+            fixed.append(line)
+            continue
+
+        if stripped.startswith('.'):
+            fixed.append(line)
+            continue
+
+        # Fix Rser=/Rpar=/Cpar= on C/L elements
+        # Pattern: C1 n+ n- 100n Rser=10 Rpar=1Meg  or  L1 n+ n- 1m Rser=100 Cpar=10p
+        if stripped[0].upper() in ('C', 'L') and re.search(r'\b(Rser|Rpar|Cpar)\s*=', stripped, re.I):
+            m = re.match(r'(\S+)\s+(\S+)\s+(\S+)\s+(\S+)(.*)', stripped)
+            if m:
+                name, np, nm, value, params = m.groups()
+                rser_m = re.search(r'Rser\s*=\s*(\S+)', params, re.I)
+                rpar_m = re.search(r'Rpar\s*=\s*(\S+)', params, re.I)
+                cpar_m = re.search(r'Cpar\s*=\s*(\S+)', params, re.I)
+                # Strip all Rser/Rpar/Cpar/ic= params, keep the value
+                clean_params = re.sub(r'\b(Rser|Rpar|Cpar|ic)\s*=\s*\S+', '', params, flags=re.I).strip()
+                if rser_m:
+                    # Insert intermediate node for series resistance
+                    int_node = f'__{name}_rs'
+                    fixed.append(f'{name} {np} {int_node} {value} {clean_params}'.strip())
+                    extra_lines.append(f'R_{name}_ser {int_node} {nm} {rser_m.group(1)}')
+                    changes += 1
+                else:
+                    fixed.append(f'{name} {np} {nm} {value} {clean_params}'.strip())
+                    changes += 1
+                if rpar_m:
+                    extra_lines.append(f'R_{name}_par {np} {nm} {rpar_m.group(1)}')
+                if cpar_m:
+                    extra_lines.append(f'C_{name}_par {np} {nm} {cpar_m.group(1)}')
+                continue
+
         # Fix G/E source with (nc+,nc-) syntax
-        # Pattern: G1 n+ n- (nc+,nc-) gain  →  G1 n+ n- nc+ nc- gain
+        # Pattern: G1 n+ n- (nc+,nc-) gain  ->  G1 n+ n- nc+ nc- gain
         if stripped[0].upper() in ('G', 'E'):
             m = re.match(
                 r'([GEge]\S+)\s+(\S+)\s+(\S+)\s+\((\S+?),(\S+?)\)\s+(.*)',
@@ -12068,9 +12112,9 @@ def _fix_ltspice_syntax(netlist_text):
                 changes += 1
                 continue
 
-        # Fix BV (behavioral voltage) → B source
+        # Fix BV (behavioral voltage) -> B source
         if stripped[0].upper() == 'B' and len(stripped) > 1 and stripped[1].upper() == 'V':
-            # BV1 n+ n- V=... → B1 n+ n- V=...
+            # BV1 n+ n- V=... -> B1 n+ n- V=...
             m = re.match(r'[Bb][Vv](\S*)\s+(.*)', stripped)
             if m:
                 name_suffix, rest = m.groups()
@@ -12080,6 +12124,18 @@ def _fix_ltspice_syntax(netlist_text):
                 continue
 
         fixed.append(line)
+
+    # Insert extra R/C elements before .end
+    if extra_lines:
+        result = []
+        for ln in fixed:
+            if ln.strip().upper() == '.END':
+                result.append('')
+                result.append('* Auto-generated from Rser/Rpar/Cpar')
+                for el in extra_lines:
+                    result.append(el)
+            result.append(ln)
+        fixed = result
 
     if changes > 0:
         print(f"  Fixed {changes} LTspice-specific syntax element(s)")

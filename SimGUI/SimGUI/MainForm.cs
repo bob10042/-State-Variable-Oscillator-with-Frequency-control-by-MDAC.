@@ -55,12 +55,14 @@ public partial class MainForm : Form
         _btnTogglePlot.Text = "Amplitude View";
 
         // Show/hide generic circuit buttons
-        _btnLoadCircuit.Visible = _project is GenericCircuitConfig;
-        _btnViewCircuit.Visible = _project is GenericCircuitConfig;
+        bool isGeneric = _project is GenericCircuitConfig;
+        _btnLoadCircuit.Visible = isGeneric;
+        _btnViewCircuit.Visible = isGeneric;
         _btnViewCircuit.Enabled = false;
-        _btnToggleView.Visible = _project is GenericCircuitConfig;
+        _btnToggleView.Visible = isGeneric;
         _btnToggleView.Enabled = false;
         _btnToggleView.Text = "Bode View";
+        _btnLoadFile.Visible = !isGeneric;  // hide "Load File" in Generic mode (use "Load Circuit" instead)
 
         // Rebuild grid columns
         _dataGrid.Columns.Clear();
