@@ -703,10 +703,12 @@ public partial class MainForm : Form
         string ltspiceExamples = SimWorkDir;
         string[] examplePaths = new[]
         {
-            @"C:\Program Files\LTC\LTspiceXVII\examples\Educational",
-            @"C:\Program Files\LTC\LTspiceXVII\examples",
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "LTspice", "examples", "Educational"),
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "LTspice", "examples"),
+            @"C:\Program Files\LTC\LTspiceXVII\examples\Educational",
+            @"C:\Program Files\LTC\LTspiceXVII\examples",
         };
         foreach (var p in examplePaths)
         {
@@ -886,13 +888,13 @@ public partial class MainForm : Form
             return;
         }
 
-        // Find LTspice executable — prefer XVII (has built-in standard symbols)
+        // Find LTspice executable — prefer ADI LTspice (current install)
         string[] ltspicePaths = new[]
         {
-            @"C:\Program Files\LTC\LTspiceXVII\XVIIx64.exe",
-            @"C:\Program Files\ADI\LTspice\LTspice.exe",
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "Programs", "ADI", "LTspice", "LTspice.exe"),
+            @"C:\Program Files\ADI\LTspice\LTspice.exe",
+            @"C:\Program Files\LTC\LTspiceXVII\XVIIx64.exe",
         };
 
         string? ltspice = ltspicePaths.FirstOrDefault(File.Exists);

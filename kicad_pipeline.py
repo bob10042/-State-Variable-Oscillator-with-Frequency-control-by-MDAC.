@@ -88,8 +88,9 @@ NGSPICE = _find_executable("NGSPICE_PATH", "ngspice", [
 ])
 
 LTSPICE = _find_executable("LTSPICE_PATH", "LTspice", [
-    r"C:\Program Files\ADI\LTspice\LTspice.exe",
     os.path.expanduser(r"~\AppData\Local\Programs\ADI\LTspice\LTspice.exe"),
+    r"C:\Program Files\ADI\LTspice\LTspice.exe",
+    r"C:\Program Files\LTC\LTspiceXVII\XVIIx64.exe",
     r"C:\Program Files (x86)\LTC\LTspiceXVII\XVIIx64.exe",
 ])
 
