@@ -6,6 +6,7 @@
 !README.md
 !PROJECT.md
 !kicad_pipeline.py
+!asc_parser.py
 !demo_loader.py
 !requirements.txt
 
@@ -29,6 +30,7 @@
 !sim_work/*.png
 !sim_work/*.cir
 !sim_work/*_results.txt
+!sim_work/*.json
 !sim_work/*_pdf/
 !sim_work/*_pdf/*.pdf
 

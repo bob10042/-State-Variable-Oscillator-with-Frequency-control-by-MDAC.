@@ -8519,6 +8519,7 @@ def simulate(netlist_path):
 
     if result.stdout:
         lines = result.stdout.strip().split('\n')
+        # Show last few lines of normal output
         for l in lines[-6:]:
             print(f"  {l}")
 
@@ -8528,8 +8529,21 @@ def simulate(netlist_path):
             print("  ERRORS:")
             for l in result.stderr.strip().split('\n')[-5:]:
                 print(f"    {l}")
+        # Also check stdout for error messages (ngspice often puts errors there)
+        if result.stdout:
+            error_lines = [l for l in result.stdout.split('\n')
+                           if any(kw in l.lower() for kw in
+                                  ('error', 'fatal', 'unknown', 'undefined',
+                                   'no such', 'can\'t find', 'singular matrix',
+                                   'doanalysis', 'timestep', 'trouble'))]
+            if error_lines:
+                print("  ngspice errors detected:")
+                for l in error_lines[:8]:
+                    print(f"    {l.strip()}")
+            else:
+                print(f"  ngspice exited with code {result.returncode}")
         else:
-            print(f"  ngspice exited with code {result.returncode} (no stderr)")
+            print(f"  ngspice exited with code {result.returncode} (no output)")
         return False
 
     # Check for result files — prefer NEW files over pre-existing ones
@@ -11357,6 +11371,672 @@ def _remove_missing_includes(netlist_text):
     return '\n'.join(fixed)
 
 
+def _convert_step_param(netlist_text):
+    """Convert LTspice .step param directives to ngspice .param with a chosen value.
+
+    LTspice .step formats:
+      .step param NAME list val1 val2 val3 ...
+      .step param NAME start stop step
+      .step oct param NAME start stop N
+      .step dec param NAME start stop N
+
+    ngspice does not support .step natively. We pick a representative value
+    (middle of list or midpoint of range) and set .param NAME=value.
+    The .step line is commented out and the .param is inserted.
+    """
+    import math
+    lines = netlist_text.split('\n')
+    fixed = []
+    param_inserts = {}  # name -> value
+
+    for line in lines:
+        stripped = line.strip()
+        if not stripped.lower().startswith('.step'):
+            fixed.append(line)
+            continue
+
+        # Parse .step directive
+        # Remove leading .step, handle optional 'oct'/'dec' keyword
+        parts = stripped.split()
+        if len(parts) < 4:
+            fixed.append(f'* (converted: .step) {stripped}')
+            continue
+
+        idx = 1  # skip '.step'
+        sweep_type = 'lin'  # default linear
+        if parts[idx].lower() in ('oct', 'dec'):
+            sweep_type = parts[idx].lower()
+            idx += 1
+
+        if parts[idx].lower() != 'param' or idx + 1 >= len(parts):
+            # .step for temp, model, etc. — not supported, comment out
+            fixed.append(f'* (converted: .step) {stripped}')
+            continue
+
+        idx += 1  # skip 'param'
+        param_name = parts[idx]
+        idx += 1
+        remaining = parts[idx:]
+
+        chosen_value = None
+
+        if remaining and remaining[0].lower() == 'list':
+            # .step param NAME list val1 val2 val3
+            values = remaining[1:]
+            if values:
+                # Pick middle value
+                mid = len(values) // 2
+                chosen_value = values[mid]
+                print(f"  .step param {param_name}: list [{', '.join(values)}] -> using middle value: {chosen_value}")
+        elif len(remaining) >= 2:
+            # .step param NAME start stop [step]
+            try:
+                start = _parse_spice_value(remaining[0])
+                stop = _parse_spice_value(remaining[1])
+                if sweep_type == 'lin':
+                    # Linear: pick midpoint
+                    mid_val = (start + stop) / 2.0
+                elif sweep_type == 'oct':
+                    # Octave: pick geometric midpoint
+                    if start > 0 and stop > 0:
+                        mid_val = math.sqrt(start * stop)
+                    else:
+                        mid_val = (start + stop) / 2.0
+                elif sweep_type == 'dec':
+                    # Decade: pick geometric midpoint
+                    if start > 0 and stop > 0:
+                        mid_val = math.sqrt(start * stop)
+                    else:
+                        mid_val = (start + stop) / 2.0
+                else:
+                    mid_val = (start + stop) / 2.0
+
+                # Format nicely
+                if abs(mid_val) >= 1e6:
+                    chosen_value = f'{mid_val/1e6:.4g}Meg'
+                elif abs(mid_val) >= 1e3:
+                    chosen_value = f'{mid_val/1e3:.4g}k'
+                elif abs(mid_val) >= 1:
+                    chosen_value = f'{mid_val:.4g}'
+                elif abs(mid_val) >= 1e-3:
+                    chosen_value = f'{mid_val*1e3:.4g}m'
+                elif abs(mid_val) >= 1e-6:
+                    chosen_value = f'{mid_val*1e6:.4g}u'
+                elif abs(mid_val) >= 1e-9:
+                    chosen_value = f'{mid_val*1e9:.4g}n'
+                elif abs(mid_val) >= 1e-12:
+                    chosen_value = f'{mid_val*1e12:.4g}p'
+                else:
+                    chosen_value = f'{mid_val:.4g}'
+                print(f"  .step param {param_name}: {sweep_type} [{remaining[0]} to {remaining[1]}] -> using midpoint: {chosen_value}")
+            except (ValueError, TypeError, ZeroDivisionError):
+                chosen_value = remaining[0]  # fallback to start value
+                print(f"  .step param {param_name}: could not parse range, using start: {chosen_value}")
+
+        if chosen_value:
+            param_inserts[param_name] = chosen_value
+            fixed.append(f'* (converted: .step -> .param {param_name}={chosen_value}) {stripped}')
+        else:
+            fixed.append(f'* (converted: .step) {stripped}')
+
+    # Check if .param already exists for these names, update them; else insert new
+    result_lines = []
+    params_set = set()
+    for line in fixed:
+        stripped = line.strip()
+        # Check if this line has .param for one of our converted params
+        if stripped.lower().startswith('.param'):
+            for pname, pval in param_inserts.items():
+                # Match .param NAME=value or .params NAME=value
+                pattern = rf'(?i)(\.params?\s+){re.escape(pname)}\s*=\s*\S+'
+                if re.search(pattern, stripped):
+                    line = re.sub(pattern, rf'\g<1>{pname}={pval}', stripped)
+                    params_set.add(pname)
+                    print(f"  Updated existing .param {pname}={pval}")
+                    break
+        result_lines.append(line)
+
+    # Insert .param for any that weren't already present
+    insert_lines = []
+    for pname, pval in param_inserts.items():
+        if pname not in params_set:
+            insert_lines.append(f'.param {pname}={pval}')
+            print(f"  Added .param {pname}={pval}")
+
+    if insert_lines:
+        # Insert after the title line (first line of netlist)
+        if result_lines:
+            result_lines = [result_lines[0]] + insert_lines + result_lines[1:]
+        else:
+            result_lines = insert_lines + result_lines
+
+    return '\n'.join(result_lines)
+
+
+def _convert_laplace_to_sxfer(netlist_text):
+    """Convert LTspice Laplace behavioral sources to ngspice XSPICE s_xfer models.
+
+    LTspice: E1 out 0 in 0 Laplace=expr  (SYMATTR Value Laplace=...)
+    or:      E1 out 0 LAPLACE {V(in)} {expr}
+
+    In the netlist from asc_parser, these appear as component value attributes:
+      E1 out+ out- in+ in- Laplace=1/(1+.0005*s)**3
+
+    ngspice equivalent using XSPICE s_xfer:
+      a_E1 in+ out_int model_E1
+      .model model_E1 s_xfer(num_coeff=[...] den_coeff=[...])
+      E1 out+ out- out_int 0 1
+
+    Supports:
+    - Simple rational polynomials: 1/(1+a*s), a*s/(s*s+b*s+c)
+    - Powers: (1+a*s)**n where n is integer
+    - Product forms: expr1 * expr2
+
+    Does NOT support (leaves as-is with warning):
+    - sqrt(s) — fractional order
+    - exp(-a*s) — pure delay
+    - Expressions with undefined parameters {param}
+    """
+    import math
+
+    lines = netlist_text.split('\n')
+    new_lines = []
+    model_counter = [0]
+    models_to_add = []
+
+    def _expand_polynomial(expr_str):
+        """Try to expand a Laplace expression into numerator/denominator coefficient lists.
+
+        Returns (gain, num_coeffs, den_coeffs) where coeffs are highest-to-lowest order,
+        or None if the expression cannot be parsed.
+        """
+        expr = expr_str.strip()
+
+        # Check for unsupported constructs
+        if 'sqrt' in expr.lower() or 'exp(' in expr.lower():
+            return None
+
+        # Check for unresolved parameters {param}
+        if re.search(r'\{[^}]+\}', expr):
+            return None
+
+        # Try to parse as product of factors and 1/factors
+        # Common patterns:
+        #   gain / (1+a*s)**n
+        #   gain * s / (s*s + a*s + b)
+        #   gain / (1+a*s) / (1+b*s)
+
+        # Strategy: use sympy-like manual polynomial parsing
+        # Split into numerator and denominator at the top-level /
+
+        # First, handle ** (power) by expanding
+        # Replace common patterns
+
+        try:
+            return _parse_rational(expr)
+        except Exception:
+            return None
+
+    def _parse_rational(expr):
+        """Parse a rational expression in s into (gain, num_coeffs, den_coeffs).
+
+        Handles:
+        - Constants: 5, 1.0
+        - Linear: (1+a*s), (a*s+b)
+        - Powers: (1+a*s)**n
+        - Products/quotients of the above
+        """
+        # Normalize: remove spaces around operators
+        expr = expr.replace(' ', '')
+
+        # Use Python's own evaluator with s as a symbolic polynomial
+        # Represent polynomial as list of coefficients [a0, a1, a2, ...] (ascending order)
+        # Polynomial multiplication and addition
+
+        class Poly:
+            """Simple polynomial in s, stored as ascending coefficients [a0, a1, a2, ...]"""
+            def __init__(self, coeffs):
+                # Remove trailing zeros
+                while len(coeffs) > 1 and abs(coeffs[-1]) < 1e-30:
+                    coeffs = coeffs[:-1]
+                self.c = list(coeffs)
+
+            def __mul__(self, other):
+                if isinstance(other, (int, float)):
+                    return Poly([x * other for x in self.c])
+                result = [0.0] * (len(self.c) + len(other.c) - 1)
+                for i, a in enumerate(self.c):
+                    for j, b in enumerate(other.c):
+                        result[i + j] += a * b
+                return Poly(result)
+
+            def __rmul__(self, other):
+                return self.__mul__(other)
+
+            def __add__(self, other):
+                if isinstance(other, (int, float)):
+                    other = Poly([other])
+                n = max(len(self.c), len(other.c))
+                result = [0.0] * n
+                for i in range(len(self.c)):
+                    result[i] += self.c[i]
+                for i in range(len(other.c)):
+                    result[i] += other.c[i]
+                return Poly(result)
+
+            def __radd__(self, other):
+                return self.__add__(other)
+
+            def __sub__(self, other):
+                if isinstance(other, (int, float)):
+                    other = Poly([other])
+                n = max(len(self.c), len(other.c))
+                result = [0.0] * n
+                for i in range(len(self.c)):
+                    result[i] += self.c[i]
+                for i in range(len(other.c)):
+                    result[i] -= other.c[i]
+                return Poly(result)
+
+            def __rsub__(self, other):
+                neg = Poly([-x for x in self.c])
+                return neg.__add__(other)
+
+            def __pow__(self, n):
+                if not isinstance(n, int) or n < 0:
+                    raise ValueError(f"Unsupported power: {n}")
+                if n == 0:
+                    return Poly([1.0])
+                result = Poly(list(self.c))
+                for _ in range(n - 1):
+                    result = result * self
+                return result
+
+            def __truediv__(self, other):
+                if isinstance(other, (int, float)):
+                    return Poly([x / other for x in self.c])
+                # Can't divide polynomials — return as rational
+                raise ValueError("Poly division")
+
+            def __neg__(self):
+                return Poly([-x for x in self.c])
+
+            def __pos__(self):
+                return Poly(list(self.c))
+
+            def degree(self):
+                return len(self.c) - 1
+
+            def to_descending(self):
+                """Return coefficients in descending order (highest power first)."""
+                return list(reversed(self.c))
+
+        # Evaluate the expression with s as Poly([0, 1])
+        s = Poly([0.0, 1.0])
+
+        # Make a safe evaluation namespace
+        safe_ns = {
+            's': s,
+            '__builtins__': {},
+        }
+        # Add math functions that might appear
+        for name in ['pi', 'e']:
+            safe_ns[name] = getattr(math, name)
+
+        # Replace SPICE suffixes in the expression: .0005 is fine, but 1u, 1n etc.
+        # The expression should already be in Python-compatible form from LTspice
+        # LTspice uses: 1e-3, .001, etc. — no SPICE suffixes in Laplace expressions
+        # But ** is used for powers, which Python handles
+
+        # Replace '.' at start of number with '0.'
+        proc_expr = re.sub(r'(?<![0-9])\.(\d)', r'0.\1', expr)
+
+        try:
+            result = eval(proc_expr, safe_ns)
+        except Exception:
+            return None
+
+        if isinstance(result, Poly):
+            # Result is a polynomial — numerator only, denominator is 1
+            num = result
+            den = Poly([1.0])
+        elif isinstance(result, (int, float)):
+            num = Poly([float(result)])
+            den = Poly([1.0])
+        else:
+            return None
+
+        # We need to handle division — use a two-pass approach
+        # Actually, let's use a Rational class wrapper
+
+        return None  # Fall through to regex-based approach
+
+    def _parse_laplace_regex(expr):
+        """Parse common Laplace expression patterns using regex.
+
+        Returns (gain, num_coeffs_descending, den_coeffs_descending) or None.
+        """
+        expr = expr.strip().replace(' ', '')
+
+        # Pattern 1: gain/(1+a*s)**n
+        # Example: 1/(1+.0005*s)**3, 1./(1+.0005*s)**3
+        m = re.match(r'^([\d.eE+-]+)\.?/\(1([+-][\d.eE+-]*)\*?s\)\*\*(\d+)$', expr)
+        if m:
+            gain = float(m.group(1)) if m.group(1) else 1.0
+            a = float(m.group(2))
+            n = int(m.group(3))
+            # (1+a*s)**n — expand binomial
+            # Coefficients of (1+a*s)^n in ascending order
+            coeffs = [1.0]
+            factor = [1.0, a]  # 1 + a*s
+            for _ in range(n):
+                new_coeffs = [0.0] * (len(coeffs) + 1)
+                for i, c in enumerate(coeffs):
+                    new_coeffs[i] += c * factor[0]
+                    new_coeffs[i + 1] += c * factor[1]
+                coeffs = new_coeffs
+            # Descending order
+            den_desc = list(reversed(coeffs))
+            num_desc = [1.0]
+            return (gain, num_desc, den_desc)
+
+        # Pattern 1b: gain/(1+a*s) — no power
+        m = re.match(r'^([\d.eE+-]*)\.?/\(1([+-][\d.eE+-]*)\*?s\)$', expr)
+        if m:
+            gain = float(m.group(1)) if m.group(1) else 1.0
+            a = float(m.group(2))
+            den_desc = [a, 1.0]  # a*s + 1
+            num_desc = [1.0]
+            return (gain, num_desc, den_desc)
+
+        # Pattern 2: gain*s/(s*s+a*s+b)
+        m = re.match(r'^([\d.eE+-]*)\*?s/\(s\*s([+-][\d.eE+-]*)\*?s([+-][\d.eE+-]+)\)$', expr)
+        if m:
+            gain = float(m.group(1)) if m.group(1) else 1.0
+            a = float(m.group(2))
+            b = float(m.group(3))
+            num_desc = [1.0, 0.0]  # s
+            den_desc = [1.0, a, b]  # s^2 + a*s + b
+            return (gain, num_desc, den_desc)
+
+        # Pattern 3: Try Python eval approach with rational tracking
+        try:
+            return _eval_laplace_expr(expr)
+        except Exception:
+            pass
+
+        return None
+
+    def _eval_laplace_expr(expr):
+        """Evaluate Laplace expression using Python eval with rational polynomial tracking."""
+        import math as _math
+
+        class Rational:
+            """Rational polynomial num/den in s, coefficients in ascending order."""
+            def __init__(self, num_asc, den_asc=None):
+                self.num = list(num_asc)
+                self.den = list(den_asc) if den_asc else [1.0]
+                self._normalize()
+
+            def _normalize(self):
+                while len(self.num) > 1 and abs(self.num[-1]) < 1e-30:
+                    self.num = self.num[:-1]
+                while len(self.den) > 1 and abs(self.den[-1]) < 1e-30:
+                    self.den = self.den[:-1]
+
+            @staticmethod
+            def _poly_mul(a, b):
+                result = [0.0] * (len(a) + len(b) - 1)
+                for i, x in enumerate(a):
+                    for j, y in enumerate(b):
+                        result[i + j] += x * y
+                return result
+
+            def __mul__(self, other):
+                if isinstance(other, (int, float)):
+                    return Rational([x * other for x in self.num], list(self.den))
+                if isinstance(other, Rational):
+                    return Rational(
+                        self._poly_mul(self.num, other.num),
+                        self._poly_mul(self.den, other.den)
+                    )
+                return NotImplemented
+
+            def __rmul__(self, other):
+                return self.__mul__(other)
+
+            def __truediv__(self, other):
+                if isinstance(other, (int, float)):
+                    return Rational([x / other for x in self.num], list(self.den))
+                if isinstance(other, Rational):
+                    return Rational(
+                        self._poly_mul(self.num, other.den),
+                        self._poly_mul(self.den, other.num)
+                    )
+                return NotImplemented
+
+            def __rtruediv__(self, other):
+                if isinstance(other, (int, float)):
+                    return Rational([other * x for x in self.den], list(self.num))
+                return NotImplemented
+
+            def __add__(self, other):
+                if isinstance(other, (int, float)):
+                    other = Rational([other])
+                if isinstance(other, Rational):
+                    # a/b + c/d = (a*d + b*c) / (b*d)
+                    new_num = [0.0] * (max(
+                        len(self._poly_mul(self.num, other.den)),
+                        len(self._poly_mul(self.den, other.num))
+                    ))
+                    ad = self._poly_mul(self.num, other.den)
+                    bc = self._poly_mul(self.den, other.num)
+                    for i in range(max(len(ad), len(bc))):
+                        val = 0.0
+                        if i < len(ad): val += ad[i]
+                        if i < len(bc): val += bc[i]
+                        if i < len(new_num):
+                            new_num[i] = val
+                        else:
+                            new_num.append(val)
+                    return Rational(new_num, self._poly_mul(self.den, other.den))
+                return NotImplemented
+
+            def __radd__(self, other):
+                return self.__add__(other)
+
+            def __sub__(self, other):
+                if isinstance(other, (int, float)):
+                    other = Rational([other])
+                if isinstance(other, Rational):
+                    neg = Rational([-x for x in other.num], list(other.den))
+                    return self.__add__(neg)
+                return NotImplemented
+
+            def __rsub__(self, other):
+                return Rational([-x for x in self.num], list(self.den)).__add__(other)
+
+            def __pow__(self, n):
+                if not isinstance(n, int) or n < 0:
+                    raise ValueError(f"Unsupported power: {n}")
+                if n == 0:
+                    return Rational([1.0])
+                result = Rational(list(self.num), list(self.den))
+                for _ in range(n - 1):
+                    result = result * self
+                return result
+
+            def __neg__(self):
+                return Rational([-x for x in self.num], list(self.den))
+
+            def __pos__(self):
+                return Rational(list(self.num), list(self.den))
+
+        s = Rational([0.0, 1.0])  # s = 0 + 1*s
+
+        # Prepare expression for eval
+        proc_expr = expr
+        # Fix leading dots: .001 → 0.001
+        proc_expr = re.sub(r'(?<![0-9])\.(\d)', r'0.\1', proc_expr)
+
+        safe_ns = {
+            's': s,
+            '__builtins__': {},
+        }
+
+        result = eval(proc_expr, safe_ns)
+
+        if isinstance(result, Rational):
+            # Extract gain by normalizing leading denominator coefficient
+            num_desc = list(reversed(result.num))
+            den_desc = list(reversed(result.den))
+            return (1.0, num_desc, den_desc)
+        elif isinstance(result, (int, float)):
+            return (float(result), [1.0], [1.0])
+
+        return None
+
+    for line in lines:
+        stripped = line.strip()
+
+        # Look for Laplace= in component value lines
+        # Format: E1 out+ out- in+ in- Laplace=expr
+        # or:     E1 out+ out- LAPLACE {V(in)} {expr}
+        laplace_match = re.match(
+            r'^([EGeg]\w+)\s+(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s+[Ll]aplace\s*=\s*(.+)$',
+            stripped
+        )
+        if not laplace_match:
+            # Try the LAPLACE {V(in)} {expr} form
+            laplace_match2 = re.match(
+                r'^([EGeg]\w+)\s+(\S+)\s+(\S+)\s+[Ll][Aa][Pp][Ll][Aa][Cc][Ee]\s+\{[^}]*\}\s+\{(.+)\}$',
+                stripped
+            )
+            if laplace_match2:
+                name = laplace_match2.group(1)
+                out_p = laplace_match2.group(2)
+                out_n = laplace_match2.group(3)
+                in_p = '0'  # input from the {V(in)} is implicit
+                in_n = '0'
+                laplace_expr = laplace_match2.group(4)
+                # Extract input node from {V(node)}
+                v_match = re.search(r'[Vv]\((\w+)\)', stripped)
+                if v_match:
+                    in_p = v_match.group(1)
+            else:
+                new_lines.append(line)
+                continue
+        else:
+            name = laplace_match.group(1)
+            out_p = laplace_match.group(2)
+            out_n = laplace_match.group(3)
+            in_p = laplace_match.group(4)
+            in_n = laplace_match.group(5)
+            laplace_expr = laplace_match.group(6)
+
+        # Try to parse the Laplace expression
+        result = _parse_laplace_regex(laplace_expr)
+
+        if result is None:
+            # Cannot parse — leave as comment with warning
+            new_lines.append(f'* (WARNING: Laplace not converted - unsupported form) {stripped}')
+            # Add a simple resistor to prevent dangling node
+            new_lines.append(f'R_{name}_dummy {out_p} {out_n} 1k')
+            print(f"  WARNING: Could not convert Laplace expression for {name}: {laplace_expr[:60]}")
+            continue
+
+        gain, num_desc, den_desc = result
+        model_counter[0] += 1
+        model_name = f'xfer_{name}_{model_counter[0]}'
+        int_node = f'int_{name}_{model_counter[0]}'
+
+        # Format coefficients for s_xfer
+        def fmt_coeffs(coeffs):
+            return ' '.join(f'{c:.10g}' for c in coeffs)
+
+        num_str = fmt_coeffs(num_desc)
+        den_str = fmt_coeffs(den_desc)
+
+        # Number of initial conditions = degree of denominator
+        n_ic = len(den_desc) - 1
+        ic_str = ' '.join(['0'] * n_ic) if n_ic > 0 else '0'
+
+        # Generate XSPICE a-device + model
+        new_lines.append(f'* (converted from: {stripped})')
+
+        if in_n == '0' or in_n == 'gnd':
+            # Single-ended input: a-device input is directly the input node
+            new_lines.append(f'a_{name} {in_p} {int_node} {model_name}')
+        else:
+            # Differential input: add a voltage-controlled voltage source
+            diff_node = f'diff_{name}_{model_counter[0]}'
+            new_lines.append(f'E_{name}_diff {diff_node} 0 {in_p} {in_n} 1')
+            new_lines.append(f'a_{name} {diff_node} {int_node} {model_name}')
+
+        new_lines.append(f'.model {model_name} s_xfer(gain={gain:.10g} num_coeff=[{num_str}] den_coeff=[{den_str}] int_ic=[{ic_str}])')
+
+        if out_n == '0' or out_n == 'gnd':
+            # Single-ended output: buffer from int_node to output
+            new_lines.append(f'E_{name}_out {out_p} 0 {int_node} 0 1')
+        else:
+            # Differential output
+            new_lines.append(f'E_{name}_out {out_p} {out_n} {int_node} 0 1')
+
+        new_lines.append(f'R_{name}_load {int_node} 0 1G')  # Load resistor for XSPICE
+        print(f"  Converted {name} Laplace to s_xfer: gain={gain:.4g}, num={num_desc}, den={den_desc}")
+
+    return '\n'.join(new_lines)
+
+
+def _validate_netlist(netlist_text):
+    """Validate and fix common netlist issues before simulation.
+
+    - Remove empty-value sources (Vi N001 0 "")
+    - Convert .step param to .param with chosen value
+    - Convert Laplace behavioral sources to XSPICE s_xfer
+    - Remove floating nodes (nodes connected to nothing)
+    """
+    # First pass: convert .step param and Laplace
+    netlist_text = _convert_step_param(netlist_text)
+    netlist_text = _convert_laplace_to_sxfer(netlist_text)
+
+    lines = netlist_text.split('\n')
+    fixed = []
+    issues = []
+    for line in lines:
+        stripped = line.strip()
+        if not stripped or stripped.startswith('*'):
+            fixed.append(line)
+            continue
+
+        # Remove empty-value voltage/current sources: V1 n1 n2 "" → comment out
+        if stripped and stripped[0].upper() in ('V', 'I') and '""' in stripped:
+            fixed.append(f'* (removed: empty value) {stripped}')
+            issues.append(f'Empty source removed: {stripped.split()[0]}')
+            continue
+
+        # Comment out .wave (LTspice-specific WAV file output)
+        if stripped.lower().startswith('.wave'):
+            fixed.append(f'* (removed: LTspice-only) {stripped}')
+            issues.append(f'.wave directive removed (LTspice-only)')
+            continue
+
+        # Comment out .savebias, .loadbias (LTspice-specific)
+        if stripped.lower().startswith('.savebias') or stripped.lower().startswith('.loadbias'):
+            fixed.append(f'* (removed: LTspice-only) {stripped}')
+            continue
+
+        fixed.append(line)
+
+    if issues:
+        for issue in issues[:5]:
+            print(f"  VALIDATION: {issue}")
+        if len(issues) > 5:
+            print(f"  ... and {len(issues) - 5} more validation issues")
+
+    return '\n'.join(fixed)
+
+
 def _fix_ltspice_syntax(netlist_text):
     """Convert LTspice-specific SPICE syntax to standard ngspice.
 
@@ -11646,6 +12326,52 @@ def _resolve_missing_subcircuits(netlist_text):
         return netlist_text + '\n' + subckt_block
 
 
+def _extract_source_frequency(netlist_text):
+    """Extract dominant frequency from SINE/PULSE source definitions.
+
+    Returns frequency in Hz, or 0 if no frequency found.
+    """
+    # SPICE value pattern: digits with optional SI suffix (k, Meg, u, n, p, etc.)
+    _val = r'[\d.eE+\-]+[a-zA-Z]*'
+    for line in netlist_text.split('\n'):
+        stripped = line.strip()
+        if not stripped or stripped.startswith('*'):
+            continue
+        # SINE(offset amplitude freq ...)
+        m = re.search(r'SINE\s*\(\s*' + _val + r'\s+' + _val + r'\s+(' + _val + r')', stripped, re.I)
+        if m:
+            try:
+                freq = _parse_spice_value(m.group(1))
+                if freq > 0:
+                    return freq
+            except (ValueError, TypeError):
+                pass
+        # PULSE(V1 V2 Tdelay Trise Tfall Ton Period) — freq = 1/Period
+        m = re.search(r'PULSE\s*\(' + (r'\s*' + _val) * 6 + r'\s+(' + _val + r')', stripped, re.I)
+        if m:
+            try:
+                period = _parse_spice_value(m.group(1))
+                if period > 0:
+                    return 1.0 / period
+            except (ValueError, TypeError):
+                pass
+    return 0.0
+
+
+def _parse_spice_value(val_str):
+    """Parse a SPICE value string with SI suffixes (e.g., '1k', '100u', '10Meg')."""
+    val_str = val_str.strip().replace('µ', 'u')
+    suffixes = {
+        'T': 1e12, 'G': 1e9, 'MEG': 1e6, 'K': 1e3,
+        'M': 1e-3, 'U': 1e-6, 'N': 1e-9, 'P': 1e-12, 'F': 1e-15,
+    }
+    for suffix, mult in suffixes.items():
+        if val_str.upper().endswith(suffix):
+            num_part = val_str[:len(val_str) - len(suffix)]
+            return float(num_part) * mult
+    return float(val_str)
+
+
 def _inject_control_block(netlist_text, probe_nodes, analysis='transient'):
     """Inject/replace .control block in an existing .cir file."""
     lines = netlist_text.split('\n')
@@ -11674,17 +12400,37 @@ def _inject_control_block(netlist_text, probe_nodes, analysis='transient'):
                 line = line.rstrip() + ' AC 1'
         new_lines.append(line)
 
+    # Extract frequency from sources for auto-scaling
+    src_freq = _extract_source_frequency(netlist_text)
+
     # Use relative filename (ngspice cwd is sim_work/)
     results_file = f"generic_{analysis}_results.txt"
 
     if analysis == 'ac_bode':
-        new_lines.append(".ac dec 100 1 10Meg")
+        # Auto-scale AC range based on source frequency
+        if src_freq > 0:
+            f_start = max(0.1, src_freq / 10000)
+            f_stop = min(100e9, src_freq * 10000)
+            new_lines.append(f".ac dec 100 {f_start:.4g} {f_stop:.4g}")
+            print(f"    AC range auto-scaled: {f_start:.4g} - {f_stop:.4g} Hz (source freq: {src_freq:.4g} Hz)")
+        else:
+            new_lines.append(".ac dec 100 1 10Meg")
         save_str = " ".join([f"vdb({n}) vp({n})" for n in probe_nodes])
     elif analysis == 'dc_sweep':
         new_lines.append(sim_cmd if sim_cmd else ".dc V1 -5 5 0.1")
         save_str = " ".join([f"V({n})" for n in probe_nodes])
     else:
-        new_lines.append(_fix_tran_cmd(sim_cmd) if sim_cmd else ".tran 1u 10m")
+        if sim_cmd:
+            new_lines.append(_fix_tran_cmd(sim_cmd))
+        elif src_freq > 0:
+            # Auto-scale: show ~20 cycles, step = period/50
+            period = 1.0 / src_freq
+            tstop = 20 * period
+            tstep = period / 50
+            new_lines.append(f".tran {tstep:.4g} {tstop:.4g}")
+            print(f"    Transient auto-scaled: step={tstep:.4g}s, stop={tstop:.4g}s (source freq: {src_freq:.4g} Hz)")
+        else:
+            new_lines.append(".tran 1u 10m")
         save_str = " ".join([f"V({n})" for n in probe_nodes])
 
     new_lines.append("")
@@ -11841,8 +12587,10 @@ def main():
                 text = _fix_ltspice_syntax(text)
                 # Remove .include directives for files that don't exist
                 text = _remove_missing_includes(text)
+                # Validate netlist before simulation
+                text = _validate_netlist(text)
                 # Now treat it like a .cir file
-                if user_nodes:
+                if user_nodes and user_nodes != ['auto']:
                     probe_nodes = user_nodes
                 else:
                     named = [n for n in all_nodes if not re.match(r'^N\d+$', n)]
@@ -11889,7 +12637,7 @@ def main():
                 else:
                     text = open(circuit_path, 'r').read()
                 all_nodes, sim_cmd = _extract_nodes_from_cir(text)
-                if user_nodes:
+                if user_nodes and user_nodes != ['auto']:
                     probe_nodes = user_nodes
                 else:
                     named = [n for n in all_nodes if not re.match(r'^N\d+$', n)]

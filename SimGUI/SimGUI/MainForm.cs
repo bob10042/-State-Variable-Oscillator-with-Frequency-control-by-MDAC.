@@ -884,13 +884,13 @@ public partial class MainForm : Form
             return;
         }
 
-        // Find LTspice executable — prefer ADI version (has symbol libraries)
+        // Find LTspice executable — prefer XVII (has built-in standard symbols)
         string[] ltspicePaths = new[]
         {
+            @"C:\Program Files\LTC\LTspiceXVII\XVIIx64.exe",
             @"C:\Program Files\ADI\LTspice\LTspice.exe",
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
                 "Programs", "ADI", "LTspice", "LTspice.exe"),
-            @"C:\Program Files\LTC\LTspiceXVII\XVIIx64.exe",
         };
 
         string? ltspice = ltspicePaths.FirstOrDefault(File.Exists);
@@ -917,7 +917,14 @@ public partial class MainForm : Form
 
         try
         {
-            System.Diagnostics.Process.Start(ltspice, $"\"{circuitPath}\"");
+            var psi = new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = ltspice,
+                Arguments = $"\"{circuitPath}\"",
+                WorkingDirectory = Path.GetDirectoryName(ltspice) ?? "",
+                UseShellExecute = false,
+            };
+            System.Diagnostics.Process.Start(psi);
             AppendOutput($"Opened in LTspice: {Path.GetFileName(circuitPath)}");
         }
         catch (Exception ex)
