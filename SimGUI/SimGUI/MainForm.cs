@@ -624,7 +624,7 @@ public partial class MainForm : Form
             catch (Exception ex)
             {
                 SetStatus($"Load error: {ex.Message}");
-                MessageBox.Show(ex.Message, "Load Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                AppendOutput($"Load error: {ex.Message}");
             }
         }
     }

@@ -528,6 +528,7 @@ def parse_asc(asc_path):
     all_node_names = set()
     components_info = []
     unknown_symbols = []
+    used_names = {}  # Track used component names: name_upper -> count
 
     def _fix_spice_value(val):
         """Convert LTspice value encoding to ngspice-compatible."""
@@ -580,6 +581,15 @@ def parse_asc(asc_path):
                 spice_name = prefix + suffix
         else:
             spice_name = f'{prefix}_{sym_type_lower}'
+
+        # Ensure unique component names (avoid duplicates that crash ngspice)
+        name_key = spice_name.upper()
+        if name_key in used_names:
+            used_names[name_key] += 1
+            # Append suffix to make unique: R1 -> R1_2, R1_3, etc.
+            spice_name = f'{spice_name}_{used_names[name_key]}'
+        else:
+            used_names[name_key] = 1
 
         # Build netlist line based on component type
         nodes_str = ' '.join(pin_nodes)

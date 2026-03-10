@@ -114,10 +114,26 @@ if LTSPICE_LIB_DIR:
 
 os.makedirs(WORK_DIR, exist_ok=True)
 
-# On Windows, suppress console popup windows when running subprocess calls from GUI
+# On Windows, suppress ALL popup windows from child processes (ngspice)
 _SUBPROCESS_KWARGS = {}
 if os.name == 'nt':
     _SUBPROCESS_KWARGS['creationflags'] = subprocess.CREATE_NO_WINDOW
+    # Force child window hidden via STARTUPINFO
+    _si = subprocess.STARTUPINFO()
+    _si.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+    _si.wShowWindow = 0  # SW_HIDE
+    _SUBPROCESS_KWARGS['startupinfo'] = _si
+    # Suppress Windows Error Reporting crash dialogs (GP fault, critical error)
+    try:
+        import ctypes
+        SEM_FAILCRITICALERRORS = 0x0001
+        SEM_NOGPFAULTERRORBOX = 0x0002
+        SEM_NOOPENFILEERRORBOX = 0x8000
+        ctypes.windll.kernel32.SetErrorMode(
+            SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX | SEM_NOOPENFILEERRORBOX
+        )
+    except Exception:
+        pass
 
 def _get_ltspice_lib_path():
     """Return the LTspice .lib path for netlist includes, with backslash escaping."""
@@ -8512,27 +8528,40 @@ def simulate(netlist_path):
     for f in glob.glob(os.path.join(work_dir, "*_results.txt")):
         pre_existing.add(f)
 
-    result = subprocess.run(
-        [NGSPICE, "-b", netlist_path],
-        capture_output=True, text=True,
-        cwd=work_dir, timeout=600, **_SUBPROCESS_KWARGS
-    )
+    # Use Popen instead of run() to detect hung processes (e.g. WER dialog)
+    try:
+        proc = subprocess.Popen(
+            [NGSPICE, "-b", netlist_path],
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            cwd=work_dir, **_SUBPROCESS_KWARGS
+        )
+        try:
+            stdout_bytes, stderr_bytes = proc.communicate(timeout=120)
+        except subprocess.TimeoutExpired:
+            # ngspice hung (probably showing a crash dialog) — kill it
+            print("  ngspice timed out (possible crash dialog) — killing process")
+            proc.kill()
+            proc.wait()
+            return False
+    except Exception as e:
+        print(f"  Failed to run ngspice: {e}")
+        return False
 
-    if result.stdout:
-        lines = result.stdout.strip().split('\n')
-        # Show last few lines of normal output
+    stdout = stdout_bytes.decode('utf-8', errors='replace') if stdout_bytes else ''
+    stderr = stderr_bytes.decode('utf-8', errors='replace') if stderr_bytes else ''
+
+    if stdout:
+        lines = stdout.strip().split('\n')
         for l in lines[-6:]:
             print(f"  {l}")
 
-    # Any non-zero exit code is a failure
-    if result.returncode != 0:
-        if result.stderr:
+    if proc.returncode != 0:
+        if stderr:
             print("  ERRORS:")
-            for l in result.stderr.strip().split('\n')[-5:]:
+            for l in stderr.strip().split('\n')[-5:]:
                 print(f"    {l}")
-        # Also check stdout for error messages (ngspice often puts errors there)
-        if result.stdout:
-            error_lines = [l for l in result.stdout.split('\n')
+        if stdout:
+            error_lines = [l for l in stdout.split('\n')
                            if any(kw in l.lower() for kw in
                                   ('error', 'fatal', 'unknown', 'undefined',
                                    'no such', 'can\'t find', 'singular matrix',
@@ -8542,9 +8571,9 @@ def simulate(netlist_path):
                 for l in error_lines[:8]:
                     print(f"    {l.strip()}")
             else:
-                print(f"  ngspice exited with code {result.returncode}")
+                print(f"  ngspice exited with code {proc.returncode}")
         else:
-            print(f"  ngspice exited with code {result.returncode} (no output)")
+            print(f"  ngspice exited with code {proc.returncode} (no output)")
         return False
 
     # Check for result files — prefer NEW files over pre-existing ones
@@ -12001,6 +12030,10 @@ def _validate_netlist(netlist_text):
     netlist_text = _convert_step_param(netlist_text)
     netlist_text = _convert_laplace_to_sxfer(netlist_text)
 
+    # Check if this is an AC-only circuit (has .ac but no .tran)
+    has_ac = any(l.strip().lower().startswith('.ac') for l in netlist_text.split('\n'))
+    has_tran = any(l.strip().lower().startswith('.tran') for l in netlist_text.split('\n'))
+
     lines = netlist_text.split('\n')
     fixed = []
     issues = []
@@ -12010,10 +12043,18 @@ def _validate_netlist(netlist_text):
             fixed.append(line)
             continue
 
-        # Remove empty-value voltage/current sources: V1 n1 n2 "" → comment out
+        # Handle empty-value voltage/current sources
         if stripped and stripped[0].upper() in ('V', 'I') and '""' in stripped:
-            fixed.append(f'* (removed: empty value) {stripped}')
-            issues.append(f'Empty source removed: {stripped.split()[0]}')
+            parts = stripped.split()
+            if has_ac and len(parts) >= 3:
+                # AC circuit: convert empty source to AC stimulus (V1 n+ n- 0 AC 1)
+                src_name = parts[0]
+                nodes = ' '.join(parts[1:3])
+                fixed.append(f'{src_name} {nodes} 0 AC 1')
+                issues.append(f'Empty source converted to AC stimulus: {src_name}')
+            else:
+                fixed.append(f'* (removed: empty value) {stripped}')
+                issues.append(f'Empty source removed: {stripped.split()[0]}')
             continue
 
         # Comment out .wave (LTspice-specific WAV file output)
@@ -12034,6 +12075,91 @@ def _validate_netlist(netlist_text):
             print(f"  VALIDATION: {issue}")
         if len(issues) > 5:
             print(f"  ... and {len(issues) - 5} more validation issues")
+
+    return '\n'.join(fixed)
+
+
+def _fix_duplicate_names(netlist_text):
+    """Fix duplicate component names that crash ngspice.
+
+    Scans the netlist for component instance lines and renames duplicates.
+    Also removes components with empty values (no resistance/capacitance/etc).
+    """
+    lines = netlist_text.split('\n')
+    fixed = []
+    seen_names = {}  # name_upper -> count
+    seen_models = set()  # track .model definitions to remove duplicates
+    # SPICE component prefixes (first char of line determines component type)
+    comp_prefixes = set('RCLVIBDQMJEGFHSTWXKUrclvibdqmjegfhstwxku')
+    fixes = 0
+    in_subckt = False
+    seen_names_sub = {}
+
+    for line in lines:
+        stripped = line.strip()
+        if not stripped or stripped.startswith('*'):
+            fixed.append(line)
+            continue
+
+        # Remove duplicate .model definitions (keep first occurrence)
+        if stripped.upper().startswith('.MODEL'):
+            parts = stripped.split()
+            if len(parts) >= 3:
+                model_key = parts[1].upper()  # model name
+                if model_key in seen_models:
+                    fixed.append(f'* (removed: duplicate .model) {stripped}')
+                    fixes += 1
+                    continue
+                seen_models.add(model_key)
+
+        # Track subcircuit scope - don't rename inside .subckt definitions
+        # (those components are separate namespace)
+        if stripped.upper().startswith('.SUBCKT'):
+            in_subckt = True
+            seen_names_sub = {}
+            fixed.append(line)
+            continue
+        if stripped.upper().startswith('.ENDS'):
+            in_subckt = False
+            fixed.append(line)
+            continue
+
+        # Only process component lines (start with letter, not directives)
+        if stripped[0] in comp_prefixes and not stripped.startswith('.'):
+            parts = stripped.split()
+            if len(parts) >= 2:
+                name = parts[0]
+                name_upper = name.upper()
+
+                # Check for empty values on passive/source components
+                prefix_char = name[0].upper()
+                if prefix_char in ('R', 'C', 'L', 'V', 'I'):
+                    # Need at least 4 tokens: Name N+ N- Value
+                    value_parts = parts[3:]  # everything after name n+ n-
+                    value_str = ' '.join(value_parts).strip()
+                    if not value_str or value_str == '""':
+                        fixed.append(f'* (removed: empty value) {stripped}')
+                        fixes += 1
+                        continue
+
+                tracker = seen_names_sub if in_subckt else seen_names
+                if name_upper in tracker:
+                    # Duplicate - rename with suffix
+                    tracker[name_upper] += 1
+                    new_name = f'{name}_{tracker[name_upper]}'
+                    new_line = new_name + stripped[len(name):]
+                    fixed.append(new_line)
+                    fixes += 1
+                else:
+                    tracker[name_upper] = 1
+                    fixed.append(line)
+            else:
+                fixed.append(line)
+        else:
+            fixed.append(line)
+
+    if fixes:
+        print(f"  PRE-VALIDATION: Fixed {fixes} duplicate/empty component name(s)")
 
     return '\n'.join(fixed)
 
@@ -12477,18 +12603,25 @@ def _inject_control_block(netlist_text, probe_nodes, analysis='transient'):
         new_lines.append(sim_cmd if sim_cmd else ".dc V1 -5 5 0.1")
         save_str = " ".join([f"V({n})" for n in probe_nodes])
     else:
-        if sim_cmd:
+        if sim_cmd and sim_cmd.strip().lower().startswith('.tran'):
             new_lines.append(_fix_tran_cmd(sim_cmd))
+            save_str = " ".join([f"V({n})" for n in probe_nodes])
+        elif sim_cmd and sim_cmd.strip().lower().startswith('.ac'):
+            # AC-only circuit requested as transient — use the .ac command instead
+            new_lines.append(sim_cmd)
+            save_str = " ".join([f"vdb({n}) vp({n})" for n in probe_nodes])
+            results_file = "generic_ac_bode_results.txt"
+            print(f"    NOTE: Circuit is AC-only, running AC analysis instead of transient")
         elif src_freq > 0:
-            # Auto-scale: show ~20 cycles, step = period/50
             period = 1.0 / src_freq
             tstop = 20 * period
             tstep = period / 50
             new_lines.append(f".tran {tstep:.4g} {tstop:.4g}")
             print(f"    Transient auto-scaled: step={tstep:.4g}s, stop={tstop:.4g}s (source freq: {src_freq:.4g} Hz)")
+            save_str = " ".join([f"V({n})" for n in probe_nodes])
         else:
             new_lines.append(".tran 1u 10m")
-        save_str = " ".join([f"V({n})" for n in probe_nodes])
+            save_str = " ".join([f"V({n})" for n in probe_nodes])
 
     new_lines.append("")
     new_lines.append(".control")
@@ -12646,9 +12779,37 @@ def main():
                 text = _remove_missing_includes(text)
                 # Validate netlist before simulation
                 text = _validate_netlist(text)
+                # Fix duplicate component names and empty values
+                text = _fix_duplicate_names(text)
+
+                # Extract actually-valid nodes from the final netlist
+                # (some nodes may have been removed with empty-value components)
+                valid_nodes = set()
+                for line in text.split('\n'):
+                    s = line.strip()
+                    if not s or s.startswith('*') or s.startswith('.'):
+                        continue
+                    parts = s.split()
+                    if len(parts) >= 3 and parts[0][0].isalpha():
+                        prefix = parts[0][0].upper()
+                        if prefix in 'RCLVIDQMJBEGFHSTWXKU':
+                            # Nodes are between the name and the value/model
+                            for p in parts[1:]:
+                                if p.startswith('{') or p.startswith('('):
+                                    break
+                                # Check if it looks like a node name (not a value)
+                                if re.match(r'^[A-Za-z_][A-Za-z0-9_]*$|^[0-9]+$|^N\d+$', p):
+                                    if p != '0':
+                                        valid_nodes.add(p)
+
+                # Filter all_nodes to only include valid nodes
+                all_nodes = [n for n in all_nodes if n in valid_nodes]
+
                 # Now treat it like a .cir file
                 if user_nodes and user_nodes != ['auto']:
-                    probe_nodes = user_nodes
+                    probe_nodes = [n for n in user_nodes if n in valid_nodes]
+                    if not probe_nodes:
+                        probe_nodes = user_nodes  # fallback
                 else:
                     named = [n for n in all_nodes if not re.match(r'^N\d+$', n)]
                     probe_nodes = named[:12] if named else all_nodes[:8]
