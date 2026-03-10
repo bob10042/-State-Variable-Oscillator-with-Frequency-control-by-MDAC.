@@ -8,6 +8,10 @@ GUI and hand-writing SPICE netlists, CircuitForge lets you define a circuit in P
 and produces everything you need: a professional KiCad schematic, a SPICE netlist,
 simulation results, and publication-quality plots.
 
+It also includes a **General Circuit Simulator** that can load any LTspice `.asc`
+schematic, automatically convert it to ngspice, and display interactive waveforms
+with oscilloscope-style stacked traces and Bode plots.
+
 ## Setup (Getting Started After Cloning)
 
 **Step 1 — Clone the repo and install Python packages:**
@@ -19,10 +23,13 @@ pip install -r requirements.txt
 > `PyMuPDF` and `Pillow` are optional — only needed for PDF-to-PNG schematic rendering.
 > The pipeline will skip PNG export and tell you if they're missing.
 
-**Step 2 — Install ngspice** (required for simulations):
-1. Download from https://sourceforge.net/projects/ngspice/files/
-2. Run the installer — the default path `C:\Spice64\` is auto-detected.
-3. If you installed somewhere else, set the env var:
+**Step 2 — Install ngspice 45.2+** (required for simulations):
+1. Download **ngspice 45.2** (or newer) from https://sourceforge.net/projects/ngspice/files/ng-spice-rework/45.2/
+2. Extract `ngspice-45.2_64.7z` to `C:\Spice64\` (default auto-detected path).
+3. **Important:** Verify `ngspice_con.exe` is the **console version** (7.6 MB), not a
+   copy of the GUI version (8.5 MB). They must have different file sizes. The console
+   version runs silently without popup dialogs.
+4. If you installed somewhere else, set the env var:
    ```cmd
    set NGSPICE_PATH=D:\your\path\to\ngspice_con.exe
    ```
@@ -41,6 +48,7 @@ channel switching, etc.). To enable those simulations:
 2. You can use 7-Zip (free) to extract: right-click the `.7z` → "Extract Here"
 
 The basic circuits (`ce_amp`, `oscillator`, `inv_amp`, `audioamp`) work without this.
+The General Circuit simulator auto-resolves models from this library when needed.
 
 **Step 5 (optional) — Run SimGUI:**
 
@@ -49,16 +57,26 @@ Requires .NET 8 SDK (download from https://dotnet.microsoft.com/download).
 cd SimGUI/SimGUI
 dotnet run
 ```
-Select Oscillator or Electrometer from the project dropdown, then click "Run Point".
+Select a project from the toolbar dropdown:
+- **Electrometer** / **Oscillator** / **Comparison** — built-in circuit projects
+- **General Circuit** — load any LTspice `.asc` file and simulate it
+
+**Step 6 (optional) — Install LTspice for example circuits:**
+
+LTspice includes 80+ educational example circuits (amplifiers, filters, oscillators,
+power supplies) that can be loaded directly in the General Circuit simulator.
+1. Download from https://www.analog.com/ltspice
+2. After install, extract `examples.zip` and `lib.zip` from the install folder
+3. Examples are at: `%LOCALAPPDATA%\LTspice\examples\Educational\`
 
 **Optional tools** (only needed for specific features):
 
 | Tool | What it's for | Install |
 |------|--------------|---------|
-| ngspice | All circuit simulations | https://sourceforge.net/projects/ngspice/files/ |
+| ngspice 45.2+ | All circuit simulations | https://sourceforge.net/projects/ngspice/files/ng-spice-rework/45.2/ |
 | KiCad 9.x | Viewing `.kicad_sch` schematics | https://www.kicad.org/download/ |
 | .NET 8 SDK | Running SimGUI desktop app | https://dotnet.microsoft.com/download |
-| LTspice | ADA4530-1 electrometer sims only | https://www.analog.com/ltspice |
+| LTspice | Example circuits + ADA4530-1 sims | https://www.analog.com/ltspice |
 | 7-Zip | Extracting model library | https://www.7-zip.org/ |
 
 **All paths are portable** — symbol libraries (`symbols/`), SPICE models (`models/`,
@@ -71,14 +89,23 @@ If you already cloned and need to update: `git pull`
 
 CircuitForge is under active development, with the pipeline improving each session:
 
+- **General Circuit Simulator**: Load any LTspice `.asc` file, auto-detect circuit type
+  (amplifier, filter, oscillator, power supply), suggest analyses (transient, Bode, DC
+  sweep), and display results with oscilloscope-style stacked waveform lanes.
+- **LTspice .asc Parser**: Built-in `asc_parser.py` converts LTspice schematics to
+  ngspice netlists without requiring LTspice.exe. Handles symbols, wires, flags, ports,
+  text directives, and rotation transforms. **51 of 82 LTspice Educational examples
+  simulate successfully** (62%) — remaining failures use LTspice-only features.
+- **Automatic syntax conversion**: LTspice-specific syntax auto-converted to ngspice:
+  `.step param` to `.param`, Laplace transforms to XSPICE `s_xfer`, LPNP/LNPN model
+  types, Rser/Rpar/Cpar inline parameters, VCCS poly shorthand, BV behavioral sources.
+- **Model auto-resolution**: Missing BJT, MOSFET, diode, and JFET models automatically
+  found in the MicroCap library. Missing subcircuits (op-amps, etc.) resolved from
+  vendor `.lib` files.
 - **Schematic quality**: Professional A3/A4 layouts at 1:1 scale (no post-scaling),
   with wire overlap detection, collinear wire merging, and configurable component spacing.
-  Layout quality is benchmarked against industry-standard schematics (Triteq MM20 series).
 - **Verification system**: Automated pin connectivity checks, floating wire detection,
-  text overlap analysis, and dynamic pin parsing from KiCad symbol libraries.
-- **LTspice conversion**: Can convert LTspice example circuits (.asc files) into
-  KiCad schematics + ngspice simulations. The `demo_loader.py` tool handles the
-  LTspice-to-ngspice netlist translation automatically.
+  text overlap analysis, duplicate component name detection, and dynamic pin parsing.
 - **20+ circuit types** currently supported, from simple BJT amplifiers to a complete
   16-channel electrometer system with MCU firmware.
 - **DAC7800 IC representation**: MDAC chips drawn as labeled IC boxes with pin names
@@ -124,10 +151,11 @@ build-simulate-verify pipeline:
    as PNG files alongside the simulation data.
 
 7. **SimGUI** - A .NET 8 WinForms desktop application (using ScottPlot 5 for
-   charting) that wraps the Python pipeline with a graphical interface. It provides
-   project-selectable configurations (Electrometer, Oscillator, Comparison), one-click
-   simulation runs across all parameter ranges, and interactive result browsing.
-   Subprocess calls run silently (no popup console windows on Windows).
+   charting) that wraps the Python pipeline with a graphical interface. Four project
+   modes: Electrometer, Oscillator, Comparison, and **General Circuit** (load any
+   LTspice `.asc` file). Features oscilloscope-style stacked waveform lanes, Bode
+   plots with magnitude/phase, and a 12-color trace palette. All subprocess calls
+   run silently with crash dialog suppression on Windows.
 
 8. **Firmware Generation** - Produces C source code for the ADuCM362 microcontroller
    that runs the physical hardware: ADC configuration, multiplexer scanning, relay
@@ -137,11 +165,11 @@ build-simulate-verify pipeline:
 
 | Resource | Purpose |
 |----------|---------|
-| `kicad_pipeline.py` | Core engine (~12200 lines). Contains all circuit builders, netlist generators, simulators, plotters, and the self-learning correction loop. Run from the command line with a circuit type and parameters. |
+| `kicad_pipeline.py` | Core engine (~12800 lines). Contains all circuit builders, netlist generators, simulators, plotters, LTspice syntax conversion, model auto-resolution, and the self-learning correction loop. Run from the command line with a circuit type and parameters. |
 | `kicad_libs/` | Custom KiCad symbol libraries (`.kicad_sym`) and SPICE model files (`.lib`, `.sub`). Includes vendor models for LMC6001, LM4562, DAC7800, AD636, CD4051B, and relay drivers. The LM741 symbol library provides the generic op-amp schematic shape used across all circuit types. |
 | `sim_work/` | Working directory where all generated files land: `.kicad_sch` schematics, `.cir` netlists, `.txt` raw results, `.png` plots, and intermediate files. |
 | `learned_rules.json` | Accumulated auto-correction rules. Each entry maps a problem pattern to its fix, so the pipeline improves over successive runs. |
-| `ngspice` | Open-source SPICE simulator (auto-detected, or set `NGSPICE_PATH`). CircuitForge invokes `ngspice_con.exe` in batch mode, passing the generated `.cir` netlist and collecting `wrdata` output. |
+| `ngspice` | Open-source SPICE simulator v45.2+ (auto-detected at `C:\Spice64\`, or set `NGSPICE_PATH`). CircuitForge invokes `ngspice_con.exe` (console version) in batch mode with full crash dialog suppression. |
 | `LTspice` | Used as a secondary simulator for circuits requiring proprietary models (e.g. the ADA4530-1 femtoamp op-amp) not available in ngspice. |
 | `SimGUI/` | .NET 8 WinForms GUI built with ScottPlot 5. Calls `kicad_pipeline.py` as a subprocess, parses results, and provides interactive charts. Configured via `IProjectConfig` implementations for each project type. |
 | `firmware/` | C source for the ADuCM362 target MCU. Compiled with `arm-none-eabi-gcc`. Includes drivers for SPI (DAC7800), UART, ADC, GPIO (mux/relay control), and flash-based calibration storage. |
@@ -169,27 +197,51 @@ build-simulate-verify pipeline:
 - Toggle between frequency accuracy and amplitude stability views
 - Documents circuit differences and what's needed to fix the analog design
 
+## General Circuit Simulator
+
+The General Circuit mode in SimGUI can load any LTspice `.asc` schematic and simulate
+it with ngspice. The pipeline automatically:
+
+1. **Parses** the `.asc` file using `asc_parser.py` (no LTspice.exe needed)
+2. **Detects** circuit type (amplifier, filter, oscillator, power supply, generic)
+3. **Suggests** appropriate analyses (transient, Bode/AC, DC sweep, measurements)
+4. **Resolves** missing models from the MicroCap library (BJT, MOSFET, diode, JFET, op-amp)
+5. **Converts** LTspice-specific syntax to ngspice-compatible format:
+   - `.step param` to `.param` with selected value
+   - `Laplace=` behavioral sources to XSPICE `s_xfer` models
+   - `LPNP`/`LNPN` model types to `PNP`/`NPN`
+   - `Rser`/`Rpar`/`Cpar` inline parameters to separate components
+   - VCCS/VCVS poly shorthand `(nc+,nc-)` to standard 4-node format
+6. **Validates** the netlist (duplicate names, empty values, unsupported directives)
+7. **Simulates** with ngspice and displays results with stacked waveform lanes or Bode plots
+
+**Tested with 82 LTspice Educational examples: 51 pass (62%).** The 31 failures use
+LTspice-only features not portable to ngspice (digital gates, IGBT, parameterized
+Laplace, Monte Carlo, S-parameters).
+
 ## Troubleshooting
 
 | Error | Fix |
 |-------|-----|
+| ngspice "fatal error" popup dialog | **Install ngspice 45.2+** — older/broken installs have identical GUI copies for both `ngspice.exe` and `ngspice_con.exe`. Download from [SourceForge](https://sourceforge.net/projects/ngspice/files/ng-spice-rework/45.2/) and extract to `C:\Spice64\`. Verify `ngspice_con.exe` (7.6 MB) differs from `ngspice.exe` (8.5 MB). |
 | `Library not found: LM741` or `Q_NPN_BCE` | Run `git pull` — the `symbols/` directory was added recently |
 | `No KiCad symbol libraries found` | Cosmetic warning from kicad-sch-api at startup — safe to ignore if build succeeds |
 | `directory name is invalid` (SimGUI) | Run `git pull` — SimGUI paths are now auto-detected |
-| `FileNotFoundError: ngspice` | Install ngspice, or set `NGSPICE_PATH` env var |
+| `FileNotFoundError: ngspice` | Install ngspice 45.2+, or set `NGSPICE_PATH` env var |
 | `FileNotFoundError: ADI1.lib` | Install LTspice, or set `LTSPICE_LIB_PATH` env var |
 | `FileNotFoundError: kicad-cli` | Install KiCad, or set `KICAD_CLI_PATH` env var (optional — only for PDF/SVG export) |
 | `ModuleNotFoundError: kicad_sch_api` | Run `pip install kicad-sch-api` |
 | `ModuleNotFoundError: numpy` | Run `pip install numpy matplotlib` |
 | `Need: pip install pymupdf pillow` | Run `pip install PyMuPDF Pillow` (optional, for PNG rendering) |
 | Model errors for electrometer/channel_switch | Extract `models/MicroCap-LIBRARY.7z` — see Step 4 above |
+| LTspice circuit fails in General Circuit mode | Check output pane for ngspice errors. Common causes: LTspice-only features (digital, IGBT), unsupported symbols (jumpers, ports), parameterized Laplace expressions. |
 
 ## Directory Structure
 
 ```
 LTspice/
-  kicad_pipeline.py          # Main pipeline (~12200 lines, 20+ circuit types)
-  demo_loader.py             # LTspice .asc to ngspice converter
+  kicad_pipeline.py          # Main pipeline (~12800 lines, 20+ circuit types)
+  asc_parser.py              # LTspice .asc to SPICE netlist converter
   requirements.txt           # Python dependencies (pip install -r requirements.txt)
   PROJECT.md                 # Project tracker
   docs/
@@ -205,15 +257,17 @@ LTspice/
     CALIBRATION.md           # ADuCM362 calibration plan
     models/                  # SPICE models (LM4562, DAC7800, AD636)
     tests/                   # ngspice test circuits
-  SimGUI/SimGUI/             # .NET 8 WinForms GUI
+  SimGUI/SimGUI/             # .NET 8 WinForms GUI (ScottPlot 5)
+    Program.cs               # Entry point + crash dialog suppression
+    MainForm.cs              # Main GUI (generic, project-switchable)
     Projects/                # IProjectConfig implementations
       IProjectConfig.cs      # Generic project interface
       OscillatorConfig.cs    # Oscillator frequency sweep + calibration sim
       ElectrometerConfig.cs  # 16-channel TIA wrapper
       ComparisonConfig.cs    # MDAC vs Analog oscillator comparison
-    Models/                  # Data models
+      GenericCircuitConfig.cs # General circuit: any LTspice .asc file
+    Models/                  # Data models (GenericCircuitResult, etc.)
     Services/                # Result parsers, CSV export, simulation runner
-    MainForm.cs              # Main GUI (generic, project-switchable)
   firmware/
     *.c, *.h                 # TIA/electrometer firmware (ADuCM362)
     oscillator/              # Oscillator firmware (standalone)
@@ -247,12 +301,26 @@ python kicad_pipeline.py analog_osc 1000
 python kicad_pipeline.py full_system
 ```
 
+### Load any LTspice circuit
+```bash
+# Analyze a circuit (returns JSON with detected type, nodes, suggested analyses)
+python kicad_pipeline.py analyze_circuit "C:\path\to\circuit.asc"
+
+# Simulate with auto-detected probes
+python kicad_pipeline.py generic_sim "C:\path\to\circuit.asc" --analyses transient --nodes auto
+
+# Simulate with specific analyses and probes
+python kicad_pipeline.py generic_sim "C:\path\to\circuit.asc" --analyses transient,ac_bode --nodes IN,OUT,VAS
+```
+
 ### Run SimGUI
 ```bash
 cd SimGUI/SimGUI
 dotnet run
 ```
-Select project (Electrometer/Oscillator/Comparison) from the toolbar dropdown.
+Select project from the toolbar dropdown:
+- **Electrometer** / **Oscillator** / **Comparison** — built-in projects
+- **General Circuit** — click "Load Circuit" to open any `.asc` file, pick analyses and probes, then simulate
 
 ### CLI test mode
 ```bash
