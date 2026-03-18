@@ -179,9 +179,36 @@ build-simulate-verify pipeline:
 
 ### Electrometer (16-Channel TIA)
 - 16-channel multiplexed transimpedance amplifier
-- 9 ranges: Rf = 100 to 10G (mA down to fA)
-- ADuCM362 MCU with 24-bit sigma-delta ADC
-- Reed relay range switching
+- 4 relay-selectable ranges: Rf = 10M / 100M / 1G+10pF / 10G+1pF (120nA to 120pA full scale)
+- ADuCM362 MCU with dual 24-bit sigma-delta ADC (CN-0359 reference design)
+- ADA4530-1 femtoamp-grade TIA (20fA input bias current)
+- 2x MAX338 (CD4051B equiv) analog multiplexers for 16:1 channel selection
+- 16x BAV199 ESD + 1MΩ + 10nF C0G input filters (fc = 15.9 Hz)
+- 4x 109P-1-A-5/1 SPST reed relays with 2N3904 NPN coil drivers + 1N4148 flyback diodes
+- 32-pin triax input connector (16 signal + 16 guard/shield)
+
+#### Hardware Schematic (KiCad Block Diagram)
+
+A complete block-level KiCad schematic is available for the hardware build:
+
+| File | Description |
+|------|-------------|
+| `tia_16ch_complete.kicad_sch` | Full system KiCad 9.0 schematic — block-level with net labels |
+| `tia_16ch_complete.pdf` | PDF export for viewing without KiCad |
+
+The schematic shows all 7 functional blocks with clear pinouts and labeled interconnections:
+
+1. **J1 Input Connector** — 32-pin (16 signal + 16 GND guard)
+2. **Input Filter Array A** — Channels 1-8: BAV199 + 1MΩ + 10nF → MUX_A1-A8
+3. **Input Filter Array B** — Channels 9-16: BAV199 + 1MΩ + 10nF → MUX_B1-B8
+4. **Analog Mux A (U1 MAX338)** — 8:1 mux, channels 1-8 → TIA_IN
+5. **Analog Mux B (U2 MAX338)** — 8:1 mux, channels 9-16 → TIA_IN
+6. **TIA (U3 ADA4530-1)** — Transimpedance amplifier with VREF divider
+7. **Relay Range Ladder** — 4x 109P reed relays selecting Rf (10M/100M/1G/10G)
+8. **Relay Drivers** — 4x 2N3904 NPN with 1kΩ base R, 1N4148 flyback diodes
+9. **MCU (U5 ADuCM362)** — ARM Cortex-M3, ADC, GPIO mux/relay control, DAC, UART
+
+All inter-block connections use net labels (no wire spaghetti). Open in KiCad 9.0 or view the PDF.
 
 ### State Variable Oscillator
 - MDAC-controlled frequency: 25 Hz - 30 kHz

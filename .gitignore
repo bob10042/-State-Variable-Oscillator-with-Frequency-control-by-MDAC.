@@ -58,6 +58,10 @@ SimGUI/**/.vs/
 # To enable all circuit sims, extract MicroCap-LIBRARY.7z into models/MicroCap-LIBRARY-for-ngspice/
 # The oscillator and ce_amp circuits work without it (models are inline or in StateVarOsc/models/)
 
+# ── TIA/Electrometer hardware schematic ──
+!tia_16ch_complete.kicad_sch
+!tia_16ch_complete.pdf
+
 # ── General excludes ──
 *.pyc
 __pycache__/
